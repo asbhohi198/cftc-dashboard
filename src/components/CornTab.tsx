@@ -330,24 +330,6 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <COTChart
-            title={`${contractName} - Producer Net Position`}
-            data={producerNetData}
-            lines={netLine}
-            alternateData={producerPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Swap Dealer Net Position`}
-            data={swapNetData}
-            lines={netLine}
-            alternateData={swapPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
             title={`${contractName} - Managed Money Net Position`}
             data={mmNetData}
             lines={netLine}
@@ -361,6 +343,24 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
             data={specNetData}
             lines={netLine}
             alternateData={specPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title={`${contractName} - Producer Net Position`}
+            data={producerNetData}
+            lines={netLine}
+            alternateData={producerPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title={`${contractName} - Swap Dealer Net Position`}
+            data={swapNetData}
+            lines={netLine}
+            alternateData={swapPctOIData}
             alternateLines={pctOILine}
             alternateLabel="% OI"
             loading={loading}
@@ -404,24 +404,6 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <COTChart
-            title={`${contractName} - Producer Net Position, Old Crop`}
-            data={producerOldData}
-            lines={netLine}
-            alternateData={producerOldPctTotalData}
-            alternateLines={pctTotalLine}
-            alternateLabel="% Total"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Swap Dealer Net Position, Old Crop`}
-            data={swapOldData}
-            lines={netLine}
-            alternateData={swapOldPctTotalData}
-            alternateLines={pctTotalLine}
-            alternateLabel="% Total"
-            loading={loading}
-          />
-          <COTChart
             title={`${contractName} - Managed Money Net Position, Old Crop`}
             data={mmOldData}
             lines={netLine}
@@ -435,6 +417,24 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
             data={specOldData}
             lines={netLine}
             alternateData={specOldPctTotalData}
+            alternateLines={pctTotalLine}
+            alternateLabel="% Total"
+            loading={loading}
+          />
+          <COTChart
+            title={`${contractName} - Producer Net Position, Old Crop`}
+            data={producerOldData}
+            lines={netLine}
+            alternateData={producerOldPctTotalData}
+            alternateLines={pctTotalLine}
+            alternateLabel="% Total"
+            loading={loading}
+          />
+          <COTChart
+            title={`${contractName} - Swap Dealer Net Position, Old Crop`}
+            data={swapOldData}
+            lines={netLine}
+            alternateData={swapOldPctTotalData}
             alternateLines={pctTotalLine}
             alternateLabel="% Total"
             loading={loading}
@@ -478,24 +478,6 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <COTChart
-            title={`${contractName} - Producer Net Position, New Crop`}
-            data={producerNewData}
-            lines={netLine}
-            alternateData={producerNewPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Swap Dealer Net Position, New Crop`}
-            data={swapNewData}
-            lines={netLine}
-            alternateData={swapNewPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
             title={`${contractName} - Managed Money Net Position, New Crop`}
             data={mmNewData}
             lines={netLine}
@@ -509,6 +491,24 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
             data={specNewData}
             lines={netLine}
             alternateData={specNewPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title={`${contractName} - Producer Net Position, New Crop`}
+            data={producerNewData}
+            lines={netLine}
+            alternateData={producerNewPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title={`${contractName} - Swap Dealer Net Position, New Crop`}
+            data={swapNewData}
+            lines={netLine}
+            alternateData={swapNewPctOIData}
             alternateLines={pctOILine}
             alternateLabel="% OI"
             loading={loading}

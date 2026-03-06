@@ -418,10 +418,10 @@ export function AllGOTab() {
           Aggregate Data
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <COTChart title={`${contractName} - Producer Net Position`} data={producerNetData} lines={netLine} alternateData={producerPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
-          <COTChart title={`${contractName} - Swap Dealer Net Position`} data={swapNetData} lines={netLine} alternateData={swapPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
           <COTChart title={`${contractName} - Managed Money Net Position`} data={mmNetData} lines={netLine} alternateData={mmPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
           <COTChart title={`${contractName} - Spec Net Position`} data={specNetData} lines={netLine} alternateData={specPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+          <COTChart title={`${contractName} - Producer Net Position`} data={producerNetData} lines={netLine} alternateData={producerPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+          <COTChart title={`${contractName} - Swap Dealer Net Position`} data={swapNetData} lines={netLine} alternateData={swapPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
           <COTChart title={`${contractName} - Other Reportables Net Position`} data={otherNetData} lines={netLine} alternateData={otherPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
           <COTChart title={`${contractName} - Non-Reportables Net Position`} data={nonReptNetData} lines={netLine} alternateData={nonReptPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
           <COTChart title={`${contractName} - Producer + Non-Reportables Net Position`} data={prodNonReptNetData} lines={netLine} alternateData={prodNonReptPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
@@ -434,10 +434,10 @@ export function AllGOTab() {
           Old Crop Data
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <COTChart title={`${contractName} - Producer Net Position, Old Crop`} data={producerOldData} lines={netLine} alternateData={producerOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
-          <COTChart title={`${contractName} - Swap Dealer Net Position, Old Crop`} data={swapOldData} lines={netLine} alternateData={swapOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
           <COTChart title={`${contractName} - Managed Money Net Position, Old Crop`} data={mmOldData} lines={netLine} alternateData={mmOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
           <COTChart title={`${contractName} - Spec Net Position, Old Crop`} data={specOldData} lines={netLine} alternateData={specOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
+          <COTChart title={`${contractName} - Producer Net Position, Old Crop`} data={producerOldData} lines={netLine} alternateData={producerOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
+          <COTChart title={`${contractName} - Swap Dealer Net Position, Old Crop`} data={swapOldData} lines={netLine} alternateData={swapOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
           <COTChart title={`${contractName} - Other Reportables Net Position, Old Crop`} data={otherOldData} lines={netLine} alternateData={otherOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
           <COTChart title={`${contractName} - Non-Reportables Net Position, Old Crop`} data={nonReptOldData} lines={netLine} alternateData={nonReptOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
           <COTChart title={`${contractName} - Producer + Non-Reportables Net Position, Old Crop`} data={prodNonReptOldData} lines={netLine} alternateData={prodNonReptOldPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
@@ -450,10 +450,10 @@ export function AllGOTab() {
           New Crop Data
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <COTChart title={`${contractName} - Producer Net Position, New Crop`} data={producerNewData} lines={netLine} alternateData={producerNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
-          <COTChart title={`${contractName} - Swap Dealer Net Position, New Crop`} data={swapNewData} lines={netLine} alternateData={swapNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
           <COTChart title={`${contractName} - Managed Money Net Position, New Crop`} data={mmNewData} lines={netLine} alternateData={mmNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
           <COTChart title={`${contractName} - Spec Net Position, New Crop`} data={specNewData} lines={netLine} alternateData={specNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+          <COTChart title={`${contractName} - Producer Net Position, New Crop`} data={producerNewData} lines={netLine} alternateData={producerNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+          <COTChart title={`${contractName} - Swap Dealer Net Position, New Crop`} data={swapNewData} lines={netLine} alternateData={swapNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
           <COTChart title={`${contractName} - Other Reportables Net Position, New Crop`} data={otherNewData} lines={netLine} alternateData={otherNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
           <COTChart title={`${contractName} - Non-Reportables Net Position, New Crop`} data={nonReptNewData} lines={netLine} alternateData={nonReptNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
           <COTChart title={`${contractName} - Producer + Non-Reportables Net Position, New Crop`} data={prodNonReptNewData} lines={netLine} alternateData={prodNonReptNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
