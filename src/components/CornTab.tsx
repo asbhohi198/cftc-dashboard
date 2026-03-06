@@ -145,13 +145,26 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
               </p>
             </div>
             <div className="text-right">
-              <p className="text-xs text-zinc-500">Latest Report</p>
+              <p className="text-xs text-zinc-500">Position Date</p>
               <p className="text-sm text-white">
                 {new Date(data[data.length - 1].date).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
                   year: "numeric",
                 })}
+              </p>
+              <p className="text-xs text-zinc-500 mt-1">Released</p>
+              <p className="text-sm text-zinc-400">
+                {(() => {
+                  const posDate = new Date(data[data.length - 1].date);
+                  const releaseDate = new Date(posDate);
+                  releaseDate.setDate(releaseDate.getDate() + 3);
+                  return releaseDate.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  });
+                })()}
               </p>
             </div>
           </div>
