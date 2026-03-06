@@ -156,7 +156,7 @@ export function COTChart({
   }
 
   const ChartContent = ({ expanded = false }: { expanded?: boolean }) => {
-    const height = expanded ? 500 : 280;
+    const height = expanded ? 500 : 350;
     const ticks = expanded ? sixMonthTicks : yearlyTicks;
 
     return (
@@ -169,18 +169,18 @@ export function COTChart({
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
-              margin={{ top: 5, right: 5, left: 0, bottom: expanded ? 80 : 60 }}
+              margin={{ top: 10, right: 10, left: 5, bottom: expanded ? 85 : 70 }}
             >
               <XAxis
                 dataKey="date"
                 tickFormatter={formatDate}
-                tick={{ fill: "#71717a", fontSize: 10 }}
+                tick={{ fill: "#71717a", fontSize: 10, dy: 5 }}
                 axisLine={{ stroke: "#3f3f46" }}
                 tickLine={{ stroke: "#3f3f46" }}
                 ticks={ticks.map(i => filteredData[i]?.date).filter(Boolean)}
                 angle={-90}
                 textAnchor="end"
-                height={expanded ? 70 : 50}
+                height={expanded ? 75 : 60}
                 interval={0}
               />
               <YAxis
@@ -267,7 +267,7 @@ export function COTChart({
 
         {/* Stats */}
         {filteredData.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-zinc-800 grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="mt-3 pt-3 border-t border-zinc-800 flex flex-wrap justify-center gap-6">
             {lines.map((line) => {
               const latest = filteredData[filteredData.length - 1];
               const previous = filteredData[filteredData.length - 2];
@@ -276,7 +276,7 @@ export function COTChart({
               const change = value - prevValue;
 
               return (
-                <div key={line.key} className="text-center">
+                <div key={line.key} className="text-center min-w-[80px]">
                   <p className="text-xs text-zinc-500">{line.name}</p>
                   <p className="text-sm font-medium" style={{ color: line.color }}>
                     {formatNumber(value)}
@@ -342,7 +342,7 @@ export function COTChart({
 
             {/* Stats */}
             {filteredData.length > 0 && (
-              <div className="mt-4 pt-4 border-t border-zinc-800 grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="mt-4 pt-4 border-t border-zinc-800 flex flex-wrap justify-center gap-8">
                 {lines.map((line) => {
                   const latest = filteredData[filteredData.length - 1];
                   const previous = filteredData[filteredData.length - 2];
@@ -351,7 +351,7 @@ export function COTChart({
                   const change = value - prevValue;
 
                   return (
-                    <div key={line.key} className="text-center">
+                    <div key={line.key} className="text-center min-w-[100px]">
                       <p className="text-sm text-zinc-500">{line.name}</p>
                       <p className="text-xl font-medium" style={{ color: line.color }}>
                         {formatNumber(value)}
