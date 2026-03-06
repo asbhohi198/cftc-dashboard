@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
+import JSZip from "jszip";
+import { CFTC_CONTRACTS, COTRecord, parseRow, getCFTCUrl } from "@/lib/cftc";
 
 // Contract configurations for G&O
 const GO_CONTRACTS = [
-  { id: "corn", label: "C", name: "Corn" },
-  { id: "chicago-wheat", label: "W", name: "Chicago Wheat" },
-  { id: "kansas-wheat", label: "KW", name: "Kansas Wheat" },
-  { id: "minneapolis-wheat", label: "MW", name: "Minneapolis Wheat" },
-  { id: "soybeans", label: "S", name: "Soybeans" },
-  { id: "soymeal", label: "SM", name: "Soymeal" },
-  { id: "soyoil", label: "BO", name: "Soyoil" },
+  { id: "corn" as const, label: "C", name: "Corn" },
+  { id: "chicago-wheat" as const, label: "W", name: "Chicago Wheat" },
+  { id: "kansas-wheat" as const, label: "KW", name: "Kansas Wheat" },
+  { id: "minneapolis-wheat" as const, label: "MW", name: "Minneapolis Wheat" },
+  { id: "soybeans" as const, label: "S", name: "Soybeans" },
+  { id: "soymeal" as const, label: "SM", name: "Soymeal" },
+  { id: "soyoil" as const, label: "BO", name: "Soyoil" },
 ];
 
 interface MMSplitData {
@@ -22,29 +24,93 @@ interface MMSplitData {
   netMMChange: number;
 }
 
+// In-memory cache
+const cache: Map<string, { data: COTRecord[]; timestamp: number }> = new Map();
+const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours
+
+async function fetchYearData(year: number, contractCode: string): Promise<COTRecord[]> {
+  const url = getCFTCUrl(year);
+
+  try {
+    const response = await fetch(url, {
+      headers: { "Accept-Encoding": "gzip, deflate" },
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+    const zip = await JSZip.loadAsync(arrayBuffer);
+
+    const txtFile = Object.keys(zip.files).find(name => name.endsWith('.txt'));
+    if (!txtFile) {
+      return [];
+    }
+
+    const content = await zip.files[txtFile].async("string");
+    const lines = content.split("\n");
+
+    const records: COTRecord[] = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+      if (!line.includes(`"${contractCode}"`)) continue;
+
+      const record = parseRow(line);
+      if (record) {
+        records.push(record);
+      }
+    }
+
+    return records;
+  } catch {
+    return [];
+  }
+}
+
+async function fetchContractData(contractCode: string): Promise<COTRecord[]> {
+  const cacheKey = `mm_splits_${contractCode}`;
+  const cached = cache.get(cacheKey);
+
+  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    return cached.data;
+  }
+
+  const currentYear = new Date().getFullYear();
+  // Only fetch last 2 years for speed - we just need latest data
+  const years = [currentYear - 1, currentYear];
+
+  const allRecords: COTRecord[] = [];
+
+  const batchResults = await Promise.all(
+    years.map(year => fetchYearData(year, contractCode))
+  );
+
+  for (const records of batchResults) {
+    allRecords.push(...records);
+  }
+
+  allRecords.sort((a, b) => a.date.localeCompare(b.date));
+
+  cache.set(cacheKey, { data: allRecords, timestamp: Date.now() });
+
+  return allRecords;
+}
+
 export async function GET() {
   try {
     // Fetch data for all contracts in parallel
     const results = await Promise.all(
       GO_CONTRACTS.map(async (contract) => {
-        const baseUrl = process.env.VERCEL_URL
-          ? `https://${process.env.VERCEL_URL}`
-          : "http://localhost:3000";
+        const contractConfig = CFTC_CONTRACTS[contract.id];
+        const data = await fetchContractData(contractConfig.code);
 
-        const res = await fetch(`${baseUrl}/api/cot?contract=${contract.id}`, {
-          cache: "no-store",
-        });
-
-        if (!res.ok) {
+        if (data.length < 2) {
           return null;
         }
 
-        const json = await res.json();
-        if (!json.success || !json.data || json.data.length < 2) {
-          return null;
-        }
-
-        const data = json.data;
         const latest = data[data.length - 1];
         const previous = data[data.length - 2];
 
@@ -57,37 +123,24 @@ export async function GET() {
           ocChange: latest.mmNetOld - previous.mmNetOld,
           ncChange: latest.mmNetOther - previous.mmNetOther,
           netMMChange: latest.mmNetAll - previous.mmNetAll,
-        } as MMSplitData;
+          positionDate: latest.date,
+        };
       })
     );
 
     // Filter out any failed requests
-    const validResults = results.filter((r): r is MMSplitData => r !== null);
+    const validResults = results.filter((r): r is MMSplitData & { positionDate: string } => r !== null);
 
-    // Get the position date from the first successful result
-    let positionDate = "";
-    for (const contract of GO_CONTRACTS) {
-      const baseUrl = process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : "http://localhost:3000";
+    // Get position date from first result
+    const positionDate = validResults.length > 0 ? validResults[0].positionDate : "";
 
-      const res = await fetch(`${baseUrl}/api/cot?contract=${contract.id}`, {
-        cache: "no-store",
-      });
-
-      if (res.ok) {
-        const json = await res.json();
-        if (json.success && json.data && json.data.length > 0) {
-          positionDate = json.data[json.data.length - 1].date;
-          break;
-        }
-      }
-    }
+    // Remove positionDate from individual items
+    const finalData: MMSplitData[] = validResults.map(({ positionDate: _, ...rest }) => rest);
 
     return NextResponse.json({
       success: true,
       positionDate,
-      data: validResults,
+      data: finalData,
     });
   } catch (error) {
     console.error("Error fetching MM splits data:", error);
