@@ -156,72 +156,6 @@ export function OCNCMMSplitsTab() {
         </div>
       </div>
 
-      {/* OC/NC Reference Table */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
-        <h3 className="text-md font-semibold text-white mb-3">
-          Old Crop / New Crop Contract Months
-        </h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="border-b border-zinc-700">
-                <th className="text-left py-1.5 px-2 text-zinc-400 font-medium">Commodity</th>
-                <th className="text-left py-1.5 px-2 text-zinc-400 font-medium">Old Crop Months</th>
-                <th className="text-left py-1.5 px-2 text-zinc-400 font-medium">New Crop Months</th>
-                <th className="text-left py-1.5 px-2 text-zinc-400 font-medium">Last OC</th>
-              </tr>
-            </thead>
-            <tbody className="text-zinc-300">
-              <tr className="border-b border-zinc-800">
-                <td className="py-1.5 px-2 text-white">Corn (C)</td>
-                <td className="py-1.5 px-2">Z, H, K, N, U</td>
-                <td className="py-1.5 px-2">Z (Dec)</td>
-                <td className="py-1.5 px-2 text-orange-400">U (Sep)</td>
-              </tr>
-              <tr className="border-b border-zinc-800">
-                <td className="py-1.5 px-2 text-white">Chicago Wheat (W)</td>
-                <td className="py-1.5 px-2">Z, H, K</td>
-                <td className="py-1.5 px-2">N, U, Z</td>
-                <td className="py-1.5 px-2 text-orange-400">K (May)</td>
-              </tr>
-              <tr className="border-b border-zinc-800">
-                <td className="py-1.5 px-2 text-white">Kansas Wheat (KW)</td>
-                <td className="py-1.5 px-2">Z, H, K</td>
-                <td className="py-1.5 px-2">N, U, Z</td>
-                <td className="py-1.5 px-2 text-orange-400">K (May)</td>
-              </tr>
-              <tr className="border-b border-zinc-800">
-                <td className="py-1.5 px-2 text-white">Minneapolis Wheat (MW)</td>
-                <td className="py-1.5 px-2">Z, H, K, N</td>
-                <td className="py-1.5 px-2">U, Z</td>
-                <td className="py-1.5 px-2 text-orange-400">N (Jul)</td>
-              </tr>
-              <tr className="border-b border-zinc-800">
-                <td className="py-1.5 px-2 text-white">Soybeans (S)</td>
-                <td className="py-1.5 px-2">F, H, K, N, Q</td>
-                <td className="py-1.5 px-2">U, X, F</td>
-                <td className="py-1.5 px-2 text-orange-400">Q (Aug)</td>
-              </tr>
-              <tr className="border-b border-zinc-800">
-                <td className="py-1.5 px-2 text-white">Soymeal (SM)</td>
-                <td className="py-1.5 px-2">Z, F, H, K, N, Q, U</td>
-                <td className="py-1.5 px-2">V, Z</td>
-                <td className="py-1.5 px-2 text-orange-400">U (Sep)</td>
-              </tr>
-              <tr className="border-b border-zinc-800">
-                <td className="py-1.5 px-2 text-white">Soyoil (BO)</td>
-                <td className="py-1.5 px-2">Z, F, H, K, N, Q, U</td>
-                <td className="py-1.5 px-2">V, Z</td>
-                <td className="py-1.5 px-2 text-orange-400">U (Sep)</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p className="text-xs text-zinc-500 mt-2">
-          Month codes: F=Jan, H=Mar, K=May, N=Jul, Q=Aug, U=Sep, V=Oct, X=Nov, Z=Dec
-        </p>
-      </div>
-
       {/* Tables Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* MM Positions Table */}
@@ -468,6 +402,72 @@ export function OCNCMMSplitsTab() {
             </ResponsiveContainer>
           </div>
         </div>
+      </div>
+
+      {/* OC/NC Reference Table */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
+        <h3 className="text-md font-semibold text-white mb-3">
+          Old Crop / New Crop Contract Months
+        </h3>
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b border-zinc-700">
+                <th className="text-left py-1.5 px-2 text-zinc-400 font-medium">Commodity</th>
+                <th className="text-left py-1.5 px-2 text-zinc-400 font-medium">Old Crop Months</th>
+                <th className="text-left py-1.5 px-2 text-zinc-400 font-medium">New Crop Months</th>
+                <th className="text-left py-1.5 px-2 text-zinc-400 font-medium">Last OC</th>
+              </tr>
+            </thead>
+            <tbody className="text-zinc-300">
+              <tr className="border-b border-zinc-800">
+                <td className="py-1.5 px-2 text-white">Corn (C)</td>
+                <td className="py-1.5 px-2">Z, H, K, N, U</td>
+                <td className="py-1.5 px-2">Z (Dec)</td>
+                <td className="py-1.5 px-2 text-orange-400">U (Sep)</td>
+              </tr>
+              <tr className="border-b border-zinc-800">
+                <td className="py-1.5 px-2 text-white">Chicago Wheat (W)</td>
+                <td className="py-1.5 px-2">Z, H, K</td>
+                <td className="py-1.5 px-2">N, U, Z</td>
+                <td className="py-1.5 px-2 text-orange-400">K (May)</td>
+              </tr>
+              <tr className="border-b border-zinc-800">
+                <td className="py-1.5 px-2 text-white">Kansas Wheat (KW)</td>
+                <td className="py-1.5 px-2">Z, H, K</td>
+                <td className="py-1.5 px-2">N, U, Z</td>
+                <td className="py-1.5 px-2 text-orange-400">K (May)</td>
+              </tr>
+              <tr className="border-b border-zinc-800">
+                <td className="py-1.5 px-2 text-white">Minneapolis Wheat (MW)</td>
+                <td className="py-1.5 px-2">Z, H, K, N</td>
+                <td className="py-1.5 px-2">U, Z</td>
+                <td className="py-1.5 px-2 text-orange-400">N (Jul)</td>
+              </tr>
+              <tr className="border-b border-zinc-800">
+                <td className="py-1.5 px-2 text-white">Soybeans (S)</td>
+                <td className="py-1.5 px-2">F, H, K, N, Q</td>
+                <td className="py-1.5 px-2">U, X, F</td>
+                <td className="py-1.5 px-2 text-orange-400">Q (Aug)</td>
+              </tr>
+              <tr className="border-b border-zinc-800">
+                <td className="py-1.5 px-2 text-white">Soymeal (SM)</td>
+                <td className="py-1.5 px-2">Z, F, H, K, N, Q, U</td>
+                <td className="py-1.5 px-2">V, Z</td>
+                <td className="py-1.5 px-2 text-orange-400">U (Sep)</td>
+              </tr>
+              <tr className="border-b border-zinc-800">
+                <td className="py-1.5 px-2 text-white">Soyoil (BO)</td>
+                <td className="py-1.5 px-2">Z, F, H, K, N, Q, U</td>
+                <td className="py-1.5 px-2">V, Z</td>
+                <td className="py-1.5 px-2 text-orange-400">U (Sep)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-zinc-500 mt-2">
+          Month codes: F=Jan, H=Mar, K=May, N=Jul, Q=Aug, U=Sep, V=Oct, X=Nov, Z=Dec
+        </p>
       </div>
 
       {/* Expanded Chart Modal */}
