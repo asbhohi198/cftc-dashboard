@@ -34,12 +34,14 @@ export type AgsSoftsSubTab =
   | "sugar"
   | "cotton"
   | "arabica-coffee"
-  | "ny-cocoa";
+  | "ny-cocoa"
+  | "all-us-softs";
 
 export type AgsLivestockSubTab =
   | "live-cattle"
   | "feeder-cattle"
-  | "lean-hogs";
+  | "lean-hogs"
+  | "all-livestock";
 
 export type SubTab = AgsGrainsSubTab | AgsOtherSubTab | AgsSoftsSubTab | AgsLivestockSubTab | null;
 
@@ -81,6 +83,7 @@ export const TAB_CONFIG: TabConfig[] = [
       { id: "cotton", label: "Cotton" },
       { id: "arabica-coffee", label: "Arabica Coffee" },
       { id: "ny-cocoa", label: "NY Cocoa" },
+      { id: "all-us-softs", label: "All US Softs" },
     ],
   },
   {
@@ -90,6 +93,7 @@ export const TAB_CONFIG: TabConfig[] = [
       { id: "live-cattle", label: "Live Cattle" },
       { id: "feeder-cattle", label: "Feeder Cattle" },
       { id: "lean-hogs", label: "Lean Hogs" },
+      { id: "all-livestock", label: "All Livestock" },
     ],
   },
   {

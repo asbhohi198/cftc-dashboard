@@ -9,6 +9,8 @@ import { AllOilseedsTab } from "./AllOilseedsTab";
 import { AllGrainsTab } from "./AllGrainsTab";
 import { AllGOTab } from "./AllGOTab";
 import { OCNCMMSplitsTab } from "./OCNCMMSplitsTab";
+import { AllSoftsTab } from "./AllSoftsTab";
+import { AllLivestockTab } from "./AllLivestockTab";
 import { BarChart3 } from "lucide-react";
 
 // Map sub-tab IDs to contract IDs for the API
@@ -125,12 +127,18 @@ export function Dashboard() {
         )}
 
         {/* Ags - Softs */}
-        {activeTab === "ags-softs" && contractId && (
+        {activeTab === "ags-softs" && activeSubTab === "all-us-softs" && (
+          <AllSoftsTab />
+        )}
+        {activeTab === "ags-softs" && activeSubTab !== "all-us-softs" && contractId && (
           <CornTab contractId={contractId} />
         )}
 
         {/* Ags - Livestock */}
-        {activeTab === "ags-livestock" && contractId && (
+        {activeTab === "ags-livestock" && activeSubTab === "all-livestock" && (
+          <AllLivestockTab />
+        )}
+        {activeTab === "ags-livestock" && activeSubTab !== "all-livestock" && contractId && (
           <CornTab contractId={contractId} />
         )}
 
