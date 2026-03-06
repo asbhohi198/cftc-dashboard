@@ -11,6 +11,7 @@ import {
   ReferenceLine,
   Legend,
 } from "recharts";
+import { X } from "lucide-react";
 
 type TimeRange = "3m" | "6m" | "1y" | "2y" | "5y" | "all";
 
@@ -86,6 +87,46 @@ function formatNumber(value: number): string {
   return value.toFixed(0);
 }
 
+// Get yearly tick indices for small charts
+function getYearlyTicks(data: DataPoint[]): number[] {
+  if (data.length === 0) return [];
+
+  const ticks: number[] = [];
+  let lastYear = -1;
+
+  data.forEach((d, index) => {
+    const year = new Date(d.date).getFullYear();
+    if (year !== lastYear) {
+      ticks.push(index);
+      lastYear = year;
+    }
+  });
+
+  return ticks;
+}
+
+// Get 6-month tick indices for expanded charts
+function getSixMonthTicks(data: DataPoint[]): number[] {
+  if (data.length === 0) return [];
+
+  const ticks: number[] = [];
+  let lastKey = "";
+
+  data.forEach((d, index) => {
+    const date = new Date(d.date);
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    // Show Jan and Jul of each year
+    const key = `${year}-${month < 6 ? 0 : 6}`;
+    if (key !== lastKey) {
+      ticks.push(index);
+      lastKey = key;
+    }
+  });
+
+  return ticks;
+}
+
 export function COTChart({
   title,
   data,
@@ -94,21 +135,15 @@ export function COTChart({
   showZeroLine = true,
 }: COTChartProps) {
   const [timeRange, setTimeRange] = useState<TimeRange>("all");
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const filteredData = useMemo(
     () => filterByTimeRange(data, timeRange),
     [data, timeRange]
   );
 
-  // Calculate tick interval based on data length
-  const tickInterval = useMemo(() => {
-    const len = filteredData.length;
-    if (len <= 20) return 0;
-    if (len <= 50) return Math.floor(len / 10);
-    if (len <= 100) return Math.floor(len / 8);
-    if (len <= 200) return Math.floor(len / 6);
-    return Math.floor(len / 5);
-  }, [filteredData.length]);
+  const yearlyTicks = useMemo(() => getYearlyTicks(filteredData), [filteredData]);
+  const sixMonthTicks = useMemo(() => getSixMonthTicks(filteredData), [filteredData]);
 
   if (loading) {
     return (
@@ -120,30 +155,12 @@ export function COTChart({
     );
   }
 
-  return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-white">{title}</h3>
-        <div className="flex gap-1">
-          {TIME_RANGES.map((range) => (
-            <button
-              key={range.id}
-              onClick={() => setTimeRange(range.id)}
-              className={`px-2 py-0.5 text-xs rounded transition-colors ${
-                timeRange === range.id
-                  ? "bg-orange-500 text-white"
-                  : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
-              }`}
-            >
-              {range.label}
-            </button>
-          ))}
-        </div>
-      </div>
+  const ChartContent = ({ expanded = false }: { expanded?: boolean }) => {
+    const height = expanded ? 500 : 280;
+    const ticks = expanded ? sixMonthTicks : yearlyTicks;
 
-      {/* Chart */}
-      <div className="h-[280px]">
+    return (
+      <div style={{ height }}>
         {filteredData.length === 0 ? (
           <div className="h-full flex items-center justify-center">
             <p className="text-zinc-500 text-sm">No data available</p>
@@ -152,7 +169,7 @@ export function COTChart({
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
-              margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
+              margin={{ top: 5, right: 5, left: 0, bottom: expanded ? 80 : 60 }}
             >
               <XAxis
                 dataKey="date"
@@ -160,14 +177,18 @@ export function COTChart({
                 tick={{ fill: "#71717a", fontSize: 10 }}
                 axisLine={{ stroke: "#3f3f46" }}
                 tickLine={{ stroke: "#3f3f46" }}
-                interval={tickInterval}
+                ticks={ticks.map(i => filteredData[i]?.date).filter(Boolean)}
+                angle={-90}
+                textAnchor="end"
+                height={expanded ? 70 : 50}
+                interval={0}
               />
               <YAxis
                 tickFormatter={formatNumber}
                 tick={{ fill: "#71717a", fontSize: 10 }}
                 axisLine={{ stroke: "#3f3f46" }}
                 tickLine={{ stroke: "#3f3f46" }}
-                width={50}
+                width={55}
               />
               <Tooltip
                 contentStyle={{
@@ -204,43 +225,153 @@ export function COTChart({
                   name={line.name}
                   stroke={line.color}
                   dot={false}
-                  strokeWidth={1.5}
+                  strokeWidth={expanded ? 2 : 1.5}
                 />
               ))}
             </LineChart>
           </ResponsiveContainer>
         )}
       </div>
+    );
+  };
 
-      {/* Stats */}
-      {filteredData.length > 0 && (
-        <div className="mt-3 pt-3 border-t border-zinc-800 grid grid-cols-2 md:grid-cols-4 gap-3">
-          {lines.map((line) => {
-            const latest = filteredData[filteredData.length - 1];
-            const previous = filteredData[filteredData.length - 2];
-            const value = latest[line.key] as number;
-            const prevValue = previous ? (previous[line.key] as number) : value;
-            const change = value - prevValue;
+  return (
+    <>
+      {/* Small Chart */}
+      <div
+        className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 cursor-pointer hover:border-zinc-700 transition-colors"
+        onClick={() => setIsExpanded(true)}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-semibold text-white">{title}</h3>
+          <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
+            {TIME_RANGES.map((range) => (
+              <button
+                key={range.id}
+                onClick={() => setTimeRange(range.id)}
+                className={`px-2 py-0.5 text-xs rounded transition-colors ${
+                  timeRange === range.id
+                    ? "bg-orange-500 text-white"
+                    : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                }`}
+              >
+                {range.label}
+              </button>
+            ))}
+          </div>
+        </div>
 
-            return (
-              <div key={line.key} className="text-center">
-                <p className="text-xs text-zinc-500">{line.name}</p>
-                <p className="text-sm font-medium" style={{ color: line.color }}>
-                  {formatNumber(value)}
-                </p>
-                <p
-                  className={`text-xs ${
-                    change >= 0 ? "text-green-400" : "text-red-400"
-                  }`}
+        {/* Chart */}
+        <ChartContent expanded={false} />
+
+        {/* Stats */}
+        {filteredData.length > 0 && (
+          <div className="mt-3 pt-3 border-t border-zinc-800 grid grid-cols-2 md:grid-cols-4 gap-3">
+            {lines.map((line) => {
+              const latest = filteredData[filteredData.length - 1];
+              const previous = filteredData[filteredData.length - 2];
+              const value = latest[line.key] as number;
+              const prevValue = previous ? (previous[line.key] as number) : value;
+              const change = value - prevValue;
+
+              return (
+                <div key={line.key} className="text-center">
+                  <p className="text-xs text-zinc-500">{line.name}</p>
+                  <p className="text-sm font-medium" style={{ color: line.color }}>
+                    {formatNumber(value)}
+                  </p>
+                  <p
+                    className={`text-xs ${
+                      change >= 0 ? "text-green-400" : "text-red-400"
+                    }`}
+                  >
+                    {change >= 0 ? "+" : ""}
+                    {formatNumber(change)}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Click hint */}
+        <p className="text-xs text-zinc-600 text-center mt-2">Click to expand</p>
+      </div>
+
+      {/* Expanded Modal */}
+      {isExpanded && (
+        <div
+          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+          onClick={() => setIsExpanded(false)}
+        >
+          <div
+            className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 w-full max-w-6xl max-h-[90vh] overflow-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-white">{title}</h2>
+              <div className="flex items-center gap-4">
+                <div className="flex gap-1">
+                  {TIME_RANGES.map((range) => (
+                    <button
+                      key={range.id}
+                      onClick={() => setTimeRange(range.id)}
+                      className={`px-3 py-1 text-sm rounded transition-colors ${
+                        timeRange === range.id
+                          ? "bg-orange-500 text-white"
+                          : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                      }`}
+                    >
+                      {range.label}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={() => setIsExpanded(false)}
+                  className="p-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition-colors"
                 >
-                  {change >= 0 ? "+" : ""}
-                  {formatNumber(change)}
-                </p>
+                  <X className="w-5 h-5 text-zinc-400" />
+                </button>
               </div>
-            );
-          })}
+            </div>
+
+            {/* Expanded Chart */}
+            <ChartContent expanded={true} />
+
+            {/* Stats */}
+            {filteredData.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-zinc-800 grid grid-cols-2 md:grid-cols-4 gap-4">
+                {lines.map((line) => {
+                  const latest = filteredData[filteredData.length - 1];
+                  const previous = filteredData[filteredData.length - 2];
+                  const value = latest[line.key] as number;
+                  const prevValue = previous ? (previous[line.key] as number) : value;
+                  const change = value - prevValue;
+
+                  return (
+                    <div key={line.key} className="text-center">
+                      <p className="text-sm text-zinc-500">{line.name}</p>
+                      <p className="text-xl font-medium" style={{ color: line.color }}>
+                        {formatNumber(value)}
+                      </p>
+                      <p
+                        className={`text-sm ${
+                          change >= 0 ? "text-green-400" : "text-red-400"
+                        }`}
+                      >
+                        {change >= 0 ? "+" : ""}
+                        {formatNumber(change)} (1 week)
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
