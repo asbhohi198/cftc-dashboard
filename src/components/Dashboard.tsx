@@ -1,12 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import { Category } from "@/lib/types";
+import { MainCategory, TAB_CONFIG } from "@/lib/types";
 import { TabNav } from "./TabNav";
 import { BarChart3 } from "lucide-react";
 
 export function Dashboard() {
-  const [activeTab, setActiveTab] = useState<Category>("home");
+  const [activeTab, setActiveTab] = useState<MainCategory>("ags-grains");
+  const [activeSubTab, setActiveSubTab] = useState<string | null>("corn");
+
+  const handleTabChange = (tab: MainCategory, subTab?: string | null) => {
+    setActiveTab(tab);
+    // If tab has sub-tabs, set the first one as default, otherwise null
+    const tabConfig = TAB_CONFIG.find((t) => t.id === tab);
+    if (subTab !== undefined) {
+      setActiveSubTab(subTab);
+    } else if (tabConfig?.subTabs && tabConfig.subTabs.length > 0) {
+      setActiveSubTab(tabConfig.subTabs[0].id);
+    } else {
+      setActiveSubTab(null);
+    }
+  };
+
+  // Get current tab and sub-tab labels for display
+  const currentTabConfig = TAB_CONFIG.find((t) => t.id === activeTab);
+  const currentSubTabLabel = currentTabConfig?.subTabs?.find(
+    (st) => st.id === activeSubTab
+  )?.label;
 
   return (
     <div className="min-h-screen bg-zinc-950">
@@ -18,78 +38,140 @@ export function Dashboard() {
               <BarChart3 className="w-6 h-6 text-orange-500" /> CFTC Dashboard
             </h1>
           </div>
-          <TabNav activeTab={activeTab} onTabChange={setActiveTab} />
+          <TabNav
+            activeTab={activeTab}
+            activeSubTab={activeSubTab}
+            onTabChange={handleTabChange}
+          />
         </div>
       </header>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto p-4">
-        {activeTab === "home" && (
+        {/* Breadcrumb showing current selection */}
+        <div className="mb-4 text-sm text-zinc-500">
+          <span className="text-zinc-400">{currentTabConfig?.label}</span>
+          {currentSubTabLabel && (
+            <>
+              <span className="mx-2">/</span>
+              <span className="text-orange-400">{currentSubTabLabel}</span>
+            </>
+          )}
+        </div>
+
+        {/* Ags - Grains & Oilseeds */}
+        {activeTab === "ags-grains" && (
           <div className="space-y-6">
             <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                CFTC Commitments of Traders Report
+              <h2 className="text-xl font-semibold text-white mb-2">
+                {currentSubTabLabel || "Grains & Oilseeds"}
               </h2>
-              <p className="text-zinc-400 mb-4">
-                This dashboard displays data from the weekly CFTC Commitments of Traders (COT) report,
-                which shows the aggregate positions of different types of traders in U.S. futures markets.
+              <p className="text-zinc-500 text-sm">
+                COT positioning data coming soon
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-zinc-800 rounded-lg p-4">
-                  <h3 className="text-sm font-medium text-zinc-400 mb-1">Commercial Traders</h3>
-                  <p className="text-xs text-zinc-500">
-                    Producers, merchants, processors - typically hedging
-                  </p>
-                </div>
-                <div className="bg-zinc-800 rounded-lg p-4">
-                  <h3 className="text-sm font-medium text-zinc-400 mb-1">Non-Commercial Traders</h3>
-                  <p className="text-xs text-zinc-500">
-                    Large speculators - hedge funds, CTAs, money managers
-                  </p>
-                </div>
-                <div className="bg-zinc-800 rounded-lg p-4">
-                  <h3 className="text-sm font-medium text-zinc-400 mb-1">Non-Reportable</h3>
-                  <p className="text-xs text-zinc-500">
-                    Small traders below reporting thresholds
-                  </p>
-                </div>
-              </div>
             </div>
+          </div>
+        )}
 
+        {/* Ags - Softs */}
+        {activeTab === "ags-softs" && (
+          <div className="space-y-6">
             <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-white mb-3">Coming Soon</h3>
-              <ul className="text-zinc-400 space-y-2 text-sm">
-                <li>- Net positioning charts for major futures contracts</li>
-                <li>- Commercial vs Non-Commercial positioning analysis</li>
-                <li>- Extreme positioning signals (percentile rankings)</li>
-                <li>- Open interest trends</li>
-                <li>- Historical positioning comparisons</li>
-              </ul>
+              <h2 className="text-xl font-semibold text-white mb-2">
+                {currentSubTabLabel || "Softs"}
+              </h2>
+              <p className="text-zinc-500 text-sm">
+                COT positioning data coming soon
+              </p>
             </div>
           </div>
         )}
 
-        {activeTab === "futures" && (
-          <div className="text-center py-12">
-            <p className="text-zinc-500">Futures positioning data - coming soon</p>
+        {/* Ags - Livestock */}
+        {activeTab === "ags-livestock" && (
+          <div className="space-y-6">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-2">
+                {currentSubTabLabel || "Livestock"}
+              </h2>
+              <p className="text-zinc-500 text-sm">
+                COT positioning data coming soon
+              </p>
+            </div>
           </div>
         )}
 
-        {activeTab === "options" && (
-          <div className="text-center py-12">
-            <p className="text-zinc-500">Options positioning data - coming soon</p>
+        {/* Ags - Other */}
+        {activeTab === "ags-other" && (
+          <div className="space-y-6">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-2">
+                Ags - Other
+              </h2>
+              <p className="text-zinc-500 text-sm">
+                COT positioning data coming soon
+              </p>
+            </div>
           </div>
         )}
 
-        {activeTab === "spreads" && (
-          <div className="text-center py-12">
-            <p className="text-zinc-500">Spread analysis - coming soon</p>
+        {/* Energy */}
+        {activeTab === "energy" && (
+          <div className="space-y-6">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-2">Energy</h2>
+              <p className="text-zinc-500 text-sm">
+                COT positioning data coming soon
+              </p>
+            </div>
           </div>
         )}
 
-        {activeTab === "analysis" && (
-          <div className="text-center py-12">
-            <p className="text-zinc-500">Position analysis tools - coming soon</p>
+        {/* Equities */}
+        {activeTab === "equities" && (
+          <div className="space-y-6">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-2">Equities</h2>
+              <p className="text-zinc-500 text-sm">
+                COT positioning data coming soon
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Rates */}
+        {activeTab === "rates" && (
+          <div className="space-y-6">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-2">Rates</h2>
+              <p className="text-zinc-500 text-sm">
+                COT positioning data coming soon
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* FX */}
+        {activeTab === "fx" && (
+          <div className="space-y-6">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-2">FX</h2>
+              <p className="text-zinc-500 text-sm">
+                COT positioning data coming soon
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Crypto */}
+        {activeTab === "crypto" && (
+          <div className="space-y-6">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-white mb-2">Crypto</h2>
+              <p className="text-zinc-500 text-sm">
+                COT positioning data coming soon
+              </p>
+            </div>
           </div>
         )}
       </main>
