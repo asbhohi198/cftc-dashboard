@@ -69,6 +69,44 @@ export function OCNCMMSplitsTab() {
     fetchData();
   }, []);
 
+  // Calculate unified Y-axis domain for both charts (must be before early returns)
+  const yAxisDomain = useMemo(() => {
+    if (data.length === 0) return [-100000, 300000];
+    const allValues = [
+      ...data.map((d) => d.oc),
+      ...data.map((d) => d.nc),
+      ...data.map((d) => d.ocChange),
+      ...data.map((d) => d.ncChange),
+    ];
+    const minVal = Math.min(...allValues, 0);
+    const maxVal = Math.max(...allValues, 0);
+    // Add 15% padding for labels
+    const padding = Math.max(Math.abs(maxVal), Math.abs(minVal)) * 0.15;
+    return [Math.floor((minVal - padding) / 10000) * 10000, Math.ceil((maxVal + padding) / 10000) * 10000];
+  }, [data]);
+
+  // Prepare chart data for positions
+  const positionChartData = useMemo(() => data.map((d) => ({
+    name: d.label,
+    OC: d.oc,
+    NC: d.nc,
+  })), [data]);
+
+  // Prepare chart data for changes
+  const changesChartData = useMemo(() => data.map((d) => ({
+    name: d.label,
+    OC: d.ocChange,
+    NC: d.ncChange,
+  })), [data]);
+
+  // Format label for bars (compact)
+  const formatLabel = (value: number) => {
+    if (Math.abs(value) >= 1000) {
+      return `${(value / 1000).toFixed(0)}k`;
+    }
+    return value.toString();
+  };
+
   if (loading) {
     return (
       <div className="space-y-6">
@@ -89,43 +127,6 @@ export function OCNCMMSplitsTab() {
       </div>
     );
   }
-
-  // Prepare chart data for positions
-  const positionChartData = data.map((d) => ({
-    name: d.label,
-    OC: d.oc,
-    NC: d.nc,
-  }));
-
-  // Prepare chart data for changes
-  const changesChartData = data.map((d) => ({
-    name: d.label,
-    OC: d.ocChange,
-    NC: d.ncChange,
-  }));
-
-  // Calculate unified Y-axis domain for both charts
-  const yAxisDomain = useMemo(() => {
-    const allValues = [
-      ...data.map((d) => d.oc),
-      ...data.map((d) => d.nc),
-      ...data.map((d) => d.ocChange),
-      ...data.map((d) => d.ncChange),
-    ];
-    const minVal = Math.min(...allValues, 0);
-    const maxVal = Math.max(...allValues, 0);
-    // Add 15% padding for labels
-    const padding = Math.max(Math.abs(maxVal), Math.abs(minVal)) * 0.15;
-    return [Math.floor((minVal - padding) / 10000) * 10000, Math.ceil((maxVal + padding) / 10000) * 10000];
-  }, [data]);
-
-  // Format label for bars (compact)
-  const formatLabel = (value: number) => {
-    if (Math.abs(value) >= 1000) {
-      return `${(value / 1000).toFixed(0)}k`;
-    }
-    return value.toString();
-  };
 
   return (
     <div className="space-y-8">
