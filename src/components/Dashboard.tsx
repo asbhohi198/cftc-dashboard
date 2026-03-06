@@ -11,6 +11,7 @@ import { AllGOTab } from "./AllGOTab";
 import { OCNCMMSplitsTab } from "./OCNCMMSplitsTab";
 import { AllSoftsTab } from "./AllSoftsTab";
 import { AllLivestockTab } from "./AllLivestockTab";
+import { HomeTab } from "./HomeTab";
 import { BarChart3 } from "lucide-react";
 
 // Map sub-tab IDs to contract IDs for the API
@@ -95,16 +96,7 @@ export function Dashboard() {
         </div>
 
         {/* Home */}
-        {activeTab === "home" && (
-          <div className="space-y-6">
-            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-2">Home</h2>
-              <p className="text-zinc-500 text-sm">
-                CFTC Commitments of Traders overview coming soon
-              </p>
-            </div>
-          </div>
-        )}
+        {activeTab === "home" && <HomeTab />}
 
         {/* Ags - Grains & Oilseeds */}
         {activeTab === "ags-grains" && activeSubTab === "all-us-wheat" && (
