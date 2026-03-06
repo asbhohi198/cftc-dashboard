@@ -156,7 +156,7 @@ export function COTChart({
   }
 
   const ChartContent = ({ expanded = false }: { expanded?: boolean }) => {
-    const height = expanded ? 570 : 330;
+    const height = expanded ? 400 : 250;
     const ticks = expanded ? sixMonthTicks : yearlyTicks;
 
     return (
@@ -169,18 +169,18 @@ export function COTChart({
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={filteredData}
-              margin={{ top: 5, right: 10, left: 5, bottom: expanded ? 80 : 70 }}
+              margin={{ top: 20, right: 10, left: 5, bottom: 5 }}
             >
               <XAxis
                 dataKey="date"
                 tickFormatter={formatDate}
-                tick={{ fill: "#71717a", fontSize: 10, dy: 35 }}
+                tick={{ fill: "#71717a", fontSize: 10 }}
                 axisLine={{ stroke: "#3f3f46" }}
                 tickLine={{ stroke: "#3f3f46" }}
                 ticks={ticks.map(i => filteredData[i]?.date).filter(Boolean)}
-                angle={-90}
+                angle={-45}
                 textAnchor="end"
-                height={expanded ? 70 : 60}
+                height={expanded ? 50 : 40}
                 interval={0}
               />
               <YAxis
@@ -212,7 +212,9 @@ export function COTChart({
                 }}
               />
               <Legend
-                wrapperStyle={{ fontSize: "11px", paddingTop: "4px" }}
+                verticalAlign="top"
+                height={24}
+                wrapperStyle={{ fontSize: "11px" }}
               />
               {showZeroLine && (
                 <ReferenceLine y={0} stroke="#52525b" strokeDasharray="3 3" />
