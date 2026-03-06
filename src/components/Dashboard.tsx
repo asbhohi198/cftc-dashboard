@@ -3,7 +3,32 @@
 import { useState } from "react";
 import { MainCategory, TAB_CONFIG } from "@/lib/types";
 import { TabNav } from "./TabNav";
+import { CornTab } from "./CornTab";
 import { BarChart3 } from "lucide-react";
+
+// Map sub-tab IDs to contract IDs for the API
+const SUB_TAB_TO_CONTRACT: Record<string, string> = {
+  // Grains & Oilseeds
+  corn: "corn",
+  "chicago-wheat": "chicago-wheat",
+  "kansas-wheat": "kansas-wheat",
+  "minneapolis-wheat": "minneapolis-wheat",
+  "all-wheat": "chicago-wheat", // Will need special handling later
+  soybeans: "soybeans",
+  soymeal: "soymeal",
+  soyoil: "soyoil",
+  oats: "oats",
+  "rough-rice": "rough-rice",
+  // Softs
+  sugar: "sugar",
+  cotton: "cotton",
+  "arabica-coffee": "arabica-coffee",
+  "ny-cocoa": "ny-cocoa",
+  // Livestock
+  "live-cattle": "live-cattle",
+  "feeder-cattle": "feeder-cattle",
+  "lean-hogs": "lean-hogs",
+};
 
 export function Dashboard() {
   const [activeTab, setActiveTab] = useState<MainCategory>("home");
@@ -27,6 +52,9 @@ export function Dashboard() {
   const currentSubTabLabel = currentTabConfig?.subTabs?.find(
     (st) => st.id === activeSubTab
   )?.label;
+
+  // Get contract ID for current sub-tab
+  const contractId = activeSubTab ? SUB_TAB_TO_CONTRACT[activeSubTab] : null;
 
   return (
     <div className="min-h-screen bg-zinc-950">
@@ -72,45 +100,18 @@ export function Dashboard() {
         )}
 
         {/* Ags - Grains & Oilseeds */}
-        {activeTab === "ags-grains" && (
-          <div className="space-y-6">
-            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-2">
-                {currentSubTabLabel || "Grains & Oilseeds"}
-              </h2>
-              <p className="text-zinc-500 text-sm">
-                COT positioning data coming soon
-              </p>
-            </div>
-          </div>
+        {activeTab === "ags-grains" && contractId && (
+          <CornTab contractId={contractId} />
         )}
 
         {/* Ags - Softs */}
-        {activeTab === "ags-softs" && (
-          <div className="space-y-6">
-            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-2">
-                {currentSubTabLabel || "Softs"}
-              </h2>
-              <p className="text-zinc-500 text-sm">
-                COT positioning data coming soon
-              </p>
-            </div>
-          </div>
+        {activeTab === "ags-softs" && contractId && (
+          <CornTab contractId={contractId} />
         )}
 
         {/* Ags - Livestock */}
-        {activeTab === "ags-livestock" && (
-          <div className="space-y-6">
-            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-2">
-                {currentSubTabLabel || "Livestock"}
-              </h2>
-              <p className="text-zinc-500 text-sm">
-                COT positioning data coming soon
-              </p>
-            </div>
-          </div>
+        {activeTab === "ags-livestock" && contractId && (
+          <CornTab contractId={contractId} />
         )}
 
         {/* Ags - Other */}
