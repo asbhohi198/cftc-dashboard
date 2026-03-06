@@ -14,6 +14,7 @@ import {
 import { X } from "lucide-react";
 
 type TimeRange = "3m" | "6m" | "1y" | "2y" | "5y" | "all";
+type ViewMode = "outright" | "percent";
 
 interface DataPoint {
   date: string;
@@ -32,6 +33,10 @@ interface COTChartProps {
   lines: ChartLine[];
   loading?: boolean;
   showZeroLine?: boolean;
+  // Optional alternate view (% OI or % Total)
+  alternateData?: DataPoint[];
+  alternateLines?: ChartLine[];
+  alternateLabel?: string; // e.g., "% OI" or "% Total"
 }
 
 const TIME_RANGES: { id: TimeRange; label: string }[] = [
@@ -87,6 +92,10 @@ function formatNumber(value: number): string {
   return value.toFixed(0);
 }
 
+function formatPercent(value: number): string {
+  return value.toFixed(1) + "%";
+}
+
 // Get yearly tick indices for small charts
 function getYearlyTicks(data: DataPoint[]): number[] {
   if (data.length === 0) return [];
@@ -133,13 +142,23 @@ export function COTChart({
   lines,
   loading = false,
   showZeroLine = true,
+  alternateData,
+  alternateLines,
+  alternateLabel,
 }: COTChartProps) {
   const [timeRange, setTimeRange] = useState<TimeRange>("all");
   const [isExpanded, setIsExpanded] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>("outright");
+
+  const hasAlternate = alternateData && alternateLines && alternateLabel;
+  const isPercentView = viewMode === "percent" && hasAlternate;
+
+  const activeData = isPercentView ? alternateData! : data;
+  const activeLines = isPercentView ? alternateLines! : lines;
 
   const filteredData = useMemo(
-    () => filterByTimeRange(data, timeRange),
-    [data, timeRange]
+    () => filterByTimeRange(activeData, timeRange),
+    [activeData, timeRange]
   );
 
   const yearlyTicks = useMemo(() => getYearlyTicks(filteredData), [filteredData]);
@@ -184,7 +203,7 @@ export function COTChart({
                 interval={0}
               />
               <YAxis
-                tickFormatter={formatNumber}
+                tickFormatter={isPercentView ? formatPercent : formatNumber}
                 tick={{ fill: "#71717a", fontSize: 10 }}
                 axisLine={{ stroke: "#3f3f46" }}
                 tickLine={{ stroke: "#3f3f46" }}
@@ -199,7 +218,7 @@ export function COTChart({
                 }}
                 labelStyle={{ color: "#a1a1aa" }}
                 formatter={(value: number, name: string) => [
-                  formatNumber(value) + " contracts",
+                  isPercentView ? formatPercent(value) : formatNumber(value) + " contracts",
                   name,
                 ]}
                 labelFormatter={(label) => {
@@ -219,7 +238,7 @@ export function COTChart({
               {showZeroLine && (
                 <ReferenceLine y={0} stroke="#52525b" strokeDasharray="3 3" />
               )}
-              {lines.map((line) => (
+              {activeLines.map((line) => (
                 <Line
                   key={line.key}
                   type="monotone"
@@ -237,6 +256,39 @@ export function COTChart({
     );
   };
 
+  const ViewToggle = ({ size = "small" }: { size?: "small" | "large" }) => {
+    if (!hasAlternate) return null;
+
+    const btnClass = size === "large"
+      ? "px-3 py-1 text-sm rounded transition-colors"
+      : "px-2 py-0.5 text-xs rounded transition-colors";
+
+    return (
+      <div className="flex gap-1">
+        <button
+          onClick={(e) => { e.stopPropagation(); setViewMode("outright"); }}
+          className={`${btnClass} ${
+            viewMode === "outright"
+              ? "bg-blue-600 text-white"
+              : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+          }`}
+        >
+          Outright
+        </button>
+        <button
+          onClick={(e) => { e.stopPropagation(); setViewMode("percent"); }}
+          className={`${btnClass} ${
+            viewMode === "percent"
+              ? "bg-blue-600 text-white"
+              : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+          }`}
+        >
+          {alternateLabel}
+        </button>
+      </div>
+    );
+  };
+
   return (
     <>
       {/* Small Chart */}
@@ -245,22 +297,25 @@ export function COTChart({
         onClick={() => setIsExpanded(true)}
       >
         {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-white">{title}</h3>
-          <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
-            {TIME_RANGES.map((range) => (
-              <button
-                key={range.id}
-                onClick={() => setTimeRange(range.id)}
-                className={`px-2 py-0.5 text-xs rounded transition-colors ${
-                  timeRange === range.id
-                    ? "bg-orange-500 text-white"
-                    : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
-                }`}
-              >
-                {range.label}
-              </button>
-            ))}
+        <div className="flex items-center justify-between mb-2 gap-2">
+          <h3 className="text-sm font-semibold text-white truncate">{title}</h3>
+          <div className="flex gap-2 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+            <ViewToggle size="small" />
+            <div className="flex gap-1">
+              {TIME_RANGES.map((range) => (
+                <button
+                  key={range.id}
+                  onClick={() => setTimeRange(range.id)}
+                  className={`px-2 py-0.5 text-xs rounded transition-colors ${
+                    timeRange === range.id
+                      ? "bg-orange-500 text-white"
+                      : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                  }`}
+                >
+                  {range.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -270,7 +325,7 @@ export function COTChart({
         {/* Stats */}
         {filteredData.length > 0 && (
           <div className="mt-3 pt-3 border-t border-zinc-800 flex flex-wrap justify-center gap-6">
-            {lines.map((line) => {
+            {activeLines.map((line) => {
               const latest = filteredData[filteredData.length - 1];
               const previous = filteredData[filteredData.length - 2];
               const value = latest[line.key] as number;
@@ -281,7 +336,7 @@ export function COTChart({
                 <div key={line.key} className="text-center min-w-[80px]">
                   <p className="text-xs text-zinc-500">{line.name}</p>
                   <p className="text-sm font-medium" style={{ color: line.color }}>
-                    {formatNumber(value)}
+                    {isPercentView ? formatPercent(value) : formatNumber(value)}
                   </p>
                   <p
                     className={`text-xs ${
@@ -289,7 +344,7 @@ export function COTChart({
                     }`}
                   >
                     {change >= 0 ? "+" : ""}
-                    {formatNumber(change)} WoW
+                    {isPercentView ? formatPercent(change) : formatNumber(change)} WoW
                   </p>
                 </div>
               );
@@ -315,6 +370,7 @@ export function COTChart({
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-white">{title}</h2>
               <div className="flex items-center gap-4">
+                <ViewToggle size="large" />
                 <div className="flex gap-1">
                   {TIME_RANGES.map((range) => (
                     <button
@@ -345,7 +401,7 @@ export function COTChart({
             {/* Stats */}
             {filteredData.length > 0 && (
               <div className="mt-4 pt-4 border-t border-zinc-800 flex flex-wrap justify-center gap-8">
-                {lines.map((line) => {
+                {activeLines.map((line) => {
                   const latest = filteredData[filteredData.length - 1];
                   const previous = filteredData[filteredData.length - 2];
                   const value = latest[line.key] as number;
@@ -356,7 +412,7 @@ export function COTChart({
                     <div key={line.key} className="text-center min-w-[100px]">
                       <p className="text-sm text-zinc-500">{line.name}</p>
                       <p className="text-xl font-medium" style={{ color: line.color }}>
-                        {formatNumber(value)}
+                        {isPercentView ? formatPercent(value) : formatNumber(value)}
                       </p>
                       <p
                         className={`text-sm ${
@@ -364,7 +420,7 @@ export function COTChart({
                         }`}
                       >
                         {change >= 0 ? "+" : ""}
-                        {formatNumber(change)} WoW
+                        {isPercentView ? formatPercent(change) : formatNumber(change)} WoW
                       </p>
                     </div>
                   );

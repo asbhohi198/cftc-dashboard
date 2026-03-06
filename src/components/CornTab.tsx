@@ -40,89 +40,239 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
     fetchData();
   }, [contractId]);
 
-  // Transform data for charts
-  const mmData = useMemo(
-    () =>
-      data.map((d) => ({
-        date: d.date,
-        "Net Long": d.mmNetAll,
-        Long: d.mmLongAll,
-        Short: -d.mmShortAll,
-      })),
-    [data]
-  );
+  // ============================================
+  // AGGREGATE DATA - Outright
+  // ============================================
+  const producerNetData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.producerNetAll,
+  })), [data]);
 
-  const mmOldNewData = useMemo(
-    () =>
-      data.map((d) => ({
-        date: d.date,
-        "Old Crop": d.mmNetOld,
-        "New Crop": d.mmNetOther,
-      })),
-    [data]
-  );
+  const swapNetData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.swapNetAll,
+  })), [data]);
 
-  const specData = useMemo(
-    () =>
-      data.map((d) => ({
-        date: d.date,
-        "Spec Net": d.specNetAll,
-        "MM Net": d.mmNetAll,
-        "Other Net": d.otherNetAll,
-      })),
-    [data]
-  );
+  const mmNetData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.mmNetAll,
+  })), [data]);
 
-  const producerData = useMemo(
-    () =>
-      data.map((d) => ({
-        date: d.date,
-        "Net Short": d.producerNetAll,
-        Long: d.producerLongAll,
-        Short: -d.producerShortAll,
-      })),
-    [data]
-  );
+  const specNetData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.specNetAll,
+  })), [data]);
 
-  const producerOldNewData = useMemo(
-    () =>
-      data.map((d) => ({
-        date: d.date,
-        "Old Crop": d.producerNetOld,
-        "New Crop": d.producerNetOther,
-      })),
-    [data]
-  );
+  const otherNetData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.otherNetAll,
+  })), [data]);
 
-  const swapData = useMemo(
-    () =>
-      data.map((d) => ({
-        date: d.date,
-        "Net Position": d.swapNetAll,
-        Spread: d.swapSpreadAll,
-      })),
-    [data]
-  );
+  const nonReptNetData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.nonReptNetAll,
+  })), [data]);
 
-  const nonReptData = useMemo(
-    () =>
-      data.map((d) => ({
-        date: d.date,
-        "Net Position": d.nonReptNetAll,
-      })),
-    [data]
-  );
+  const prodNonReptNetData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.producerNetAll + d.nonReptNetAll,
+  })), [data]);
 
-  const openInterestData = useMemo(
-    () =>
-      data.map((d) => ({
-        date: d.date,
-        "Total OI": d.openInterestAll,
-        "Old Crop": d.openInterestOld,
-        "New Crop": d.openInterestOther,
-      })),
-    [data]
-  );
+  // ============================================
+  // AGGREGATE DATA - % OI
+  // ============================================
+  const producerPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? (d.producerNetAll / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  const swapPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? (d.swapNetAll / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  const mmPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? (d.mmNetAll / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  const specPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? (d.specNetAll / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  const otherPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? (d.otherNetAll / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  const nonReptPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? (d.nonReptNetAll / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  const prodNonReptPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? ((d.producerNetAll + d.nonReptNetAll) / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  // ============================================
+  // OLD CROP DATA - Outright
+  // ============================================
+  const producerOldData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.producerNetOld,
+  })), [data]);
+
+  const swapOldData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.swapNetOld,
+  })), [data]);
+
+  const mmOldData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.mmNetOld,
+  })), [data]);
+
+  const specOldData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.specNetOld,
+  })), [data]);
+
+  const otherOldData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.otherNetOld,
+  })), [data]);
+
+  const nonReptOldData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.nonReptNetOld,
+  })), [data]);
+
+  const prodNonReptOldData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.producerNetOld + d.nonReptNetOld,
+  })), [data]);
+
+  // ============================================
+  // OLD CROP DATA - % Total (old as % of aggregate)
+  // ============================================
+  const producerOldPctTotalData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% Total": d.producerNetAll ? (d.producerNetOld / d.producerNetAll) * 100 : 0,
+  })), [data]);
+
+  const swapOldPctTotalData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% Total": d.swapNetAll ? (d.swapNetOld / d.swapNetAll) * 100 : 0,
+  })), [data]);
+
+  const mmOldPctTotalData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% Total": d.mmNetAll ? (d.mmNetOld / d.mmNetAll) * 100 : 0,
+  })), [data]);
+
+  const specOldPctTotalData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% Total": d.specNetAll ? (d.specNetOld / d.specNetAll) * 100 : 0,
+  })), [data]);
+
+  const otherOldPctTotalData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% Total": d.otherNetAll ? (d.otherNetOld / d.otherNetAll) * 100 : 0,
+  })), [data]);
+
+  const nonReptOldPctTotalData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% Total": d.nonReptNetAll ? (d.nonReptNetOld / d.nonReptNetAll) * 100 : 0,
+  })), [data]);
+
+  // Producer + Non-rept Old uses % OI (per user's list)
+  const prodNonReptOldPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? ((d.producerNetOld + d.nonReptNetOld) / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  // ============================================
+  // NEW CROP DATA - Outright
+  // ============================================
+  const producerNewData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.producerNetOther,
+  })), [data]);
+
+  const swapNewData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.swapNetOther,
+  })), [data]);
+
+  const mmNewData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.mmNetOther,
+  })), [data]);
+
+  const specNewData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.specNetOther,
+  })), [data]);
+
+  const otherNewData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.otherNetOther,
+  })), [data]);
+
+  const nonReptNewData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.nonReptNetOther,
+  })), [data]);
+
+  const prodNonReptNewData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "Net Position": d.producerNetOther + d.nonReptNetOther,
+  })), [data]);
+
+  // ============================================
+  // NEW CROP DATA - % OI
+  // ============================================
+  const producerNewPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? (d.producerNetOther / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  const swapNewPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? (d.swapNetOther / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  const mmNewPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? (d.mmNetOther / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  const specNewPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? (d.specNetOther / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  const otherNewPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? (d.otherNetOther / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  const nonReptNewPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? (d.nonReptNetOther / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  const prodNonReptNewPctOIData = useMemo(() => data.map((d) => ({
+    date: d.date,
+    "% OI": d.openInterestAll ? ((d.producerNetOther + d.nonReptNetOther) / d.openInterestAll) * 100 : 0,
+  })), [data]);
+
+  // Line configs
+  const netLine = [{ key: "Net Position", name: "Net Position", color: "#f97316" }];
+  const pctOILine = [{ key: "% OI", name: "% OI", color: "#f97316" }];
+  const pctTotalLine = [{ key: "% Total", name: "% Total", color: "#f97316" }];
 
   if (error) {
     return (
@@ -133,7 +283,7 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header Stats */}
       {!loading && data.length > 0 && (
         <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
@@ -171,122 +321,226 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
         </div>
       )}
 
-      {/* Managed Money Section */}
+      {/* ========================================= */}
+      {/* AGGREGATE DATA SECTION */}
+      {/* ========================================= */}
       <div className="space-y-4">
-        <h3 className="text-sm font-medium text-zinc-400 uppercase tracking-wider">
-          Managed Money (Specs)
-        </h3>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <COTChart
-            title="Managed Money Net Position"
-            data={mmData}
-            lines={[
-              { key: "Net Long", name: "Net Position", color: "#f97316" },
-            ]}
-            loading={loading}
-          />
-          <COTChart
-            title="Managed Money: Old Crop vs New Crop"
-            data={mmOldNewData}
-            lines={[
-              { key: "Old Crop", name: "Old Crop", color: "#22c55e" },
-              { key: "New Crop", name: "New Crop", color: "#3b82f6" },
-            ]}
-            loading={loading}
-          />
-        </div>
-      </div>
-
-      {/* Speculators Section */}
-      <div className="space-y-4">
-        <h3 className="text-sm font-medium text-zinc-400 uppercase tracking-wider">
-          Speculators (MM + Other Reportables)
-        </h3>
-        <COTChart
-          title="Speculator Net Positioning"
-          data={specData}
-          lines={[
-            { key: "Spec Net", name: "Total Spec", color: "#f97316" },
-            { key: "MM Net", name: "Managed Money", color: "#22c55e" },
-            { key: "Other Net", name: "Other Reportables", color: "#8b5cf6" },
-          ]}
-          loading={loading}
-        />
-      </div>
-
-      {/* Producer/Commercial Section */}
-      <div className="space-y-4">
-        <h3 className="text-sm font-medium text-zinc-400 uppercase tracking-wider">
-          Producer/Merchant (Commercials)
+        <h3 className="text-lg font-semibold text-white border-b border-zinc-700 pb-2">
+          Aggregate Data
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <COTChart
             title="Producer Net Position"
-            data={producerData}
-            lines={[
-              { key: "Net Short", name: "Net Position", color: "#ef4444" },
-            ]}
+            data={producerNetData}
+            lines={netLine}
+            alternateData={producerPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
             loading={loading}
           />
           <COTChart
-            title="Producer: Old Crop vs New Crop"
-            data={producerOldNewData}
-            lines={[
-              { key: "Old Crop", name: "Old Crop", color: "#22c55e" },
-              { key: "New Crop", name: "New Crop", color: "#3b82f6" },
-            ]}
+            title="Swap Dealer Net Position"
+            data={swapNetData}
+            lines={netLine}
+            alternateData={swapPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title="Managed Money Net Position"
+            data={mmNetData}
+            lines={netLine}
+            alternateData={mmPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title="Spec Net Position"
+            data={specNetData}
+            lines={netLine}
+            alternateData={specPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title="Other Reportables Net Position"
+            data={otherNetData}
+            lines={netLine}
+            alternateData={otherPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title="Non-Reportables Net Position"
+            data={nonReptNetData}
+            lines={netLine}
+            alternateData={nonReptPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title="Producer + Non-Reportables Net Position"
+            data={prodNonReptNetData}
+            lines={netLine}
+            alternateData={prodNonReptPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
             loading={loading}
           />
         </div>
       </div>
 
-      {/* Swap Dealers Section */}
+      {/* ========================================= */}
+      {/* OLD CROP DATA SECTION */}
+      {/* ========================================= */}
       <div className="space-y-4">
-        <h3 className="text-sm font-medium text-zinc-400 uppercase tracking-wider">
-          Swap Dealers
+        <h3 className="text-lg font-semibold text-white border-b border-zinc-700 pb-2">
+          Old Crop Data
         </h3>
-        <COTChart
-          title="Swap Dealer Positioning"
-          data={swapData}
-          lines={[
-            { key: "Net Position", name: "Net Position", color: "#06b6d4" },
-            { key: "Spread", name: "Spread", color: "#a855f7" },
-          ]}
-          loading={loading}
-        />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <COTChart
+            title="Producer Net Position, Old Crop"
+            data={producerOldData}
+            lines={netLine}
+            alternateData={producerOldPctTotalData}
+            alternateLines={pctTotalLine}
+            alternateLabel="% Total"
+            loading={loading}
+          />
+          <COTChart
+            title="Swap Dealer Net Position, Old Crop"
+            data={swapOldData}
+            lines={netLine}
+            alternateData={swapOldPctTotalData}
+            alternateLines={pctTotalLine}
+            alternateLabel="% Total"
+            loading={loading}
+          />
+          <COTChart
+            title="Managed Money Net Position, Old Crop"
+            data={mmOldData}
+            lines={netLine}
+            alternateData={mmOldPctTotalData}
+            alternateLines={pctTotalLine}
+            alternateLabel="% Total"
+            loading={loading}
+          />
+          <COTChart
+            title="Spec Net Position, Old Crop"
+            data={specOldData}
+            lines={netLine}
+            alternateData={specOldPctTotalData}
+            alternateLines={pctTotalLine}
+            alternateLabel="% Total"
+            loading={loading}
+          />
+          <COTChart
+            title="Other Reportables Net Position, Old Crop"
+            data={otherOldData}
+            lines={netLine}
+            alternateData={otherOldPctTotalData}
+            alternateLines={pctTotalLine}
+            alternateLabel="% Total"
+            loading={loading}
+          />
+          <COTChart
+            title="Non-Reportables Net Position, Old Crop"
+            data={nonReptOldData}
+            lines={netLine}
+            alternateData={nonReptOldPctTotalData}
+            alternateLines={pctTotalLine}
+            alternateLabel="% Total"
+            loading={loading}
+          />
+          <COTChart
+            title="Producer + Non-Reportables Net Position, Old Crop"
+            data={prodNonReptOldData}
+            lines={netLine}
+            alternateData={prodNonReptOldPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+        </div>
       </div>
 
-      {/* Non-Reportables Section */}
+      {/* ========================================= */}
+      {/* NEW CROP DATA SECTION */}
+      {/* ========================================= */}
       <div className="space-y-4">
-        <h3 className="text-sm font-medium text-zinc-400 uppercase tracking-wider">
-          Non-Reportables (Small Traders)
+        <h3 className="text-lg font-semibold text-white border-b border-zinc-700 pb-2">
+          New Crop Data
         </h3>
-        <COTChart
-          title="Non-Reportable Net Position"
-          data={nonReptData}
-          lines={[
-            { key: "Net Position", name: "Net Position", color: "#fbbf24" },
-          ]}
-          loading={loading}
-        />
-      </div>
-
-      {/* Open Interest Section */}
-      <div className="space-y-4">
-        <h3 className="text-sm font-medium text-zinc-400 uppercase tracking-wider">
-          Open Interest
-        </h3>
-        <COTChart
-          title="Open Interest"
-          data={openInterestData}
-          lines={[
-            { key: "Total OI", name: "Total", color: "#ffffff" },
-            { key: "Old Crop", name: "Old Crop", color: "#22c55e" },
-            { key: "New Crop", name: "New Crop", color: "#3b82f6" },
-          ]}
-          loading={loading}
-          showZeroLine={false}
-        />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <COTChart
+            title="Producer Net Position, New Crop"
+            data={producerNewData}
+            lines={netLine}
+            alternateData={producerNewPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title="Swap Dealer Net Position, New Crop"
+            data={swapNewData}
+            lines={netLine}
+            alternateData={swapNewPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title="Managed Money Net Position, New Crop"
+            data={mmNewData}
+            lines={netLine}
+            alternateData={mmNewPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title="Spec Net Position, New Crop"
+            data={specNewData}
+            lines={netLine}
+            alternateData={specNewPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title="Other Reportables Net Position, New Crop"
+            data={otherNewData}
+            lines={netLine}
+            alternateData={otherNewPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title="Non-Reportables Net Position, New Crop"
+            data={nonReptNewData}
+            lines={netLine}
+            alternateData={nonReptNewPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+          <COTChart
+            title="Producer + Non-Reportables Net Position, New Crop"
+            data={prodNonReptNewData}
+            lines={netLine}
+            alternateData={prodNonReptNewPctOIData}
+            alternateLines={pctOILine}
+            alternateLabel="% OI"
+            loading={loading}
+          />
+        </div>
       </div>
     </div>
   );
