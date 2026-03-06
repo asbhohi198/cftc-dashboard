@@ -174,13 +174,13 @@ export function COTChart({
               <XAxis
                 dataKey="date"
                 tickFormatter={formatDate}
-                tick={{ fill: "#71717a", fontSize: 10, dx: -5, dy: -5 }}
+                tick={{ fill: "#71717a", fontSize: 10, dy: 25 }}
                 axisLine={{ stroke: "#3f3f46" }}
                 tickLine={{ stroke: "#3f3f46" }}
                 ticks={ticks.map(i => filteredData[i]?.date).filter(Boolean)}
                 angle={-90}
                 textAnchor="end"
-                height={expanded ? 60 : 50}
+                height={expanded ? 70 : 60}
                 interval={0}
               />
               <YAxis
