@@ -289,7 +289,7 @@ export function COTChart({
                     }`}
                   >
                     {change >= 0 ? "+" : ""}
-                    {formatNumber(change)}
+                    {formatNumber(change)} WoW
                   </p>
                 </div>
               );
@@ -364,7 +364,7 @@ export function COTChart({
                         }`}
                       >
                         {change >= 0 ? "+" : ""}
-                        {formatNumber(change)} (1 week)
+                        {formatNumber(change)} WoW
                       </p>
                     </div>
                   );
