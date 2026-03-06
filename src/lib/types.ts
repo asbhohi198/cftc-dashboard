@@ -23,7 +23,8 @@ export type AgsGrainsSubTab =
   | "all-us-wheat"
   | "all-us-oilseeds"
   | "all-us-grains"
-  | "all-us-go";
+  | "all-us-go"
+  | "oc-nc-mm-splits";
 
 export type AgsOtherSubTab =
   | "oats"
@@ -69,6 +70,7 @@ export const TAB_CONFIG: TabConfig[] = [
       { id: "all-us-oilseeds", label: "All US Oilseeds" },
       { id: "all-us-grains", label: "All US Grains" },
       { id: "all-us-go", label: "All US G&O" },
+      { id: "oc-nc-mm-splits", label: "OC/NC MM Splits" },
     ],
   },
   {
