@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MainCategory, TAB_CONFIG } from "@/lib/types";
 import { TabNav } from "./TabNav";
 import { CornTab } from "./CornTab";
+import { AllWheatTab } from "./AllWheatTab";
 import { BarChart3 } from "lucide-react";
 
 // Map sub-tab IDs to contract IDs for the API
@@ -100,7 +101,10 @@ export function Dashboard() {
         )}
 
         {/* Ags - Grains & Oilseeds */}
-        {activeTab === "ags-grains" && contractId && (
+        {activeTab === "ags-grains" && activeSubTab === "all-wheat" && (
+          <AllWheatTab />
+        )}
+        {activeTab === "ags-grains" && activeSubTab !== "all-wheat" && contractId && (
           <CornTab contractId={contractId} />
         )}
 
