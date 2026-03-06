@@ -17,10 +17,15 @@ export type AgsGrainsSubTab =
   | "chicago-wheat"
   | "kansas-wheat"
   | "minneapolis-wheat"
-  | "all-wheat"
   | "soybeans"
   | "soymeal"
   | "soyoil"
+  | "all-us-wheat"
+  | "all-us-oilseeds"
+  | "all-us-grains"
+  | "all-us-go";
+
+export type AgsOtherSubTab =
   | "oats"
   | "rough-rice";
 
@@ -35,7 +40,7 @@ export type AgsLivestockSubTab =
   | "feeder-cattle"
   | "lean-hogs";
 
-export type SubTab = AgsGrainsSubTab | AgsSoftsSubTab | AgsLivestockSubTab | null;
+export type SubTab = AgsGrainsSubTab | AgsOtherSubTab | AgsSoftsSubTab | AgsLivestockSubTab | null;
 
 // Tab configuration
 export interface TabConfig {
@@ -57,12 +62,13 @@ export const TAB_CONFIG: TabConfig[] = [
       { id: "chicago-wheat", label: "Chicago Wheat" },
       { id: "kansas-wheat", label: "Kansas Wheat" },
       { id: "minneapolis-wheat", label: "Minneapolis Wheat" },
-      { id: "all-wheat", label: "All Wheat" },
       { id: "soybeans", label: "Soybeans" },
       { id: "soymeal", label: "Soymeal" },
       { id: "soyoil", label: "Soyoil" },
-      { id: "oats", label: "Oats" },
-      { id: "rough-rice", label: "Rough Rice" },
+      { id: "all-us-wheat", label: "All US Wheat" },
+      { id: "all-us-oilseeds", label: "All US Oilseeds" },
+      { id: "all-us-grains", label: "All US Grains" },
+      { id: "all-us-go", label: "All US G&O" },
     ],
   },
   {
@@ -87,6 +93,10 @@ export const TAB_CONFIG: TabConfig[] = [
   {
     id: "ags-other",
     label: "Ags - Other",
+    subTabs: [
+      { id: "oats", label: "Oats" },
+      { id: "rough-rice", label: "Rough Rice" },
+    ],
   },
   {
     id: "energy",

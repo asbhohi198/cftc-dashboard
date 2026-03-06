@@ -71,21 +71,31 @@ function sumRecords(a: COTRecord, b: COTRecord): COTRecord {
   };
 }
 
-// Merge three data arrays by date (summing values)
-function mergeWheatData(
+// Merge multiple data arrays by date (summing values)
+function mergeGrainsData(
+  corn: COTRecord[],
   chicago: COTRecord[],
   kansas: COTRecord[],
   minneapolis: COTRecord[]
 ): COTRecord[] {
-  // Create a map by date
   const byDate = new Map<string, COTRecord>();
 
-  // Add Chicago data
-  for (const rec of chicago) {
+  // Add corn data
+  for (const rec of corn) {
     byDate.set(rec.date, rec);
   }
 
-  // Add Kansas data
+  // Add Chicago wheat data
+  for (const rec of chicago) {
+    const existing = byDate.get(rec.date);
+    if (existing) {
+      byDate.set(rec.date, sumRecords(existing, rec));
+    } else {
+      byDate.set(rec.date, rec);
+    }
+  }
+
+  // Add Kansas wheat data
   for (const rec of kansas) {
     const existing = byDate.get(rec.date);
     if (existing) {
@@ -95,7 +105,7 @@ function mergeWheatData(
     }
   }
 
-  // Add Minneapolis data
+  // Add Minneapolis wheat data
   for (const rec of minneapolis) {
     const existing = byDate.get(rec.date);
     if (existing) {
@@ -105,15 +115,14 @@ function mergeWheatData(
     }
   }
 
-  // Convert to array and sort by date
   return Array.from(byDate.values()).sort((a, b) => a.date.localeCompare(b.date));
 }
 
-export function AllWheatTab() {
+export function AllGrainsTab() {
   const [data, setData] = useState<COTRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const contractName = "All US Wheat";
+  const contractName = "All US Grains";
 
   useEffect(() => {
     async function fetchData() {
@@ -121,26 +130,27 @@ export function AllWheatTab() {
       setError(null);
 
       try {
-        // Fetch all three wheat contracts in parallel
-        const [chicagoRes, kansasRes, minneapolisRes] = await Promise.all([
+        const [cornRes, chicagoRes, kansasRes, minneapolisRes] = await Promise.all([
+          fetch("/api/cot?contract=corn"),
           fetch("/api/cot?contract=chicago-wheat"),
           fetch("/api/cot?contract=kansas-wheat"),
           fetch("/api/cot?contract=minneapolis-wheat"),
         ]);
 
-        const [chicagoJson, kansasJson, minneapolisJson] = await Promise.all([
+        const [cornJson, chicagoJson, kansasJson, minneapolisJson] = await Promise.all([
+          cornRes.json(),
           chicagoRes.json(),
           kansasRes.json(),
           minneapolisRes.json(),
         ]);
 
-        if (!chicagoJson.success || !kansasJson.success || !minneapolisJson.success) {
-          setError("Failed to fetch wheat data");
+        if (!cornJson.success || !chicagoJson.success || !kansasJson.success || !minneapolisJson.success) {
+          setError("Failed to fetch grains data");
           return;
         }
 
-        // Merge the data
-        const merged = mergeWheatData(
+        const merged = mergeGrainsData(
+          cornJson.data,
           chicagoJson.data,
           kansasJson.data,
           minneapolisJson.data
@@ -408,7 +418,7 @@ export function AllWheatTab() {
             <div>
               <h2 className="text-lg font-semibold text-white">{contractName}</h2>
               <p className="text-xs text-zinc-500">
-                CFTC COT - Chicago + Kansas + Minneapolis Wheat Combined
+                CFTC COT - Corn + Chicago Wheat + Kansas Wheat + Minneapolis Wheat Combined
               </p>
             </div>
             <div className="text-right">

@@ -5,19 +5,22 @@ import { MainCategory, TAB_CONFIG } from "@/lib/types";
 import { TabNav } from "./TabNav";
 import { CornTab } from "./CornTab";
 import { AllWheatTab } from "./AllWheatTab";
+import { AllOilseedsTab } from "./AllOilseedsTab";
+import { AllGrainsTab } from "./AllGrainsTab";
+import { AllGOTab } from "./AllGOTab";
 import { BarChart3 } from "lucide-react";
 
 // Map sub-tab IDs to contract IDs for the API
 const SUB_TAB_TO_CONTRACT: Record<string, string> = {
-  // Grains & Oilseeds
+  // Grains & Oilseeds (combined tabs handled separately)
   corn: "corn",
   "chicago-wheat": "chicago-wheat",
   "kansas-wheat": "kansas-wheat",
   "minneapolis-wheat": "minneapolis-wheat",
-  "all-wheat": "chicago-wheat", // Will need special handling later
   soybeans: "soybeans",
   soymeal: "soymeal",
   soyoil: "soyoil",
+  // Ags - Other
   oats: "oats",
   "rough-rice": "rough-rice",
   // Softs
@@ -101,10 +104,19 @@ export function Dashboard() {
         )}
 
         {/* Ags - Grains & Oilseeds */}
-        {activeTab === "ags-grains" && activeSubTab === "all-wheat" && (
+        {activeTab === "ags-grains" && activeSubTab === "all-us-wheat" && (
           <AllWheatTab />
         )}
-        {activeTab === "ags-grains" && activeSubTab !== "all-wheat" && contractId && (
+        {activeTab === "ags-grains" && activeSubTab === "all-us-oilseeds" && (
+          <AllOilseedsTab />
+        )}
+        {activeTab === "ags-grains" && activeSubTab === "all-us-grains" && (
+          <AllGrainsTab />
+        )}
+        {activeTab === "ags-grains" && activeSubTab === "all-us-go" && (
+          <AllGOTab />
+        )}
+        {activeTab === "ags-grains" && activeSubTab !== "all-us-wheat" && activeSubTab !== "all-us-oilseeds" && activeSubTab !== "all-us-grains" && activeSubTab !== "all-us-go" && contractId && (
           <CornTab contractId={contractId} />
         )}
 
@@ -119,17 +131,8 @@ export function Dashboard() {
         )}
 
         {/* Ags - Other */}
-        {activeTab === "ags-other" && (
-          <div className="space-y-6">
-            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-2">
-                Ags - Other
-              </h2>
-              <p className="text-zinc-500 text-sm">
-                COT positioning data coming soon
-              </p>
-            </div>
-          </div>
+        {activeTab === "ags-other" && contractId && (
+          <CornTab contractId={contractId} />
         )}
 
         {/* Energy */}
