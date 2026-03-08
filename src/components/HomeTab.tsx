@@ -71,7 +71,9 @@ interface ExpandedChartData {
 }
 
 // Custom tick component for vertical x-axis labels (mini charts)
-function CustomTickMini({ x, y, payload }: { x: number; y: number; payload: { value: string } }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function CustomTickMini(props: any) {
+  const { x, y, payload } = props;
   return (
     <g transform={`translate(${x},${y})`}>
       <text
@@ -90,7 +92,9 @@ function CustomTickMini({ x, y, payload }: { x: number; y: number; payload: { va
 }
 
 // Custom tick component for vertical x-axis labels (expanded charts)
-function CustomTickExpanded({ x, y, payload }: { x: number; y: number; payload: { value: string } }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function CustomTickExpanded(props: any) {
+  const { x, y, payload } = props;
   return (
     <g transform={`translate(${x},${y})`}>
       <text
