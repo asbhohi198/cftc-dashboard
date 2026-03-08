@@ -70,6 +70,44 @@ interface ExpandedChartData {
   series: FlaggedSeries;
 }
 
+// Custom tick component for vertical x-axis labels (mini charts)
+function CustomTickMini({ x, y, payload }: { x: number; y: number; payload: { value: string } }) {
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={4}
+        textAnchor="end"
+        fill="#71717a"
+        fontSize={9}
+        transform="rotate(-90)"
+      >
+        {formatDate(payload.value)}
+      </text>
+    </g>
+  );
+}
+
+// Custom tick component for vertical x-axis labels (expanded charts)
+function CustomTickExpanded({ x, y, payload }: { x: number; y: number; payload: { value: string } }) {
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={4}
+        textAnchor="end"
+        fill="#a1a1aa"
+        fontSize={11}
+        transform="rotate(-90)"
+      >
+        {formatDate(payload.value)}
+      </text>
+    </g>
+  );
+}
+
 export function HomeTab() {
   const [data, setData] = useState<CommodityScreening[]>([]);
   const [positionDate, setPositionDate] = useState<string>("");
@@ -278,9 +316,8 @@ export function HomeTab() {
                           <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                           <XAxis
                             dataKey="date"
-                            tick={{ fill: "#71717a", fontSize: 9, angle: -90, textAnchor: "end" }}
+                            tick={CustomTickMini}
                             axisLine={{ stroke: "#3f3f46" }}
-                            tickFormatter={(date) => formatDate(date)}
                             interval="preserveStartEnd"
                             height={50}
                           />
@@ -408,9 +445,8 @@ export function HomeTab() {
                   <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
                   <XAxis
                     dataKey="date"
-                    tick={{ fill: "#a1a1aa", fontSize: 11, angle: -90, textAnchor: "end" }}
+                    tick={CustomTickExpanded}
                     axisLine={{ stroke: "#52525b" }}
-                    tickFormatter={(date) => formatDate(date)}
                     interval="preserveStartEnd"
                     height={70}
                   />
