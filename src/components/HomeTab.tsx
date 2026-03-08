@@ -365,7 +365,7 @@ export function HomeTab() {
                     </div>
 
                     {/* Mini Chart */}
-                    <div className="h-36">
+                    <div className="h-64">
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart
                           data={series.historicalData.slice(-104)} // Last 2 years
@@ -494,7 +494,7 @@ export function HomeTab() {
             </div>
 
             {/* Full Chart */}
-            <div className="h-[50vh]">
+            <div className="h-[75vh]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
                   data={expandedChart.series.historicalData}
