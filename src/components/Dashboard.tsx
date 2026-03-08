@@ -36,6 +36,37 @@ const SUB_TAB_TO_CONTRACT: Record<string, string> = {
   "live-cattle": "live-cattle",
   "feeder-cattle": "feeder-cattle",
   "lean-hogs": "lean-hogs",
+  // Energy
+  "wti-crude": "wti-crude",
+  "natural-gas": "natural-gas",
+  "rbob-gasoline": "rbob-gasoline",
+  "heating-oil": "heating-oil",
+  // Equities
+  "sp500": "sp500",
+  "nasdaq100": "nasdaq100",
+  "dow": "dow",
+  "russell2000": "russell2000",
+  "vix": "vix",
+  // Rates
+  "10y-note": "10y-note",
+  "2y-note": "2y-note",
+  "5y-note": "5y-note",
+  "30y-bond": "30y-bond",
+  "fed-funds": "fed-funds",
+  "sofr": "sofr",
+  // FX
+  "eurusd": "eurusd",
+  "usdjpy": "usdjpy",
+  "gbpusd": "gbpusd",
+  "usdcad": "usdcad",
+  "audusd": "audusd",
+  "usdchf": "usdchf",
+  "usdmxn": "usdmxn",
+  "nzdusd": "nzdusd",
+  "dxy": "dxy",
+  // Crypto
+  "bitcoin": "bitcoin",
+  "ethereum": "ethereum",
 };
 
 export function Dashboard() {
@@ -140,63 +171,28 @@ export function Dashboard() {
         )}
 
         {/* Energy */}
-        {activeTab === "energy" && (
-          <div className="space-y-6">
-            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-2">Energy</h2>
-              <p className="text-zinc-500 text-sm">
-                COT positioning data coming soon
-              </p>
-            </div>
-          </div>
+        {activeTab === "energy" && contractId && (
+          <CornTab contractId={contractId} />
         )}
 
         {/* Equities */}
-        {activeTab === "equities" && (
-          <div className="space-y-6">
-            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-2">Equities</h2>
-              <p className="text-zinc-500 text-sm">
-                COT positioning data coming soon
-              </p>
-            </div>
-          </div>
+        {activeTab === "equities" && contractId && (
+          <CornTab contractId={contractId} />
         )}
 
         {/* Rates */}
-        {activeTab === "rates" && (
-          <div className="space-y-6">
-            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-2">Rates</h2>
-              <p className="text-zinc-500 text-sm">
-                COT positioning data coming soon
-              </p>
-            </div>
-          </div>
+        {activeTab === "rates" && contractId && (
+          <CornTab contractId={contractId} />
         )}
 
         {/* FX */}
-        {activeTab === "fx" && (
-          <div className="space-y-6">
-            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-2">FX</h2>
-              <p className="text-zinc-500 text-sm">
-                COT positioning data coming soon
-              </p>
-            </div>
-          </div>
+        {activeTab === "fx" && contractId && (
+          <CornTab contractId={contractId} />
         )}
 
         {/* Crypto */}
-        {activeTab === "crypto" && (
-          <div className="space-y-6">
-            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-2">Crypto</h2>
-              <p className="text-zinc-500 text-sm">
-                COT positioning data coming soon
-              </p>
-            </div>
-          </div>
+        {activeTab === "crypto" && contractId && (
+          <CornTab contractId={contractId} />
         )}
       </main>
     </div>

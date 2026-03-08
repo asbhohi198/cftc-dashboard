@@ -27,12 +27,24 @@ interface FlaggedSeries {
   historicalData: { date: string; value: number }[];
 }
 
+type AssetCategory = "ags" | "energy" | "equities" | "rates" | "fx" | "crypto";
+
 interface CommodityScreening {
   id: string;
   label: string;
+  category: AssetCategory;
   positionDate: string;
   flaggedSeries: FlaggedSeries[];
 }
+
+const CATEGORY_LABELS: Record<AssetCategory, string> = {
+  ags: "Ags",
+  energy: "Energy",
+  equities: "Equities",
+  rates: "Rates",
+  fx: "FX",
+  crypto: "Crypto",
+};
 
 interface APIResponse {
   success: boolean;
@@ -150,18 +162,30 @@ export function HomeTab() {
     return data.reduce((sum, c) => sum + c.flaggedSeries.length, 0);
   }, [data]);
 
-  // Filter for Managed Money only flags (net position and % OI)
-  const mmFlags = useMemo(() => {
-    const flags: { commodity: string; series: FlaggedSeries }[] = [];
+  // Filter for Managed Money only flags (net position and % OI) grouped by category
+  const mmFlagsByCategory = useMemo(() => {
+    const flagsByCategory: Record<AssetCategory, { commodity: string; series: FlaggedSeries }[]> = {
+      ags: [],
+      energy: [],
+      equities: [],
+      rates: [],
+      fx: [],
+      crypto: [],
+    };
     for (const commodity of data) {
       for (const series of commodity.flaggedSeries) {
         if (series.seriesKey === "mmNetAll" || series.seriesKey === "mmNetAll_pctOI") {
-          flags.push({ commodity: commodity.label, series });
+          flagsByCategory[commodity.category].push({ commodity: commodity.label, series });
         }
       }
     }
-    return flags;
+    return flagsByCategory;
   }, [data]);
+
+  // Total MM flags count
+  const totalMMFlags = useMemo(() => {
+    return Object.values(mmFlagsByCategory).reduce((sum, flags) => sum + flags.length, 0);
+  }, [mmFlagsByCategory]);
 
   if (loading) {
     return (
@@ -240,43 +264,57 @@ export function HomeTab() {
         </div>
       </div>
 
-      {/* Managed Money Summary */}
-      {mmFlags.length > 0 && (
+      {/* Managed Money Summary - Grouped by Category */}
+      {totalMMFlags > 0 && (
         <div className="bg-orange-950/30 border border-orange-800/50 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-4">
             <AlertTriangle className="w-5 h-5 text-orange-500" />
             <h3 className="text-md font-semibold text-orange-400">
-              Managed Money Extremes ({mmFlags.length})
+              Managed Money Extremes ({totalMMFlags})
             </h3>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-            {mmFlags.map((flag, idx) => (
-              <div
-                key={`${flag.commodity}-${flag.series.seriesKey}-${idx}`}
-                className="bg-zinc-900/80 border border-zinc-700 rounded-lg p-3 cursor-pointer hover:border-orange-600 transition-colors"
-                onClick={() => setExpandedChart({ commodity: flag.commodity, series: flag.series })}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-medium text-white">{flag.commodity}</span>
-                  {flag.series.isHigh ? (
-                    <TrendingUp className="w-3 h-3 text-green-400" />
-                  ) : (
-                    <TrendingDown className="w-3 h-3 text-red-400" />
-                  )}
+          <div className="space-y-4">
+            {(Object.keys(mmFlagsByCategory) as AssetCategory[]).map((category) => {
+              const flags = mmFlagsByCategory[category];
+              if (flags.length === 0) return null;
+              return (
+                <div key={category}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h4 className="text-sm font-medium text-zinc-300">{CATEGORY_LABELS[category]}</h4>
+                    <span className="text-xs text-zinc-500">({flags.length})</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                    {flags.map((flag, idx) => (
+                      <div
+                        key={`${flag.commodity}-${flag.series.seriesKey}-${idx}`}
+                        className="bg-zinc-900/80 border border-zinc-700 rounded-lg p-3 cursor-pointer hover:border-orange-600 transition-colors"
+                        onClick={() => setExpandedChart({ commodity: flag.commodity, series: flag.series })}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs font-medium text-white">{flag.commodity}</span>
+                          {flag.series.isHigh ? (
+                            <TrendingUp className="w-3 h-3 text-green-400" />
+                          ) : (
+                            <TrendingDown className="w-3 h-3 text-red-400" />
+                          )}
+                        </div>
+                        <p className="text-xs text-zinc-400 mb-2">
+                          {flag.series.isPercentage ? "MM % OI" : "MM Net Position"}
+                        </p>
+                        <div className="flex items-baseline justify-between">
+                          <span className={`text-lg font-bold ${flag.series.isHigh ? "text-green-400" : "text-red-400"}`}>
+                            {formatValue(flag.series.latestValue, flag.series.isPercentage)}
+                          </span>
+                          <span className={`text-xs ${flag.series.isHigh ? "text-green-400/70" : "text-red-400/70"}`}>
+                            {flag.series.percentile.toFixed(0)}th %ile
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <p className="text-xs text-zinc-400 mb-2">
-                  {flag.series.isPercentage ? "MM % OI" : "MM Net Position"}
-                </p>
-                <div className="flex items-baseline justify-between">
-                  <span className={`text-lg font-bold ${flag.series.isHigh ? "text-green-400" : "text-red-400"}`}>
-                    {formatValue(flag.series.latestValue, flag.series.isPercentage)}
-                  </span>
-                  <span className={`text-xs ${flag.series.isHigh ? "text-green-400/70" : "text-red-400/70"}`}>
-                    {flag.series.percentile.toFixed(0)}th %ile
-                  </span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

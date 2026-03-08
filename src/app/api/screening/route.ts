@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { CFTC_CONTRACTS, COTRecord, ContractId } from "@/lib/cftc";
+import { CFTC_CONTRACTS, COTRecord, ContractId, AssetCategory } from "@/lib/cftc";
 
 // Data series to screen - net positions
 const NET_SERIES = [
@@ -22,29 +22,64 @@ const PCT_OI_SERIES = [
 ] as const;
 
 // Individual contracts to screen
-const CONTRACTS_TO_SCREEN: { id: string; label: string; contracts: ContractId[] }[] = [
-  { id: "corn", label: "Corn", contracts: ["corn"] },
-  { id: "chicago-wheat", label: "Chicago Wheat", contracts: ["chicago-wheat"] },
-  { id: "kansas-wheat", label: "Kansas Wheat", contracts: ["kansas-wheat"] },
-  { id: "minneapolis-wheat", label: "Minneapolis Wheat", contracts: ["minneapolis-wheat"] },
-  { id: "soybeans", label: "Soybeans", contracts: ["soybeans"] },
-  { id: "soymeal", label: "Soymeal", contracts: ["soymeal"] },
-  { id: "soyoil", label: "Soyoil", contracts: ["soyoil"] },
-  { id: "all-us-wheat", label: "All US Wheat", contracts: ["chicago-wheat", "kansas-wheat", "minneapolis-wheat"] },
-  { id: "all-us-oilseeds", label: "All US Oilseeds", contracts: ["soybeans", "soymeal", "soyoil"] },
-  { id: "all-us-grains", label: "All US Grains", contracts: ["corn", "chicago-wheat", "kansas-wheat", "minneapolis-wheat"] },
-  { id: "all-us-go", label: "All US G&O", contracts: ["corn", "chicago-wheat", "kansas-wheat", "minneapolis-wheat", "soybeans", "soymeal", "soyoil"] },
-  { id: "sugar", label: "Sugar", contracts: ["sugar"] },
-  { id: "cotton", label: "Cotton", contracts: ["cotton"] },
-  { id: "arabica-coffee", label: "Arabica Coffee", contracts: ["arabica-coffee"] },
-  { id: "ny-cocoa", label: "NY Cocoa", contracts: ["ny-cocoa"] },
-  { id: "all-us-softs", label: "All US Softs", contracts: ["sugar", "cotton", "arabica-coffee", "ny-cocoa"] },
-  { id: "live-cattle", label: "Live Cattle", contracts: ["live-cattle"] },
-  { id: "feeder-cattle", label: "Feeder Cattle", contracts: ["feeder-cattle"] },
-  { id: "lean-hogs", label: "Lean Hogs", contracts: ["lean-hogs"] },
-  { id: "all-livestock", label: "All Livestock", contracts: ["live-cattle", "feeder-cattle", "lean-hogs"] },
-  { id: "oats", label: "Oats", contracts: ["oats"] },
-  { id: "rough-rice", label: "Rough Rice", contracts: ["rough-rice"] },
+const CONTRACTS_TO_SCREEN: { id: string; label: string; contracts: ContractId[]; category: AssetCategory }[] = [
+  // Ags - Grains & Oilseeds
+  { id: "corn", label: "Corn", contracts: ["corn"], category: "ags" },
+  { id: "chicago-wheat", label: "Chicago Wheat", contracts: ["chicago-wheat"], category: "ags" },
+  { id: "kansas-wheat", label: "Kansas Wheat", contracts: ["kansas-wheat"], category: "ags" },
+  { id: "minneapolis-wheat", label: "Minneapolis Wheat", contracts: ["minneapolis-wheat"], category: "ags" },
+  { id: "soybeans", label: "Soybeans", contracts: ["soybeans"], category: "ags" },
+  { id: "soymeal", label: "Soymeal", contracts: ["soymeal"], category: "ags" },
+  { id: "soyoil", label: "Soyoil", contracts: ["soyoil"], category: "ags" },
+  { id: "all-us-wheat", label: "All US Wheat", contracts: ["chicago-wheat", "kansas-wheat", "minneapolis-wheat"], category: "ags" },
+  { id: "all-us-oilseeds", label: "All US Oilseeds", contracts: ["soybeans", "soymeal", "soyoil"], category: "ags" },
+  { id: "all-us-grains", label: "All US Grains", contracts: ["corn", "chicago-wheat", "kansas-wheat", "minneapolis-wheat"], category: "ags" },
+  { id: "all-us-go", label: "All US G&O", contracts: ["corn", "chicago-wheat", "kansas-wheat", "minneapolis-wheat", "soybeans", "soymeal", "soyoil"], category: "ags" },
+  // Ags - Softs
+  { id: "sugar", label: "Sugar", contracts: ["sugar"], category: "ags" },
+  { id: "cotton", label: "Cotton", contracts: ["cotton"], category: "ags" },
+  { id: "arabica-coffee", label: "Arabica Coffee", contracts: ["arabica-coffee"], category: "ags" },
+  { id: "ny-cocoa", label: "NY Cocoa", contracts: ["ny-cocoa"], category: "ags" },
+  { id: "all-us-softs", label: "All US Softs", contracts: ["sugar", "cotton", "arabica-coffee", "ny-cocoa"], category: "ags" },
+  // Ags - Livestock
+  { id: "live-cattle", label: "Live Cattle", contracts: ["live-cattle"], category: "ags" },
+  { id: "feeder-cattle", label: "Feeder Cattle", contracts: ["feeder-cattle"], category: "ags" },
+  { id: "lean-hogs", label: "Lean Hogs", contracts: ["lean-hogs"], category: "ags" },
+  { id: "all-livestock", label: "All Livestock", contracts: ["live-cattle", "feeder-cattle", "lean-hogs"], category: "ags" },
+  // Ags - Other
+  { id: "oats", label: "Oats", contracts: ["oats"], category: "ags" },
+  { id: "rough-rice", label: "Rough Rice", contracts: ["rough-rice"], category: "ags" },
+  // Energy
+  { id: "wti-crude", label: "WTI Crude Oil", contracts: ["wti-crude"], category: "energy" },
+  { id: "natural-gas", label: "Natural Gas", contracts: ["natural-gas"], category: "energy" },
+  { id: "rbob-gasoline", label: "RBOB Gasoline", contracts: ["rbob-gasoline"], category: "energy" },
+  { id: "heating-oil", label: "Heating Oil", contracts: ["heating-oil"], category: "energy" },
+  // Equities
+  { id: "sp500", label: "S&P 500", contracts: ["sp500"], category: "equities" },
+  { id: "nasdaq100", label: "Nasdaq 100", contracts: ["nasdaq100"], category: "equities" },
+  { id: "dow", label: "Dow Jones", contracts: ["dow"], category: "equities" },
+  { id: "russell2000", label: "Russell 2000", contracts: ["russell2000"], category: "equities" },
+  { id: "vix", label: "VIX", contracts: ["vix"], category: "equities" },
+  // Rates
+  { id: "2y-note", label: "2-Year Note", contracts: ["2y-note"], category: "rates" },
+  { id: "5y-note", label: "5-Year Note", contracts: ["5y-note"], category: "rates" },
+  { id: "10y-note", label: "10-Year Note", contracts: ["10y-note"], category: "rates" },
+  { id: "30y-bond", label: "30-Year Bond", contracts: ["30y-bond"], category: "rates" },
+  { id: "fed-funds", label: "Fed Funds", contracts: ["fed-funds"], category: "rates" },
+  { id: "sofr", label: "SOFR", contracts: ["sofr"], category: "rates" },
+  // FX
+  { id: "eurusd", label: "EUR/USD", contracts: ["eurusd"], category: "fx" },
+  { id: "usdjpy", label: "USD/JPY", contracts: ["usdjpy"], category: "fx" },
+  { id: "gbpusd", label: "GBP/USD", contracts: ["gbpusd"], category: "fx" },
+  { id: "usdcad", label: "USD/CAD", contracts: ["usdcad"], category: "fx" },
+  { id: "audusd", label: "AUD/USD", contracts: ["audusd"], category: "fx" },
+  { id: "usdchf", label: "USD/CHF", contracts: ["usdchf"], category: "fx" },
+  { id: "usdmxn", label: "USD/MXN", contracts: ["usdmxn"], category: "fx" },
+  { id: "nzdusd", label: "NZD/USD", contracts: ["nzdusd"], category: "fx" },
+  { id: "dxy", label: "DXY Index", contracts: ["dxy"], category: "fx" },
+  // Crypto
+  { id: "bitcoin", label: "Bitcoin", contracts: ["bitcoin"], category: "crypto" },
+  { id: "ethereum", label: "Ethereum", contracts: ["ethereum"], category: "crypto" },
 ];
 
 interface FlaggedSeries {
@@ -64,6 +99,7 @@ interface FlaggedSeries {
 interface CommodityScreening {
   id: string;
   label: string;
+  category: AssetCategory;
   positionDate: string;
   flaggedSeries: FlaggedSeries[];
 }
@@ -158,6 +194,7 @@ export async function GET(request: Request) {
         results.push({
           id: commodity.id,
           label: commodity.label,
+          category: commodity.category,
           positionDate: "",
           flaggedSeries: [],
         });
@@ -246,6 +283,7 @@ export async function GET(request: Request) {
       results.push({
         id: commodity.id,
         label: commodity.label,
+        category: commodity.category,
         positionDate: latest.date,
         flaggedSeries,
       });

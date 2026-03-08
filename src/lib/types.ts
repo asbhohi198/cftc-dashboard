@@ -43,7 +43,43 @@ export type AgsLivestockSubTab =
   | "lean-hogs"
   | "all-livestock";
 
-export type SubTab = AgsGrainsSubTab | AgsOtherSubTab | AgsSoftsSubTab | AgsLivestockSubTab | null;
+export type EnergySubTab =
+  | "wti-crude"
+  | "natural-gas"
+  | "rbob-gasoline"
+  | "heating-oil";
+
+export type EquitiesSubTab =
+  | "sp500"
+  | "nasdaq100"
+  | "dow"
+  | "russell2000"
+  | "vix";
+
+export type RatesSubTab =
+  | "10y-note"
+  | "2y-note"
+  | "5y-note"
+  | "30y-bond"
+  | "fed-funds"
+  | "sofr";
+
+export type FXSubTab =
+  | "eurusd"
+  | "usdjpy"
+  | "gbpusd"
+  | "usdcad"
+  | "audusd"
+  | "usdchf"
+  | "usdmxn"
+  | "nzdusd"
+  | "dxy";
+
+export type CryptoSubTab =
+  | "bitcoin"
+  | "ethereum";
+
+export type SubTab = AgsGrainsSubTab | AgsOtherSubTab | AgsSoftsSubTab | AgsLivestockSubTab | EnergySubTab | EquitiesSubTab | RatesSubTab | FXSubTab | CryptoSubTab | null;
 
 // Tab configuration
 export interface TabConfig {
@@ -107,22 +143,58 @@ export const TAB_CONFIG: TabConfig[] = [
   {
     id: "energy",
     label: "Energy",
+    subTabs: [
+      { id: "wti-crude", label: "WTI Crude" },
+      { id: "natural-gas", label: "Natural Gas" },
+      { id: "rbob-gasoline", label: "RBOB Gasoline" },
+      { id: "heating-oil", label: "Heating Oil" },
+    ],
   },
   {
     id: "equities",
     label: "Equities",
+    subTabs: [
+      { id: "sp500", label: "S&P 500" },
+      { id: "nasdaq100", label: "Nasdaq 100" },
+      { id: "dow", label: "Dow Jones" },
+      { id: "russell2000", label: "Russell 2000" },
+      { id: "vix", label: "VIX" },
+    ],
   },
   {
     id: "rates",
     label: "Rates",
+    subTabs: [
+      { id: "2y-note", label: "2-Year Note" },
+      { id: "5y-note", label: "5-Year Note" },
+      { id: "10y-note", label: "10-Year Note" },
+      { id: "30y-bond", label: "30-Year Bond" },
+      { id: "fed-funds", label: "Fed Funds" },
+      { id: "sofr", label: "SOFR" },
+    ],
   },
   {
     id: "fx",
     label: "FX",
+    subTabs: [
+      { id: "eurusd", label: "EUR/USD" },
+      { id: "usdjpy", label: "USD/JPY" },
+      { id: "gbpusd", label: "GBP/USD" },
+      { id: "usdcad", label: "USD/CAD" },
+      { id: "audusd", label: "AUD/USD" },
+      { id: "usdchf", label: "USD/CHF" },
+      { id: "usdmxn", label: "USD/MXN" },
+      { id: "nzdusd", label: "NZD/USD" },
+      { id: "dxy", label: "DXY Index" },
+    ],
   },
   {
     id: "crypto",
     label: "Crypto",
+    subTabs: [
+      { id: "bitcoin", label: "Bitcoin" },
+      { id: "ethereum", label: "Ethereum" },
+    ],
   },
 ];
 
