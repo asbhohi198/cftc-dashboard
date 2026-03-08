@@ -278,8 +278,11 @@ export function HomeTab() {
                           <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                           <XAxis
                             dataKey="date"
-                            tick={false}
+                            tick={{ fill: "#71717a", fontSize: 9, angle: -90, textAnchor: "end" }}
                             axisLine={{ stroke: "#3f3f46" }}
+                            tickFormatter={(date) => formatDate(date)}
+                            interval="preserveStartEnd"
+                            height={50}
                           />
                           <YAxis
                             tick={{ fill: "#71717a", fontSize: 9 }}
@@ -405,10 +408,11 @@ export function HomeTab() {
                   <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
                   <XAxis
                     dataKey="date"
-                    tick={{ fill: "#a1a1aa", fontSize: 11 }}
+                    tick={{ fill: "#a1a1aa", fontSize: 11, angle: -90, textAnchor: "end" }}
                     axisLine={{ stroke: "#52525b" }}
                     tickFormatter={(date) => formatDate(date)}
                     interval="preserveStartEnd"
+                    height={70}
                   />
                   <YAxis
                     tick={{ fill: "#a1a1aa", fontSize: 11 }}
