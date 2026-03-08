@@ -21,6 +21,7 @@ interface FlaggedSeries {
   threshold95: number;
   threshold5: number;
   isHigh: boolean;
+  isPercentage: boolean;
   historicalMin: number;
   historicalMax: number;
   historicalData: { date: string; value: number }[];
@@ -35,6 +36,7 @@ interface CommodityScreening {
 
 interface APIResponse {
   success: boolean;
+  positionDate: string;
   data: CommodityScreening[];
 }
 
@@ -46,6 +48,13 @@ function formatNumber(num: number): string {
     return `${(num / 1000).toFixed(0)}k`;
   }
   return num.toLocaleString("en-US");
+}
+
+function formatValue(num: number, isPercentage: boolean): string {
+  if (isPercentage) {
+    return `${num.toFixed(1)}%`;
+  }
+  return formatNumber(num);
 }
 
 function formatDate(dateStr: string): string {
@@ -63,6 +72,7 @@ interface ExpandedChartData {
 
 export function HomeTab() {
   const [data, setData] = useState<CommodityScreening[]>([]);
+  const [positionDate, setPositionDate] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedChart, setExpandedChart] = useState<ExpandedChartData | null>(null);
@@ -78,6 +88,7 @@ export function HomeTab() {
 
         if (json.success) {
           setData(json.data);
+          setPositionDate(json.positionDate);
         } else {
           setError("Failed to fetch screening data");
         }
@@ -137,9 +148,39 @@ export function HomeTab() {
               Data series where the latest value is in the 95th or 5th percentile of historical data
             </p>
           </div>
-          <div className="text-right">
-            <p className="text-2xl font-bold text-white">{totalFlagged}</p>
-            <p className="text-xs text-zinc-500">Flagged Series</p>
+          <div className="flex items-center gap-6">
+            {positionDate && (
+              <div className="text-right">
+                <p className="text-xs text-zinc-500">Report Date</p>
+                <p className="text-sm font-medium text-white">
+                  {new Date(positionDate).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </p>
+              </div>
+            )}
+            {positionDate && (
+              <div className="text-right">
+                <p className="text-xs text-zinc-500">Release Date</p>
+                <p className="text-sm font-medium text-zinc-400">
+                  {(() => {
+                    const date = new Date(positionDate);
+                    date.setDate(date.getDate() + 3);
+                    return date.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    });
+                  })()}
+                </p>
+              </div>
+            )}
+            <div className="text-right border-l border-zinc-700 pl-6">
+              <p className="text-2xl font-bold text-white">{totalFlagged}</p>
+              <p className="text-xs text-zinc-500">Flagged Series</p>
+            </div>
           </div>
         </div>
       </div>
@@ -210,7 +251,7 @@ export function HomeTab() {
                       <div className="bg-zinc-900/50 rounded p-2">
                         <p className="text-zinc-500">Current</p>
                         <p className={`font-semibold ${series.isHigh ? "text-green-400" : "text-red-400"}`}>
-                          {formatNumber(series.latestValue)}
+                          {formatValue(series.latestValue, series.isPercentage)}
                         </p>
                       </div>
                       <div className="bg-zinc-900/50 rounded p-2">
@@ -222,7 +263,7 @@ export function HomeTab() {
                       <div className="bg-zinc-900/50 rounded p-2">
                         <p className="text-zinc-500">{series.isHigh ? "95th" : "5th"} Threshold</p>
                         <p className="font-semibold text-zinc-300">
-                          {formatNumber(series.isHigh ? series.threshold95 : series.threshold5)}
+                          {formatValue(series.isHigh ? series.threshold95 : series.threshold5, series.isPercentage)}
                         </p>
                       </div>
                     </div>
@@ -243,7 +284,7 @@ export function HomeTab() {
                           <YAxis
                             tick={{ fill: "#71717a", fontSize: 9 }}
                             axisLine={{ stroke: "#3f3f46" }}
-                            tickFormatter={(v) => formatNumber(v)}
+                            tickFormatter={(v) => series.isPercentage ? `${v.toFixed(0)}%` : formatNumber(v)}
                             width={40}
                           />
                           <Tooltip
@@ -254,7 +295,7 @@ export function HomeTab() {
                               fontSize: "11px",
                             }}
                             labelFormatter={(label) => formatDate(label as string)}
-                            formatter={(value: number) => [formatNumber(value), ""]}
+                            formatter={(value: number) => [formatValue(value, series.isPercentage), ""]}
                           />
                           <ReferenceLine
                             y={series.threshold95}
@@ -282,8 +323,8 @@ export function HomeTab() {
 
                     {/* Range Info */}
                     <div className="flex justify-between text-xs text-zinc-500 mt-2">
-                      <span>Min: {formatNumber(series.historicalMin)}</span>
-                      <span>Max: {formatNumber(series.historicalMax)}</span>
+                      <span>Min: {formatValue(series.historicalMin, series.isPercentage)}</span>
+                      <span>Max: {formatValue(series.historicalMax, series.isPercentage)}</span>
                     </div>
                   </div>
                 ))}
@@ -325,7 +366,7 @@ export function HomeTab() {
               <div className="bg-zinc-800 rounded-lg p-3">
                 <p className="text-xs text-zinc-500">Current Value</p>
                 <p className={`text-lg font-bold ${expandedChart.series.isHigh ? "text-green-400" : "text-red-400"}`}>
-                  {formatNumber(expandedChart.series.latestValue)}
+                  {formatValue(expandedChart.series.latestValue, expandedChart.series.isPercentage)}
                 </p>
               </div>
               <div className="bg-zinc-800 rounded-lg p-3">
@@ -337,19 +378,19 @@ export function HomeTab() {
               <div className="bg-zinc-800 rounded-lg p-3">
                 <p className="text-xs text-zinc-500">95th Threshold</p>
                 <p className="text-lg font-bold text-green-400">
-                  {formatNumber(expandedChart.series.threshold95)}
+                  {formatValue(expandedChart.series.threshold95, expandedChart.series.isPercentage)}
                 </p>
               </div>
               <div className="bg-zinc-800 rounded-lg p-3">
                 <p className="text-xs text-zinc-500">5th Threshold</p>
                 <p className="text-lg font-bold text-red-400">
-                  {formatNumber(expandedChart.series.threshold5)}
+                  {formatValue(expandedChart.series.threshold5, expandedChart.series.isPercentage)}
                 </p>
               </div>
               <div className="bg-zinc-800 rounded-lg p-3">
                 <p className="text-xs text-zinc-500">Historical Range</p>
                 <p className="text-lg font-bold text-zinc-300">
-                  {formatNumber(expandedChart.series.historicalMin)} to {formatNumber(expandedChart.series.historicalMax)}
+                  {formatValue(expandedChart.series.historicalMin, expandedChart.series.isPercentage)} to {formatValue(expandedChart.series.historicalMax, expandedChart.series.isPercentage)}
                 </p>
               </div>
             </div>
@@ -372,7 +413,7 @@ export function HomeTab() {
                   <YAxis
                     tick={{ fill: "#a1a1aa", fontSize: 11 }}
                     axisLine={{ stroke: "#52525b" }}
-                    tickFormatter={(v) => formatNumber(v)}
+                    tickFormatter={(v) => expandedChart.series.isPercentage ? `${v.toFixed(0)}%` : formatNumber(v)}
                   />
                   <Tooltip
                     contentStyle={{
@@ -385,7 +426,7 @@ export function HomeTab() {
                       day: "numeric",
                       year: "numeric",
                     })}
-                    formatter={(value: number) => [formatNumber(value), ""]}
+                    formatter={(value: number) => [formatValue(value, expandedChart.series.isPercentage), ""]}
                   />
                   <ReferenceLine
                     y={expandedChart.series.threshold95}

@@ -1,14 +1,24 @@
 import { NextResponse } from "next/server";
 import { CFTC_CONTRACTS, COTRecord, ContractId } from "@/lib/cftc";
 
-// Data series to screen
-const DATA_SERIES = [
+// Data series to screen - net positions
+const NET_SERIES = [
   { key: "mmNetAll", label: "Managed Money Net Position" },
   { key: "specNetAll", label: "Spec Net Position" },
   { key: "producerNetAll", label: "Producer Net Position" },
   { key: "swapNetAll", label: "Swap Dealer Net Position" },
   { key: "otherNetAll", label: "Other Reportables Net Position" },
   { key: "nonReptNetAll", label: "Non-Reportables Net Position" },
+] as const;
+
+// Data series to screen - % of OI (calculated)
+const PCT_OI_SERIES = [
+  { netKey: "mmNetAll", label: "Managed Money % OI" },
+  { netKey: "specNetAll", label: "Spec % OI" },
+  { netKey: "producerNetAll", label: "Producer % OI" },
+  { netKey: "swapNetAll", label: "Swap Dealer % OI" },
+  { netKey: "otherNetAll", label: "Other Reportables % OI" },
+  { netKey: "nonReptNetAll", label: "Non-Reportables % OI" },
 ] as const;
 
 // Individual contracts to screen
@@ -45,6 +55,7 @@ interface FlaggedSeries {
   threshold95: number;
   threshold5: number;
   isHigh: boolean; // true = 95th percentile, false = 5th percentile
+  isPercentage: boolean; // true if this is a % OI series
   historicalMin: number;
   historicalMax: number;
   historicalData: { date: string; value: number }[];
@@ -156,8 +167,8 @@ export async function GET(request: Request) {
       const latest = data[data.length - 1];
       const flaggedSeries: FlaggedSeries[] = [];
 
-      // Screen each data series
-      for (const series of DATA_SERIES) {
+      // Screen net position series
+      for (const series of NET_SERIES) {
         const values = data.map((d) => d[series.key as keyof COTRecord] as number);
         const sortedValues = [...values].sort((a, b) => a - b);
         const latestValue = latest[series.key as keyof COTRecord] as number;
@@ -166,7 +177,6 @@ export async function GET(request: Request) {
         const threshold95 = getPercentileValue(sortedValues, 95);
         const threshold5 = getPercentileValue(sortedValues, 5);
 
-        // Check if in 95th percentile (high) or 5th percentile (low)
         const isHigh = percentile >= 95;
         const isLow = percentile <= 5;
 
@@ -179,12 +189,56 @@ export async function GET(request: Request) {
             threshold95,
             threshold5,
             isHigh,
+            isPercentage: false,
             historicalMin: sortedValues[0],
             historicalMax: sortedValues[sortedValues.length - 1],
             historicalData: data.map((d) => ({
               date: d.date,
               value: d[series.key as keyof COTRecord] as number,
             })),
+          });
+        }
+      }
+
+      // Screen % OI series
+      for (const series of PCT_OI_SERIES) {
+        const values = data.map((d) => {
+          const oi = d.openInterestAll;
+          const net = d[series.netKey as keyof COTRecord] as number;
+          return oi > 0 ? (net / oi) * 100 : 0;
+        });
+        const sortedValues = [...values].sort((a, b) => a - b);
+        const latestOI = latest.openInterestAll;
+        const latestNet = latest[series.netKey as keyof COTRecord] as number;
+        const latestValue = latestOI > 0 ? (latestNet / latestOI) * 100 : 0;
+
+        const percentile = calculatePercentile(latestValue, sortedValues);
+        const threshold95 = getPercentileValue(sortedValues, 95);
+        const threshold5 = getPercentileValue(sortedValues, 5);
+
+        const isHigh = percentile >= 95;
+        const isLow = percentile <= 5;
+
+        if (isHigh || isLow) {
+          flaggedSeries.push({
+            seriesKey: `${series.netKey}_pctOI`,
+            seriesLabel: series.label,
+            latestValue,
+            percentile: Math.round(percentile * 10) / 10,
+            threshold95,
+            threshold5,
+            isHigh,
+            isPercentage: true,
+            historicalMin: sortedValues[0],
+            historicalMax: sortedValues[sortedValues.length - 1],
+            historicalData: data.map((d) => {
+              const oi = d.openInterestAll;
+              const net = d[series.netKey as keyof COTRecord] as number;
+              return {
+                date: d.date,
+                value: oi > 0 ? (net / oi) * 100 : 0,
+              };
+            }),
           });
         }
       }
@@ -197,8 +251,16 @@ export async function GET(request: Request) {
       });
     }
 
+    // Get the latest position date from results
+    const latestPositionDate = results
+      .filter((r) => r.positionDate)
+      .map((r) => r.positionDate)
+      .sort()
+      .pop() || "";
+
     return NextResponse.json({
       success: true,
+      positionDate: latestPositionDate,
       data: results,
     });
   } catch (error) {
