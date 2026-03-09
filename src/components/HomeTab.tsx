@@ -223,10 +223,10 @@ export function HomeTab() {
           <div>
             <h2 className="text-lg font-semibold text-white flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-yellow-500" />
-              95th Percentile Screening
+              98th Percentile Screening
             </h2>
             <p className="text-xs text-zinc-500 mt-1">
-              Data series where the latest value is in the 95th or 5th percentile of historical data
+              Data series where the latest value is in the 98th or 2nd percentile of historical data
             </p>
           </div>
           <div className="flex items-center gap-6">
@@ -397,7 +397,7 @@ export function HomeTab() {
                         </p>
                       </div>
                       <div className="bg-zinc-900/50 rounded p-2">
-                        <p className="text-zinc-500">{series.isHigh ? "95th" : "5th"} Threshold</p>
+                        <p className="text-zinc-500">{series.isHigh ? "98th" : "2nd"} Threshold</p>
                         <p className="font-semibold text-zinc-300">
                           {formatValue(series.isHigh ? series.threshold95 : series.threshold5, series.isPercentage)}
                         </p>
@@ -488,7 +488,7 @@ export function HomeTab() {
                   {expandedChart.commodity} - {expandedChart.series.seriesLabel}
                 </h3>
                 <p className="text-sm text-zinc-400">
-                  {expandedChart.series.isHigh ? "95th" : "5th"} Percentile Alert
+                  {expandedChart.series.isHigh ? "98th" : "2nd"} Percentile Alert
                 </p>
               </div>
               <button
@@ -514,13 +514,13 @@ export function HomeTab() {
                 </p>
               </div>
               <div className="bg-zinc-800 rounded-lg p-3">
-                <p className="text-xs text-zinc-500">95th Threshold</p>
+                <p className="text-xs text-zinc-500">98th Threshold</p>
                 <p className="text-lg font-bold text-green-400">
                   {formatValue(expandedChart.series.threshold95, expandedChart.series.isPercentage)}
                 </p>
               </div>
               <div className="bg-zinc-800 rounded-lg p-3">
-                <p className="text-xs text-zinc-500">5th Threshold</p>
+                <p className="text-xs text-zinc-500">2nd Threshold</p>
                 <p className="text-lg font-bold text-red-400">
                   {formatValue(expandedChart.series.threshold5, expandedChart.series.isPercentage)}
                 </p>
@@ -571,14 +571,14 @@ export function HomeTab() {
                     stroke="#22c55e"
                     strokeDasharray="5 5"
                     strokeWidth={2}
-                    label={{ value: "95th", fill: "#22c55e", fontSize: 11 }}
+                    label={{ value: "98th", fill: "#22c55e", fontSize: 11 }}
                   />
                   <ReferenceLine
                     y={expandedChart.series.threshold5}
                     stroke="#ef4444"
                     strokeDasharray="5 5"
                     strokeWidth={2}
-                    label={{ value: "5th", fill: "#ef4444", fontSize: 11 }}
+                    label={{ value: "2nd", fill: "#ef4444", fontSize: 11 }}
                   />
                   <ReferenceLine y={0} stroke="#52525b" />
                   <Line
