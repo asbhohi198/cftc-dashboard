@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import JSZip from "jszip";
-import { CFTC_CONTRACTS, ContractId, COTRecord, parseRow, getYearsToFetch, getCFTCUrl } from "@/lib/cftc";
+import { CFTC_CONTRACTS, ContractId, COTRecord, parseRow, parseTFFRow, getYearsToFetch, getCFTCUrl, ReportType } from "@/lib/cftc";
 
 // In-memory cache
 const cache: Map<string, { data: COTRecord[]; timestamp: number }> = new Map();
 const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours
 
-async function fetchYearData(year: number, contractCode: string): Promise<COTRecord[]> {
-  const url = getCFTCUrl(year);
+async function fetchYearData(year: number, contractCode: string, reportType: ReportType): Promise<COTRecord[]> {
+  const url = getCFTCUrl(year, reportType);
 
   try {
     const response = await fetch(url, {
@@ -42,7 +42,8 @@ async function fetchYearData(year: number, contractCode: string): Promise<COTRec
       // Check if this row is for our contract
       if (!line.includes(`"${contractCode}"`)) continue;
 
-      const record = parseRow(line);
+      // Use appropriate parser based on report type
+      const record = reportType === "tff" ? parseTFFRow(line) : parseRow(line);
       if (record) {
         records.push(record);
       }
@@ -55,7 +56,7 @@ async function fetchYearData(year: number, contractCode: string): Promise<COTRec
   }
 }
 
-async function fetchAllData(contractCode: string): Promise<COTRecord[]> {
+async function fetchAllData(contractCode: string, reportType: ReportType): Promise<COTRecord[]> {
   const years = getYearsToFetch();
   const allRecords: COTRecord[] = [];
 
@@ -64,7 +65,7 @@ async function fetchAllData(contractCode: string): Promise<COTRecord[]> {
   for (let i = 0; i < years.length; i += batchSize) {
     const batch = years.slice(i, i + batchSize);
     const batchResults = await Promise.all(
-      batch.map(year => fetchYearData(year, contractCode))
+      batch.map(year => fetchYearData(year, contractCode, reportType))
     );
     for (const records of batchResults) {
       allRecords.push(...records);
@@ -108,7 +109,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const data = await fetchAllData(contract.code);
+    const data = await fetchAllData(contract.code, contract.reportType);
 
     // Update cache
     cache.set(cacheKey, { data, timestamp: Date.now() });
