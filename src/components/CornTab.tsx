@@ -13,6 +13,8 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [contractName, setContractName] = useState("Corn");
+  const [isAgs, setIsAgs] = useState(true); // Only show old/new crop for ags
+  const [reportType, setReportType] = useState<"disagg" | "tff">("disagg");
 
   useEffect(() => {
     async function fetchData() {
@@ -26,6 +28,9 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
         if (json.success) {
           setData(json.data);
           setContractName(json.contract.name);
+          // Only show old/new crop for agricultural commodities
+          setIsAgs(json.contract.category === "ags");
+          setReportType(json.contract.reportType || "disagg");
         } else {
           setError(json.error || "Failed to fetch data");
         }
@@ -291,7 +296,7 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
             <div>
               <h2 className="text-lg font-semibold text-white">{contractName}</h2>
               <p className="text-xs text-zinc-500">
-                CFTC Commitments of Traders - Disaggregated Report
+                CFTC Commitments of Traders - {reportType === "tff" ? "Traders in Financial Futures" : "Disaggregated"} Report
               </p>
             </div>
             <div className="text-right">
@@ -396,152 +401,156 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
       </div>
 
       {/* ========================================= */}
-      {/* OLD CROP DATA SECTION */}
+      {/* OLD CROP DATA SECTION - Only for agricultural commodities */}
       {/* ========================================= */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-white border-b border-zinc-700 pb-2">
-          Old Crop Data
-        </h3>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <COTChart
-            title={`${contractName} - Managed Money Net Position, Old Crop`}
-            data={mmOldData}
-            lines={netLine}
-            alternateData={mmOldPctTotalData}
-            alternateLines={pctTotalLine}
-            alternateLabel="% Total"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Spec Net Position, Old Crop`}
-            data={specOldData}
-            lines={netLine}
-            alternateData={specOldPctTotalData}
-            alternateLines={pctTotalLine}
-            alternateLabel="% Total"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Producer Net Position, Old Crop`}
-            data={producerOldData}
-            lines={netLine}
-            alternateData={producerOldPctTotalData}
-            alternateLines={pctTotalLine}
-            alternateLabel="% Total"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Swap Dealer Net Position, Old Crop`}
-            data={swapOldData}
-            lines={netLine}
-            alternateData={swapOldPctTotalData}
-            alternateLines={pctTotalLine}
-            alternateLabel="% Total"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Other Reportables Net Position, Old Crop`}
-            data={otherOldData}
-            lines={netLine}
-            alternateData={otherOldPctTotalData}
-            alternateLines={pctTotalLine}
-            alternateLabel="% Total"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Non-Reportables Net Position, Old Crop`}
-            data={nonReptOldData}
-            lines={netLine}
-            alternateData={nonReptOldPctTotalData}
-            alternateLines={pctTotalLine}
-            alternateLabel="% Total"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Producer + Non-Reportables Net Position, Old Crop`}
-            data={prodNonReptOldData}
-            lines={netLine}
-            alternateData={prodNonReptOldPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
+      {isAgs && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-white border-b border-zinc-700 pb-2">
+            Old Crop Data
+          </h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <COTChart
+              title={`${contractName} - Managed Money Net Position, Old Crop`}
+              data={mmOldData}
+              lines={netLine}
+              alternateData={mmOldPctTotalData}
+              alternateLines={pctTotalLine}
+              alternateLabel="% Total"
+              loading={loading}
+            />
+            <COTChart
+              title={`${contractName} - Spec Net Position, Old Crop`}
+              data={specOldData}
+              lines={netLine}
+              alternateData={specOldPctTotalData}
+              alternateLines={pctTotalLine}
+              alternateLabel="% Total"
+              loading={loading}
+            />
+            <COTChart
+              title={`${contractName} - Producer Net Position, Old Crop`}
+              data={producerOldData}
+              lines={netLine}
+              alternateData={producerOldPctTotalData}
+              alternateLines={pctTotalLine}
+              alternateLabel="% Total"
+              loading={loading}
+            />
+            <COTChart
+              title={`${contractName} - Swap Dealer Net Position, Old Crop`}
+              data={swapOldData}
+              lines={netLine}
+              alternateData={swapOldPctTotalData}
+              alternateLines={pctTotalLine}
+              alternateLabel="% Total"
+              loading={loading}
+            />
+            <COTChart
+              title={`${contractName} - Other Reportables Net Position, Old Crop`}
+              data={otherOldData}
+              lines={netLine}
+              alternateData={otherOldPctTotalData}
+              alternateLines={pctTotalLine}
+              alternateLabel="% Total"
+              loading={loading}
+            />
+            <COTChart
+              title={`${contractName} - Non-Reportables Net Position, Old Crop`}
+              data={nonReptOldData}
+              lines={netLine}
+              alternateData={nonReptOldPctTotalData}
+              alternateLines={pctTotalLine}
+              alternateLabel="% Total"
+              loading={loading}
+            />
+            <COTChart
+              title={`${contractName} - Producer + Non-Reportables Net Position, Old Crop`}
+              data={prodNonReptOldData}
+              lines={netLine}
+              alternateData={prodNonReptOldPctOIData}
+              alternateLines={pctOILine}
+              alternateLabel="% OI"
+              loading={loading}
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ========================================= */}
-      {/* NEW CROP DATA SECTION */}
+      {/* NEW CROP DATA SECTION - Only for agricultural commodities */}
       {/* ========================================= */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-white border-b border-zinc-700 pb-2">
-          New Crop Data
-        </h3>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <COTChart
-            title={`${contractName} - Managed Money Net Position, New Crop`}
-            data={mmNewData}
-            lines={netLine}
-            alternateData={mmNewPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Spec Net Position, New Crop`}
-            data={specNewData}
-            lines={netLine}
-            alternateData={specNewPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Producer Net Position, New Crop`}
-            data={producerNewData}
-            lines={netLine}
-            alternateData={producerNewPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Swap Dealer Net Position, New Crop`}
-            data={swapNewData}
-            lines={netLine}
-            alternateData={swapNewPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Other Reportables Net Position, New Crop`}
-            data={otherNewData}
-            lines={netLine}
-            alternateData={otherNewPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Non-Reportables Net Position, New Crop`}
-            data={nonReptNewData}
-            lines={netLine}
-            alternateData={nonReptNewPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Producer + Non-Reportables Net Position, New Crop`}
-            data={prodNonReptNewData}
-            lines={netLine}
-            alternateData={prodNonReptNewPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
+      {isAgs && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-white border-b border-zinc-700 pb-2">
+            New Crop Data
+          </h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <COTChart
+              title={`${contractName} - Managed Money Net Position, New Crop`}
+              data={mmNewData}
+              lines={netLine}
+              alternateData={mmNewPctOIData}
+              alternateLines={pctOILine}
+              alternateLabel="% OI"
+              loading={loading}
+            />
+            <COTChart
+              title={`${contractName} - Spec Net Position, New Crop`}
+              data={specNewData}
+              lines={netLine}
+              alternateData={specNewPctOIData}
+              alternateLines={pctOILine}
+              alternateLabel="% OI"
+              loading={loading}
+            />
+            <COTChart
+              title={`${contractName} - Producer Net Position, New Crop`}
+              data={producerNewData}
+              lines={netLine}
+              alternateData={producerNewPctOIData}
+              alternateLines={pctOILine}
+              alternateLabel="% OI"
+              loading={loading}
+            />
+            <COTChart
+              title={`${contractName} - Swap Dealer Net Position, New Crop`}
+              data={swapNewData}
+              lines={netLine}
+              alternateData={swapNewPctOIData}
+              alternateLines={pctOILine}
+              alternateLabel="% OI"
+              loading={loading}
+            />
+            <COTChart
+              title={`${contractName} - Other Reportables Net Position, New Crop`}
+              data={otherNewData}
+              lines={netLine}
+              alternateData={otherNewPctOIData}
+              alternateLines={pctOILine}
+              alternateLabel="% OI"
+              loading={loading}
+            />
+            <COTChart
+              title={`${contractName} - Non-Reportables Net Position, New Crop`}
+              data={nonReptNewData}
+              lines={netLine}
+              alternateData={nonReptNewPctOIData}
+              alternateLines={pctOILine}
+              alternateLabel="% OI"
+              loading={loading}
+            />
+            <COTChart
+              title={`${contractName} - Producer + Non-Reportables Net Position, New Crop`}
+              data={prodNonReptNewData}
+              lines={netLine}
+              alternateData={prodNonReptNewPctOIData}
+              alternateLines={pctOILine}
+              alternateLabel="% OI"
+              loading={loading}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

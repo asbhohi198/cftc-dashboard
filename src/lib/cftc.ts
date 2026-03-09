@@ -39,7 +39,7 @@ export const CFTC_CONTRACTS = {
   "5y-note": { code: "044601", name: "5-Year T-Note", exchange: "CBOT", marketName: "5-YEAR U.S. TREASURY NOTES", category: "rates", reportType: "tff" as ReportType },
   "30y-bond": { code: "020601", name: "30-Year T-Bond", exchange: "CBOT", marketName: "U.S. TREASURY BONDS", category: "rates", reportType: "tff" as ReportType },
   "fed-funds": { code: "045601", name: "Fed Funds", exchange: "CBOT", marketName: "30-DAY FEDERAL FUNDS", category: "rates", reportType: "tff" as ReportType },
-  "sofr": { code: "132741", name: "SOFR 3-Month", exchange: "CME", marketName: "3-MONTH SOFR", category: "rates", reportType: "tff" as ReportType },
+  "sofr": { code: "134741", name: "SOFR 3-Month", exchange: "CME", marketName: "3-MONTH SOFR", category: "rates", reportType: "tff" as ReportType },
   // FX (TFF Report)
   "eurusd": { code: "099741", name: "Euro FX", exchange: "CME", marketName: "EURO FX", category: "fx", reportType: "tff" as ReportType },
   "usdjpy": { code: "097741", name: "Japanese Yen", exchange: "CME", marketName: "JAPANESE YEN", category: "fx", reportType: "tff" as ReportType },
