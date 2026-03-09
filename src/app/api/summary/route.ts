@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { CFTC_CONTRACTS, COTRecord, ContractId, ReportType } from "@/lib/cftc";
 
-type AssetCategory = "ags" | "energy" | "equities" | "rates" | "fx" | "crypto";
+type AssetCategory = "ags" | "energy" | "metals" | "equities" | "rates" | "fx" | "crypto";
 
 // Commodities organized by sector
 const SECTOR_COMMODITIES: Record<AssetCategory, { id: ContractId; label: string }[]> = {
@@ -22,12 +22,23 @@ const SECTOR_COMMODITIES: Record<AssetCategory, { id: ContractId; label: string 
     { id: "arabica-coffee", label: "KC" },
     { id: "rough-rice", label: "RR" },
     { id: "ny-cocoa", label: "CC" },
+    { id: "orange-juice", label: "OJ" },
+    { id: "lumber", label: "LB" },
+    { id: "milk", label: "DA" },
   ],
   energy: [
     { id: "wti-crude", label: "CL" },
+    { id: "brent-crude", label: "BZ" },
     { id: "natural-gas", label: "NG" },
     { id: "rbob-gasoline", label: "RB" },
     { id: "heating-oil", label: "HO" },
+  ],
+  metals: [
+    { id: "gold", label: "GC" },
+    { id: "silver", label: "SI" },
+    { id: "copper", label: "HG" },
+    { id: "platinum", label: "PL" },
+    { id: "palladium", label: "PA" },
   ],
   equities: [
     { id: "sp500", label: "ES" },
@@ -53,6 +64,8 @@ const SECTOR_COMMODITIES: Record<AssetCategory, { id: ContractId; label: string 
     { id: "usdchf", label: "CHF" },
     { id: "usdmxn", label: "MXN" },
     { id: "nzdusd", label: "NZD" },
+    { id: "usdzar", label: "ZAR" },
+    { id: "usdbrl", label: "BRL" },
     { id: "dxy", label: "DXY" },
   ],
   crypto: [
@@ -67,6 +80,7 @@ const SECTOR_AGGREGATES: Record<AssetCategory, { id: string; label: string; cont
     { id: "all-wheat", label: "All W", contracts: ["chicago-wheat", "kansas-wheat", "minneapolis-wheat"], insertAfter: "MW" },
   ],
   energy: [],
+  metals: [],
   equities: [],
   rates: [],
   fx: [],
@@ -76,6 +90,7 @@ const SECTOR_AGGREGATES: Record<AssetCategory, { id: string; label: string; cont
 const SECTOR_LABELS: Record<AssetCategory, string> = {
   ags: "Agricultural",
   energy: "Energy",
+  metals: "Metals",
   equities: "Equities",
   rates: "Rates",
   fx: "FX",

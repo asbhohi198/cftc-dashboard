@@ -28,6 +28,9 @@ const SUB_TAB_TO_CONTRACT: Record<string, string> = {
   // Ags - Other
   oats: "oats",
   "rough-rice": "rough-rice",
+  "orange-juice": "orange-juice",
+  "lumber": "lumber",
+  "milk": "milk",
   // Softs
   sugar: "sugar",
   cotton: "cotton",
@@ -39,9 +42,16 @@ const SUB_TAB_TO_CONTRACT: Record<string, string> = {
   "lean-hogs": "lean-hogs",
   // Energy
   "wti-crude": "wti-crude",
+  "brent-crude": "brent-crude",
   "natural-gas": "natural-gas",
   "rbob-gasoline": "rbob-gasoline",
   "heating-oil": "heating-oil",
+  // Metals
+  "gold": "gold",
+  "silver": "silver",
+  "copper": "copper",
+  "platinum": "platinum",
+  "palladium": "palladium",
   // Equities
   "sp500": "sp500",
   "nasdaq100": "nasdaq100",
@@ -64,6 +74,8 @@ const SUB_TAB_TO_CONTRACT: Record<string, string> = {
   "usdchf": "usdchf",
   "usdmxn": "usdmxn",
   "nzdusd": "nzdusd",
+  "usdzar": "usdzar",
+  "usdbrl": "usdbrl",
   "dxy": "dxy",
   // Crypto
   "bitcoin": "bitcoin",
@@ -176,6 +188,11 @@ export function Dashboard() {
 
         {/* Energy */}
         {activeTab === "energy" && contractId && (
+          <CornTab contractId={contractId} />
+        )}
+
+        {/* Metals */}
+        {activeTab === "metals" && contractId && (
           <CornTab contractId={contractId} />
         )}
 

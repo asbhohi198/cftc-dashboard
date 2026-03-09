@@ -27,7 +27,7 @@ interface FlaggedSeries {
   historicalData: { date: string; value: number }[];
 }
 
-type AssetCategory = "ags" | "energy" | "equities" | "rates" | "fx" | "crypto";
+type AssetCategory = "ags" | "energy" | "metals" | "equities" | "rates" | "fx" | "crypto";
 
 interface CommodityScreening {
   id: string;
@@ -40,6 +40,7 @@ interface CommodityScreening {
 const CATEGORY_LABELS: Record<AssetCategory, string> = {
   ags: "Ags",
   energy: "Energy",
+  metals: "Metals",
   equities: "Equities",
   rates: "Rates",
   fx: "FX",
@@ -167,6 +168,7 @@ export function HomeTab() {
     const flagsByCategory: Record<AssetCategory, { commodity: string; series: FlaggedSeries }[]> = {
       ags: [],
       energy: [],
+      metals: [],
       equities: [],
       rates: [],
       fx: [],

@@ -7,6 +7,7 @@ export type MainCategory =
   | "ags-livestock"
   | "ags-other"
   | "energy"
+  | "metals"
   | "equities"
   | "rates"
   | "fx"
@@ -29,7 +30,10 @@ export type AgsGrainsSubTab =
 
 export type AgsOtherSubTab =
   | "oats"
-  | "rough-rice";
+  | "rough-rice"
+  | "orange-juice"
+  | "lumber"
+  | "milk";
 
 export type AgsSoftsSubTab =
   | "sugar"
@@ -46,9 +50,17 @@ export type AgsLivestockSubTab =
 
 export type EnergySubTab =
   | "wti-crude"
+  | "brent-crude"
   | "natural-gas"
   | "rbob-gasoline"
   | "heating-oil";
+
+export type MetalsSubTab =
+  | "gold"
+  | "silver"
+  | "copper"
+  | "platinum"
+  | "palladium";
 
 export type EquitiesSubTab =
   | "sp500"
@@ -74,13 +86,15 @@ export type FXSubTab =
   | "usdchf"
   | "usdmxn"
   | "nzdusd"
+  | "usdzar"
+  | "usdbrl"
   | "dxy";
 
 export type CryptoSubTab =
   | "bitcoin"
   | "ethereum";
 
-export type SubTab = AgsGrainsSubTab | AgsOtherSubTab | AgsSoftsSubTab | AgsLivestockSubTab | EnergySubTab | EquitiesSubTab | RatesSubTab | FXSubTab | CryptoSubTab | null;
+export type SubTab = AgsGrainsSubTab | AgsOtherSubTab | AgsSoftsSubTab | AgsLivestockSubTab | EnergySubTab | MetalsSubTab | EquitiesSubTab | RatesSubTab | FXSubTab | CryptoSubTab | null;
 
 // Tab configuration
 export interface TabConfig {
@@ -143,6 +157,9 @@ export const TAB_CONFIG: TabConfig[] = [
     subTabs: [
       { id: "oats", label: "Oats" },
       { id: "rough-rice", label: "Rough Rice" },
+      { id: "orange-juice", label: "Orange Juice" },
+      { id: "lumber", label: "Lumber" },
+      { id: "milk", label: "Class III Milk" },
     ],
   },
   {
@@ -150,9 +167,21 @@ export const TAB_CONFIG: TabConfig[] = [
     label: "Energy",
     subTabs: [
       { id: "wti-crude", label: "WTI Crude" },
+      { id: "brent-crude", label: "Brent Crude" },
       { id: "natural-gas", label: "Natural Gas" },
       { id: "rbob-gasoline", label: "RBOB Gasoline" },
       { id: "heating-oil", label: "Heating Oil" },
+    ],
+  },
+  {
+    id: "metals",
+    label: "Metals",
+    subTabs: [
+      { id: "gold", label: "Gold" },
+      { id: "silver", label: "Silver" },
+      { id: "copper", label: "Copper" },
+      { id: "platinum", label: "Platinum" },
+      { id: "palladium", label: "Palladium" },
     ],
   },
   {
@@ -190,6 +219,8 @@ export const TAB_CONFIG: TabConfig[] = [
       { id: "usdchf", label: "USD/CHF" },
       { id: "usdmxn", label: "USD/MXN" },
       { id: "nzdusd", label: "NZD/USD" },
+      { id: "usdzar", label: "USD/ZAR" },
+      { id: "usdbrl", label: "USD/BRL" },
       { id: "dxy", label: "DXY Index" },
     ],
   },

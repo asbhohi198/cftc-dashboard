@@ -49,11 +49,21 @@ const CONTRACTS_TO_SCREEN: { id: string; label: string; contracts: ContractId[];
   // Ags - Other
   { id: "oats", label: "Oats", contracts: ["oats"], category: "ags" },
   { id: "rough-rice", label: "Rough Rice", contracts: ["rough-rice"], category: "ags" },
+  { id: "orange-juice", label: "Orange Juice", contracts: ["orange-juice"], category: "ags" },
+  { id: "lumber", label: "Lumber", contracts: ["lumber"], category: "ags" },
+  { id: "milk", label: "Class III Milk", contracts: ["milk"], category: "ags" },
   // Energy
   { id: "wti-crude", label: "WTI Crude Oil", contracts: ["wti-crude"], category: "energy" },
+  { id: "brent-crude", label: "Brent Crude Oil", contracts: ["brent-crude"], category: "energy" },
   { id: "natural-gas", label: "Natural Gas", contracts: ["natural-gas"], category: "energy" },
   { id: "rbob-gasoline", label: "RBOB Gasoline", contracts: ["rbob-gasoline"], category: "energy" },
   { id: "heating-oil", label: "Heating Oil", contracts: ["heating-oil"], category: "energy" },
+  // Metals
+  { id: "gold", label: "Gold", contracts: ["gold"], category: "metals" },
+  { id: "silver", label: "Silver", contracts: ["silver"], category: "metals" },
+  { id: "copper", label: "Copper", contracts: ["copper"], category: "metals" },
+  { id: "platinum", label: "Platinum", contracts: ["platinum"], category: "metals" },
+  { id: "palladium", label: "Palladium", contracts: ["palladium"], category: "metals" },
   // Equities
   { id: "sp500", label: "S&P 500", contracts: ["sp500"], category: "equities" },
   { id: "nasdaq100", label: "Nasdaq 100", contracts: ["nasdaq100"], category: "equities" },
@@ -76,6 +86,8 @@ const CONTRACTS_TO_SCREEN: { id: string; label: string; contracts: ContractId[];
   { id: "usdchf", label: "USD/CHF", contracts: ["usdchf"], category: "fx" },
   { id: "usdmxn", label: "USD/MXN", contracts: ["usdmxn"], category: "fx" },
   { id: "nzdusd", label: "NZD/USD", contracts: ["nzdusd"], category: "fx" },
+  { id: "usdzar", label: "USD/ZAR", contracts: ["usdzar"], category: "fx" },
+  { id: "usdbrl", label: "USD/BRL", contracts: ["usdbrl"], category: "fx" },
   { id: "dxy", label: "DXY Index", contracts: ["dxy"], category: "fx" },
   // Crypto
   { id: "bitcoin", label: "Bitcoin", contracts: ["bitcoin"], category: "crypto" },

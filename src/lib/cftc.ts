@@ -13,6 +13,9 @@ export const CFTC_CONTRACTS = {
   soyoil: { code: "007601", name: "Soybean Oil", exchange: "CBOT", marketName: "SOYBEAN OIL - CHICAGO BOARD OF TRADE", category: "ags", reportType: "disagg" as ReportType },
   oats: { code: "004603", name: "Oats", exchange: "CBOT", marketName: "OATS - CHICAGO BOARD OF TRADE", category: "ags", reportType: "disagg" as ReportType },
   "rough-rice": { code: "039601", name: "Rough Rice", exchange: "CBOT", marketName: "ROUGH RICE - CHICAGO BOARD OF TRADE", category: "ags", reportType: "disagg" as ReportType },
+  "orange-juice": { code: "040701", name: "Orange Juice", exchange: "ICE", marketName: "FRZN CONCENTRATED ORANGE JUICE - ICE FUTURES U.S.", category: "ags", reportType: "disagg" as ReportType },
+  "lumber": { code: "058643", name: "Lumber", exchange: "CME", marketName: "RANDOM LENGTH LUMBER - CHICAGO MERCANTILE EXCHANGE", category: "ags", reportType: "disagg" as ReportType },
+  "milk": { code: "052641", name: "Class III Milk", exchange: "CME", marketName: "MILK, Class III - CHICAGO MERCANTILE EXCHANGE", category: "ags", reportType: "disagg" as ReportType },
   // Softs (Disaggregated Report)
   sugar: { code: "080732", name: "Sugar #11", exchange: "ICE", marketName: "SUGAR NO. 11 - ICE FUTURES U.S.", category: "ags", reportType: "disagg" as ReportType },
   cotton: { code: "033661", name: "Cotton", exchange: "ICE", marketName: "COTTON NO. 2 - ICE FUTURES U.S.", category: "ags", reportType: "disagg" as ReportType },
@@ -24,9 +27,16 @@ export const CFTC_CONTRACTS = {
   "lean-hogs": { code: "054642", name: "Lean Hogs", exchange: "CME", marketName: "LEAN HOGS - CHICAGO MERCANTILE EXCHANGE", category: "ags", reportType: "disagg" as ReportType },
   // Energy (Disaggregated Report)
   "wti-crude": { code: "067651", name: "WTI Crude Oil", exchange: "NYMEX", marketName: "CRUDE OIL, LIGHT SWEET - NEW YORK MERCANTILE EXCHANGE", category: "energy", reportType: "disagg" as ReportType },
+  "brent-crude": { code: "06765T", name: "Brent Crude Oil", exchange: "ICE", marketName: "BRENT LAST DAY - ICE FUTURES EUROPE", category: "energy", reportType: "disagg" as ReportType },
   "natural-gas": { code: "023651", name: "Natural Gas", exchange: "NYMEX", marketName: "NATURAL GAS - NEW YORK MERCANTILE EXCHANGE", category: "energy", reportType: "disagg" as ReportType },
   "rbob-gasoline": { code: "111659", name: "RBOB Gasoline", exchange: "NYMEX", marketName: "RBOB GASOLINE - NEW YORK MERCANTILE EXCHANGE", category: "energy", reportType: "disagg" as ReportType },
   "heating-oil": { code: "022651", name: "Heating Oil", exchange: "NYMEX", marketName: "NO. 2 HEATING OIL - NEW YORK MERCANTILE EXCHANGE", category: "energy", reportType: "disagg" as ReportType },
+  // Metals (Disaggregated Report)
+  "gold": { code: "088691", name: "Gold", exchange: "COMEX", marketName: "GOLD - COMMODITY EXCHANGE INC.", category: "metals", reportType: "disagg" as ReportType },
+  "silver": { code: "084691", name: "Silver", exchange: "COMEX", marketName: "SILVER - COMMODITY EXCHANGE INC.", category: "metals", reportType: "disagg" as ReportType },
+  "copper": { code: "085692", name: "Copper", exchange: "COMEX", marketName: "COPPER- #1 - COMMODITY EXCHANGE INC.", category: "metals", reportType: "disagg" as ReportType },
+  "platinum": { code: "076651", name: "Platinum", exchange: "NYMEX", marketName: "PLATINUM - NEW YORK MERCANTILE EXCHANGE", category: "metals", reportType: "disagg" as ReportType },
+  "palladium": { code: "075651", name: "Palladium", exchange: "NYMEX", marketName: "PALLADIUM - NEW YORK MERCANTILE EXCHANGE", category: "metals", reportType: "disagg" as ReportType },
   // Equities (TFF Report - Traders in Financial Futures)
   "sp500": { code: "13874A", name: "S&P 500 E-mini", exchange: "CME", marketName: "E-MINI S&P 500 STOCK INDEX", category: "equities", reportType: "tff" as ReportType },
   "nasdaq100": { code: "209742", name: "Nasdaq 100 E-mini", exchange: "CME", marketName: "NASDAQ-100 STOCK INDEX (MINI)", category: "equities", reportType: "tff" as ReportType },
@@ -49,13 +59,15 @@ export const CFTC_CONTRACTS = {
   "usdchf": { code: "092741", name: "Swiss Franc", exchange: "CME", marketName: "SWISS FRANC", category: "fx", reportType: "tff" as ReportType },
   "usdmxn": { code: "095741", name: "Mexican Peso", exchange: "CME", marketName: "MEXICAN PESO", category: "fx", reportType: "tff" as ReportType },
   "nzdusd": { code: "112741", name: "NZ Dollar", exchange: "CME", marketName: "NEW ZEALAND DOLLAR", category: "fx", reportType: "tff" as ReportType },
+  "usdzar": { code: "122741", name: "South African Rand", exchange: "CME", marketName: "SOUTH AFRICAN RAND", category: "fx", reportType: "tff" as ReportType },
+  "usdbrl": { code: "102741", name: "Brazilian Real", exchange: "CME", marketName: "BRAZILIAN REAL", category: "fx", reportType: "tff" as ReportType },
   "dxy": { code: "098662", name: "US Dollar Index", exchange: "ICE", marketName: "U.S. DOLLAR INDEX", category: "fx", reportType: "tff" as ReportType },
   // Crypto (TFF Report)
   "bitcoin": { code: "133741", name: "Bitcoin", exchange: "CME", marketName: "BITCOIN", category: "crypto", reportType: "tff" as ReportType },
   "ethereum": { code: "146021", name: "Ethereum", exchange: "CME", marketName: "ETHER", category: "crypto", reportType: "tff" as ReportType },
 } as const;
 
-export type AssetCategory = "ags" | "energy" | "equities" | "rates" | "fx" | "crypto";
+export type AssetCategory = "ags" | "energy" | "metals" | "equities" | "rates" | "fx" | "crypto";
 
 export type ContractId = keyof typeof CFTC_CONTRACTS;
 
