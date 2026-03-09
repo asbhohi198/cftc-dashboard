@@ -364,6 +364,26 @@ export function SummaryTab() {
             )}
           </div>
         </div>
+        {/* Note/Legend */}
+        <div className="mt-3 pt-3 border-t border-zinc-800">
+          <div className="flex flex-wrap items-center gap-6 text-xs text-zinc-500">
+            <div>
+              <span className="font-medium text-zinc-400">Note:</span> Spec = MM/Lev Funds + Other Reportables. Changes are week-over-week.
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold rounded">Chg</span>
+              <span>= Change &gt; 2 std dev</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 bg-green-500/20 text-green-400 font-bold rounded">%OI</span>
+              <span>= 98th percentile</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 bg-red-500/20 text-red-400 font-bold rounded">%OI</span>
+              <span>= 2nd percentile</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Sector Tables */}
@@ -385,26 +405,6 @@ export function SummaryTab() {
         </div>
       ))}
 
-      {/* Legend */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-3">
-        <div className="flex flex-wrap items-center gap-6 text-xs text-zinc-500">
-          <div>
-            <span className="font-medium text-zinc-400">Note:</span> Spec = MM/Lev Funds + Other Reportables. Changes are week-over-week.
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold rounded">Chg</span>
-            <span>= Change &gt; 1 std dev</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 bg-green-500/20 text-green-400 font-bold rounded">%OI</span>
-            <span>= 95th percentile</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 bg-red-500/20 text-red-400 font-bold rounded">%OI</span>
-            <span>= 5th percentile</span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
