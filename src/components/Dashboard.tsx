@@ -12,6 +12,7 @@ import { OCNCMMSplitsTab } from "./OCNCMMSplitsTab";
 import { AllSoftsTab } from "./AllSoftsTab";
 import { AllLivestockTab } from "./AllLivestockTab";
 import { HomeTab } from "./HomeTab";
+import { SummaryTab } from "./SummaryTab";
 import { BarChart3 } from "lucide-react";
 
 // Map sub-tab IDs to contract IDs for the API
@@ -114,7 +115,7 @@ export function Dashboard() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto p-4">
+      <main className={`mx-auto p-4 ${activeTab === "summary" ? "max-w-[1800px]" : "max-w-7xl"}`}>
         {/* Breadcrumb showing current selection */}
         <div className="mb-4 text-sm text-zinc-500">
           <span className="text-zinc-400">{currentTabConfig?.label}</span>
@@ -128,6 +129,9 @@ export function Dashboard() {
 
         {/* Home */}
         {activeTab === "home" && <HomeTab />}
+
+        {/* Summary */}
+        {activeTab === "summary" && <SummaryTab />}
 
         {/* Ags - Grains & Oilseeds */}
         {activeTab === "ags-grains" && activeSubTab === "all-us-wheat" && (
