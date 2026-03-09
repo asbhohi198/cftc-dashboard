@@ -40,7 +40,12 @@ async function fetchYearData(year: number, contractCode: string, reportType: Rep
       if (!line) continue;
 
       // Check if this row is for our contract
-      if (!line.includes(`"${contractCode}"`)) continue;
+      // TFF report has unquoted codes, disaggregated has quoted codes
+      const hasContract = reportType === "tff"
+        ? line.includes(`,${contractCode},`) || line.includes(`,${contractCode} ,`)
+        : line.includes(`"${contractCode}"`);
+
+      if (!hasContract) continue;
 
       // Use appropriate parser based on report type
       const record = reportType === "tff" ? parseTFFRow(line) : parseRow(line);
