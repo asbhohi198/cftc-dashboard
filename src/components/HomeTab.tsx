@@ -279,11 +279,11 @@ export function HomeTab() {
               if (flags.length === 0) return null;
               return (
                 <div key={category}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <h4 className="text-sm font-medium text-zinc-300">{CATEGORY_LABELS[category]}</h4>
-                    <span className="text-xs text-zinc-500">({flags.length})</span>
+                  <div className="flex items-center gap-3 mb-3 pb-2 border-b border-orange-800/30">
+                    <h4 className="text-lg font-bold text-orange-400 uppercase tracking-wide">{CATEGORY_LABELS[category]}</h4>
+                    <span className="px-2 py-0.5 bg-orange-500/20 text-orange-300 text-xs font-semibold rounded-full">{flags.length}</span>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mb-4">
                     {flags.map((flag, idx) => (
                       <div
                         key={`${flag.commodity}-${flag.series.seriesKey}-${idx}`}
