@@ -1,40 +1,96 @@
 import { NextResponse } from "next/server";
-import { CFTC_CONTRACTS, COTRecord, ContractId } from "@/lib/cftc";
+import { CFTC_CONTRACTS, COTRecord, ContractId, ReportType } from "@/lib/cftc";
 
-// Commodities to include in summary (matching Excel file)
-const SUMMARY_COMMODITIES: { id: ContractId; label: string }[] = [
-  { id: "corn", label: "C" },
-  { id: "chicago-wheat", label: "W" },
-  { id: "kansas-wheat", label: "KW" },
-  { id: "minneapolis-wheat", label: "MW" },
-  { id: "soybeans", label: "S" },
-  { id: "soymeal", label: "SM" },
-  { id: "soyoil", label: "BO" },
-  { id: "oats", label: "O" },
-  { id: "sugar", label: "SB" },
-  { id: "cotton", label: "CT" },
-  { id: "live-cattle", label: "LC" },
-  { id: "feeder-cattle", label: "FC" },
-  { id: "lean-hogs", label: "LH" },
-  { id: "arabica-coffee", label: "KC" },
-  { id: "rough-rice", label: "RR" },
-  { id: "ny-cocoa", label: "CC" },
-];
+type AssetCategory = "ags" | "energy" | "equities" | "rates" | "fx" | "crypto";
 
-// Aggregate commodity groups
-const AGGREGATE_GROUPS: { id: string; label: string; contracts: ContractId[] }[] = [
-  { id: "all-wheat", label: "All W", contracts: ["chicago-wheat", "kansas-wheat", "minneapolis-wheat"] },
-];
+// Commodities organized by sector
+const SECTOR_COMMODITIES: Record<AssetCategory, { id: ContractId; label: string }[]> = {
+  ags: [
+    { id: "corn", label: "C" },
+    { id: "chicago-wheat", label: "W" },
+    { id: "kansas-wheat", label: "KW" },
+    { id: "minneapolis-wheat", label: "MW" },
+    { id: "soybeans", label: "S" },
+    { id: "soymeal", label: "SM" },
+    { id: "soyoil", label: "BO" },
+    { id: "oats", label: "O" },
+    { id: "sugar", label: "SB" },
+    { id: "cotton", label: "CT" },
+    { id: "live-cattle", label: "LC" },
+    { id: "feeder-cattle", label: "FC" },
+    { id: "lean-hogs", label: "LH" },
+    { id: "arabica-coffee", label: "KC" },
+    { id: "rough-rice", label: "RR" },
+    { id: "ny-cocoa", label: "CC" },
+  ],
+  energy: [
+    { id: "wti-crude", label: "CL" },
+    { id: "natural-gas", label: "NG" },
+    { id: "rbob-gasoline", label: "RB" },
+    { id: "heating-oil", label: "HO" },
+  ],
+  equities: [
+    { id: "sp500", label: "ES" },
+    { id: "nasdaq100", label: "NQ" },
+    { id: "dow", label: "YM" },
+    { id: "russell2000", label: "RTY" },
+    { id: "vix", label: "VX" },
+  ],
+  rates: [
+    { id: "2y-note", label: "ZT" },
+    { id: "5y-note", label: "ZF" },
+    { id: "10y-note", label: "ZN" },
+    { id: "30y-bond", label: "ZB" },
+    { id: "fed-funds", label: "FF" },
+    { id: "sofr", label: "SR3" },
+  ],
+  fx: [
+    { id: "eurusd", label: "EUR" },
+    { id: "usdjpy", label: "JPY" },
+    { id: "gbpusd", label: "GBP" },
+    { id: "usdcad", label: "CAD" },
+    { id: "audusd", label: "AUD" },
+    { id: "usdchf", label: "CHF" },
+    { id: "usdmxn", label: "MXN" },
+    { id: "nzdusd", label: "NZD" },
+    { id: "dxy", label: "DXY" },
+  ],
+  crypto: [
+    { id: "bitcoin", label: "BTC" },
+    { id: "ethereum", label: "ETH" },
+  ],
+};
+
+// Aggregate groups per sector
+const SECTOR_AGGREGATES: Record<AssetCategory, { id: string; label: string; contracts: ContractId[]; insertAfter: string }[]> = {
+  ags: [
+    { id: "all-wheat", label: "All W", contracts: ["chicago-wheat", "kansas-wheat", "minneapolis-wheat"], insertAfter: "MW" },
+  ],
+  energy: [],
+  equities: [],
+  rates: [],
+  fx: [],
+  crypto: [],
+};
+
+const SECTOR_LABELS: Record<AssetCategory, string> = {
+  ags: "Agricultural",
+  energy: "Energy",
+  equities: "Equities",
+  rates: "Rates",
+  fx: "FX",
+  crypto: "Crypto",
+};
 
 interface ChangeData {
   value: number;
-  isSignificant: boolean; // > 1 std dev
+  isSignificant: boolean;
 }
 
 interface PctOIData {
   value: number;
-  isExtreme: boolean; // 95th or 5th percentile
-  isHigh: boolean; // true = 95th, false = 5th
+  isExtreme: boolean;
+  isHigh: boolean;
 }
 
 interface ParticipantData {
@@ -49,18 +105,32 @@ interface SummaryRow {
   fullName: string;
   isAggregate: boolean;
   positionDate: string;
+  reportType: ReportType;
   openInterest: {
     size: number;
     change: ChangeData;
     pctChange: number;
   };
-  producer: ParticipantData;
-  nonReportables: ParticipantData;
-  producerNonRept: ParticipantData;
-  swapDealer: ParticipantData;
-  managedMoney: ParticipantData;
-  otherReportables: ParticipantData;
-  spec: ParticipantData;
+  // Disaggregated report categories (ags, energy)
+  producer?: ParticipantData;
+  swapDealer?: ParticipantData;
+  managedMoney?: ParticipantData;
+  otherReportables?: ParticipantData;
+  // TFF report categories (equities, rates, fx, crypto)
+  dealer?: ParticipantData;
+  assetManager?: ParticipantData;
+  leveragedFunds?: ParticipantData;
+  otherTFF?: ParticipantData;
+  // Common
+  nonReportables?: ParticipantData;
+  spec: ParticipantData; // MM+Other for disagg, LevFunds+Other for TFF
+}
+
+interface SectorData {
+  sector: AssetCategory;
+  label: string;
+  reportType: ReportType;
+  rows: SummaryRow[];
 }
 
 // Calculate standard deviation
@@ -97,62 +167,6 @@ function calculatePctOIValues(data: COTRecord[], getNet: (r: COTRecord) => numbe
   return data.map(r => r.openInterestAll > 0 ? getNet(r) / r.openInterestAll : 0);
 }
 
-interface StdDevs {
-  oi: number;
-  producer: number;
-  nonRept: number;
-  prodNonRept: number;
-  swap: number;
-  mm: number;
-  other: number;
-  spec: number;
-}
-
-interface PctOIPercentiles {
-  producer: number;
-  nonRept: number;
-  prodNonRept: number;
-  swap: number;
-  mm: number;
-  other: number;
-  spec: number;
-}
-
-function calculateStdDevs(data: COTRecord[]): StdDevs {
-  return {
-    oi: calculateStdDev(calculateWeeklyChanges(data, r => r.openInterestAll)),
-    producer: calculateStdDev(calculateWeeklyChanges(data, r => r.producerNetAll)),
-    nonRept: calculateStdDev(calculateWeeklyChanges(data, r => r.nonReptNetAll)),
-    prodNonRept: calculateStdDev(calculateWeeklyChanges(data, r => r.producerNetAll + r.nonReptNetAll)),
-    swap: calculateStdDev(calculateWeeklyChanges(data, r => r.swapNetAll)),
-    mm: calculateStdDev(calculateWeeklyChanges(data, r => r.mmNetAll)),
-    other: calculateStdDev(calculateWeeklyChanges(data, r => r.otherNetAll)),
-    spec: calculateStdDev(calculateWeeklyChanges(data, r => r.mmNetAll + r.otherNetAll)),
-  };
-}
-
-function calculatePctOIPercentiles(data: COTRecord[], latest: COTRecord): PctOIPercentiles {
-  const latestOI = latest.openInterestAll;
-
-  const producerPctOI = latestOI > 0 ? latest.producerNetAll / latestOI : 0;
-  const nonReptPctOI = latestOI > 0 ? latest.nonReptNetAll / latestOI : 0;
-  const prodNonReptPctOI = latestOI > 0 ? (latest.producerNetAll + latest.nonReptNetAll) / latestOI : 0;
-  const swapPctOI = latestOI > 0 ? latest.swapNetAll / latestOI : 0;
-  const mmPctOI = latestOI > 0 ? latest.mmNetAll / latestOI : 0;
-  const otherPctOI = latestOI > 0 ? latest.otherNetAll / latestOI : 0;
-  const specPctOI = latestOI > 0 ? (latest.mmNetAll + latest.otherNetAll) / latestOI : 0;
-
-  return {
-    producer: calculatePercentile(producerPctOI, calculatePctOIValues(data, r => r.producerNetAll)),
-    nonRept: calculatePercentile(nonReptPctOI, calculatePctOIValues(data, r => r.nonReptNetAll)),
-    prodNonRept: calculatePercentile(prodNonReptPctOI, calculatePctOIValues(data, r => r.producerNetAll + r.nonReptNetAll)),
-    swap: calculatePercentile(swapPctOI, calculatePctOIValues(data, r => r.swapNetAll)),
-    mm: calculatePercentile(mmPctOI, calculatePctOIValues(data, r => r.mmNetAll)),
-    other: calculatePercentile(otherPctOI, calculatePctOIValues(data, r => r.otherNetAll)),
-    spec: calculatePercentile(specPctOI, calculatePctOIValues(data, r => r.mmNetAll + r.otherNetAll)),
-  };
-}
-
 function isSignificant(change: number, stdDev: number): boolean {
   return stdDev > 0 && Math.abs(change) > stdDev;
 }
@@ -165,97 +179,95 @@ function isHigh(percentile: number): boolean {
   return percentile >= 95;
 }
 
-function calculateRow(data: COTRecord[], label: string, fullName: string, id: string, isAggregate: boolean): SummaryRow | null {
+function calculateParticipantData(
+  data: COTRecord[],
+  latest: COTRecord,
+  previous: COTRecord,
+  getNet: (r: COTRecord) => number
+): ParticipantData {
+  const latestNet = getNet(latest);
+  const previousNet = getNet(previous);
+  const change = latestNet - previousNet;
+  const pctOI = latest.openInterestAll > 0 ? latestNet / latest.openInterestAll : 0;
+
+  const weeklyChanges = calculateWeeklyChanges(data, getNet);
+  const stdDev = calculateStdDev(weeklyChanges);
+
+  const pctOIValues = calculatePctOIValues(data, getNet);
+  const percentile = calculatePercentile(pctOI, pctOIValues);
+
+  return {
+    net: latestNet,
+    change: { value: change, isSignificant: isSignificant(change, stdDev) },
+    pctOI: { value: pctOI, isExtreme: isExtreme(percentile), isHigh: isHigh(percentile) },
+  };
+}
+
+function calculateRow(data: COTRecord[], label: string, fullName: string, id: string, isAggregate: boolean, reportType: ReportType): SummaryRow | null {
   if (data.length < 2) return null;
 
   const latest = data[data.length - 1];
   const previous = data[data.length - 2];
 
-  // Calculate standard deviations using all historical data
-  const stdDevs = calculateStdDevs(data);
-
-  // Calculate percentiles for %OI values
-  const pctOIPercentiles = calculatePctOIPercentiles(data, latest);
-
+  // Open Interest
   const oiChange = latest.openInterestAll - previous.openInterestAll;
   const oiPctChange = previous.openInterestAll ? oiChange / previous.openInterestAll : 0;
+  const oiWeeklyChanges = calculateWeeklyChanges(data, r => r.openInterestAll);
+  const oiStdDev = calculateStdDev(oiWeeklyChanges);
 
-  const producerNet = latest.producerNetAll;
-  const producerChange = producerNet - previous.producerNetAll;
-  const producerPctOI = latest.openInterestAll ? producerNet / latest.openInterestAll : 0;
-
-  const nonReptNet = latest.nonReptNetAll;
-  const nonReptChange = nonReptNet - previous.nonReptNetAll;
-  const nonReptPctOI = latest.openInterestAll ? nonReptNet / latest.openInterestAll : 0;
-
-  const prodNonReptNet = producerNet + nonReptNet;
-  const prodNonReptChange = producerChange + nonReptChange;
-  const prodNonReptPctOI = latest.openInterestAll ? prodNonReptNet / latest.openInterestAll : 0;
-
-  const swapNet = latest.swapNetAll;
-  const swapChange = swapNet - previous.swapNetAll;
-  const swapPctOI = latest.openInterestAll ? swapNet / latest.openInterestAll : 0;
-
-  const mmNet = latest.mmNetAll;
-  const mmChange = mmNet - previous.mmNetAll;
-  const mmPctOI = latest.openInterestAll ? mmNet / latest.openInterestAll : 0;
-
-  const otherNet = latest.otherNetAll;
-  const otherChange = otherNet - previous.otherNetAll;
-  const otherPctOI = latest.openInterestAll ? otherNet / latest.openInterestAll : 0;
-
-  // Spec is defined as Managed Money + Other Reportables
-  const specNet = mmNet + otherNet;
-  const specChange = mmChange + otherChange;
-  const specPctOI = latest.openInterestAll ? specNet / latest.openInterestAll : 0;
-
-  return {
+  const baseRow: SummaryRow = {
     id,
     label,
     fullName,
     isAggregate,
     positionDate: latest.date,
+    reportType,
     openInterest: {
       size: latest.openInterestAll,
-      change: { value: oiChange, isSignificant: isSignificant(oiChange, stdDevs.oi) },
+      change: { value: oiChange, isSignificant: isSignificant(oiChange, oiStdDev) },
       pctChange: oiPctChange,
     },
-    producer: {
-      net: producerNet,
-      change: { value: producerChange, isSignificant: isSignificant(producerChange, stdDevs.producer) },
-      pctOI: { value: producerPctOI, isExtreme: isExtreme(pctOIPercentiles.producer), isHigh: isHigh(pctOIPercentiles.producer) },
-    },
-    nonReportables: {
-      net: nonReptNet,
-      change: { value: nonReptChange, isSignificant: isSignificant(nonReptChange, stdDevs.nonRept) },
-      pctOI: { value: nonReptPctOI, isExtreme: isExtreme(pctOIPercentiles.nonRept), isHigh: isHigh(pctOIPercentiles.nonRept) },
-    },
-    producerNonRept: {
-      net: prodNonReptNet,
-      change: { value: prodNonReptChange, isSignificant: isSignificant(prodNonReptChange, stdDevs.prodNonRept) },
-      pctOI: { value: prodNonReptPctOI, isExtreme: isExtreme(pctOIPercentiles.prodNonRept), isHigh: isHigh(pctOIPercentiles.prodNonRept) },
-    },
-    swapDealer: {
-      net: swapNet,
-      change: { value: swapChange, isSignificant: isSignificant(swapChange, stdDevs.swap) },
-      pctOI: { value: swapPctOI, isExtreme: isExtreme(pctOIPercentiles.swap), isHigh: isHigh(pctOIPercentiles.swap) },
-    },
-    managedMoney: {
-      net: mmNet,
-      change: { value: mmChange, isSignificant: isSignificant(mmChange, stdDevs.mm) },
-      pctOI: { value: mmPctOI, isExtreme: isExtreme(pctOIPercentiles.mm), isHigh: isHigh(pctOIPercentiles.mm) },
-    },
-    otherReportables: {
-      net: otherNet,
-      change: { value: otherChange, isSignificant: isSignificant(otherChange, stdDevs.other) },
-      pctOI: { value: otherPctOI, isExtreme: isExtreme(pctOIPercentiles.other), isHigh: isHigh(pctOIPercentiles.other) },
-    },
-    spec: {
-      net: specNet,
-      change: { value: specChange, isSignificant: isSignificant(specChange, stdDevs.spec) },
-      pctOI: { value: specPctOI, isExtreme: isExtreme(pctOIPercentiles.spec), isHigh: isHigh(pctOIPercentiles.spec) },
-    },
+    spec: { net: 0, change: { value: 0, isSignificant: false }, pctOI: { value: 0, isExtreme: false, isHigh: false } },
   };
+
+  if (reportType === "disagg") {
+    // Disaggregated report (ags, energy)
+    const producer = calculateParticipantData(data, latest, previous, r => r.producerNetAll);
+    const swapDealer = calculateParticipantData(data, latest, previous, r => r.swapNetAll);
+    const managedMoney = calculateParticipantData(data, latest, previous, r => r.mmNetAll);
+    const otherReportables = calculateParticipantData(data, latest, previous, r => r.otherNetAll);
+    const nonReportables = calculateParticipantData(data, latest, previous, r => r.nonReptNetAll);
+    const spec = calculateParticipantData(data, latest, previous, r => r.mmNetAll + r.otherNetAll);
+
+    return {
+      ...baseRow,
+      producer,
+      swapDealer,
+      managedMoney,
+      otherReportables,
+      nonReportables,
+      spec,
+    };
+  } else {
+    // TFF report (equities, rates, fx, crypto)
+    // In TFF: Dealer=Producer, AssetManager=SwapDealer, LeveragedFunds=MM, Other=Other
+    const dealer = calculateParticipantData(data, latest, previous, r => r.producerNetAll);
+    const assetManager = calculateParticipantData(data, latest, previous, r => r.swapNetAll);
+    const leveragedFunds = calculateParticipantData(data, latest, previous, r => r.mmNetAll);
+    const otherTFF = calculateParticipantData(data, latest, previous, r => r.otherNetAll);
+    const nonReportables = calculateParticipantData(data, latest, previous, r => r.nonReptNetAll);
+    const spec = calculateParticipantData(data, latest, previous, r => r.mmNetAll + r.otherNetAll);
+
+    return {
+      ...baseRow,
+      dealer,
+      assetManager,
+      leveragedFunds,
+      otherTFF,
+      nonReportables,
+      spec,
+    };
+  }
 }
 
 // Sum multiple COTRecord arrays by date
@@ -287,65 +299,84 @@ export async function GET(request: Request) {
 
   try {
     // Fetch all commodity data
+    const allContractIds = Object.values(SECTOR_COMMODITIES).flat().map(c => c.id);
     const contractDataMap = new Map<ContractId, COTRecord[]>();
 
-    const fetchPromises = SUMMARY_COMMODITIES.map(async (commodity) => {
+    const fetchPromises = allContractIds.map(async (contractId) => {
       try {
-        const res = await fetch(`${baseUrl}/api/cot?contract=${commodity.id}`, {
+        const res = await fetch(`${baseUrl}/api/cot?contract=${contractId}`, {
           cache: "no-store",
         });
         const json = await res.json();
         if (json.success && json.data) {
-          contractDataMap.set(commodity.id, json.data);
+          contractDataMap.set(contractId, json.data);
         }
       } catch (e) {
-        console.error(`Failed to fetch ${commodity.id}:`, e);
+        console.error(`Failed to fetch ${contractId}:`, e);
       }
     });
 
     await Promise.all(fetchPromises);
 
-    // Build summary rows
-    const rows: SummaryRow[] = [];
+    // Build sector data
+    const sectors: SectorData[] = [];
 
-    // Individual commodities
-    for (const commodity of SUMMARY_COMMODITIES) {
-      const data = contractDataMap.get(commodity.id);
-      if (!data || data.length < 2) continue;
+    for (const sector of Object.keys(SECTOR_COMMODITIES) as AssetCategory[]) {
+      const commodities = SECTOR_COMMODITIES[sector];
+      const aggregates = SECTOR_AGGREGATES[sector];
+      const rows: SummaryRow[] = [];
 
-      const contract = CFTC_CONTRACTS[commodity.id];
-      const row = calculateRow(data, commodity.label, contract.name, commodity.id, false);
-      if (row) {
-        rows.push(row);
-      }
-    }
+      // Determine report type from first commodity
+      const firstContract = commodities[0]?.id;
+      const reportType = firstContract ? CFTC_CONTRACTS[firstContract].reportType : "disagg";
 
-    // Aggregate groups
-    for (const group of AGGREGATE_GROUPS) {
-      const datasets = group.contracts
-        .map((c) => contractDataMap.get(c))
-        .filter((d): d is COTRecord[] => d !== undefined && d.length > 0);
+      // Individual commodities
+      for (const commodity of commodities) {
+        const data = contractDataMap.get(commodity.id);
+        if (!data || data.length < 2) continue;
 
-      if (datasets.length > 0) {
-        const combinedData = sumRecordsByDate(datasets);
-        const row = calculateRow(combinedData, group.label, group.label, group.id, true);
+        const contract = CFTC_CONTRACTS[commodity.id];
+        const row = calculateRow(data, commodity.label, contract.name, commodity.id, false, contract.reportType);
         if (row) {
-          // Insert after individual wheats (after MW)
-          const mwIndex = rows.findIndex((r) => r.label === "MW");
-          if (mwIndex !== -1) {
-            rows.splice(mwIndex + 1, 0, row);
-          } else {
-            rows.push(row);
+          rows.push(row);
+        }
+      }
+
+      // Aggregate groups
+      for (const group of aggregates) {
+        const datasets = group.contracts
+          .map((c) => contractDataMap.get(c))
+          .filter((d): d is COTRecord[] => d !== undefined && d.length > 0);
+
+        if (datasets.length > 0) {
+          const combinedData = sumRecordsByDate(datasets);
+          const row = calculateRow(combinedData, group.label, group.label, group.id, true, reportType);
+          if (row) {
+            const insertIdx = rows.findIndex((r) => r.label === group.insertAfter);
+            if (insertIdx !== -1) {
+              rows.splice(insertIdx + 1, 0, row);
+            } else {
+              rows.push(row);
+            }
           }
         }
+      }
+
+      if (rows.length > 0) {
+        sectors.push({
+          sector,
+          label: SECTOR_LABELS[sector],
+          reportType,
+          rows,
+        });
       }
     }
 
     // Get dates from the first commodity with data
     let latestDate = "";
     let priorDate = "";
-    for (const commodity of SUMMARY_COMMODITIES) {
-      const data = contractDataMap.get(commodity.id);
+    for (const contractId of allContractIds) {
+      const data = contractDataMap.get(contractId);
       if (data && data.length >= 2) {
         latestDate = data[data.length - 1].date;
         priorDate = data[data.length - 2].date;
@@ -367,7 +398,7 @@ export async function GET(request: Request) {
         positionDate: priorDate,
         releaseDate: priorReleaseDate,
       },
-      data: rows,
+      sectors,
     });
   } catch (error) {
     console.error("Error in summary:", error);
