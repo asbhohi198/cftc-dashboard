@@ -26,6 +26,23 @@ const AGGREGATE_GROUPS: { id: string; label: string; contracts: ContractId[] }[]
   { id: "all-wheat", label: "All W", contracts: ["chicago-wheat", "kansas-wheat", "minneapolis-wheat"] },
 ];
 
+interface ChangeData {
+  value: number;
+  isSignificant: boolean; // > 1 std dev
+}
+
+interface PctOIData {
+  value: number;
+  isExtreme: boolean; // 95th or 5th percentile
+  isHigh: boolean; // true = 95th, false = 5th
+}
+
+interface ParticipantData {
+  net: number;
+  change: ChangeData;
+  pctOI: PctOIData;
+}
+
 interface SummaryRow {
   id: string;
   label: string;
@@ -34,44 +51,118 @@ interface SummaryRow {
   positionDate: string;
   openInterest: {
     size: number;
-    change: number;
+    change: ChangeData;
     pctChange: number;
   };
-  producer: {
-    net: number;
-    change: number;
-    pctOI: number;
+  producer: ParticipantData;
+  nonReportables: ParticipantData;
+  producerNonRept: ParticipantData;
+  swapDealer: ParticipantData;
+  managedMoney: ParticipantData;
+  otherReportables: ParticipantData;
+  spec: ParticipantData;
+}
+
+// Calculate standard deviation
+function calculateStdDev(values: number[]): number {
+  if (values.length < 2) return 0;
+  const mean = values.reduce((a, b) => a + b, 0) / values.length;
+  const squaredDiffs = values.map(v => Math.pow(v - mean, 2));
+  const avgSquaredDiff = squaredDiffs.reduce((a, b) => a + b, 0) / values.length;
+  return Math.sqrt(avgSquaredDiff);
+}
+
+// Calculate percentile of a value within an array
+function calculatePercentile(value: number, values: number[]): number {
+  if (values.length === 0) return 50;
+  const sorted = [...values].sort((a, b) => a - b);
+  let count = 0;
+  for (const v of sorted) {
+    if (v < value) count++;
+  }
+  return (count / sorted.length) * 100;
+}
+
+// Calculate weekly changes for a series
+function calculateWeeklyChanges(data: COTRecord[], getValue: (r: COTRecord) => number): number[] {
+  const changes: number[] = [];
+  for (let i = 1; i < data.length; i++) {
+    changes.push(getValue(data[i]) - getValue(data[i - 1]));
+  }
+  return changes;
+}
+
+// Calculate %OI values for a series
+function calculatePctOIValues(data: COTRecord[], getNet: (r: COTRecord) => number): number[] {
+  return data.map(r => r.openInterestAll > 0 ? getNet(r) / r.openInterestAll : 0);
+}
+
+interface StdDevs {
+  oi: number;
+  producer: number;
+  nonRept: number;
+  prodNonRept: number;
+  swap: number;
+  mm: number;
+  other: number;
+  spec: number;
+}
+
+interface PctOIPercentiles {
+  producer: number;
+  nonRept: number;
+  prodNonRept: number;
+  swap: number;
+  mm: number;
+  other: number;
+  spec: number;
+}
+
+function calculateStdDevs(data: COTRecord[]): StdDevs {
+  return {
+    oi: calculateStdDev(calculateWeeklyChanges(data, r => r.openInterestAll)),
+    producer: calculateStdDev(calculateWeeklyChanges(data, r => r.producerNetAll)),
+    nonRept: calculateStdDev(calculateWeeklyChanges(data, r => r.nonReptNetAll)),
+    prodNonRept: calculateStdDev(calculateWeeklyChanges(data, r => r.producerNetAll + r.nonReptNetAll)),
+    swap: calculateStdDev(calculateWeeklyChanges(data, r => r.swapNetAll)),
+    mm: calculateStdDev(calculateWeeklyChanges(data, r => r.mmNetAll)),
+    other: calculateStdDev(calculateWeeklyChanges(data, r => r.otherNetAll)),
+    spec: calculateStdDev(calculateWeeklyChanges(data, r => r.mmNetAll + r.otherNetAll)),
   };
-  nonReportables: {
-    net: number;
-    change: number;
-    pctOI: number;
+}
+
+function calculatePctOIPercentiles(data: COTRecord[], latest: COTRecord): PctOIPercentiles {
+  const latestOI = latest.openInterestAll;
+
+  const producerPctOI = latestOI > 0 ? latest.producerNetAll / latestOI : 0;
+  const nonReptPctOI = latestOI > 0 ? latest.nonReptNetAll / latestOI : 0;
+  const prodNonReptPctOI = latestOI > 0 ? (latest.producerNetAll + latest.nonReptNetAll) / latestOI : 0;
+  const swapPctOI = latestOI > 0 ? latest.swapNetAll / latestOI : 0;
+  const mmPctOI = latestOI > 0 ? latest.mmNetAll / latestOI : 0;
+  const otherPctOI = latestOI > 0 ? latest.otherNetAll / latestOI : 0;
+  const specPctOI = latestOI > 0 ? (latest.mmNetAll + latest.otherNetAll) / latestOI : 0;
+
+  return {
+    producer: calculatePercentile(producerPctOI, calculatePctOIValues(data, r => r.producerNetAll)),
+    nonRept: calculatePercentile(nonReptPctOI, calculatePctOIValues(data, r => r.nonReptNetAll)),
+    prodNonRept: calculatePercentile(prodNonReptPctOI, calculatePctOIValues(data, r => r.producerNetAll + r.nonReptNetAll)),
+    swap: calculatePercentile(swapPctOI, calculatePctOIValues(data, r => r.swapNetAll)),
+    mm: calculatePercentile(mmPctOI, calculatePctOIValues(data, r => r.mmNetAll)),
+    other: calculatePercentile(otherPctOI, calculatePctOIValues(data, r => r.otherNetAll)),
+    spec: calculatePercentile(specPctOI, calculatePctOIValues(data, r => r.mmNetAll + r.otherNetAll)),
   };
-  producerNonRept: {
-    net: number;
-    change: number;
-    pctOI: number;
-  };
-  swapDealer: {
-    net: number;
-    change: number;
-    pctOI: number;
-  };
-  managedMoney: {
-    net: number;
-    change: number;
-    pctOI: number;
-  };
-  otherReportables: {
-    net: number;
-    change: number;
-    pctOI: number;
-  };
-  spec: {
-    net: number;
-    change: number;
-    pctOI: number;
-  };
+}
+
+function isSignificant(change: number, stdDev: number): boolean {
+  return stdDev > 0 && Math.abs(change) > stdDev;
+}
+
+function isExtreme(percentile: number): boolean {
+  return percentile >= 95 || percentile <= 5;
+}
+
+function isHigh(percentile: number): boolean {
+  return percentile >= 95;
 }
 
 function calculateRow(data: COTRecord[], label: string, fullName: string, id: string, isAggregate: boolean): SummaryRow | null {
@@ -79,6 +170,12 @@ function calculateRow(data: COTRecord[], label: string, fullName: string, id: st
 
   const latest = data[data.length - 1];
   const previous = data[data.length - 2];
+
+  // Calculate standard deviations using all historical data
+  const stdDevs = calculateStdDevs(data);
+
+  // Calculate percentiles for %OI values
+  const pctOIPercentiles = calculatePctOIPercentiles(data, latest);
 
   const oiChange = latest.openInterestAll - previous.openInterestAll;
   const oiPctChange = previous.openInterestAll ? oiChange / previous.openInterestAll : 0;
@@ -120,43 +217,43 @@ function calculateRow(data: COTRecord[], label: string, fullName: string, id: st
     positionDate: latest.date,
     openInterest: {
       size: latest.openInterestAll,
-      change: oiChange,
+      change: { value: oiChange, isSignificant: isSignificant(oiChange, stdDevs.oi) },
       pctChange: oiPctChange,
     },
     producer: {
       net: producerNet,
-      change: producerChange,
-      pctOI: producerPctOI,
+      change: { value: producerChange, isSignificant: isSignificant(producerChange, stdDevs.producer) },
+      pctOI: { value: producerPctOI, isExtreme: isExtreme(pctOIPercentiles.producer), isHigh: isHigh(pctOIPercentiles.producer) },
     },
     nonReportables: {
       net: nonReptNet,
-      change: nonReptChange,
-      pctOI: nonReptPctOI,
+      change: { value: nonReptChange, isSignificant: isSignificant(nonReptChange, stdDevs.nonRept) },
+      pctOI: { value: nonReptPctOI, isExtreme: isExtreme(pctOIPercentiles.nonRept), isHigh: isHigh(pctOIPercentiles.nonRept) },
     },
     producerNonRept: {
       net: prodNonReptNet,
-      change: prodNonReptChange,
-      pctOI: prodNonReptPctOI,
+      change: { value: prodNonReptChange, isSignificant: isSignificant(prodNonReptChange, stdDevs.prodNonRept) },
+      pctOI: { value: prodNonReptPctOI, isExtreme: isExtreme(pctOIPercentiles.prodNonRept), isHigh: isHigh(pctOIPercentiles.prodNonRept) },
     },
     swapDealer: {
       net: swapNet,
-      change: swapChange,
-      pctOI: swapPctOI,
+      change: { value: swapChange, isSignificant: isSignificant(swapChange, stdDevs.swap) },
+      pctOI: { value: swapPctOI, isExtreme: isExtreme(pctOIPercentiles.swap), isHigh: isHigh(pctOIPercentiles.swap) },
     },
     managedMoney: {
       net: mmNet,
-      change: mmChange,
-      pctOI: mmPctOI,
+      change: { value: mmChange, isSignificant: isSignificant(mmChange, stdDevs.mm) },
+      pctOI: { value: mmPctOI, isExtreme: isExtreme(pctOIPercentiles.mm), isHigh: isHigh(pctOIPercentiles.mm) },
     },
     otherReportables: {
       net: otherNet,
-      change: otherChange,
-      pctOI: otherPctOI,
+      change: { value: otherChange, isSignificant: isSignificant(otherChange, stdDevs.other) },
+      pctOI: { value: otherPctOI, isExtreme: isExtreme(pctOIPercentiles.other), isHigh: isHigh(pctOIPercentiles.other) },
     },
     spec: {
       net: specNet,
-      change: specChange,
-      pctOI: specPctOI,
+      change: { value: specChange, isSignificant: isSignificant(specChange, stdDevs.spec) },
+      pctOI: { value: specPctOI, isExtreme: isExtreme(pctOIPercentiles.spec), isHigh: isHigh(pctOIPercentiles.spec) },
     },
   };
 }
@@ -244,12 +341,32 @@ export async function GET(request: Request) {
       }
     }
 
-    // Get latest position date
-    const latestDate = rows.length > 0 ? rows[0].positionDate : "";
+    // Get dates from the first commodity with data
+    let latestDate = "";
+    let priorDate = "";
+    for (const commodity of SUMMARY_COMMODITIES) {
+      const data = contractDataMap.get(commodity.id);
+      if (data && data.length >= 2) {
+        latestDate = data[data.length - 1].date;
+        priorDate = data[data.length - 2].date;
+        break;
+      }
+    }
+
+    // Calculate release dates (position date + 3 days)
+    const latestReleaseDate = latestDate ? addDays(latestDate, 3) : "";
+    const priorReleaseDate = priorDate ? addDays(priorDate, 3) : "";
 
     return NextResponse.json({
       success: true,
-      positionDate: latestDate,
+      latestReport: {
+        positionDate: latestDate,
+        releaseDate: latestReleaseDate,
+      },
+      priorReport: {
+        positionDate: priorDate,
+        releaseDate: priorReleaseDate,
+      },
       data: rows,
     });
   } catch (error) {
@@ -259,4 +376,10 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
+}
+
+function addDays(dateStr: string, days: number): string {
+  const date = new Date(dateStr);
+  date.setDate(date.getDate() + days);
+  return date.toISOString().split("T")[0];
 }

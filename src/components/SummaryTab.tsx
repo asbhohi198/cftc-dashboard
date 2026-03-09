@@ -2,10 +2,21 @@
 
 import { useEffect, useState } from "react";
 
+interface ChangeData {
+  value: number;
+  isSignificant: boolean;
+}
+
+interface PctOIData {
+  value: number;
+  isExtreme: boolean;
+  isHigh: boolean;
+}
+
 interface ParticipantData {
   net: number;
-  change: number;
-  pctOI: number;
+  change: ChangeData;
+  pctOI: PctOIData;
 }
 
 interface SummaryRow {
@@ -16,7 +27,7 @@ interface SummaryRow {
   positionDate: string;
   openInterest: {
     size: number;
-    change: number;
+    change: ChangeData;
     pctChange: number;
   };
   producer: ParticipantData;
@@ -26,6 +37,11 @@ interface SummaryRow {
   managedMoney: ParticipantData;
   otherReportables: ParticipantData;
   spec: ParticipantData;
+}
+
+interface ReportDate {
+  positionDate: string;
+  releaseDate: string;
 }
 
 function formatNumber(num: number): string {
@@ -52,6 +68,15 @@ function formatPctChange(num: number): string {
   return sign + (num * 100).toFixed(2) + "%";
 }
 
+function formatDate(dateStr: string): string {
+  if (!dateStr) return "-";
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 function getChangeColor(num: number): string {
   if (num > 0) return "text-green-400";
   if (num < 0) return "text-red-400";
@@ -60,7 +85,8 @@ function getChangeColor(num: number): string {
 
 export function SummaryTab() {
   const [data, setData] = useState<SummaryRow[]>([]);
-  const [positionDate, setPositionDate] = useState<string>("");
+  const [latestReport, setLatestReport] = useState<ReportDate | null>(null);
+  const [priorReport, setPriorReport] = useState<ReportDate | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -75,7 +101,8 @@ export function SummaryTab() {
 
         if (json.success) {
           setData(json.data);
-          setPositionDate(json.positionDate);
+          setLatestReport(json.latestReport);
+          setPriorReport(json.priorReport);
         } else {
           setError(json.error || "Failed to fetch summary data");
         }
@@ -116,7 +143,7 @@ export function SummaryTab() {
 
   return (
     <div className="space-y-4">
-      {/* Header */}
+      {/* Header with Report Dates */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
         <div className="flex items-center justify-between">
           <div>
@@ -125,18 +152,32 @@ export function SummaryTab() {
               Weekly position changes across all agricultural commodities
             </p>
           </div>
-          {positionDate && (
-            <div className="text-right">
-              <p className="text-xs text-zinc-500">Position Date</p>
-              <p className="text-sm font-medium text-white">
-                {new Date(positionDate).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </p>
-            </div>
-          )}
+          <div className="flex items-center gap-8">
+            {/* Latest Report */}
+            {latestReport && (
+              <div className="text-right">
+                <p className="text-xs text-zinc-500 font-medium">Latest Report</p>
+                <p className="text-sm font-medium text-white">
+                  Position: {formatDate(latestReport.positionDate)}
+                </p>
+                <p className="text-xs text-zinc-400">
+                  Released: {formatDate(latestReport.releaseDate)}
+                </p>
+              </div>
+            )}
+            {/* Prior Report */}
+            {priorReport && (
+              <div className="text-right border-l border-zinc-700 pl-8">
+                <p className="text-xs text-zinc-500 font-medium">Prior Report</p>
+                <p className="text-sm font-medium text-zinc-400">
+                  Position: {formatDate(priorReport.positionDate)}
+                </p>
+                <p className="text-xs text-zinc-500">
+                  Released: {formatDate(priorReport.releaseDate)}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -228,8 +269,8 @@ export function SummaryTab() {
                   <td className="px-1 py-1.5 text-right text-zinc-300 border-l border-zinc-800">
                     {formatNumber(row.openInterest.size)}
                   </td>
-                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.openInterest.change)}`}>
-                    {formatChange(row.openInterest.change)}
+                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.openInterest.change.value)} ${row.openInterest.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
+                    {formatChange(row.openInterest.change.value)}
                   </td>
                   <td className={`px-1 py-1.5 text-right ${getChangeColor(row.openInterest.pctChange)}`}>
                     {formatPctChange(row.openInterest.pctChange)}
@@ -239,77 +280,77 @@ export function SummaryTab() {
                   <td className="px-1 py-1.5 text-right text-zinc-300 border-l border-zinc-800">
                     {formatNumber(row.producer.net)}
                   </td>
-                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.producer.change)}`}>
-                    {formatChange(row.producer.change)}
+                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.producer.change.value)} ${row.producer.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
+                    {formatChange(row.producer.change.value)}
                   </td>
-                  <td className="px-1 py-1.5 text-right text-blue-400/70">
-                    {formatPct(row.producer.pctOI)}
+                  <td className={`px-1 py-1.5 text-right ${row.producer.pctOI.isExtreme ? (row.producer.pctOI.isHigh ? "font-bold bg-green-500/20 text-green-400" : "font-bold bg-red-500/20 text-red-400") : "text-blue-400/70"}`}>
+                    {formatPct(row.producer.pctOI.value)}
                   </td>
 
                   {/* Non-Reportables */}
                   <td className="px-1 py-1.5 text-right text-zinc-300 border-l border-zinc-800">
                     {formatNumber(row.nonReportables.net)}
                   </td>
-                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.nonReportables.change)}`}>
-                    {formatChange(row.nonReportables.change)}
+                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.nonReportables.change.value)} ${row.nonReportables.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
+                    {formatChange(row.nonReportables.change.value)}
                   </td>
-                  <td className="px-1 py-1.5 text-right text-purple-400/70">
-                    {formatPct(row.nonReportables.pctOI)}
+                  <td className={`px-1 py-1.5 text-right ${row.nonReportables.pctOI.isExtreme ? (row.nonReportables.pctOI.isHigh ? "font-bold bg-green-500/20 text-green-400" : "font-bold bg-red-500/20 text-red-400") : "text-purple-400/70"}`}>
+                    {formatPct(row.nonReportables.pctOI.value)}
                   </td>
 
                   {/* Producer + Non-Rep */}
                   <td className="px-1 py-1.5 text-right text-zinc-300 border-l border-zinc-800">
                     {formatNumber(row.producerNonRept.net)}
                   </td>
-                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.producerNonRept.change)}`}>
-                    {formatChange(row.producerNonRept.change)}
+                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.producerNonRept.change.value)} ${row.producerNonRept.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
+                    {formatChange(row.producerNonRept.change.value)}
                   </td>
-                  <td className="px-1 py-1.5 text-right text-cyan-400/70">
-                    {formatPct(row.producerNonRept.pctOI)}
+                  <td className={`px-1 py-1.5 text-right ${row.producerNonRept.pctOI.isExtreme ? (row.producerNonRept.pctOI.isHigh ? "font-bold bg-green-500/20 text-green-400" : "font-bold bg-red-500/20 text-red-400") : "text-cyan-400/70"}`}>
+                    {formatPct(row.producerNonRept.pctOI.value)}
                   </td>
 
                   {/* Swap Dealer */}
                   <td className="px-1 py-1.5 text-right text-zinc-300 border-l border-zinc-800">
                     {formatNumber(row.swapDealer.net)}
                   </td>
-                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.swapDealer.change)}`}>
-                    {formatChange(row.swapDealer.change)}
+                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.swapDealer.change.value)} ${row.swapDealer.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
+                    {formatChange(row.swapDealer.change.value)}
                   </td>
-                  <td className="px-1 py-1.5 text-right text-yellow-400/70">
-                    {formatPct(row.swapDealer.pctOI)}
+                  <td className={`px-1 py-1.5 text-right ${row.swapDealer.pctOI.isExtreme ? (row.swapDealer.pctOI.isHigh ? "font-bold bg-green-500/20 text-green-400" : "font-bold bg-red-500/20 text-red-400") : "text-yellow-400/70"}`}>
+                    {formatPct(row.swapDealer.pctOI.value)}
                   </td>
 
                   {/* Managed Money */}
                   <td className="px-1 py-1.5 text-right text-zinc-300 border-l border-zinc-800">
                     {formatNumber(row.managedMoney.net)}
                   </td>
-                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.managedMoney.change)}`}>
-                    {formatChange(row.managedMoney.change)}
+                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.managedMoney.change.value)} ${row.managedMoney.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
+                    {formatChange(row.managedMoney.change.value)}
                   </td>
-                  <td className="px-1 py-1.5 text-right text-orange-400/70">
-                    {formatPct(row.managedMoney.pctOI)}
+                  <td className={`px-1 py-1.5 text-right ${row.managedMoney.pctOI.isExtreme ? (row.managedMoney.pctOI.isHigh ? "font-bold bg-green-500/20 text-green-400" : "font-bold bg-red-500/20 text-red-400") : "text-orange-400/70"}`}>
+                    {formatPct(row.managedMoney.pctOI.value)}
                   </td>
 
                   {/* Other Reportables */}
                   <td className="px-1 py-1.5 text-right text-zinc-300 border-l border-zinc-800">
                     {formatNumber(row.otherReportables.net)}
                   </td>
-                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.otherReportables.change)}`}>
-                    {formatChange(row.otherReportables.change)}
+                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.otherReportables.change.value)} ${row.otherReportables.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
+                    {formatChange(row.otherReportables.change.value)}
                   </td>
-                  <td className="px-1 py-1.5 text-right text-pink-400/70">
-                    {formatPct(row.otherReportables.pctOI)}
+                  <td className={`px-1 py-1.5 text-right ${row.otherReportables.pctOI.isExtreme ? (row.otherReportables.pctOI.isHigh ? "font-bold bg-green-500/20 text-green-400" : "font-bold bg-red-500/20 text-red-400") : "text-pink-400/70"}`}>
+                    {formatPct(row.otherReportables.pctOI.value)}
                   </td>
 
                   {/* Spec */}
                   <td className="px-1 py-1.5 text-right text-zinc-300 border-l border-zinc-800">
                     {formatNumber(row.spec.net)}
                   </td>
-                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.spec.change)}`}>
-                    {formatChange(row.spec.change)}
+                  <td className={`px-1 py-1.5 text-right ${getChangeColor(row.spec.change.value)} ${row.spec.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
+                    {formatChange(row.spec.change.value)}
                   </td>
-                  <td className="px-1 py-1.5 text-right text-emerald-400/70">
-                    {formatPct(row.spec.pctOI)}
+                  <td className={`px-1 py-1.5 text-right ${row.spec.pctOI.isExtreme ? (row.spec.pctOI.isHigh ? "font-bold bg-green-500/20 text-green-400" : "font-bold bg-red-500/20 text-red-400") : "text-emerald-400/70"}`}>
+                    {formatPct(row.spec.pctOI.value)}
                   </td>
                 </tr>
               ))}
@@ -320,10 +361,23 @@ export function SummaryTab() {
 
       {/* Legend */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-3">
-        <p className="text-xs text-zinc-500">
-          <span className="font-medium text-zinc-400">Note:</span> Spec is defined as Managed Money + Other Reportables.
-          Changes are week-over-week. %OI is net position as a percentage of total open interest.
-        </p>
+        <div className="flex flex-wrap items-center gap-6 text-xs text-zinc-500">
+          <div>
+            <span className="font-medium text-zinc-400">Note:</span> Spec = Managed Money + Other Reportables. Changes are week-over-week.
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="px-2 py-0.5 bg-yellow-500/20 text-yellow-400 font-bold rounded">Chg</span>
+            <span>= Change &gt; 1 std dev</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="px-2 py-0.5 bg-green-500/20 text-green-400 font-bold rounded">%OI</span>
+            <span>= 95th percentile</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="px-2 py-0.5 bg-red-500/20 text-red-400 font-bold rounded">%OI</span>
+            <span>= 5th percentile</span>
+          </div>
+        </div>
       </div>
     </div>
   );
