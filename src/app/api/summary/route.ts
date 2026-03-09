@@ -168,15 +168,15 @@ function calculatePctOIValues(data: COTRecord[], getNet: (r: COTRecord) => numbe
 }
 
 function isSignificant(change: number, stdDev: number): boolean {
-  return stdDev > 0 && Math.abs(change) > stdDev;
+  return stdDev > 0 && Math.abs(change) > 2 * stdDev;
 }
 
 function isExtreme(percentile: number): boolean {
-  return percentile >= 95 || percentile <= 5;
+  return percentile >= 98 || percentile <= 2;
 }
 
 function isHigh(percentile: number): boolean {
-  return percentile >= 95;
+  return percentile >= 98;
 }
 
 function calculateParticipantData(
