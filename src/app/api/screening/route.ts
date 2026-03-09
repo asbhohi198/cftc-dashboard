@@ -226,8 +226,8 @@ export async function GET(request: Request) {
         const threshold95 = getPercentileValue(sortedValues, 95);
         const threshold5 = getPercentileValue(sortedValues, 5);
 
-        const isHigh = percentile >= 95;
-        const isLow = percentile <= 5;
+        const isHigh = percentile >= 98;
+        const isLow = percentile <= 2;
 
         if (isHigh || isLow) {
           flaggedSeries.push({
@@ -265,8 +265,8 @@ export async function GET(request: Request) {
         const threshold95 = getPercentileValue(sortedValues, 95);
         const threshold5 = getPercentileValue(sortedValues, 5);
 
-        const isHigh = percentile >= 95;
-        const isLow = percentile <= 5;
+        const isHigh = percentile >= 98;
+        const isLow = percentile <= 2;
 
         if (isHigh || isLow) {
           flaggedSeries.push({
