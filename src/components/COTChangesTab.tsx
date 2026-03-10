@@ -27,6 +27,8 @@ const TIME_RANGE_OPTIONS: { id: TimeRange; label: string; weeks: number | null }
   { id: "all", label: "All", weeks: null },
 ];
 
+type SortColumn = "1w" | "2w" | "3w";
+
 interface ChangeRow {
   id: string;
   label: string;
@@ -34,7 +36,11 @@ interface ChangeRow {
   mmNetCurrent: number;
   mmNetPrevious: number;
   mmNetChange: number;
-  zScore: number;
+  zScore1w: number;
+  mmNetChange2w: number;
+  zScore2w: number;
+  mmNetChange3w: number;
+  zScore3w: number;
   positionDate: string;
   historicalChanges: { date: string; change: number }[];
 }
@@ -104,8 +110,8 @@ function MiniChart({ row, onClick }: { row: ChangeRow; onClick: () => void }) {
           <span className={`text-xs font-mono ${row.mmNetChange >= 0 ? "text-green-400" : "text-red-400"}`}>
             {row.mmNetChange >= 0 ? "+" : ""}{formatNumber(row.mmNetChange)}
           </span>
-          <span className={`text-xs font-mono font-bold px-1.5 py-0.5 rounded ${getZScoreBg(row.zScore)} ${getZScoreColor(row.zScore)}`}>
-            {row.zScore >= 0 ? "+" : ""}{row.zScore.toFixed(2)}σ
+          <span className={`text-xs font-mono font-bold px-1.5 py-0.5 rounded ${getZScoreBg(row.zScore1w)} ${getZScoreColor(row.zScore1w)}`}>
+            {row.zScore1w >= 0 ? "+" : ""}{row.zScore1w.toFixed(2)}σ
           </span>
         </div>
       </div>
@@ -139,6 +145,15 @@ function MiniChart({ row, onClick }: { row: ChangeRow; onClick: () => void }) {
   );
 }
 
+// Helper to get Z-score by column
+function getZScoreByColumn(row: ChangeRow, col: SortColumn): number {
+  switch (col) {
+    case "1w": return row.zScore1w;
+    case "2w": return row.zScore2w;
+    case "3w": return row.zScore3w;
+  }
+}
+
 export function COTChangesTab({ sector }: COTChangesTabProps) {
   const [data, setData] = useState<SectorData | null>(null);
   const [positionDate, setPositionDate] = useState<string>("");
@@ -147,6 +162,7 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
   const [selectedRow, setSelectedRow] = useState<ChangeRow | null>(null);
   const [expandedChart, setExpandedChart] = useState<ChangeRow | null>(null);
   const [expandedTimeRange, setExpandedTimeRange] = useState<TimeRange>("1y");
+  const [sortColumn, setSortColumn] = useState<SortColumn>("1w");
 
   useEffect(() => {
     async function fetchData() {
@@ -158,10 +174,10 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
         if (json.success && json.sectors.length > 0) {
           setData(json.sectors[0]);
           setPositionDate(json.positionDate);
-          // Select row with highest absolute Z-score by default
+          // Select row with highest absolute Z-score by default (1w)
           if (json.sectors[0].rows.length > 0) {
             const topRow = json.sectors[0].rows.reduce((max, row) =>
-              Math.abs(row.zScore) > Math.abs(max.zScore) ? row : max
+              Math.abs(row.zScore1w) > Math.abs(max.zScore1w) ? row : max
             );
             setSelectedRow(topRow);
           }
@@ -201,12 +217,12 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
     );
   }
 
-  // Sort rows: aggregates at the end, sorted by z-score otherwise
+  // Sort rows: aggregates at the end, sorted by selected z-score column
   const sortedRows = [...data.rows].sort((a, b) => {
     if (a.isAggregate !== b.isAggregate) {
       return a.isAggregate ? 1 : -1;
     }
-    return Math.abs(b.zScore) - Math.abs(a.zScore);
+    return Math.abs(getZScoreByColumn(b, sortColumn)) - Math.abs(getZScoreByColumn(a, sortColumn));
   });
 
   return (
@@ -255,8 +271,24 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
               <tr className="bg-zinc-800/50 border-b border-zinc-700">
                 <th className="text-left py-3 px-4 text-zinc-400 font-medium">Commodity</th>
                 <th className="text-right py-3 px-4 text-zinc-400 font-medium">MM Net</th>
-                <th className="text-right py-3 px-4 text-zinc-400 font-medium">WoW Chg</th>
-                <th className="text-right py-3 px-4 text-zinc-400 font-medium">Z-Score</th>
+                <th
+                  className={`text-right py-3 px-2 font-medium cursor-pointer hover:text-white transition-colors ${sortColumn === "1w" ? "text-orange-400" : "text-zinc-400"}`}
+                  onClick={() => setSortColumn("1w")}
+                >
+                  1W Z {sortColumn === "1w" && "▼"}
+                </th>
+                <th
+                  className={`text-right py-3 px-2 font-medium cursor-pointer hover:text-white transition-colors ${sortColumn === "2w" ? "text-orange-400" : "text-zinc-400"}`}
+                  onClick={() => setSortColumn("2w")}
+                >
+                  2W Z {sortColumn === "2w" && "▼"}
+                </th>
+                <th
+                  className={`text-right py-3 px-2 font-medium cursor-pointer hover:text-white transition-colors ${sortColumn === "3w" ? "text-orange-400" : "text-zinc-400"}`}
+                  onClick={() => setSortColumn("3w")}
+                >
+                  3W Z {sortColumn === "3w" && "▼"}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -276,11 +308,14 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
                   <td className="py-3 px-4 text-right font-mono text-zinc-300">
                     {formatNumber(row.mmNetCurrent)}
                   </td>
-                  <td className={`py-3 px-4 text-right font-mono ${row.mmNetChange >= 0 ? "text-green-400" : "text-red-400"}`}>
-                    {row.mmNetChange >= 0 ? "+" : ""}{formatNumber(row.mmNetChange)}
+                  <td className={`py-3 px-2 text-right font-mono font-bold ${getZScoreColor(row.zScore1w)} ${sortColumn === "1w" ? getZScoreBg(row.zScore1w) : ""}`}>
+                    {row.zScore1w >= 0 ? "+" : ""}{row.zScore1w.toFixed(2)}σ
                   </td>
-                  <td className={`py-3 px-4 text-right font-mono font-bold ${getZScoreColor(row.zScore)} ${getZScoreBg(row.zScore)}`}>
-                    {row.zScore >= 0 ? "+" : ""}{row.zScore.toFixed(2)}σ
+                  <td className={`py-3 px-2 text-right font-mono font-bold ${getZScoreColor(row.zScore2w)} ${sortColumn === "2w" ? getZScoreBg(row.zScore2w) : ""}`}>
+                    {row.zScore2w >= 0 ? "+" : ""}{row.zScore2w.toFixed(2)}σ
+                  </td>
+                  <td className={`py-3 px-2 text-right font-mono font-bold ${getZScoreColor(row.zScore3w)} ${sortColumn === "3w" ? getZScoreBg(row.zScore3w) : ""}`}>
+                    {row.zScore3w >= 0 ? "+" : ""}{row.zScore3w.toFixed(2)}σ
                   </td>
                 </tr>
               ))}
@@ -338,17 +373,23 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
               </div>
 
               {/* Stats */}
-              <div className="mt-4 grid grid-cols-2 gap-3">
-                <div className="bg-zinc-800 rounded-lg p-3">
-                  <p className="text-xs text-zinc-500">Current Change</p>
-                  <p className={`text-lg font-bold ${selectedRow.mmNetChange >= 0 ? "text-green-400" : "text-red-400"}`}>
-                    {selectedRow.mmNetChange >= 0 ? "+" : ""}{formatNumber(selectedRow.mmNetChange)}
+              <div className="mt-4 grid grid-cols-3 gap-2">
+                <div className="bg-zinc-800 rounded-lg p-2">
+                  <p className="text-xs text-zinc-500">1W Z</p>
+                  <p className={`text-sm font-bold ${getZScoreColor(selectedRow.zScore1w)}`}>
+                    {selectedRow.zScore1w >= 0 ? "+" : ""}{selectedRow.zScore1w.toFixed(2)}σ
                   </p>
                 </div>
-                <div className="bg-zinc-800 rounded-lg p-3">
-                  <p className="text-xs text-zinc-500">Z-Score</p>
-                  <p className={`text-lg font-bold ${getZScoreColor(selectedRow.zScore)}`}>
-                    {selectedRow.zScore >= 0 ? "+" : ""}{selectedRow.zScore.toFixed(2)}σ
+                <div className="bg-zinc-800 rounded-lg p-2">
+                  <p className="text-xs text-zinc-500">2W Z</p>
+                  <p className={`text-sm font-bold ${getZScoreColor(selectedRow.zScore2w)}`}>
+                    {selectedRow.zScore2w >= 0 ? "+" : ""}{selectedRow.zScore2w.toFixed(2)}σ
+                  </p>
+                </div>
+                <div className="bg-zinc-800 rounded-lg p-2">
+                  <p className="text-xs text-zinc-500">3W Z</p>
+                  <p className={`text-sm font-bold ${getZScoreColor(selectedRow.zScore3w)}`}>
+                    {selectedRow.zScore3w >= 0 ? "+" : ""}{selectedRow.zScore3w.toFixed(2)}σ
                   </p>
                 </div>
               </div>
@@ -421,14 +462,10 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
               </div>
 
               {/* Stats Row */}
-              <div className="grid grid-cols-4 gap-4 mb-6">
+              <div className="grid grid-cols-6 gap-3 mb-6">
                 <div className="bg-zinc-800 rounded-lg p-3">
                   <p className="text-xs text-zinc-500">MM Net Position</p>
                   <p className="text-lg font-bold text-white">{formatNumber(expandedChart.mmNetCurrent)}</p>
-                </div>
-                <div className="bg-zinc-800 rounded-lg p-3">
-                  <p className="text-xs text-zinc-500">Previous Week</p>
-                  <p className="text-lg font-bold text-zinc-400">{formatNumber(expandedChart.mmNetPrevious)}</p>
                 </div>
                 <div className="bg-zinc-800 rounded-lg p-3">
                   <p className="text-xs text-zinc-500">WoW Change</p>
@@ -437,9 +474,27 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
                   </p>
                 </div>
                 <div className="bg-zinc-800 rounded-lg p-3">
-                  <p className="text-xs text-zinc-500">Z-Score</p>
-                  <p className={`text-lg font-bold ${getZScoreColor(expandedChart.zScore)}`}>
-                    {expandedChart.zScore >= 0 ? "+" : ""}{expandedChart.zScore.toFixed(2)}σ
+                  <p className="text-xs text-zinc-500">1W Z-Score</p>
+                  <p className={`text-lg font-bold ${getZScoreColor(expandedChart.zScore1w)}`}>
+                    {expandedChart.zScore1w >= 0 ? "+" : ""}{expandedChart.zScore1w.toFixed(2)}σ
+                  </p>
+                </div>
+                <div className="bg-zinc-800 rounded-lg p-3">
+                  <p className="text-xs text-zinc-500">2W Z-Score</p>
+                  <p className={`text-lg font-bold ${getZScoreColor(expandedChart.zScore2w)}`}>
+                    {expandedChart.zScore2w >= 0 ? "+" : ""}{expandedChart.zScore2w.toFixed(2)}σ
+                  </p>
+                </div>
+                <div className="bg-zinc-800 rounded-lg p-3">
+                  <p className="text-xs text-zinc-500">3W Z-Score</p>
+                  <p className={`text-lg font-bold ${getZScoreColor(expandedChart.zScore3w)}`}>
+                    {expandedChart.zScore3w >= 0 ? "+" : ""}{expandedChart.zScore3w.toFixed(2)}σ
+                  </p>
+                </div>
+                <div className="bg-zinc-800 rounded-lg p-3">
+                  <p className="text-xs text-zinc-500">3W Change</p>
+                  <p className={`text-lg font-bold ${expandedChart.mmNetChange3w >= 0 ? "text-green-400" : "text-red-400"}`}>
+                    {expandedChart.mmNetChange3w >= 0 ? "+" : ""}{formatNumber(expandedChart.mmNetChange3w)}
                   </p>
                 </div>
               </div>

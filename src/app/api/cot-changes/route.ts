@@ -122,8 +122,15 @@ interface ChangeRow {
   isAggregate: boolean;
   mmNetCurrent: number;
   mmNetPrevious: number;
+  // 1-week change
   mmNetChange: number;
-  zScore: number;
+  zScore1w: number;
+  // 2-week change
+  mmNetChange2w: number;
+  zScore2w: number;
+  // 3-week change
+  mmNetChange3w: number;
+  zScore3w: number;
   positionDate: string;
   // Historical weekly changes for charting
   historicalChanges: { date: string; change: number }[];
@@ -160,6 +167,15 @@ function calculateWeeklyChanges(data: COTRecord[]): number[] {
   return changes;
 }
 
+// Calculate N-week changes (change from N weeks ago to now)
+function calculateNWeekChanges(data: COTRecord[], n: number): number[] {
+  const changes: number[] = [];
+  for (let i = n; i < data.length; i++) {
+    changes.push(data[i].mmNetAll - data[i - n].mmNetAll);
+  }
+  return changes;
+}
+
 // Calculate z-score for a value given an array
 function calculateZScore(value: number, values: number[]): number {
   const mean = calculateMean(values);
@@ -169,18 +185,30 @@ function calculateZScore(value: number, values: number[]): number {
 }
 
 function calculateRow(data: COTRecord[], label: string, id: string, isAggregate: boolean): ChangeRow | null {
-  if (data.length < 2) return null;
+  if (data.length < 4) return null; // Need at least 4 data points for 3-week change
 
   const latest = data[data.length - 1];
   const previous = data[data.length - 2];
+  const twoWeeksAgo = data[data.length - 3];
+  const threeWeeksAgo = data[data.length - 4];
 
   const mmNetCurrent = latest.mmNetAll;
   const mmNetPrevious = previous.mmNetAll;
-  const mmNetChange = mmNetCurrent - mmNetPrevious;
 
-  // Calculate historical weekly changes for z-score
+  // 1-week change
+  const mmNetChange = mmNetCurrent - mmNetPrevious;
   const weeklyChanges = calculateWeeklyChanges(data);
-  const zScore = calculateZScore(mmNetChange, weeklyChanges);
+  const zScore1w = calculateZScore(mmNetChange, weeklyChanges);
+
+  // 2-week change
+  const mmNetChange2w = mmNetCurrent - twoWeeksAgo.mmNetAll;
+  const twoWeekChanges = calculateNWeekChanges(data, 2);
+  const zScore2w = calculateZScore(mmNetChange2w, twoWeekChanges);
+
+  // 3-week change
+  const mmNetChange3w = mmNetCurrent - threeWeeksAgo.mmNetAll;
+  const threeWeekChanges = calculateNWeekChanges(data, 3);
+  const zScore3w = calculateZScore(mmNetChange3w, threeWeekChanges);
 
   // Get ALL historical weekly changes for charting
   const allChanges: { date: string; change: number }[] = [];
@@ -198,7 +226,11 @@ function calculateRow(data: COTRecord[], label: string, id: string, isAggregate:
     mmNetCurrent,
     mmNetPrevious,
     mmNetChange,
-    zScore,
+    zScore1w,
+    mmNetChange2w,
+    zScore2w,
+    mmNetChange3w,
+    zScore3w,
     positionDate: latest.date,
     historicalChanges: allChanges,
   };
