@@ -109,17 +109,18 @@ function MiniChart({ row, onClick }: { row: ChangeRow; onClick: () => void }) {
           </span>
         </div>
       </div>
-      <div className="h-36">
+      <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 25 }}>
+          <BarChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 50 }}>
             <XAxis
               dataKey="date"
               tick={{ fill: "#71717a", fontSize: 8 }}
               angle={-90}
               textAnchor="end"
-              height={25}
+              height={50}
               tickFormatter={formatChartDate}
-              interval={Math.floor(chartData.length / 4)}
+              interval={Math.floor(chartData.length / 6)}
+              dy={10}
             />
             <ReferenceLine y={0} stroke="#52525b" />
             <Bar dataKey="change" radius={[1, 1, 0, 0]}>
@@ -157,9 +158,12 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
         if (json.success && json.sectors.length > 0) {
           setData(json.sectors[0]);
           setPositionDate(json.positionDate);
-          // Select first row by default for chart
+          // Select row with highest absolute Z-score by default
           if (json.sectors[0].rows.length > 0) {
-            setSelectedRow(json.sectors[0].rows[0]);
+            const topRow = json.sectors[0].rows.reduce((max, row) =>
+              Math.abs(row.zScore) > Math.abs(max.zScore) ? row : max
+            );
+            setSelectedRow(topRow);
           }
         } else {
           setError("No data available");
