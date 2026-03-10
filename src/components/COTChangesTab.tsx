@@ -88,9 +88,9 @@ function getZScoreBg(zScore: number): string {
   return "";
 }
 
-// Mini chart component for the grid (shows last 52 weeks)
+// Mini chart component for the grid (shows last 2 years / 104 weeks)
 function MiniChart({ row, onClick }: { row: ChangeRow; onClick: () => void }) {
-  const chartData = row.historicalChanges.slice(-52);
+  const chartData = row.historicalChanges.slice(-104);
   return (
     <div
       className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 cursor-pointer hover:border-zinc-600 transition-colors"
@@ -109,7 +109,7 @@ function MiniChart({ row, onClick }: { row: ChangeRow; onClick: () => void }) {
           </span>
         </div>
       </div>
-      <div className="h-64">
+      <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 30 }}>
             <XAxis
@@ -119,7 +119,7 @@ function MiniChart({ row, onClick }: { row: ChangeRow; onClick: () => void }) {
               textAnchor="end"
               height={30}
               tickFormatter={formatChartDate}
-              interval={Math.floor(chartData.length / 6)}
+              interval={Math.floor(chartData.length / 10)}
               dy={15}
             />
             <ReferenceLine y={0} stroke="#52525b" />
