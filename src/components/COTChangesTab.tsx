@@ -16,6 +16,17 @@ import { X } from "lucide-react";
 
 type AssetCategory = "ags-grains" | "ags-softs" | "ags-livestock" | "ags-other" | "energy" | "metals" | "equities" | "rates" | "fx" | "crypto";
 
+type TimeRange = "3m" | "6m" | "1y" | "2y" | "5y" | "all";
+
+const TIME_RANGE_OPTIONS: { id: TimeRange; label: string; weeks: number | null }[] = [
+  { id: "3m", label: "3M", weeks: 13 },
+  { id: "6m", label: "6M", weeks: 26 },
+  { id: "1y", label: "1Y", weeks: 52 },
+  { id: "2y", label: "2Y", weeks: 104 },
+  { id: "5y", label: "5Y", weeks: 260 },
+  { id: "all", label: "All", weeks: null },
+];
+
 interface ChangeRow {
   id: string;
   label: string;
@@ -77,8 +88,9 @@ function getZScoreBg(zScore: number): string {
   return "";
 }
 
-// Mini chart component for the grid
+// Mini chart component for the grid (shows last 52 weeks)
 function MiniChart({ row, onClick }: { row: ChangeRow; onClick: () => void }) {
+  const chartData = row.historicalChanges.slice(-52);
   return (
     <div
       className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 cursor-pointer hover:border-zinc-600 transition-colors"
@@ -97,16 +109,25 @@ function MiniChart({ row, onClick }: { row: ChangeRow; onClick: () => void }) {
           </span>
         </div>
       </div>
-      <div className="h-32">
+      <div className="h-36">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={row.historicalChanges} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
+          <BarChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 25 }}>
+            <XAxis
+              dataKey="date"
+              tick={{ fill: "#71717a", fontSize: 8 }}
+              angle={-90}
+              textAnchor="end"
+              height={25}
+              tickFormatter={formatChartDate}
+              interval={Math.floor(chartData.length / 4)}
+            />
             <ReferenceLine y={0} stroke="#52525b" />
             <Bar dataKey="change" radius={[1, 1, 0, 0]}>
-              {row.historicalChanges.map((entry, index) => (
+              {chartData.map((entry, index, arr) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={entry.change >= 0 ? "#22c55e" : "#ef4444"}
-                  opacity={index === row.historicalChanges.length - 1 ? 1 : 0.5}
+                  opacity={index === arr.length - 1 ? 1 : 0.5}
                 />
               ))}
             </Bar>
@@ -124,6 +145,7 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
   const [error, setError] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<ChangeRow | null>(null);
   const [expandedChart, setExpandedChart] = useState<ChangeRow | null>(null);
+  const [expandedTimeRange, setExpandedTimeRange] = useState<TimeRange>("1y");
 
   useEffect(() => {
     async function fetchData() {
@@ -271,17 +293,17 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
 
               <div className="h-96">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={selectedRow.historicalChanges} margin={{ top: 10, right: 10, left: -10, bottom: 60 }}>
+                  <BarChart data={selectedRow.historicalChanges.slice(-52)} margin={{ top: 10, right: 10, left: -10, bottom: 80 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                     <XAxis
                       dataKey="date"
                       tick={{ fill: "#71717a", fontSize: 10 }}
                       angle={-90}
                       textAnchor="end"
-                      height={80}
+                      height={100}
                       tickFormatter={formatChartDate}
-                      interval={Math.floor(selectedRow.historicalChanges.length / 8)}
-                      dy={10}
+                      interval={Math.floor(Math.min(52, selectedRow.historicalChanges.length) / 8)}
+                      dy={15}
                     />
                     <YAxis
                       tick={{ fill: "#71717a", fontSize: 10 }}
@@ -299,11 +321,11 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
                     />
                     <ReferenceLine y={0} stroke="#52525b" />
                     <Bar dataKey="change" radius={[2, 2, 0, 0]}>
-                      {selectedRow.historicalChanges.map((entry, index) => (
+                      {selectedRow.historicalChanges.slice(-52).map((entry, index, arr) => (
                         <Cell
                           key={`cell-${index}`}
                           fill={entry.change >= 0 ? "#22c55e" : "#ef4444"}
-                          opacity={index === selectedRow.historicalChanges.length - 1 ? 1 : 0.6}
+                          opacity={index === arr.length - 1 ? 1 : 0.6}
                         />
                       ))}
                     </Bar>
@@ -344,99 +366,126 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
       </div>
 
       {/* Expanded Chart Modal */}
-      {expandedChart && (
-        <div
-          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
-          onClick={() => setExpandedChart(null)}
-        >
+      {expandedChart && (() => {
+        const timeOption = TIME_RANGE_OPTIONS.find(t => t.id === expandedTimeRange);
+        const chartData = timeOption?.weeks
+          ? expandedChart.historicalChanges.slice(-timeOption.weeks)
+          : expandedChart.historicalChanges;
+        const intervalDivisor = chartData.length > 100 ? 20 : chartData.length > 50 ? 12 : 8;
+
+        return (
           <div
-            className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 max-w-4xl w-full max-h-[90vh] overflow-auto"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+            onClick={() => setExpandedChart(null)}
           >
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className={`text-lg font-semibold ${expandedChart.isAggregate ? "text-orange-400" : "text-white"}`}>
-                  {expandedChart.label}
-                </h3>
-                <p className="text-sm text-zinc-400">Weekly MM Net Changes (Last 52 Weeks)</p>
+            <div
+              className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 max-w-5xl w-full max-h-[90vh] overflow-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className={`text-lg font-semibold ${expandedChart.isAggregate ? "text-orange-400" : "text-white"}`}>
+                    {expandedChart.label}
+                  </h3>
+                  <p className="text-sm text-zinc-400">
+                    Weekly MM Net Changes ({chartData.length} weeks)
+                  </p>
+                </div>
+                <button
+                  onClick={() => setExpandedChart(null)}
+                  className="text-zinc-400 hover:text-white transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
               </div>
-              <button
-                onClick={() => setExpandedChart(null)}
-                className="text-zinc-400 hover:text-white transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
 
-            {/* Stats Row */}
-            <div className="grid grid-cols-4 gap-4 mb-6">
-              <div className="bg-zinc-800 rounded-lg p-3">
-                <p className="text-xs text-zinc-500">MM Net Position</p>
-                <p className="text-lg font-bold text-white">{formatNumber(expandedChart.mmNetCurrent)}</p>
+              {/* Time Range Toggle */}
+              <div className="flex items-center gap-2 mb-4">
+                {TIME_RANGE_OPTIONS.map((option) => (
+                  <button
+                    key={option.id}
+                    onClick={() => setExpandedTimeRange(option.id)}
+                    className={`px-3 py-1.5 text-xs font-medium rounded transition-colors ${
+                      expandedTimeRange === option.id
+                        ? "bg-orange-500 text-white"
+                        : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
               </div>
-              <div className="bg-zinc-800 rounded-lg p-3">
-                <p className="text-xs text-zinc-500">Previous Week</p>
-                <p className="text-lg font-bold text-zinc-400">{formatNumber(expandedChart.mmNetPrevious)}</p>
-              </div>
-              <div className="bg-zinc-800 rounded-lg p-3">
-                <p className="text-xs text-zinc-500">WoW Change</p>
-                <p className={`text-lg font-bold ${expandedChart.mmNetChange >= 0 ? "text-green-400" : "text-red-400"}`}>
-                  {expandedChart.mmNetChange >= 0 ? "+" : ""}{formatNumber(expandedChart.mmNetChange)}
-                </p>
-              </div>
-              <div className="bg-zinc-800 rounded-lg p-3">
-                <p className="text-xs text-zinc-500">Z-Score</p>
-                <p className={`text-lg font-bold ${getZScoreColor(expandedChart.zScore)}`}>
-                  {expandedChart.zScore >= 0 ? "+" : ""}{expandedChart.zScore.toFixed(2)}σ
-                </p>
-              </div>
-            </div>
 
-            {/* Large Chart */}
-            <div className="h-96">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={expandedChart.historicalChanges} margin={{ top: 20, right: 30, left: 20, bottom: 80 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                  <XAxis
-                    dataKey="date"
-                    tick={{ fill: "#71717a", fontSize: 11 }}
-                    angle={-90}
-                    textAnchor="end"
-                    height={100}
-                    tickFormatter={formatChartDate}
-                    interval={Math.floor(expandedChart.historicalChanges.length / 12)}
-                    dy={10}
-                  />
-                  <YAxis
-                    tick={{ fill: "#71717a", fontSize: 11 }}
-                    tickFormatter={(v) => formatNumber(v)}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#18181b",
-                      border: "1px solid #27272a",
-                      borderRadius: "0.5rem",
-                      fontSize: "12px",
-                    }}
-                    formatter={(value: number) => [formatNumber(value), "Change"]}
-                    labelFormatter={(label) => formatDate(label)}
-                  />
-                  <ReferenceLine y={0} stroke="#52525b" strokeWidth={2} />
-                  <Bar dataKey="change" radius={[3, 3, 0, 0]}>
-                    {expandedChart.historicalChanges.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={entry.change >= 0 ? "#22c55e" : "#ef4444"}
-                        opacity={index === expandedChart.historicalChanges.length - 1 ? 1 : 0.6}
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+              {/* Stats Row */}
+              <div className="grid grid-cols-4 gap-4 mb-6">
+                <div className="bg-zinc-800 rounded-lg p-3">
+                  <p className="text-xs text-zinc-500">MM Net Position</p>
+                  <p className="text-lg font-bold text-white">{formatNumber(expandedChart.mmNetCurrent)}</p>
+                </div>
+                <div className="bg-zinc-800 rounded-lg p-3">
+                  <p className="text-xs text-zinc-500">Previous Week</p>
+                  <p className="text-lg font-bold text-zinc-400">{formatNumber(expandedChart.mmNetPrevious)}</p>
+                </div>
+                <div className="bg-zinc-800 rounded-lg p-3">
+                  <p className="text-xs text-zinc-500">WoW Change</p>
+                  <p className={`text-lg font-bold ${expandedChart.mmNetChange >= 0 ? "text-green-400" : "text-red-400"}`}>
+                    {expandedChart.mmNetChange >= 0 ? "+" : ""}{formatNumber(expandedChart.mmNetChange)}
+                  </p>
+                </div>
+                <div className="bg-zinc-800 rounded-lg p-3">
+                  <p className="text-xs text-zinc-500">Z-Score</p>
+                  <p className={`text-lg font-bold ${getZScoreColor(expandedChart.zScore)}`}>
+                    {expandedChart.zScore >= 0 ? "+" : ""}{expandedChart.zScore.toFixed(2)}σ
+                  </p>
+                </div>
+              </div>
+
+              {/* Large Chart */}
+              <div className="h-96">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 80 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                    <XAxis
+                      dataKey="date"
+                      tick={{ fill: "#71717a", fontSize: 11 }}
+                      angle={-90}
+                      textAnchor="end"
+                      height={100}
+                      tickFormatter={formatChartDate}
+                      interval={Math.floor(chartData.length / intervalDivisor)}
+                      dy={15}
+                    />
+                    <YAxis
+                      tick={{ fill: "#71717a", fontSize: 11 }}
+                      tickFormatter={(v) => formatNumber(v)}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "#18181b",
+                        border: "1px solid #27272a",
+                        borderRadius: "0.5rem",
+                        fontSize: "12px",
+                      }}
+                      formatter={(value: number) => [formatNumber(value), "Change"]}
+                      labelFormatter={(label) => formatDate(label)}
+                    />
+                    <ReferenceLine y={0} stroke="#52525b" strokeWidth={2} />
+                    <Bar dataKey="change" radius={[3, 3, 0, 0]}>
+                      {chartData.map((entry, index, arr) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={entry.change >= 0 ? "#22c55e" : "#ef4444"}
+                          opacity={index === arr.length - 1 ? 1 : 0.6}
+                        />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   );
 }

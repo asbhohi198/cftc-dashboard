@@ -182,11 +182,10 @@ function calculateRow(data: COTRecord[], label: string, id: string, isAggregate:
   const weeklyChanges = calculateWeeklyChanges(data);
   const zScore = calculateZScore(mmNetChange, weeklyChanges);
 
-  // Get last 52 weeks of changes for charting (or all if less)
-  const recentChanges: { date: string; change: number }[] = [];
-  const startIdx = Math.max(1, data.length - 52);
-  for (let i = startIdx; i < data.length; i++) {
-    recentChanges.push({
+  // Get ALL historical weekly changes for charting
+  const allChanges: { date: string; change: number }[] = [];
+  for (let i = 1; i < data.length; i++) {
+    allChanges.push({
       date: data[i].date,
       change: data[i].mmNetAll - data[i - 1].mmNetAll,
     });
@@ -201,7 +200,7 @@ function calculateRow(data: COTRecord[], label: string, id: string, isAggregate:
     mmNetChange,
     zScore,
     positionDate: latest.date,
-    historicalChanges: recentChanges,
+    historicalChanges: allChanges,
   };
 }
 
