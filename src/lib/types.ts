@@ -2,6 +2,7 @@
 export type MainCategory =
   | "home"
   | "summary"
+  | "cot-changes"
   | "ags-grains"
   | "ags-softs"
   | "ags-livestock"
@@ -94,7 +95,19 @@ export type CryptoSubTab =
   | "bitcoin"
   | "ethereum";
 
-export type SubTab = AgsGrainsSubTab | AgsOtherSubTab | AgsSoftsSubTab | AgsLivestockSubTab | EnergySubTab | MetalsSubTab | EquitiesSubTab | RatesSubTab | FXSubTab | CryptoSubTab | null;
+export type COTChangesSubTab =
+  | "changes-ags-grains"
+  | "changes-ags-softs"
+  | "changes-ags-livestock"
+  | "changes-ags-other"
+  | "changes-energy"
+  | "changes-metals"
+  | "changes-equities"
+  | "changes-rates"
+  | "changes-fx"
+  | "changes-crypto";
+
+export type SubTab = AgsGrainsSubTab | AgsOtherSubTab | AgsSoftsSubTab | AgsLivestockSubTab | EnergySubTab | MetalsSubTab | EquitiesSubTab | RatesSubTab | FXSubTab | CryptoSubTab | COTChangesSubTab | null;
 
 // Tab configuration
 export interface TabConfig {
@@ -111,6 +124,22 @@ export const TAB_CONFIG: TabConfig[] = [
   {
     id: "summary",
     label: "Summary",
+  },
+  {
+    id: "cot-changes",
+    label: "COT Changes",
+    subTabs: [
+      { id: "changes-ags-grains", label: "Ags - G&O" },
+      { id: "changes-ags-softs", label: "Ags - Softs" },
+      { id: "changes-ags-livestock", label: "Ags - Livestock" },
+      { id: "changes-ags-other", label: "Ags - Other" },
+      { id: "changes-energy", label: "Energy" },
+      { id: "changes-metals", label: "Metals" },
+      { id: "changes-equities", label: "Equities" },
+      { id: "changes-rates", label: "Rates" },
+      { id: "changes-fx", label: "FX" },
+      { id: "changes-crypto", label: "Crypto" },
+    ],
   },
   {
     id: "ags-grains",

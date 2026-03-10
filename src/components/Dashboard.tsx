@@ -13,6 +13,7 @@ import { AllSoftsTab } from "./AllSoftsTab";
 import { AllLivestockTab } from "./AllLivestockTab";
 import { HomeTab } from "./HomeTab";
 import { SummaryTab } from "./SummaryTab";
+import { COTChangesTab } from "./COTChangesTab";
 import { BarChart3 } from "lucide-react";
 
 // Map sub-tab IDs to contract IDs for the API
@@ -144,6 +145,38 @@ export function Dashboard() {
 
         {/* Summary */}
         {activeTab === "summary" && <SummaryTab />}
+
+        {/* COT Changes */}
+        {activeTab === "cot-changes" && activeSubTab === "changes-ags-grains" && (
+          <COTChangesTab sector="ags-grains" />
+        )}
+        {activeTab === "cot-changes" && activeSubTab === "changes-ags-softs" && (
+          <COTChangesTab sector="ags-softs" />
+        )}
+        {activeTab === "cot-changes" && activeSubTab === "changes-ags-livestock" && (
+          <COTChangesTab sector="ags-livestock" />
+        )}
+        {activeTab === "cot-changes" && activeSubTab === "changes-ags-other" && (
+          <COTChangesTab sector="ags-other" />
+        )}
+        {activeTab === "cot-changes" && activeSubTab === "changes-energy" && (
+          <COTChangesTab sector="energy" />
+        )}
+        {activeTab === "cot-changes" && activeSubTab === "changes-metals" && (
+          <COTChangesTab sector="metals" />
+        )}
+        {activeTab === "cot-changes" && activeSubTab === "changes-equities" && (
+          <COTChangesTab sector="equities" />
+        )}
+        {activeTab === "cot-changes" && activeSubTab === "changes-rates" && (
+          <COTChangesTab sector="rates" />
+        )}
+        {activeTab === "cot-changes" && activeSubTab === "changes-fx" && (
+          <COTChangesTab sector="fx" />
+        )}
+        {activeTab === "cot-changes" && activeSubTab === "changes-crypto" && (
+          <COTChangesTab sector="crypto" />
+        )}
 
         {/* Ags - Grains & Oilseeds */}
         {activeTab === "ags-grains" && activeSubTab === "all-us-wheat" && (
