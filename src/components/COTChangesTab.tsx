@@ -111,16 +111,16 @@ function MiniChart({ row, onClick }: { row: ChangeRow; onClick: () => void }) {
       </div>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 50 }}>
+          <BarChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 30 }}>
             <XAxis
               dataKey="date"
               tick={{ fill: "#71717a", fontSize: 8 }}
               angle={-90}
               textAnchor="end"
-              height={50}
+              height={30}
               tickFormatter={formatChartDate}
               interval={Math.floor(chartData.length / 6)}
-              dy={10}
+              dy={15}
             />
             <ReferenceLine y={0} stroke="#52525b" />
             <Bar dataKey="change" radius={[1, 1, 0, 0]}>
