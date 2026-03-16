@@ -12,6 +12,7 @@ import { OCNCMMSplitsTab } from "./OCNCMMSplitsTab";
 import { AllSoftsTab } from "./AllSoftsTab";
 import { AllLivestockTab } from "./AllLivestockTab";
 import { HomeTab } from "./HomeTab";
+import { GuideTab } from "./GuideTab";
 import { SummaryTab } from "./SummaryTab";
 import { COTChangesTab } from "./COTChangesTab";
 import { BarChart3 } from "lucide-react";
@@ -142,6 +143,9 @@ export function Dashboard() {
 
         {/* Home */}
         {activeTab === "home" && <HomeTab />}
+
+        {/* Guide */}
+        {activeTab === "guide" && <GuideTab />}
 
         {/* Summary */}
         {activeTab === "summary" && <SummaryTab />}

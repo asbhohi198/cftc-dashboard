@@ -1,6 +1,7 @@
 // Main category tabs
 export type MainCategory =
   | "home"
+  | "guide"
   | "summary"
   | "cot-changes"
   | "ags-grains"
@@ -120,6 +121,10 @@ export const TAB_CONFIG: TabConfig[] = [
   {
     id: "home",
     label: "Home",
+  },
+  {
+    id: "guide",
+    label: "Guide",
   },
   {
     id: "summary",
