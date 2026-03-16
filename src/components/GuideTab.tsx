@@ -2,7 +2,7 @@
 
 export function GuideTab() {
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-5xl mx-auto space-y-8">
       {/* Header */}
       <div className="text-center">
         <h2 className="text-2xl font-bold text-white">How to Trade Positioning Data</h2>
@@ -35,128 +35,94 @@ export function GuideTab() {
 
       {/* Five Ways to Trade Positioning */}
       <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6">
-        <h3 className="text-lg font-semibold text-orange-400 mb-4">Five Ways to Trade Positioning</h3>
+        <h3 className="text-lg font-semibold text-orange-400 mb-6">Five Ways to Trade Positioning</h3>
 
         <div className="space-y-6">
           {/* Method 1 */}
-          <div className="border-l-2 border-zinc-700 pl-4">
-            <h4 className="text-white font-medium mb-2">1. Play for extreme positioning to burn itself out</h4>
-            <ul className="space-y-1 text-sm text-zinc-400">
-              <li>Wait for 2-3 standard deviation extremes and take the other side</li>
-              <li>This is simplistic on its own - use as a starting point for investigation</li>
-              <li>Look for other inputs to improve timing or raise odds of reversal</li>
-            </ul>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2 border-l-2 border-zinc-700 pl-4">
+              <h4 className="text-white font-medium mb-2">1. Play for extreme positioning to burn itself out</h4>
+              <ul className="space-y-1 text-sm text-zinc-400">
+                <li>Wait for 2-3 standard deviation extremes and take the other side</li>
+                <li>This is simplistic on its own - use as a starting point for investigation</li>
+                <li>Look for other inputs to improve timing or raise odds of reversal</li>
+              </ul>
+            </div>
+            <div className="bg-zinc-800/50 rounded-lg p-4">
+              <div className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Trade Idea</div>
+              <div className="text-cyan-400 font-semibold">Short Gold</div>
+              <p className="text-xs text-zinc-500 mt-1">Managed money net long at 98th percentile after safe-haven bid; stretched positioning vulnerable to mean reversion</p>
+            </div>
           </div>
 
           {/* Method 2 */}
-          <div className="border-l-2 border-zinc-700 pl-4">
-            <h4 className="text-white font-medium mb-2">2. Extreme positioning + extreme narrative</h4>
-            <ul className="space-y-1 text-sm text-zinc-400">
-              <li>Magazine cover indicator (e.g., The Economist cover story)</li>
-              <li>Every strategist has the same view</li>
-              <li>Outrageous price targets coming out of the woodwork</li>
-            </ul>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2 border-l-2 border-zinc-700 pl-4">
+              <h4 className="text-white font-medium mb-2">2. Extreme positioning + extreme narrative</h4>
+              <ul className="space-y-1 text-sm text-zinc-400">
+                <li>Magazine cover indicator (e.g., The Economist cover story)</li>
+                <li>Every strategist has the same view</li>
+                <li>Outrageous price targets coming out of the woodwork</li>
+              </ul>
+            </div>
+            <div className="bg-zinc-800/50 rounded-lg p-4">
+              <div className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Trade Idea</div>
+              <div className="text-cyan-400 font-semibold">Short USD (via Long EUR/USD)</div>
+              <p className="text-xs text-zinc-500 mt-1">Specs max long USD + "King Dollar" narrative everywhere; every strategist bullish USD after war bid</p>
+            </div>
           </div>
 
           {/* Method 3 */}
-          <div className="border-l-2 border-zinc-700 pl-4">
-            <h4 className="text-white font-medium mb-2">3. Exogenous shock triggers degrossing</h4>
-            <ul className="space-y-1 text-sm text-zinc-400">
-              <li>VAR shocks lead to position reduction regardless of fundamentals</li>
-              <li>When a major shock hits, go down the list of extreme positions and take the other side</li>
-              <li>Safe haven status and historical behavior become meaningless during shocks</li>
-            </ul>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2 border-l-2 border-zinc-700 pl-4">
+              <h4 className="text-white font-medium mb-2">3. Exogenous shock triggers degrossing</h4>
+              <ul className="space-y-1 text-sm text-zinc-400">
+                <li>VAR shocks lead to position reduction regardless of fundamentals</li>
+                <li>When a major shock hits, go down the list of extreme positions and take the other side</li>
+                <li>Safe haven status and historical behavior become meaningless during shocks</li>
+              </ul>
+            </div>
+            <div className="bg-zinc-800/50 rounded-lg p-4">
+              <div className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Trade Idea</div>
+              <div className="text-cyan-400 font-semibold">Long Copper (on next risk-off flush)</div>
+              <p className="text-xs text-zinc-500 mt-1">Specs already short; any shock-driven selloff creates opportunity to buy into already-bearish positioning</p>
+            </div>
           </div>
 
           {/* Method 4 */}
-          <div className="border-l-2 border-zinc-700 pl-4">
-            <h4 className="text-white font-medium mb-2">4. Strong sentiment but no position yet (event risk)</h4>
-            <ul className="space-y-1 text-sm text-zinc-400">
-              <li>Market has a strong view but waiting for an event to pass (NFP, ECB, etc.)</li>
-              <li>After the event, traders pile in regardless of outcome - they just wanted the event out of the way</li>
-              <li>Profit by putting on the position faster than others once event passes</li>
-            </ul>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2 border-l-2 border-zinc-700 pl-4">
+              <h4 className="text-white font-medium mb-2">4. Strong sentiment but no position yet (event risk)</h4>
+              <ul className="space-y-1 text-sm text-zinc-400">
+                <li>Market has a strong view but waiting for an event to pass (NFP, ECB, etc.)</li>
+                <li>After the event, traders pile in regardless of outcome - they just wanted the event out of the way</li>
+                <li>Profit by putting on the position faster than others once event passes</li>
+              </ul>
+            </div>
+            <div className="bg-zinc-800/50 rounded-lg p-4">
+              <div className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Trade Idea</div>
+              <div className="text-cyan-400 font-semibold">Short 10Y Treasuries (post-FOMC)</div>
+              <p className="text-xs text-zinc-500 mt-1">Bearish bond sentiment but specs waiting for FOMC; once event passes, expect renewed selling pressure</p>
+            </div>
           </div>
 
           {/* Method 5 */}
-          <div className="border-l-2 border-zinc-700 pl-4">
-            <h4 className="text-white font-medium mb-2">5. Extreme sentiment + technical reversal</h4>
-            <ul className="space-y-1 text-sm text-zinc-400">
-              <li>Wait for reversal formations: shooting star, bear hammer, extreme volume spike</li>
-              <li>High sentiment readings are normal in a trend - be patient</li>
-              <li>Volume spike at price extreme + 2-3 std dev positioning = 5-star setup</li>
-            </ul>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2 border-l-2 border-zinc-700 pl-4">
+              <h4 className="text-white font-medium mb-2">5. Extreme sentiment + technical reversal</h4>
+              <ul className="space-y-1 text-sm text-zinc-400">
+                <li>Wait for reversal formations: shooting star, bear hammer, extreme volume spike</li>
+                <li>High sentiment readings are normal in a trend - be patient</li>
+                <li>Volume spike at price extreme + 2-3 std dev positioning = 5-star setup</li>
+              </ul>
+            </div>
+            <div className="bg-zinc-800/50 rounded-lg p-4">
+              <div className="text-xs text-zinc-500 uppercase tracking-wide mb-1">Trade Idea</div>
+              <div className="text-cyan-400 font-semibold">Long Soybeans (on weekly hammer)</div>
+              <p className="text-xs text-zinc-500 mt-1">Managed money near 5yr lows in net position; wait for bullish reversal candle to confirm bottom</p>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Positioning vs Sentiment */}
-      <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6">
-        <h3 className="text-lg font-semibold text-orange-400 mb-4">Positioning vs Sentiment</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div className="bg-zinc-800/50 rounded-lg p-4">
-            <h4 className="text-cyan-400 font-medium mb-2">Sentiment</h4>
-            <p className="text-sm text-zinc-400">How people VIEW the market (polls, surveys like DSI)</p>
-          </div>
-          <div className="bg-zinc-800/50 rounded-lg p-4">
-            <h4 className="text-purple-400 font-medium mb-2">Positioning</h4>
-            <p className="text-sm text-zinc-400">ACTUAL positions (CFTC COT data)</p>
-          </div>
-        </div>
-        <div className="space-y-2 text-sm text-zinc-400">
-          <p><span className="text-zinc-300">Bearish but NOT positioned:</span> Primed to go down as people put on new shorts</p>
-          <p><span className="text-zinc-300">Bearish AND heavily short:</span> At risk of short squeeze - nobody left to sell</p>
-          <p className="text-zinc-500 italic mt-3">Sentiment leads positioning - it's faster to get bearish than to put on a sizeable trade</p>
-        </div>
-      </div>
-
-      {/* Sentiment Framework Table */}
-      <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6">
-        <h3 className="text-lg font-semibold text-orange-400 mb-4">Sentiment vs Market Price Framework</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-zinc-700">
-                <th className="text-left py-2 text-zinc-400 font-medium">Sentiment</th>
-                <th className="text-center py-2 text-zinc-400 font-medium">Bull Market</th>
-                <th className="text-center py-2 text-zinc-400 font-medium">Bear Market</th>
-              </tr>
-            </thead>
-            <tbody className="text-zinc-300">
-              <tr className="border-b border-zinc-800">
-                <td className="py-2">Bullish and increasing</td>
-                <td className="text-center text-green-400">Very Bullish</td>
-                <td className="text-center">-</td>
-              </tr>
-              <tr className="border-b border-zinc-800">
-                <td className="py-2">Bullish and stable</td>
-                <td className="text-center text-green-400">Bullish</td>
-                <td className="text-center">-</td>
-              </tr>
-              <tr className="border-b border-zinc-800">
-                <td className="py-2">Bullish but falling</td>
-                <td className="text-center text-red-400 font-bold">BEARISH</td>
-                <td className="text-center">-</td>
-              </tr>
-              <tr className="border-b border-zinc-800">
-                <td className="py-2">Bearish and stable</td>
-                <td className="text-center">-</td>
-                <td className="text-center text-red-400">Bearish</td>
-              </tr>
-              <tr className="border-b border-zinc-800">
-                <td className="py-2">Bearish and getting more bearish</td>
-                <td className="text-center">-</td>
-                <td className="text-center text-red-400">Very Bearish</td>
-              </tr>
-              <tr>
-                <td className="py-2">Bearish but getting less bearish</td>
-                <td className="text-center">-</td>
-                <td className="text-center text-green-400 font-bold">BULLISH</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p className="text-xs text-zinc-500 mt-3 italic">Rate of change matters more than absolute levels</p>
       </div>
 
       {/* Additional Notes */}
@@ -189,6 +155,7 @@ export function GuideTab() {
       {/* Source */}
       <div className="text-center text-xs text-zinc-600">
         <p>Source: Brent Donnelly, Spectra Markets - "How to trade the positioning report"</p>
+        <p className="mt-1 text-zinc-700">Trade ideas are illustrative examples based on COT data patterns, not recommendations</p>
       </div>
     </div>
   );
