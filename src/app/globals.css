@@ -24,3 +24,26 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Print/PDF styles - prevent chart overflow */
+@media print {
+  .recharts-wrapper,
+  .recharts-surface,
+  [class*="recharts-"],
+  .grid > div,
+  .col-span-2,
+  .col-span-3,
+  .lg\:col-span-2,
+  .lg\:col-span-3 {
+    overflow: hidden !important;
+  }
+}
+
+/* Also apply overflow-hidden to chart containers in general */
+.recharts-responsive-container {
+  overflow: hidden !important;
+}
+
+.recharts-wrapper svg {
+  overflow: hidden !important;
+}
