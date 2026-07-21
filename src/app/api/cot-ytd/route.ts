@@ -103,6 +103,8 @@ function calculateYTDData(records: COTRecord[]): {
   years: number[];
   weeklyData: { week: number; [year: number]: number }[];
 } {
+  const currentYear = new Date().getFullYear();
+
   // Group records by year
   const byYear: Record<number, COTRecord[]> = {};
   for (const record of records) {
@@ -115,6 +117,7 @@ function calculateYTDData(records: COTRecord[]): {
 
   // Calculate cumulative changes for each year
   const yearCumulativeData: Record<number, { week: number; cumulative: number }[]> = {};
+  const yearMaxWeek: Record<number, number> = {}; // Track the last actual data week for each year
 
   for (const year of years) {
     const yearRecords = byYear[year].sort((a, b) => a.date.localeCompare(b.date));
@@ -129,6 +132,9 @@ function calculateYTDData(records: COTRecord[]): {
       const cumulative = record.mmNetAll - baseline;
       return { week, cumulative };
     });
+
+    // Track the maximum week with actual data for this year
+    yearMaxWeek[year] = Math.max(...yearCumulativeData[year].map(d => d.week));
   }
 
   // Create weekly data structure (weeks 1-52)
@@ -138,6 +144,13 @@ function calculateYTDData(records: COTRecord[]): {
     for (const year of years) {
       const yearData = yearCumulativeData[year];
       if (!yearData) continue;
+
+      // For current year: only include data up to the last actual data point (no extrapolation)
+      // For historical years: fill in values to week 52
+      if (year === currentYear && week > yearMaxWeek[year]) {
+        // Don't add data for future weeks in current year
+        continue;
+      }
 
       // Find the record for this week (or the closest earlier week)
       const weekRecord = yearData.filter(d => d.week <= week).pop();

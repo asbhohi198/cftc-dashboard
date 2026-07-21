@@ -51,9 +51,9 @@ const YEAR_COLORS: Record<number, string> = {
   2024: "#22d3ee",
 };
 
-// Current year gets bright red
+// Current year gets white for emphasis
 const CURRENT_YEAR = new Date().getFullYear();
-const CURRENT_YEAR_COLOR = "#ef4444";
+const CURRENT_YEAR_COLOR = "#ffffff";
 
 function formatNumber(num: number): string {
   if (Math.abs(num) >= 1000000) {
@@ -63,6 +63,35 @@ function formatNumber(num: number): string {
   }
   return Math.round(num).toLocaleString();
 }
+
+// Convert week number to month abbreviation
+function weekToMonth(week: number): string {
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  // Approximate: each month is ~4.33 weeks
+  const monthIndex = Math.min(Math.floor((week - 1) / 4.33), 11);
+  return months[monthIndex];
+}
+
+// Custom X-axis tick with vertical rotation
+const CustomXAxisTick = (props: { x?: number; y?: number; payload?: { value: number } }) => {
+  const { x = 0, y = 0, payload } = props;
+  const month = weekToMonth(payload?.value || 1);
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={16}
+        textAnchor="end"
+        fill="#ffffff"
+        fontSize={11}
+        transform="rotate(-90)"
+      >
+        {month}
+      </text>
+    </g>
+  );
+};
 
 interface COTYTDTabProps {
   sector: string;
@@ -126,8 +155,8 @@ export function COTYTDTab({ sector }: COTYTDTabProps) {
 
   const renderChart = (contract: ContractData, isExpanded: boolean = false) => {
     const chartMargin = isExpanded
-      ? { top: 20, right: 30, left: 20, bottom: 20 }
-      : { top: 10, right: 10, left: 0, bottom: 10 };
+      ? { top: 20, right: 20, left: -15, bottom: 50 }
+      : { top: 10, right: 5, left: -20, bottom: 50 };
 
     // Get years to display (show all years, current year last for z-order)
     const sortedYears = [...contract.years].sort((a, b) => {
@@ -136,15 +165,18 @@ export function COTYTDTab({ sector }: COTYTDTabProps) {
       return a - b;
     });
 
+    // Show ticks at start of each month (approximately weeks 1, 5, 9, 14, 18, 22, 27, 31, 35, 40, 44, 48)
+    const monthStartWeeks = [1, 5, 9, 14, 18, 22, 27, 31, 35, 40, 44, 48];
+
     return (
       <ResponsiveContainer width="100%" height={isExpanded ? "100%" : 350}>
         <LineChart data={contract.weeklyData} margin={chartMargin}>
           <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
           <XAxis
             dataKey="week"
-            tick={{ fill: "#ffffff", fontSize: isExpanded ? 13 : 11 }}
-            tickFormatter={(week) => `W${week}`}
-            interval={isExpanded ? 3 : 7}
+            tick={<CustomXAxisTick />}
+            ticks={monthStartWeeks}
+            height={50}
           />
           <YAxis
             tick={{ fill: "#ffffff", fontSize: isExpanded ? 13 : 11 }}
@@ -176,9 +208,9 @@ export function COTYTDTab({ sector }: COTYTDTabProps) {
               dataKey={year.toString()}
               name={year.toString()}
               stroke={getYearColor(year)}
-              strokeWidth={year === CURRENT_YEAR ? 3 : 1}
+              strokeWidth={year === CURRENT_YEAR ? 1.25 : 1}
               dot={false}
-              connectNulls
+              connectNulls={false}
             />
           ))}
         </LineChart>
@@ -199,8 +231,8 @@ export function COTYTDTab({ sector }: COTYTDTabProps) {
         <div className="mt-3 pt-3 border-t border-zinc-800">
           <div className="flex items-center gap-4 text-xs text-zinc-500">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-1 bg-red-500 rounded"></div>
-              <span className="text-red-400 font-semibold">{CURRENT_YEAR} (Current)</span>
+              <div className="w-6 h-1 bg-white rounded"></div>
+              <span className="text-white font-semibold">{CURRENT_YEAR} (Current)</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-6 h-0.5 bg-zinc-500 rounded"></div>
@@ -268,7 +300,7 @@ export function COTYTDTab({ sector }: COTYTDTabProps) {
               {expandedChart.years.map((year) => (
                 <div key={year} className="flex items-center gap-1.5">
                   <div
-                    className="w-4 h-1 rounded"
+                    className="w-4 rounded"
                     style={{
                       backgroundColor: getYearColor(year),
                       height: year === CURRENT_YEAR ? 3 : 2,
@@ -277,7 +309,7 @@ export function COTYTDTab({ sector }: COTYTDTabProps) {
                   <span
                     className={`text-xs ${
                       year === CURRENT_YEAR
-                        ? "text-red-400 font-bold"
+                        ? "text-white font-bold"
                         : "text-zinc-400"
                     }`}
                   >

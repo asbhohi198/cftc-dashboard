@@ -2,6 +2,11 @@
 
 ## Chart Requirements (CRITICAL)
 
+### X-Axis Label Spacing (MUST FOLLOW)
+- **X-axis labels must NEVER touch the x-axis line** - always add spacing between labels and the axis
+- For rotated vertical labels, use `y={15}` or higher to push labels down from the axis line
+- This applies to ALL charts in the dashboard
+
 ### Click to Expand
 - **ALL charts must have click-to-expand functionality** - clicking a chart opens it in a modal/overlay for larger viewing
 

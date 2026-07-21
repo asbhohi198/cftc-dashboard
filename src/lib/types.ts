@@ -5,6 +5,7 @@ export type MainCategory =
   | "summary"
   | "cot-changes"
   | "cot-ytd"
+  | "cot-traders"
   | "ags-grains"
   | "ags-softs"
   | "ags-livestock"
@@ -120,7 +121,16 @@ export type COTYTDSubTab =
   | "ytd-fx"
   | "ytd-crypto";
 
-export type SubTab = AgsGrainsSubTab | AgsOtherSubTab | AgsSoftsSubTab | AgsLivestockSubTab | EnergySubTab | MetalsSubTab | EquitiesSubTab | RatesSubTab | FXSubTab | CryptoSubTab | COTChangesSubTab | COTYTDSubTab | null;
+export type COTTradersSubTab =
+  | "traders-ags"
+  | "traders-energy"
+  | "traders-metals"
+  | "traders-equities"
+  | "traders-rates"
+  | "traders-fx"
+  | "traders-crypto";
+
+export type SubTab = AgsGrainsSubTab | AgsOtherSubTab | AgsSoftsSubTab | AgsLivestockSubTab | EnergySubTab | MetalsSubTab | EquitiesSubTab | RatesSubTab | FXSubTab | CryptoSubTab | COTChangesSubTab | COTYTDSubTab | COTTradersSubTab | null;
 
 // Tab configuration
 export interface TabConfig {
@@ -170,6 +180,19 @@ export const TAB_CONFIG: TabConfig[] = [
       { id: "ytd-rates", label: "Rates" },
       { id: "ytd-fx", label: "FX" },
       { id: "ytd-crypto", label: "Crypto" },
+    ],
+  },
+  {
+    id: "cot-traders",
+    label: "COT Traders",
+    subTabs: [
+      { id: "traders-ags", label: "Ags" },
+      { id: "traders-energy", label: "Energy" },
+      { id: "traders-metals", label: "Metals" },
+      { id: "traders-equities", label: "Equities" },
+      { id: "traders-rates", label: "Rates" },
+      { id: "traders-fx", label: "FX" },
+      { id: "traders-crypto", label: "Crypto" },
     ],
   },
   {
