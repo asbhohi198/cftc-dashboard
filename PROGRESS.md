@@ -2,6 +2,19 @@
 
 ## Current Task
 
+### 2026-07-21 - Fix Chart Formatting (Uniform Colors + Click-to-Expand)
+**Status:** Completed
+**Description:** Fixed all summary charts to use uniform formatting matching the main Weekly MM Net Changes chart
+
+**Changes:**
+- [x] Changed color scheme from blue/red to green/red for all charts
+- [x] Added click-to-expand modal for all 5 summary charts
+- [x] Added "Click chart to expand" text under each chart
+- [x] Adjusted x-axis label positioning for better alignment
+- Commit: 0a584f6
+
+---
+
 ### 2026-07-21 - Add Gross Long/Short/Net Changes Chart
 **Status:** Completed
 **Description:** Add grouped bar chart showing MM Long Change, MM Short Change, and Net Change per commodity
