@@ -157,7 +157,7 @@ export const TAB_CONFIG: TabConfig[] = [
     id: "cot-changes",
     label: "COT Changes",
     subTabs: [
-      { id: "ags-summary", label: "Summary" },
+      { id: "ags-summary", label: "Ags - Summary" },
       { id: "changes-ags-grains", label: "Ags - G&O" },
       { id: "changes-ags-softs", label: "Ags - Softs" },
       { id: "changes-ags-livestock", label: "Ags - Livestock" },

@@ -203,6 +203,39 @@ function getZScoreBg(zScore: number): string {
   return "";
 }
 
+// Analyze what's driving the MM net change
+function getChangeDriver(row: ChangeRow): { driver: string; description: string } {
+  const { mmNetChange, mmLongChange, mmShortChange } = row;
+  const absLong = Math.abs(mmLongChange);
+  const absShort = Math.abs(mmShortChange);
+
+  if (Math.abs(mmNetChange) < 1000) {
+    return { driver: "Flat", description: "Minimal change" };
+  }
+
+  if (mmNetChange > 0) {
+    // Net buying - was it long buying or short covering?
+    if (mmShortChange < 0 && absShort > absLong) {
+      return { driver: "Short covering", description: `Shorts ${formatNumber(mmShortChange)}` };
+    } else if (mmLongChange > 0 && absLong > absShort) {
+      return { driver: "Long buying", description: `Longs +${formatNumber(mmLongChange)}` };
+    } else if (mmShortChange < 0 && mmLongChange > 0) {
+      return { driver: "Both", description: "Longs up, shorts down" };
+    }
+    return { driver: "Long buying", description: `Longs +${formatNumber(mmLongChange)}` };
+  } else {
+    // Net selling - was it long liquidation or short selling?
+    if (mmLongChange < 0 && absLong > absShort) {
+      return { driver: "Long liquidation", description: `Longs ${formatNumber(mmLongChange)}` };
+    } else if (mmShortChange > 0 && absShort > absLong) {
+      return { driver: "Short selling", description: `Shorts +${formatNumber(mmShortChange)}` };
+    } else if (mmLongChange < 0 && mmShortChange > 0) {
+      return { driver: "Both", description: "Longs down, shorts up" };
+    }
+    return { driver: "Long liquidation", description: `Longs ${formatNumber(mmLongChange)}` };
+  }
+}
+
 type SummaryChartType = "mmNet" | "pctMax" | "mmChange" | "pctOI" | "grossChanges" | null;
 
 export function AgsSummaryTab() {
@@ -645,20 +678,49 @@ export function AgsSummaryTab() {
               </ResponsiveContainer>
             </div>
             {expandedSummaryChart === "grossChanges" && (
-              <div className="flex items-center justify-center gap-6 mt-4 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-blue-500 rounded"></div>
-                  <span className="text-zinc-300">MM Long Change</span>
+              <>
+                <div className="flex items-center justify-center gap-6 mt-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-blue-500 rounded"></div>
+                    <span className="text-zinc-300">MM Long Change</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-red-500 rounded"></div>
+                    <span className="text-zinc-300">MM Short Change</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-green-500 rounded"></div>
+                    <span className="text-zinc-300">MM Net Change</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-red-500 rounded"></div>
-                  <span className="text-zinc-300">MM Short Change</span>
+                {/* Driver Analysis Table */}
+                <div className="mt-6 border-t border-zinc-700 pt-4">
+                  <h4 className="text-sm font-semibold text-zinc-300 mb-3 uppercase tracking-wide">Position Change Drivers</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {data.map((row) => {
+                      const { driver, description } = getChangeDriver(row);
+                      const isPositive = row.mmNetChange > 0;
+                      const driverColor = driver === "Short covering" ? "text-orange-400" :
+                                          driver === "Long buying" ? "text-green-400" :
+                                          driver === "Long liquidation" ? "text-red-400" :
+                                          driver === "Short selling" ? "text-purple-400" :
+                                          driver === "Both" ? "text-yellow-400" : "text-zinc-500";
+                      return (
+                        <div key={row.id} className="bg-zinc-800/50 rounded-lg p-3">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-sm font-medium text-white">{row.label}</span>
+                            <span className={`text-sm font-mono font-bold ${isPositive ? "text-green-400" : "text-red-400"}`}>
+                              {isPositive ? "+" : ""}{formatNumber(row.mmNetChange)}
+                            </span>
+                          </div>
+                          <div className={`text-xs font-medium ${driverColor}`}>{driver}</div>
+                          <div className="text-xs text-zinc-500">{description}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-green-500 rounded"></div>
-                  <span className="text-zinc-300">MM Net Change</span>
-                </div>
-              </div>
+              </>
             )}
           </div>
         </div>
