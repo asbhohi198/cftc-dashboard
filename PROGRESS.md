@@ -2,6 +2,22 @@
 
 ## Current Task
 
+### 2026-07-21 - Add COT YTD Tab with Cumulative Seasonal Charts
+**Status:** Completed
+**Description:** New COT YTD tab showing cumulative MM net position changes from Jan 1, with multi-year line comparisons
+
+**Changes:**
+- [x] Added "cot-ytd" to MainCategory in types.ts
+- [x] Added COTYTDSubTab type with subtabs: ytd-ags, ytd-energy, ytd-metals, ytd-equities, ytd-rates, ytd-fx, ytd-crypto
+- [x] Created /api/cot-ytd API route to calculate cumulative YTD changes
+- [x] Created COTYTDTab component with multi-year line charts
+- [x] Current year (2026) highlighted in thick red, historical years in muted colors
+- [x] Click-to-expand modal with full legend
+- [x] Updated Dashboard.tsx to render new tab
+- Commit: d71543d
+
+---
+
 ### 2026-07-21 - Fix Chart Formatting (Uniform Colors + Click-to-Expand)
 **Status:** Completed
 **Description:** Fixed all summary charts to use uniform formatting matching the main Weekly MM Net Changes chart
