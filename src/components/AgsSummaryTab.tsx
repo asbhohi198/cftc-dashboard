@@ -213,7 +213,7 @@ export function AgsSummaryTab() {
   const [selectedRow, setSelectedRow] = useState<ChangeRow | null>(null);
   const [expandedChart, setExpandedChart] = useState<ChangeRow | null>(null);
   const [expandedSummaryChart, setExpandedSummaryChart] = useState<SummaryChartType>(null);
-  const [timeRange, setTimeRange] = useState<TimeRange>("5y");
+  const [timeRange, setTimeRange] = useState<TimeRange>("2y");
   const [expandedTimeRange, setExpandedTimeRange] = useState<TimeRange>("all");
 
   useEffect(() => {
