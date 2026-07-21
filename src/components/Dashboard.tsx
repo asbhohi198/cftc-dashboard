@@ -17,6 +17,7 @@ import { SummaryTab } from "./SummaryTab";
 import { COTChangesTab } from "./COTChangesTab";
 import { COTChangesSummaryTab } from "./COTChangesSummaryTab";
 import { AgsSummaryTab } from "./AgsSummaryTab";
+import { COTYTDTab } from "./COTYTDTab";
 import { BarChart3 } from "lucide-react";
 
 // Map sub-tab IDs to contract IDs for the API
@@ -188,6 +189,29 @@ export function Dashboard() {
         )}
         {activeTab === "cot-changes" && activeSubTab === "changes-crypto" && (
           <COTChangesTab sector="crypto" />
+        )}
+
+        {/* COT YTD */}
+        {activeTab === "cot-ytd" && activeSubTab === "ytd-ags" && (
+          <COTYTDTab sector="ags" />
+        )}
+        {activeTab === "cot-ytd" && activeSubTab === "ytd-energy" && (
+          <COTYTDTab sector="energy" />
+        )}
+        {activeTab === "cot-ytd" && activeSubTab === "ytd-metals" && (
+          <COTYTDTab sector="metals" />
+        )}
+        {activeTab === "cot-ytd" && activeSubTab === "ytd-equities" && (
+          <COTYTDTab sector="equities" />
+        )}
+        {activeTab === "cot-ytd" && activeSubTab === "ytd-rates" && (
+          <COTYTDTab sector="rates" />
+        )}
+        {activeTab === "cot-ytd" && activeSubTab === "ytd-fx" && (
+          <COTYTDTab sector="fx" />
+        )}
+        {activeTab === "cot-ytd" && activeSubTab === "ytd-crypto" && (
+          <COTYTDTab sector="crypto" />
         )}
 
         {/* Ags - Grains & Oilseeds */}

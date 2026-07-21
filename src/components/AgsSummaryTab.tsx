@@ -146,9 +146,9 @@ const CustomXAxisTick = (props: { x?: number; y?: number; payload?: { value: str
   return (
     <g transform={`translate(${x},${y})`}>
       <text
-        x={5}
+        x={18}
         y={0}
-        dy={35}
+        dy={55}
         textAnchor="end"
         fill="#ffffff"
         fontSize={13}
@@ -458,11 +458,11 @@ export function AgsSummaryTab() {
           {/* Chart 1: Managed Money Net (F&O) */}
           <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
             <h4 className="text-sm font-semibold text-zinc-300 mb-3 tracking-wide uppercase">Managed Money Net (F&O)</h4>
-            <div className="h-[600px] cursor-pointer" onClick={() => setExpandedSummaryChart("mmNet")}>
+            <div className="h-[500px] cursor-pointer" onClick={() => setExpandedSummaryChart("mmNet")}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 100 }}>
+                <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                  <XAxis dataKey="label" tick={<CustomXAxisTick />} height={100} interval={0} />
+                  <XAxis dataKey="label" tick={<CustomXAxisTick />} height={120} interval={0} />
                   <YAxis tick={{ fill: "#ffffff", fontSize: 12 }} tickFormatter={(v) => formatNumber(v)} />
                   <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number) => [formatNumber(value), "MM Net"]} />
                   <ReferenceLine y={0} stroke="#52525b" />
@@ -484,11 +484,11 @@ export function AgsSummaryTab() {
               <span className="px-2 py-0.5 bg-orange-500 text-white text-[10px] font-bold rounded uppercase tracking-wider">Key Chart</span>
               <h4 className="text-sm font-bold text-orange-400 tracking-wide uppercase">Net MM Position as % Historical Max</h4>
             </div>
-            <div className="h-[600px] cursor-pointer" onClick={() => setExpandedSummaryChart("pctMax")}>
+            <div className="h-[500px] cursor-pointer" onClick={() => setExpandedSummaryChart("pctMax")}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 100 }}>
+                <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                  <XAxis dataKey="label" tick={<CustomXAxisTick />} height={100} interval={0} />
+                  <XAxis dataKey="label" tick={<CustomXAxisTick />} height={120} interval={0} />
                   <YAxis tick={{ fill: "#ffffff", fontSize: 12 }} tickFormatter={(v) => `${v.toFixed(0)}%`} />
                   <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number) => [`${value.toFixed(1)}%`, "% of Max"]} />
                   <ReferenceLine y={0} stroke="#52525b" />
@@ -507,11 +507,11 @@ export function AgsSummaryTab() {
           {/* Chart 3: Managed Money Net Change (WoW) */}
           <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
             <h4 className="text-sm font-semibold text-zinc-300 mb-3 tracking-wide uppercase">Managed Money Net Change (WoW)</h4>
-            <div className="h-[600px] cursor-pointer" onClick={() => setExpandedSummaryChart("mmChange")}>
+            <div className="h-[500px] cursor-pointer" onClick={() => setExpandedSummaryChart("mmChange")}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 100 }}>
+                <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                  <XAxis dataKey="label" tick={<CustomXAxisTick />} height={100} interval={0} />
+                  <XAxis dataKey="label" tick={<CustomXAxisTick />} height={120} interval={0} />
                   <YAxis tick={{ fill: "#ffffff", fontSize: 12 }} tickFormatter={(v) => formatNumber(v)} />
                   <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number) => [formatNumber(value), "WoW Change"]} />
                   <ReferenceLine y={0} stroke="#52525b" />
@@ -532,7 +532,7 @@ export function AgsSummaryTab() {
             <h4 className="text-sm font-semibold text-zinc-300 mb-3 tracking-wide uppercase">MM Net Position as % Open Interest</h4>
             <div className="h-[600px] cursor-pointer" onClick={() => setExpandedSummaryChart("pctOI")}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 100 }}>
+                <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 50 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis dataKey="label" tick={<CustomXAxisTick />} height={100} interval={0} />
                   <YAxis tick={{ fill: "#ffffff", fontSize: 12 }} tickFormatter={(v) => `${v.toFixed(0)}%`} />
@@ -558,7 +558,7 @@ export function AgsSummaryTab() {
         <p className="text-xs text-zinc-500 mb-4">Week-over-week changes in MM long positions, short positions, and net position</p>
         <div className="h-[480px] cursor-pointer" onClick={() => setExpandedSummaryChart("grossChanges")}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} margin={{ top: 20, right: 5, left: -15, bottom: 100 }}>
+            <BarChart data={data} margin={{ top: 20, right: 5, left: -15, bottom: 50 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
               <XAxis dataKey="label" tick={<CustomXAxisTick />} height={100} interval={0} />
               <YAxis tick={{ fill: "#ffffff", fontSize: 12 }} tickFormatter={(v) => formatNumber(v)} />
