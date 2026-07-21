@@ -253,7 +253,7 @@ export function AgsSummaryTab() {
               </div>
 
               <div
-                className="h-[400px] cursor-pointer"
+                className="h-[600px] cursor-pointer"
                 onClick={() => setExpandedChart(selectedRow)}
               >
                 <ResponsiveContainer width="100%" height="100%">
@@ -305,7 +305,7 @@ export function AgsSummaryTab() {
               <p className="text-xs text-zinc-600 mt-2 text-center">Click chart to expand</p>
             </>
           ) : (
-            <div className="h-[400px] flex items-center justify-center">
+            <div className="h-[600px] flex items-center justify-center">
               <p className="text-zinc-500 text-sm">Select a commodity to view chart</p>
             </div>
           )}
