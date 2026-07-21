@@ -97,6 +97,8 @@ export type CryptoSubTab =
   | "ethereum";
 
 export type COTChangesSubTab =
+  | "ags-summary"
+  | "changes-summary"
   | "changes-ags-grains"
   | "changes-ags-softs"
   | "changes-ags-livestock"
@@ -134,6 +136,7 @@ export const TAB_CONFIG: TabConfig[] = [
     id: "cot-changes",
     label: "COT Changes",
     subTabs: [
+      { id: "ags-summary", label: "Summary" },
       { id: "changes-ags-grains", label: "Ags - G&O" },
       { id: "changes-ags-softs", label: "Ags - Softs" },
       { id: "changes-ags-livestock", label: "Ags - Livestock" },

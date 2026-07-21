@@ -15,6 +15,8 @@ import { HomeTab } from "./HomeTab";
 import { GuideTab } from "./GuideTab";
 import { SummaryTab } from "./SummaryTab";
 import { COTChangesTab } from "./COTChangesTab";
+import { COTChangesSummaryTab } from "./COTChangesSummaryTab";
+import { AgsSummaryTab } from "./AgsSummaryTab";
 import { BarChart3 } from "lucide-react";
 
 // Map sub-tab IDs to contract IDs for the API
@@ -151,6 +153,12 @@ export function Dashboard() {
         {activeTab === "summary" && <SummaryTab />}
 
         {/* COT Changes */}
+        {activeTab === "cot-changes" && activeSubTab === "ags-summary" && (
+          <AgsSummaryTab />
+        )}
+        {activeTab === "cot-changes" && activeSubTab === "changes-summary" && (
+          <COTChangesSummaryTab />
+        )}
         {activeTab === "cot-changes" && activeSubTab === "changes-ags-grains" && (
           <COTChangesTab sector="ags-grains" />
         )}
