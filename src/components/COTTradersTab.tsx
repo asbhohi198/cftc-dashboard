@@ -451,19 +451,19 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={barChartData}
-              margin={{ top: 20, right: 10, left: 0, bottom: 50 }}
+              margin={{ top: 20, right: 10, left: 0, bottom: 25 }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
               <XAxis
                 dataKey="name"
-                tick={{ fill: "#ffffff", fontSize: 10 }}
+                tick={{ fill: "#ffffff", fontSize: 12 }}
                 angle={-90}
                 textAnchor="end"
                 height={70}
-                dy={25}
+                dy={35}
               />
               <YAxis
-                tick={{ fill: "#ffffff", fontSize: 10 }}
+                tick={{ fill: "#ffffff", fontSize: 12 }}
                 domain={[0, 100]}
                 tickFormatter={(v) => `${v}%`}
               />
@@ -479,13 +479,13 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                 itemStyle={{ color: "#ffffff" }}
                 formatter={(value: number) => [`${value.toFixed(1)}%`, "% Long"]}
               />
-              <ReferenceLine y={50} stroke="#52525b" strokeDasharray="3 3" />
+              <ReferenceLine y={50} stroke="#ffffff" strokeDasharray="3 3" />
               <Bar dataKey="pctLong" radius={[4, 4, 0, 0]}>
                 <LabelList
                   dataKey="pctLong"
                   position="top"
                   fill="#ffffff"
-                  fontSize={11}
+                  fontSize={13}
                   formatter={(value: number) => `${value.toFixed(0)}%`}
                 />
                 {barChartData.map((entry, index) => (
