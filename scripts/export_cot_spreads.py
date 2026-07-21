@@ -213,12 +213,19 @@ def get_active_contracts(prefix: str, months: List[str], as_of_date: datetime = 
     """
     Get the front month and 3rd month contract symbols.
     Returns (front_symbol, third_symbol)
+
+    Accounts for contract expiry: contracts are considered expired after the 5th
+    of their delivery month.
     """
     if as_of_date is None:
         as_of_date = datetime.now()
 
     current_year = as_of_date.year
     current_month = as_of_date.month
+    current_day = as_of_date.day
+
+    # Expiry day threshold - contracts are considered expired after this day of the month
+    EXPIRY_DAY = 5
 
     # Build list of upcoming contracts
     upcoming = []
@@ -227,9 +234,16 @@ def get_active_contracts(prefix: str, months: List[str], as_of_date: datetime = 
         year_suffix = str(year)[-4:]  # Full year for Norgate
         for month_code in months:
             month_num = MONTH_CODES[month_code]
-            # Skip if this contract month has already passed
-            if year == current_year and month_num < current_month:
-                continue
+
+            # Skip if this contract has already expired:
+            # - Past months in current year are expired
+            # - Current month is expired if we're past the expiry day
+            if year == current_year:
+                if month_num < current_month:
+                    continue
+                if month_num == current_month and current_day > EXPIRY_DAY:
+                    continue
+
             upcoming.append({
                 "symbol": f"{prefix}-{year_suffix}{month_code}",
                 "year": year,

@@ -91,9 +91,10 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
         if (json.success) {
           setData(json.contracts);
           setReportDate(json.reportDate);
-          // Select first row by default
+          // Select commodity with highest % Long by default
           if (json.contracts.length > 0) {
-            setSelectedRow(json.contracts[0]);
+            const highestPctLong = [...json.contracts].sort((a, b) => b.pctLong - a.pctLong)[0];
+            setSelectedRow(highestPctLong);
           }
         } else {
           setError("Failed to load data");

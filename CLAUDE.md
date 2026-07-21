@@ -1,5 +1,13 @@
 # CFTC Dashboard - Claude Code Memory
 
+## Futures Contract Expiry (CRITICAL)
+
+When calculating spreads or identifying front month contracts:
+- **Contracts expire early in the month** - after the 5th of the delivery month, consider that contract expired
+- Use the NEXT available contract as the front month
+- Example: On July 6th+, July contracts have expired, so use August as front month
+- For soybeans 1-3 spread after July 5th: use Aug/Nov, NOT Jul/Oct
+
 ## Chart Requirements (CRITICAL)
 
 ### X-Axis Label Spacing (MUST FOLLOW)

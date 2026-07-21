@@ -272,6 +272,7 @@ export function COTSpreadsTab() {
                   color: "#ffffff",
                 }}
                 labelStyle={{ color: "#ffffff" }}
+                itemStyle={{ color: "#ffffff" }}
                 formatter={(value: number, name: string) => {
                   if (name === "y") return [`${value.toFixed(1)}%`, "1-3 %"];
                   return [formatNumber(value), "Net MM"];
@@ -348,6 +349,7 @@ export function COTSpreadsTab() {
                         color: "#ffffff",
                       }}
                       labelStyle={{ color: "#ffffff" }}
+                      itemStyle={{ color: "#ffffff" }}
                       formatter={(value: number, name: string) => {
                         if (name === "spread") return [value.toFixed(2), "Spread"];
                         return [formatNumber(value), "Net MM"];
@@ -436,6 +438,7 @@ export function COTSpreadsTab() {
                             color: "#ffffff",
                           }}
                           labelStyle={{ color: "#ffffff" }}
+                          itemStyle={{ color: "#ffffff" }}
                           formatter={(value: number, name: string) => {
                             if (name === "spread") return [value.toFixed(2), "Spread"];
                             return [formatNumber(value), "Net MM"];
