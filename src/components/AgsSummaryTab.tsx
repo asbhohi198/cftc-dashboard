@@ -234,6 +234,24 @@ function getChangeDriver(row: ChangeRow): { driver: string; description: string;
   }
 }
 
+// Commodity code mapping
+const COMMODITY_CODES: Record<string, string> = {
+  "Corn": "C",
+  "Soybeans": "S",
+  "Chicago Wheat": "W",
+  "Kansas Wheat": "KW",
+  "Minneapolis Wheat": "MW",
+  "Soybean Oil": "BO",
+  "Soybean Meal": "SM",
+  "Live Cattle": "LC",
+  "Lean Hogs": "LH",
+  "Feeder Cattle": "FC",
+  "NY Sugar": "SB",
+  "NY Coffee": "KC",
+  "NY Cocoa": "CC",
+  "Cotton": "CT",
+};
+
 // Custom label renderer for driver annotations above bars
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const renderDriverLabel = (props: any, data: ChangeRow[]) => {
@@ -242,17 +260,18 @@ const renderDriverLabel = (props: any, data: ChangeRow[]) => {
   if (!row) return null;
 
   const driverInfo = getChangeDriver(row);
+  const code = COMMODITY_CODES[row.label] || row.label.substring(0, 2).toUpperCase();
 
   return (
     <text
-      x={Number(x) + Number(width) / 2 + 25}
+      x={Number(x) + Number(width) / 2 + 40}
       y={25}
       fill={driverInfo.color}
       textAnchor="middle"
       fontSize={10}
       fontWeight="bold"
     >
-      {driverInfo.driver}
+      {code}: {driverInfo.driver}
     </text>
   );
 };
