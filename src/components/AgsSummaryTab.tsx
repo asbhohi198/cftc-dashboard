@@ -214,6 +214,7 @@ export function AgsSummaryTab() {
   const [expandedChart, setExpandedChart] = useState<ChangeRow | null>(null);
   const [expandedSummaryChart, setExpandedSummaryChart] = useState<SummaryChartType>(null);
   const [timeRange, setTimeRange] = useState<TimeRange>("5y");
+  const [expandedTimeRange, setExpandedTimeRange] = useState<TimeRange>("all");
 
   useEffect(() => {
     async function fetchData() {
@@ -666,7 +667,10 @@ export function AgsSummaryTab() {
 
       {/* Expanded Chart Modal */}
       {expandedChart && (() => {
-        const chartData = getChartData(expandedChart);
+        const expandedTimeOption = TIME_RANGE_OPTIONS.find(t => t.id === expandedTimeRange);
+        const chartData = expandedTimeOption?.weeks
+          ? expandedChart.historicalChanges.slice(-expandedTimeOption.weeks)
+          : expandedChart.historicalChanges;
         const intervalDivisor = chartData.length > 100 ? 20 : chartData.length > 50 ? 12 : 8;
 
         return (
@@ -700,9 +704,9 @@ export function AgsSummaryTab() {
                 {TIME_RANGE_OPTIONS.map((option) => (
                   <button
                     key={option.id}
-                    onClick={() => setTimeRange(option.id)}
+                    onClick={() => setExpandedTimeRange(option.id)}
                     className={`px-3 py-1.5 text-xs font-medium rounded transition-colors ${
-                      timeRange === option.id
+                      expandedTimeRange === option.id
                         ? "bg-orange-500 text-white"
                         : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
                     }`}
@@ -737,7 +741,7 @@ export function AgsSummaryTab() {
               </div>
 
               {/* Large Chart */}
-              <div className="h-[650px]">
+              <div className="h-[550px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
@@ -746,7 +750,7 @@ export function AgsSummaryTab() {
                       tick={{ fill: "#ffffff", fontSize: 13 }}
                       angle={-90}
                       textAnchor="end"
-                      height={280}
+                      height={200}
                       tickFormatter={formatChartDate}
                       interval={Math.floor(chartData.length / intervalDivisor)}
                       dy={25}
