@@ -3,7 +3,7 @@
 ## Current Task
 
 ### 2026-07-21 - Add 4 Summary Charts to COT Changes Summary Tab
-**Status:** In Progress
+**Status:** Completed
 **Description:** Add 4 sector-wide bar charts below existing content showing all 14 US Ag commodities:
 1. Managed Money Net (F&O) - Current MM net position
 2. Net MM Position as % Historical Max
@@ -11,10 +11,10 @@
 4. MM net pos as % OI - Position as % of Open Interest
 
 **Steps:**
-- [ ] 1. Update API to include additional data fields (mmNetCurrent, pctHistoricalMax, pctOI)
-- [ ] 2. Update AgsSummaryTab to display 4 summary charts in 2x2 grid below existing content
-- [ ] 3. Test and verify charts match Excel format
-- [ ] 4. Commit and push
+- [x] 1. Update API to include additional data fields (mmNetCurrent, pctHistoricalMax, pctOI)
+- [x] 2. Update AgsSummaryTab to display 4 summary charts in 2x2 grid below existing content
+- [x] 3. Test and verify charts match Excel format
+- [x] 4. Commit and push - 511230a
 
 **Files to Modify:**
 - src/app/api/cot-changes-ags-summary/route.ts
