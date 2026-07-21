@@ -459,8 +459,8 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                 tick={{ fill: "#ffffff", fontSize: 10 }}
                 angle={-90}
                 textAnchor="end"
-                height={50}
-                dy={15}
+                height={70}
+                dy={25}
               />
               <YAxis
                 tick={{ fill: "#ffffff", fontSize: 10 }}
@@ -485,7 +485,7 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                   dataKey="pctLong"
                   position="top"
                   fill="#ffffff"
-                  fontSize={9}
+                  fontSize={11}
                   formatter={(value: number) => `${value.toFixed(0)}%`}
                 />
                 {barChartData.map((entry, index) => (
@@ -502,7 +502,32 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
 
       {/* Individual Historical Charts Grid */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
-        <h3 className="text-md font-semibold text-white mb-4">Historical Number of Traders by Commodity</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-md font-semibold text-white">Historical {chartViewMode === "number" ? "Number of Traders" : "% Long"} by Commodity</h3>
+          {/* View Mode Toggle for Grid */}
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setChartViewMode("number")}
+              className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${
+                chartViewMode === "number"
+                  ? "bg-blue-500 text-white"
+                  : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+              }`}
+            >
+              #
+            </button>
+            <button
+              onClick={() => setChartViewMode("percent")}
+              className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${
+                chartViewMode === "percent"
+                  ? "bg-blue-500 text-white"
+                  : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+              }`}
+            >
+              %
+            </button>
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {data.map((row) => {
             const chartData = getChartData(row);
@@ -521,20 +546,32 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                 <div className="h-32">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
-                      <Line
-                        type="monotone"
-                        dataKey="tradersLong"
-                        stroke="#3b82f6"
-                        strokeWidth={1.5}
-                        dot={false}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="tradersShort"
-                        stroke="#ef4444"
-                        strokeWidth={1.5}
-                        dot={false}
-                      />
+                      {chartViewMode === "number" ? (
+                        <>
+                          <Line
+                            type="monotone"
+                            dataKey="tradersLong"
+                            stroke="#3b82f6"
+                            strokeWidth={1.5}
+                            dot={false}
+                          />
+                          <Line
+                            type="monotone"
+                            dataKey="tradersShort"
+                            stroke="#ef4444"
+                            strokeWidth={1.5}
+                            dot={false}
+                          />
+                        </>
+                      ) : (
+                        <Line
+                          type="monotone"
+                          dataKey="pctLong"
+                          stroke="#22c55e"
+                          strokeWidth={1.5}
+                          dot={false}
+                        />
+                      )}
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -564,7 +601,7 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                     {expandedChart.name}
                   </h3>
                   <p className="text-sm text-zinc-400">
-                    Number of Traders Long vs Short ({chartData.length} weeks)
+                    {expandedChartViewMode === "number" ? "Number of Traders Long vs Short" : "% Long"} ({chartData.length} weeks)
                   </p>
                 </div>
                 <button
@@ -575,21 +612,47 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                 </button>
               </div>
 
-              {/* Time Range Toggle */}
-              <div className="flex items-center gap-2 mb-4">
-                {TIME_RANGE_OPTIONS.map((option) => (
+              {/* View Mode and Time Range Toggles */}
+              <div className="flex items-center gap-4 mb-4">
+                {/* View Mode Toggle */}
+                <div className="flex items-center gap-1">
                   <button
-                    key={option.id}
-                    onClick={() => setExpandedTimeRange(option.id)}
+                    onClick={() => setExpandedChartViewMode("number")}
                     className={`px-3 py-1.5 text-xs font-medium rounded transition-colors ${
-                      expandedTimeRange === option.id
-                        ? "bg-orange-500 text-white"
+                      expandedChartViewMode === "number"
+                        ? "bg-blue-500 text-white"
                         : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
                     }`}
                   >
-                    {option.label}
+                    #
                   </button>
-                ))}
+                  <button
+                    onClick={() => setExpandedChartViewMode("percent")}
+                    className={`px-3 py-1.5 text-xs font-medium rounded transition-colors ${
+                      expandedChartViewMode === "percent"
+                        ? "bg-blue-500 text-white"
+                        : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+                    }`}
+                  >
+                    %
+                  </button>
+                </div>
+                {/* Time Range Toggle */}
+                <div className="flex items-center gap-1">
+                  {TIME_RANGE_OPTIONS.map((option) => (
+                    <button
+                      key={option.id}
+                      onClick={() => setExpandedTimeRange(option.id)}
+                      className={`px-3 py-1.5 text-xs font-medium rounded transition-colors ${
+                        expandedTimeRange === option.id
+                          ? "bg-orange-500 text-white"
+                          : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Stats Row */}
@@ -635,6 +698,8 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                     />
                     <YAxis
                       tick={{ fill: "#ffffff", fontSize: 11 }}
+                      domain={expandedChartViewMode === "percent" ? [0, 100] : ["auto", "auto"]}
+                      tickFormatter={expandedChartViewMode === "percent" ? (v) => `${v}%` : undefined}
                     />
                     <Tooltip
                       contentStyle={{
@@ -647,24 +712,41 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                       labelStyle={{ color: "#ffffff" }}
                       itemStyle={{ color: "#ffffff" }}
                       labelFormatter={(label) => formatDate(label)}
+                      formatter={expandedChartViewMode === "percent" ? (value: number) => [`${value.toFixed(1)}%`, "% Long"] : undefined}
                     />
                     <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="tradersLong"
-                      name="Long"
-                      stroke="#3b82f6"
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="tradersShort"
-                      name="Short"
-                      stroke="#ef4444"
-                      strokeWidth={2}
-                      dot={false}
-                    />
+                    {expandedChartViewMode === "number" ? (
+                      <>
+                        <Line
+                          type="monotone"
+                          dataKey="tradersLong"
+                          name="Long"
+                          stroke="#3b82f6"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="tradersShort"
+                          name="Short"
+                          stroke="#ef4444"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <ReferenceLine y={50} stroke="#52525b" strokeDasharray="3 3" />
+                        <Line
+                          type="monotone"
+                          dataKey="pctLong"
+                          name="% Long"
+                          stroke="#22c55e"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                      </>
+                    )}
                   </LineChart>
                 </ResponsiveContainer>
               </div>
