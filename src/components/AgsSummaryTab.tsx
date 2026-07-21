@@ -739,14 +739,14 @@ export function AgsSummaryTab() {
               {/* Large Chart */}
               <div className="h-[576px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 120 }}>
+                  <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 150 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                     <XAxis
                       dataKey="date"
                       tick={{ fill: "#ffffff", fontSize: 13 }}
                       angle={-90}
                       textAnchor="end"
-                      height={150}
+                      height={188}
                       tickFormatter={formatChartDate}
                       interval={Math.floor(chartData.length / intervalDivisor)}
                       dy={25}
