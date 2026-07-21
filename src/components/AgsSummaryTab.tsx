@@ -311,7 +311,7 @@ export function AgsSummaryTab() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         {/* Table */}
         <div className="lg:col-span-1 bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
           <table className="w-full text-sm">
@@ -393,7 +393,7 @@ export function AgsSummaryTab() {
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={getChartData(selectedRow)}
-                    margin={{ top: 10, right: 10, left: 0, bottom: 100 }}
+                    margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                     <XAxis
