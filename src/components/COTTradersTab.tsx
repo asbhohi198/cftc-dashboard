@@ -76,8 +76,8 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
   const [expandedChart, setExpandedChart] = useState<TradersRow | null>(null);
   const [timeRange, setTimeRange] = useState<TimeRange>("5y");
   const [expandedTimeRange, setExpandedTimeRange] = useState<TimeRange>("all");
-  const [chartViewMode, setChartViewMode] = useState<ChartViewMode>("number");
-  const [expandedChartViewMode, setExpandedChartViewMode] = useState<ChartViewMode>("number");
+  const [chartViewMode, setChartViewMode] = useState<ChartViewMode>("percent");
+  const [expandedChartViewMode, setExpandedChartViewMode] = useState<ChartViewMode>("percent");
   const [sortField, setSortField] = useState<SortField>("pctLong");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
@@ -406,7 +406,7 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                       labelFormatter={(label) => formatDate(label)}
                       formatter={chartViewMode === "percent" ? (value: number, name: string) => [`${value.toFixed(1)}%`, name] : undefined}
                     />
-                    <Legend />
+                    <Legend wrapperStyle={{ paddingTop: 20 }} />
                     {chartViewMode === "number" ? (
                       <>
                         <Line
@@ -686,7 +686,7 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                       labelFormatter={(label) => formatDate(label)}
                       formatter={expandedChartViewMode === "percent" ? (value: number, name: string) => [`${value.toFixed(1)}%`, name] : undefined}
                     />
-                    <Legend />
+                    <Legend wrapperStyle={{ paddingTop: 20 }} />
                     {expandedChartViewMode === "number" ? (
                       <>
                         <Line
