@@ -68,6 +68,20 @@ function sumRecords(a: COTRecord, b: COTRecord): COTRecord {
     specNetAll: a.specNetAll + b.specNetAll,
     specNetOld: a.specNetOld + b.specNetOld,
     specNetOther: a.specNetOther + b.specNetOther,
+    // Number of Traders
+    tradersProducerLong: a.tradersProducerLong + b.tradersProducerLong,
+    tradersProducerShort: a.tradersProducerShort + b.tradersProducerShort,
+    tradersSwapLong: a.tradersSwapLong + b.tradersSwapLong,
+    tradersSwapShort: a.tradersSwapShort + b.tradersSwapShort,
+    tradersSwapSpread: a.tradersSwapSpread + b.tradersSwapSpread,
+    tradersMMLong: a.tradersMMLong + b.tradersMMLong,
+    tradersMMShort: a.tradersMMShort + b.tradersMMShort,
+    tradersMMSpread: a.tradersMMSpread + b.tradersMMSpread,
+    tradersOtherLong: a.tradersOtherLong + b.tradersOtherLong,
+    tradersOtherShort: a.tradersOtherShort + b.tradersOtherShort,
+    tradersOtherSpread: a.tradersOtherSpread + b.tradersOtherSpread,
+    tradersTotalLong: a.tradersTotalLong + b.tradersTotalLong,
+    tradersTotalShort: a.tradersTotalShort + b.tradersTotalShort,
   };
 }
 
