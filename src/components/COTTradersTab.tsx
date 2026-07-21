@@ -684,7 +684,7 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                       labelStyle={{ color: "#ffffff" }}
                       itemStyle={{ color: "#ffffff" }}
                       labelFormatter={(label) => formatDate(label)}
-                      formatter={expandedChartViewMode === "percent" ? (value: number) => [`${value.toFixed(1)}%`, "% Long"] : undefined}
+                      formatter={expandedChartViewMode === "percent" ? (value: number, name: string) => [`${value.toFixed(1)}%`, name] : undefined}
                     />
                     <Legend />
                     {expandedChartViewMode === "number" ? (
