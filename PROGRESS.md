@@ -3,7 +3,7 @@
 ## Current Task
 
 ### 2026-07-21 - COT Changes Summary Tab (Ags Only)
-**Status:** In Progress
+**Status:** Completed
 **Description:** Create new "Summary" subtab at top of COT Changes showing all US Ag commodities with Net MM WoW Change and Z-score. Table on left, bar chart on right showing weekly change history when commodity is clicked.
 
 **Commodities (14 US Ags from Excel):**
@@ -18,7 +18,7 @@
 - [x] 3. Create new component AgsSummaryTab.tsx with table + chart layout
 - [x] 4. Update Dashboard.tsx to render new tab
 - [x] 5. Test build - PASSED
-- [ ] 6. Commit and push to git
+- [x] 6. Commit and push to git - ae3710a
 
 **Notes:**
 - Exclude EU markets (Matif Wheat, Canola, Rapeseed, LDN Sugar, LDN Robusta, LDN Cocoa)
