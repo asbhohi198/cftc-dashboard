@@ -282,7 +282,7 @@ export function AgsSummaryTab() {
                       height={80}
                       tickFormatter={formatChartDate}
                       interval={Math.floor(getChartData(selectedRow).length / 12)}
-                      dy={5}
+                      dy={12}
                       dx={-5}
                     />
                     <YAxis
