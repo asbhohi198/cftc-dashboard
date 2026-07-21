@@ -146,7 +146,7 @@ const CustomXAxisTick = (props: { x?: number; y?: number; payload?: { value: str
   return (
     <g transform={`translate(${x},${y})`}>
       <text
-        x={-8}
+        x={5}
         y={0}
         dy={35}
         textAnchor="end"
@@ -166,7 +166,7 @@ const CustomXAxisTickLarge = (props: { x?: number; y?: number; payload?: { value
   return (
     <g transform={`translate(${x},${y})`}>
       <text
-        x={-8}
+        x={-25}
         y={0}
         dy={40}
         textAnchor="end"
