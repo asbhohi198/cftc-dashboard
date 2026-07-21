@@ -234,38 +234,26 @@ function getChangeDriver(row: ChangeRow): { driver: string; description: string;
   }
 }
 
-// Custom XAxis tick for grossChanges expanded chart with driver annotations
-const GrossChangesXAxisTick = (props: { x?: number; y?: number; payload?: { value: string }; data: ChangeRow[] }) => {
-  const { x = 0, y = 0, payload, data } = props;
-  const row = data.find(r => r.label === payload?.value);
-  const driverInfo = row ? getChangeDriver(row) : null;
+// Custom label renderer for driver annotations above bars
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const renderDriverLabel = (props: any, data: ChangeRow[]) => {
+  const { x = 0, width = 0, index = 0 } = props;
+  const row = data[index];
+  if (!row) return null;
+
+  const driverInfo = getChangeDriver(row);
 
   return (
-    <g transform={`translate(${x},${y})`}>
-      <text
-        x={0}
-        y={15}
-        textAnchor="start"
-        fill="#ffffff"
-        fontSize={14}
-        transform="rotate(-90)"
-      >
-        {payload?.value}
-      </text>
-      {driverInfo && (
-        <text
-          x={-85}
-          y={15}
-          textAnchor="start"
-          fill={driverInfo.color}
-          fontSize={11}
-          fontWeight="bold"
-          transform="rotate(-90)"
-        >
-          {driverInfo.driver}
-        </text>
-      )}
-    </g>
+    <text
+      x={Number(x) + Number(width) / 2}
+      y={25}
+      fill={driverInfo.color}
+      textAnchor="middle"
+      fontSize={10}
+      fontWeight="bold"
+    >
+      {driverInfo.driver}
+    </text>
   );
 };
 
@@ -673,14 +661,15 @@ export function AgsSummaryTab() {
             <div className="h-[70vh]">
               <ResponsiveContainer width="100%" height="100%">
                 {expandedSummaryChart === "grossChanges" ? (
-                  <BarChart data={data} margin={{ top: 25, right: 20, left: -10, bottom: 150 }}>
+                  <BarChart data={data} margin={{ top: 45, right: 20, left: -10, bottom: 120 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                    <XAxis dataKey="label" tick={<GrossChangesXAxisTick data={data} />} height={160} interval={0} />
+                    <XAxis dataKey="label" tick={{ fill: "#ffffff", fontSize: 14 }} angle={-90} textAnchor="start" height={120} interval={0} dy={70} dx={-5} />
                     <YAxis tick={{ fill: "#ffffff", fontSize: 13 }} tickFormatter={(v) => formatNumber(v)} />
                     <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number, name: string) => [formatNumber(value), name]} />
                     <ReferenceLine y={0} stroke="#52525b" strokeWidth={2} />
                     <Bar dataKey="mmLongChange" name="MM Long" fill="#3b82f6" radius={[3, 3, 0, 0]}>
                       <LabelList dataKey="mmLongChange" content={renderBarLabelLarge} />
+                      <LabelList dataKey="mmLongChange" content={(props) => renderDriverLabel(props, data)} />
                     </Bar>
                     <Bar dataKey="mmShortChange" name="MM Short" fill="#ef4444" radius={[3, 3, 0, 0]}>
                       <LabelList dataKey="mmShortChange" content={renderBarLabelLarge} />
