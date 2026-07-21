@@ -134,8 +134,7 @@ function MiniChart({ row, onClick }: { row: ChangeRow; onClick: () => void }) {
                 <Cell
                   key={`cell-${index}`}
                   fill={entry.change >= 0 ? "#22c55e" : "#ef4444"}
-                  opacity={index === arr.length - 1 ? 1 : 0.5}
-                />
+                                  />
               ))}
             </Bar>
           </BarChart>
@@ -364,8 +363,7 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
                         <Cell
                           key={`cell-${index}`}
                           fill={entry.change >= 0 ? "#22c55e" : "#ef4444"}
-                          opacity={index === arr.length - 1 ? 1 : 0.6}
-                        />
+                                                  />
                       ))}
                     </Bar>
                   </BarChart>
@@ -534,8 +532,7 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
                         <Cell
                           key={`cell-${index}`}
                           fill={entry.change >= 0 ? "#22c55e" : "#ef4444"}
-                          opacity={index === arr.length - 1 ? 1 : 0.6}
-                        />
+                                                  />
                       ))}
                     </Bar>
                   </BarChart>

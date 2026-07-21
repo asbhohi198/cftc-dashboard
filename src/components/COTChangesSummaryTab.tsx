@@ -299,8 +299,7 @@ export function COTChangesSummaryTab() {
                         <Cell
                           key={`cell-${index}`}
                           fill={entry.change >= 0 ? "#22c55e" : "#ef4444"}
-                          opacity={index === arr.length - 1 ? 1 : 0.6}
-                        />
+                                                  />
                       ))}
                     </Bar>
                   </BarChart>
@@ -419,8 +418,7 @@ export function COTChangesSummaryTab() {
                         <Cell
                           key={`cell-${index}`}
                           fill={entry.change >= 0 ? "#22c55e" : "#ef4444"}
-                          opacity={index === arr.length - 1 ? 1 : 0.6}
-                        />
+                                                  />
                       ))}
                     </Bar>
                   </BarChart>
