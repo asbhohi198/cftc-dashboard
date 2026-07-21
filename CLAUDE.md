@@ -16,3 +16,7 @@
 - **ALL charts must have vertical x-axis labels** (angle: -90 degrees, textAnchor: "end")
 - X-axis labels must always be visible (never use tick={false})
 - Format dates as "Mon YY" (e.g., "Jan 24")
+
+### Tooltip Styling
+- **ALL chart tooltips must have white text** for both date labels and data values
+- Use: `contentStyle={{ color: "#ffffff" }}`, `labelStyle={{ color: "#ffffff" }}`, `itemStyle={{ color: "#ffffff" }}`

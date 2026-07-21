@@ -79,7 +79,7 @@ export function AgsSummaryTab() {
   const [error, setError] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<ChangeRow | null>(null);
   const [expandedChart, setExpandedChart] = useState<ChangeRow | null>(null);
-  const [timeRange, setTimeRange] = useState<TimeRange>("2y");
+  const [timeRange, setTimeRange] = useState<TimeRange>("5y");
 
   useEffect(() => {
     async function fetchData() {
@@ -282,7 +282,10 @@ export function AgsSummaryTab() {
                         border: "1px solid #27272a",
                         borderRadius: "0.5rem",
                         fontSize: "12px",
+                        color: "#ffffff",
                       }}
+                      labelStyle={{ color: "#ffffff" }}
+                      itemStyle={{ color: "#ffffff" }}
                       formatter={(value: number) => [formatNumber(value), "Change"]}
                       labelFormatter={(label) => formatDate(label)}
                     />
@@ -406,7 +409,10 @@ export function AgsSummaryTab() {
                         border: "1px solid #27272a",
                         borderRadius: "0.5rem",
                         fontSize: "12px",
+                        color: "#ffffff",
                       }}
+                      labelStyle={{ color: "#ffffff" }}
+                      itemStyle={{ color: "#ffffff" }}
                       formatter={(value: number) => [formatNumber(value), "Change"]}
                       labelFormatter={(label) => formatDate(label)}
                     />
