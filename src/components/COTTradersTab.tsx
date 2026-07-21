@@ -298,68 +298,71 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
         <div className="lg:col-span-2 bg-zinc-900 border border-zinc-800 rounded-lg p-4">
           {selectedRow ? (
             <>
-              <div className="flex items-center justify-between mb-4">
+              {/* Header Row */}
+              <div className="flex items-center justify-between mb-2">
                 <div>
                   <h3 className="text-md font-semibold text-white">{selectedRow.name}</h3>
                   <p className="text-xs text-zinc-500">
                     {chartViewMode === "number" ? "Number of Traders Long vs Short" : "% Long"} ({getChartData(selectedRow).length} weeks)
                   </p>
                 </div>
-                <div className="flex items-center gap-4">
-                  {/* View Mode Toggle */}
-                  <div className="flex items-center gap-1">
+                {/* Latest value badge */}
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-mono">
+                    <span className="text-blue-400">{selectedRow.tradersLong}L</span>
+                    {" / "}
+                    <span className="text-red-400">{selectedRow.tradersShort}S</span>
+                  </span>
+                  <span className={`text-sm font-mono font-bold px-2 py-0.5 rounded ${
+                    selectedRow.pctLong >= 55 ? "bg-green-500/20 text-green-400" :
+                    selectedRow.pctLong <= 45 ? "bg-red-500/20 text-red-400" :
+                    "bg-zinc-800 text-zinc-400"
+                  }`}>
+                    {selectedRow.pctLong.toFixed(1)}%
+                  </span>
+                </div>
+              </div>
+
+              {/* Toggles Row */}
+              <div className="flex items-center gap-4 mb-4 pb-3 border-b border-zinc-800">
+                {/* View Mode Toggle */}
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => setChartViewMode("number")}
+                    className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${
+                      chartViewMode === "number"
+                        ? "bg-blue-500 text-white"
+                        : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+                    }`}
+                  >
+                    #
+                  </button>
+                  <button
+                    onClick={() => setChartViewMode("percent")}
+                    className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${
+                      chartViewMode === "percent"
+                        ? "bg-blue-500 text-white"
+                        : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+                    }`}
+                  >
+                    %
+                  </button>
+                </div>
+                {/* Time Range Toggle */}
+                <div className="flex items-center gap-1">
+                  {TIME_RANGE_OPTIONS.map((option) => (
                     <button
-                      onClick={() => setChartViewMode("number")}
+                      key={option.id}
+                      onClick={() => setTimeRange(option.id)}
                       className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${
-                        chartViewMode === "number"
-                          ? "bg-blue-500 text-white"
+                        timeRange === option.id
+                          ? "bg-orange-500 text-white"
                           : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
                       }`}
                     >
-                      #
+                      {option.label}
                     </button>
-                    <button
-                      onClick={() => setChartViewMode("percent")}
-                      className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${
-                        chartViewMode === "percent"
-                          ? "bg-blue-500 text-white"
-                          : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
-                      }`}
-                    >
-                      %
-                    </button>
-                  </div>
-                  {/* Time Range Toggle */}
-                  <div className="flex items-center gap-1">
-                    {TIME_RANGE_OPTIONS.map((option) => (
-                      <button
-                        key={option.id}
-                        onClick={() => setTimeRange(option.id)}
-                        className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${
-                          timeRange === option.id
-                            ? "bg-orange-500 text-white"
-                            : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
-                        }`}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                  {/* Latest value badge */}
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-mono">
-                      <span className="text-blue-400">{selectedRow.tradersLong}L</span>
-                      {" / "}
-                      <span className="text-red-400">{selectedRow.tradersShort}S</span>
-                    </span>
-                    <span className={`text-sm font-mono font-bold px-2 py-0.5 rounded ${
-                      selectedRow.pctLong >= 55 ? "bg-green-500/20 text-green-400" :
-                      selectedRow.pctLong <= 45 ? "bg-red-500/20 text-red-400" :
-                      "bg-zinc-800 text-zinc-400"
-                    }`}>
-                      {selectedRow.pctLong.toFixed(1)}%
-                    </span>
-                  </div>
+                  ))}
                 </div>
               </div>
 
@@ -370,21 +373,21 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart
                     data={getChartData(selectedRow)}
-                    margin={{ top: 10, right: 10, left: 0, bottom: 80 }}
+                    margin={{ top: 10, right: 10, left: 0, bottom: 40 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                     <XAxis
                       dataKey="date"
-                      tick={{ fill: "#ffffff", fontSize: 10 }}
+                      tick={{ fill: "#ffffff", fontSize: 12 }}
                       angle={-90}
                       textAnchor="end"
-                      height={80}
+                      height={50}
                       tickFormatter={formatChartDate}
                       interval={Math.floor(getChartData(selectedRow).length / 12)}
                       dy={15}
                     />
                     <YAxis
-                      tick={{ fill: "#ffffff", fontSize: 10 }}
+                      tick={{ fill: "#ffffff", fontSize: 12 }}
                       domain={chartViewMode === "percent" ? [0, 100] : ["auto", "auto"]}
                       tickFormatter={chartViewMode === "percent" ? (v) => `${v}%` : undefined}
                     />
