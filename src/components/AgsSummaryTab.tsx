@@ -269,39 +269,6 @@ const GrossChangesXAxisTick = (props: { x?: number; y?: number; payload?: { valu
   );
 };
 
-// Old version for backward compatibility
-function getChangeDriverOld(row: ChangeRow): { driver: string; description: string } {
-  const { mmNetChange, mmLongChange, mmShortChange } = row;
-  const absLong = Math.abs(mmLongChange);
-  const absShort = Math.abs(mmShortChange);
-
-  if (Math.abs(mmNetChange) < 1000) {
-    return { driver: "Flat", description: "Minimal change" };
-  }
-
-  if (mmNetChange > 0) {
-    // Net buying - was it long buying or short covering?
-    if (mmShortChange < 0 && absShort > absLong) {
-      return { driver: "Short covering", description: `Shorts ${formatNumber(mmShortChange)}` };
-    } else if (mmLongChange > 0 && absLong > absShort) {
-      return { driver: "Long buying", description: `Longs +${formatNumber(mmLongChange)}` };
-    } else if (mmShortChange < 0 && mmLongChange > 0) {
-      return { driver: "Both", description: "Longs up, shorts down" };
-    }
-    return { driver: "Long buying", description: `Longs +${formatNumber(mmLongChange)}` };
-  } else {
-    // Net selling - was it long liquidation or short selling?
-    if (mmLongChange < 0 && absLong > absShort) {
-      return { driver: "Long liquidation", description: `Longs ${formatNumber(mmLongChange)}` };
-    } else if (mmShortChange > 0 && absShort > absLong) {
-      return { driver: "Short selling", description: `Shorts +${formatNumber(mmShortChange)}` };
-    } else if (mmLongChange < 0 && mmShortChange > 0) {
-      return { driver: "Both", description: "Longs down, shorts up" };
-    }
-    return { driver: "Long liquidation", description: `Longs ${formatNumber(mmLongChange)}` };
-  }
-}
-
 type SummaryChartType = "mmNet" | "pctMax" | "mmChange" | "pctOI" | "grossChanges" | null;
 
 export function AgsSummaryTab() {

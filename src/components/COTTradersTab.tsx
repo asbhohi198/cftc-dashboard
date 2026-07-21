@@ -508,35 +508,9 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
 
       {/* Individual Historical Charts Grid */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-md font-semibold text-white">Historical {chartViewMode === "number" ? "Number of Traders" : "% Long"} by Commodity</h3>
-          {/* View Mode Toggle for Grid */}
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => setChartViewMode("number")}
-              className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${
-                chartViewMode === "number"
-                  ? "bg-blue-500 text-white"
-                  : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
-              }`}
-            >
-              #
-            </button>
-            <button
-              onClick={() => setChartViewMode("percent")}
-              className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${
-                chartViewMode === "percent"
-                  ? "bg-blue-500 text-white"
-                  : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
-              }`}
-            >
-              %
-            </button>
-          </div>
-        </div>
+        <h3 className="text-md font-semibold text-white mb-4">Historical % Long by Commodity (since 2010)</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {data.map((row) => {
-            const chartData = getChartData(row);
             return (
               <div
                 key={row.id}
@@ -551,33 +525,15 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                 </div>
                 <div className="h-32">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
-                      {chartViewMode === "number" ? (
-                        <>
-                          <Line
-                            type="monotone"
-                            dataKey="tradersLong"
-                            stroke="#3b82f6"
-                            strokeWidth={1.5}
-                            dot={false}
-                          />
-                          <Line
-                            type="monotone"
-                            dataKey="tradersShort"
-                            stroke="#ef4444"
-                            strokeWidth={1.5}
-                            dot={false}
-                          />
-                        </>
-                      ) : (
-                        <Line
-                          type="monotone"
-                          dataKey="pctLong"
-                          stroke="#22c55e"
-                          strokeWidth={1.5}
-                          dot={false}
-                        />
-                      )}
+                    <LineChart data={row.historicalData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
+                      <ReferenceLine y={50} stroke="#52525b" strokeDasharray="3 3" />
+                      <Line
+                        type="monotone"
+                        dataKey="pctLong"
+                        stroke="#22c55e"
+                        strokeWidth={1.5}
+                        dot={false}
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
