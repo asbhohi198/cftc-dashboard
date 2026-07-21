@@ -420,7 +420,7 @@ export function HomeTab() {
                             height={50}
                           />
                           <YAxis
-                            tick={{ fill: "#71717a", fontSize: 9 }}
+                            tick={{ fill: "#ffffff", fontSize: 9 }}
                             axisLine={{ stroke: "#3f3f46" }}
                             tickFormatter={(v) => series.isPercentage ? `${v.toFixed(0)}%` : formatNumber(v)}
                             width={40}

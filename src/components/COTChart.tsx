@@ -193,7 +193,7 @@ export function COTChart({
               <XAxis
                 dataKey="date"
                 tickFormatter={formatDate}
-                tick={{ fill: "#71717a", fontSize: 10, dy: 25 }}
+                tick={{ fill: "#ffffff", fontSize: 10, dy: 25 }}
                 axisLine={{ stroke: "#3f3f46" }}
                 tickLine={{ stroke: "#3f3f46" }}
                 ticks={ticks.map(i => filteredData[i]?.date).filter(Boolean)}
@@ -204,7 +204,7 @@ export function COTChart({
               />
               <YAxis
                 tickFormatter={isPercentView ? formatPercent : formatNumber}
-                tick={{ fill: "#71717a", fontSize: 10 }}
+                tick={{ fill: "#ffffff", fontSize: 10 }}
                 axisLine={{ stroke: "#3f3f46" }}
                 tickLine={{ stroke: "#3f3f46" }}
                 width={55}

@@ -120,7 +120,7 @@ function MiniChart({ row, onClick }: { row: ChangeRow; onClick: () => void }) {
           <BarChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 30 }}>
             <XAxis
               dataKey="date"
-              tick={{ fill: "#71717a", fontSize: 8 }}
+              tick={{ fill: "#ffffff", fontSize: 8 }}
               angle={-90}
               textAnchor="end"
               height={30}
@@ -336,7 +336,7 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                     <XAxis
                       dataKey="date"
-                      tick={{ fill: "#71717a", fontSize: 10 }}
+                      tick={{ fill: "#ffffff", fontSize: 10 }}
                       angle={-90}
                       textAnchor="end"
                       height={100}
@@ -345,7 +345,7 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
                       dy={15}
                     />
                     <YAxis
-                      tick={{ fill: "#71717a", fontSize: 10 }}
+                      tick={{ fill: "#ffffff", fontSize: 10 }}
                       tickFormatter={(v) => formatNumber(v)}
                     />
                     <Tooltip
@@ -506,7 +506,7 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                     <XAxis
                       dataKey="date"
-                      tick={{ fill: "#71717a", fontSize: 11 }}
+                      tick={{ fill: "#ffffff", fontSize: 11 }}
                       angle={-90}
                       textAnchor="end"
                       height={100}
@@ -515,7 +515,7 @@ export function COTChangesTab({ sector }: COTChangesTabProps) {
                       dy={15}
                     />
                     <YAxis
-                      tick={{ fill: "#71717a", fontSize: 11 }}
+                      tick={{ fill: "#ffffff", fontSize: 11 }}
                       tickFormatter={(v) => formatNumber(v)}
                     />
                     <Tooltip
