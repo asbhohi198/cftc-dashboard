@@ -81,6 +81,8 @@ function getZScoreBg(zScore: number): string {
   return "";
 }
 
+type SummaryChartType = "mmNet" | "pctMax" | "mmChange" | "pctOI" | "grossChanges" | null;
+
 export function AgsSummaryTab() {
   const [data, setData] = useState<ChangeRow[]>([]);
   const [reportDate, setReportDate] = useState<string>("");
@@ -88,6 +90,7 @@ export function AgsSummaryTab() {
   const [error, setError] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<ChangeRow | null>(null);
   const [expandedChart, setExpandedChart] = useState<ChangeRow | null>(null);
+  const [expandedSummaryChart, setExpandedSummaryChart] = useState<SummaryChartType>(null);
   const [timeRange, setTimeRange] = useState<TimeRange>("5y");
 
   useEffect(() => {
@@ -279,7 +282,8 @@ export function AgsSummaryTab() {
                       height={80}
                       tickFormatter={formatChartDate}
                       interval={Math.floor(getChartData(selectedRow).length / 12)}
-                      dy={15}
+                      dy={5}
+                      dx={-5}
                     />
                     <YAxis
                       tick={{ fill: "#71717a", fontSize: 10 }}
@@ -328,193 +332,89 @@ export function AgsSummaryTab() {
           {/* Chart 1: Managed Money Net (F&O) */}
           <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
             <h4 className="text-sm font-medium text-white mb-3">Managed Money Net (F&O)</h4>
-            <div className="h-80">
+            <div className="h-80 cursor-pointer" onClick={() => setExpandedSummaryChart("mmNet")}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={data}
-                  margin={{ top: 20, right: 10, left: 10, bottom: 80 }}
-                >
+                <BarChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 80 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                  <XAxis
-                    dataKey="label"
-                    tick={{ fill: "#71717a", fontSize: 9 }}
-                    angle={-90}
-                    textAnchor="end"
-                    height={80}
-                    interval={0}
-                  />
-                  <YAxis
-                    tick={{ fill: "#71717a", fontSize: 10 }}
-                    tickFormatter={(v) => formatNumber(v)}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#18181b",
-                      border: "1px solid #27272a",
-                      borderRadius: "0.5rem",
-                      fontSize: "12px",
-                      color: "#ffffff",
-                    }}
-                    labelStyle={{ color: "#ffffff" }}
-                    itemStyle={{ color: "#ffffff" }}
-                    formatter={(value: number) => [formatNumber(value), "MM Net"]}
-                  />
+                  <XAxis dataKey="label" tick={{ fill: "#71717a", fontSize: 9 }} angle={-90} textAnchor="end" height={80} interval={0} />
+                  <YAxis tick={{ fill: "#71717a", fontSize: 10 }} tickFormatter={(v) => formatNumber(v)} />
+                  <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number) => [formatNumber(value), "MM Net"]} />
                   <ReferenceLine y={0} stroke="#52525b" />
-                  <Bar dataKey="mmNetCurrent" radius={[2, 2, 0, 0]} label={{ position: 'top', fill: '#a1a1aa', fontSize: 8, formatter: (v: number) => formatNumber(v) }}>
+                  <Bar dataKey="mmNetCurrent" radius={[2, 2, 0, 0]}>
                     {data.map((entry, index) => (
-                      <Cell
-                        key={`cell-mmnet-${index}`}
-                        fill={entry.mmNetCurrent >= 0 ? "#3b82f6" : "#ef4444"}
-                      />
+                      <Cell key={`cell-mmnet-${index}`} fill={entry.mmNetCurrent >= 0 ? "#22c55e" : "#ef4444"} />
                     ))}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </div>
+            <p className="text-xs text-zinc-600 mt-2 text-center">Click chart to expand</p>
           </div>
 
           {/* Chart 2: Net MM Position as % Historical Max */}
           <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
             <h4 className="text-sm font-medium text-white mb-3">Net MM Position as % Historical Max</h4>
-            <div className="h-80">
+            <div className="h-80 cursor-pointer" onClick={() => setExpandedSummaryChart("pctMax")}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={data}
-                  margin={{ top: 20, right: 10, left: 10, bottom: 80 }}
-                >
+                <BarChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 80 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                  <XAxis
-                    dataKey="label"
-                    tick={{ fill: "#71717a", fontSize: 9 }}
-                    angle={-90}
-                    textAnchor="end"
-                    height={80}
-                    interval={0}
-                  />
-                  <YAxis
-                    tick={{ fill: "#71717a", fontSize: 10 }}
-                    tickFormatter={(v) => `${v.toFixed(0)}%`}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#18181b",
-                      border: "1px solid #27272a",
-                      borderRadius: "0.5rem",
-                      fontSize: "12px",
-                      color: "#ffffff",
-                    }}
-                    labelStyle={{ color: "#ffffff" }}
-                    itemStyle={{ color: "#ffffff" }}
-                    formatter={(value: number) => [`${value.toFixed(1)}%`, "% of Max"]}
-                  />
+                  <XAxis dataKey="label" tick={{ fill: "#71717a", fontSize: 9 }} angle={-90} textAnchor="end" height={80} interval={0} />
+                  <YAxis tick={{ fill: "#71717a", fontSize: 10 }} tickFormatter={(v) => `${v.toFixed(0)}%`} />
+                  <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number) => [`${value.toFixed(1)}%`, "% of Max"]} />
                   <ReferenceLine y={0} stroke="#52525b" />
-                  <Bar dataKey="pctHistoricalMax" radius={[2, 2, 0, 0]} label={{ position: 'top', fill: '#a1a1aa', fontSize: 8, formatter: (v: number) => `${v.toFixed(0)}%` }}>
+                  <Bar dataKey="pctHistoricalMax" radius={[2, 2, 0, 0]}>
                     {data.map((entry, index) => (
-                      <Cell
-                        key={`cell-pctmax-${index}`}
-                        fill={entry.pctHistoricalMax >= 0 ? "#3b82f6" : "#ef4444"}
-                      />
+                      <Cell key={`cell-pctmax-${index}`} fill={entry.pctHistoricalMax >= 0 ? "#22c55e" : "#ef4444"} />
                     ))}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </div>
+            <p className="text-xs text-zinc-600 mt-2 text-center">Click chart to expand</p>
           </div>
 
           {/* Chart 3: Managed Money Net Change (WoW) */}
           <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
             <h4 className="text-sm font-medium text-white mb-3">Managed Money Net Change (WoW)</h4>
-            <div className="h-80">
+            <div className="h-80 cursor-pointer" onClick={() => setExpandedSummaryChart("mmChange")}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={data}
-                  margin={{ top: 20, right: 10, left: 10, bottom: 80 }}
-                >
+                <BarChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 80 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                  <XAxis
-                    dataKey="label"
-                    tick={{ fill: "#71717a", fontSize: 9 }}
-                    angle={-90}
-                    textAnchor="end"
-                    height={80}
-                    interval={0}
-                  />
-                  <YAxis
-                    tick={{ fill: "#71717a", fontSize: 10 }}
-                    tickFormatter={(v) => formatNumber(v)}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#18181b",
-                      border: "1px solid #27272a",
-                      borderRadius: "0.5rem",
-                      fontSize: "12px",
-                      color: "#ffffff",
-                    }}
-                    labelStyle={{ color: "#ffffff" }}
-                    itemStyle={{ color: "#ffffff" }}
-                    formatter={(value: number) => [formatNumber(value), "WoW Change"]}
-                  />
+                  <XAxis dataKey="label" tick={{ fill: "#71717a", fontSize: 9 }} angle={-90} textAnchor="end" height={80} interval={0} />
+                  <YAxis tick={{ fill: "#71717a", fontSize: 10 }} tickFormatter={(v) => formatNumber(v)} />
+                  <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number) => [formatNumber(value), "WoW Change"]} />
                   <ReferenceLine y={0} stroke="#52525b" />
-                  <Bar dataKey="mmNetChange" radius={[2, 2, 0, 0]} label={{ position: 'top', fill: '#a1a1aa', fontSize: 8, formatter: (v: number) => formatNumber(v) }}>
+                  <Bar dataKey="mmNetChange" radius={[2, 2, 0, 0]}>
                     {data.map((entry, index) => (
-                      <Cell
-                        key={`cell-change-${index}`}
-                        fill={entry.mmNetChange >= 0 ? "#22c55e" : "#ef4444"}
-                      />
+                      <Cell key={`cell-change-${index}`} fill={entry.mmNetChange >= 0 ? "#22c55e" : "#ef4444"} />
                     ))}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </div>
+            <p className="text-xs text-zinc-600 mt-2 text-center">Click chart to expand</p>
           </div>
 
           {/* Chart 4: MM Net Position as % OI */}
           <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
             <h4 className="text-sm font-medium text-white mb-3">MM Net Position as % Open Interest</h4>
-            <div className="h-80">
+            <div className="h-80 cursor-pointer" onClick={() => setExpandedSummaryChart("pctOI")}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={data}
-                  margin={{ top: 20, right: 10, left: 10, bottom: 80 }}
-                >
+                <BarChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 80 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                  <XAxis
-                    dataKey="label"
-                    tick={{ fill: "#71717a", fontSize: 9 }}
-                    angle={-90}
-                    textAnchor="end"
-                    height={80}
-                    interval={0}
-                  />
-                  <YAxis
-                    tick={{ fill: "#71717a", fontSize: 10 }}
-                    tickFormatter={(v) => `${v.toFixed(0)}%`}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#18181b",
-                      border: "1px solid #27272a",
-                      borderRadius: "0.5rem",
-                      fontSize: "12px",
-                      color: "#ffffff",
-                    }}
-                    labelStyle={{ color: "#ffffff" }}
-                    itemStyle={{ color: "#ffffff" }}
-                    formatter={(value: number) => [`${value.toFixed(1)}%`, "% of OI"]}
-                  />
+                  <XAxis dataKey="label" tick={{ fill: "#71717a", fontSize: 9 }} angle={-90} textAnchor="end" height={80} interval={0} />
+                  <YAxis tick={{ fill: "#71717a", fontSize: 10 }} tickFormatter={(v) => `${v.toFixed(0)}%`} />
+                  <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number) => [`${value.toFixed(1)}%`, "% of OI"]} />
                   <ReferenceLine y={0} stroke="#52525b" />
-                  <Bar dataKey="pctOI" radius={[2, 2, 0, 0]} label={{ position: 'top', fill: '#a1a1aa', fontSize: 8, formatter: (v: number) => `${v.toFixed(0)}%` }}>
+                  <Bar dataKey="pctOI" radius={[2, 2, 0, 0]}>
                     {data.map((entry, index) => (
-                      <Cell
-                        key={`cell-pctoi-${index}`}
-                        fill={entry.pctOI >= 0 ? "#3b82f6" : "#ef4444"}
-                      />
+                      <Cell key={`cell-pctoi-${index}`} fill={entry.pctOI >= 0 ? "#22c55e" : "#ef4444"} />
                     ))}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </div>
+            <p className="text-xs text-zinc-600 mt-2 text-center">Click chart to expand</p>
           </div>
         </div>
       </div>
@@ -523,46 +423,23 @@ export function AgsSummaryTab() {
       <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
         <h3 className="text-lg font-semibold text-white mb-2">Managed Money Changes: Gross Long, Gross Short & Total Net</h3>
         <p className="text-xs text-zinc-500 mb-4">Week-over-week changes in MM long positions, short positions, and net position</p>
-        <div className="h-96">
+        <div className="h-96 cursor-pointer" onClick={() => setExpandedSummaryChart("grossChanges")}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={data}
-              margin={{ top: 20, right: 30, left: 10, bottom: 80 }}
-            >
+            <BarChart data={data} margin={{ top: 20, right: 30, left: 10, bottom: 80 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-              <XAxis
-                dataKey="label"
-                tick={{ fill: "#71717a", fontSize: 9 }}
-                angle={-90}
-                textAnchor="end"
-                height={80}
-                interval={0}
-              />
-              <YAxis
-                tick={{ fill: "#71717a", fontSize: 10 }}
-                tickFormatter={(v) => formatNumber(v)}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#18181b",
-                  border: "1px solid #27272a",
-                  borderRadius: "0.5rem",
-                  fontSize: "12px",
-                  color: "#ffffff",
-                }}
-                labelStyle={{ color: "#ffffff" }}
-                itemStyle={{ color: "#ffffff" }}
-                formatter={(value: number, name: string) => [formatNumber(value), name]}
-              />
+              <XAxis dataKey="label" tick={{ fill: "#71717a", fontSize: 9 }} angle={-90} textAnchor="end" height={80} interval={0} />
+              <YAxis tick={{ fill: "#71717a", fontSize: 10 }} tickFormatter={(v) => formatNumber(v)} />
+              <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number, name: string) => [formatNumber(value), name]} />
               <ReferenceLine y={0} stroke="#52525b" />
-              <Bar dataKey="mmLongChange" name="MM Long" fill="#3b82f6" radius={[2, 2, 0, 0]} label={{ position: 'top', fill: '#a1a1aa', fontSize: 7, formatter: (v: number) => formatNumber(v) }} />
-              <Bar dataKey="mmShortChange" name="MM Short" fill="#ef4444" radius={[2, 2, 0, 0]} label={{ position: 'top', fill: '#a1a1aa', fontSize: 7, formatter: (v: number) => formatNumber(v) }} />
-              <Bar dataKey="mmNetChange" name="MM Net" fill="#22c55e" radius={[2, 2, 0, 0]} label={{ position: 'top', fill: '#a1a1aa', fontSize: 7, formatter: (v: number) => formatNumber(v) }} />
+              <Bar dataKey="mmLongChange" name="MM Long" fill="#3b82f6" radius={[2, 2, 0, 0]} />
+              <Bar dataKey="mmShortChange" name="MM Short" fill="#ef4444" radius={[2, 2, 0, 0]} />
+              <Bar dataKey="mmNetChange" name="MM Net" fill="#22c55e" radius={[2, 2, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
+        <p className="text-xs text-zinc-600 mt-2 text-center">Click chart to expand</p>
         {/* Legend */}
-        <div className="flex items-center justify-center gap-6 mt-4 text-xs">
+        <div className="flex items-center justify-center gap-6 mt-2 text-xs">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-blue-500 rounded"></div>
             <span className="text-zinc-400">MM Long Change</span>
@@ -577,6 +454,72 @@ export function AgsSummaryTab() {
           </div>
         </div>
       </div>
+
+      {/* Summary Chart Expanded Modal */}
+      {expandedSummaryChart && (
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" onClick={() => setExpandedSummaryChart(null)}>
+          <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 max-w-6xl w-full max-h-[90vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-white">
+                {expandedSummaryChart === "mmNet" && "Managed Money Net (F&O)"}
+                {expandedSummaryChart === "pctMax" && "Net MM Position as % Historical Max"}
+                {expandedSummaryChart === "mmChange" && "Managed Money Net Change (WoW)"}
+                {expandedSummaryChart === "pctOI" && "MM Net Position as % Open Interest"}
+                {expandedSummaryChart === "grossChanges" && "Managed Money Changes: Gross Long, Gross Short & Total Net"}
+              </h3>
+              <button onClick={() => setExpandedSummaryChart(null)} className="text-zinc-400 hover:text-white transition-colors">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="h-[70vh]">
+              <ResponsiveContainer width="100%" height="100%">
+                {expandedSummaryChart === "grossChanges" ? (
+                  <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 100 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                    <XAxis dataKey="label" tick={{ fill: "#71717a", fontSize: 11 }} angle={-90} textAnchor="end" height={100} interval={0} />
+                    <YAxis tick={{ fill: "#71717a", fontSize: 11 }} tickFormatter={(v) => formatNumber(v)} />
+                    <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number, name: string) => [formatNumber(value), name]} />
+                    <ReferenceLine y={0} stroke="#52525b" strokeWidth={2} />
+                    <Bar dataKey="mmLongChange" name="MM Long" fill="#3b82f6" radius={[3, 3, 0, 0]} />
+                    <Bar dataKey="mmShortChange" name="MM Short" fill="#ef4444" radius={[3, 3, 0, 0]} />
+                    <Bar dataKey="mmNetChange" name="MM Net" fill="#22c55e" radius={[3, 3, 0, 0]} />
+                  </BarChart>
+                ) : (
+                  <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 100 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                    <XAxis dataKey="label" tick={{ fill: "#71717a", fontSize: 11 }} angle={-90} textAnchor="end" height={100} interval={0} />
+                    <YAxis tick={{ fill: "#71717a", fontSize: 11 }} tickFormatter={(v) => expandedSummaryChart === "pctMax" || expandedSummaryChart === "pctOI" ? `${v.toFixed(0)}%` : formatNumber(v)} />
+                    <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number) => [expandedSummaryChart === "pctMax" || expandedSummaryChart === "pctOI" ? `${value.toFixed(1)}%` : formatNumber(value), expandedSummaryChart === "mmNet" ? "MM Net" : expandedSummaryChart === "pctMax" ? "% of Max" : expandedSummaryChart === "mmChange" ? "WoW Change" : "% of OI"]} />
+                    <ReferenceLine y={0} stroke="#52525b" strokeWidth={2} />
+                    <Bar dataKey={expandedSummaryChart === "mmNet" ? "mmNetCurrent" : expandedSummaryChart === "pctMax" ? "pctHistoricalMax" : expandedSummaryChart === "mmChange" ? "mmNetChange" : "pctOI"} radius={[3, 3, 0, 0]}>
+                      {data.map((entry, index) => {
+                        const value = expandedSummaryChart === "mmNet" ? entry.mmNetCurrent : expandedSummaryChart === "pctMax" ? entry.pctHistoricalMax : expandedSummaryChart === "mmChange" ? entry.mmNetChange : entry.pctOI;
+                        return <Cell key={`cell-expanded-${index}`} fill={value >= 0 ? "#22c55e" : "#ef4444"} />;
+                      })}
+                    </Bar>
+                  </BarChart>
+                )}
+              </ResponsiveContainer>
+            </div>
+            {expandedSummaryChart === "grossChanges" && (
+              <div className="flex items-center justify-center gap-6 mt-4 text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 bg-blue-500 rounded"></div>
+                  <span className="text-zinc-300">MM Long Change</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 bg-red-500 rounded"></div>
+                  <span className="text-zinc-300">MM Short Change</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 bg-green-500 rounded"></div>
+                  <span className="text-zinc-300">MM Net Change</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Expanded Chart Modal */}
       {expandedChart && (() => {
