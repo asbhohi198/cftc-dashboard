@@ -671,6 +671,7 @@ export function AgsSummaryTab() {
           ? expandedChart.historicalChanges.slice(-expandedTimeOption.weeks)
           : expandedChart.historicalChanges;
         const intervalDivisor = chartData.length > 100 ? 20 : chartData.length > 50 ? 12 : 8;
+        const latestValue = chartData.length > 0 ? chartData[chartData.length - 1].change : 0;
 
         return (
           <div
@@ -773,6 +774,7 @@ export function AgsSummaryTab() {
                       labelFormatter={(label) => formatDate(label)}
                     />
                     <ReferenceLine y={0} stroke="#52525b" strokeWidth={2} />
+                    <ReferenceLine y={latestValue} stroke="#ffffff" strokeDasharray="3 3" strokeWidth={1} />
                     <Bar dataKey="change" radius={[3, 3, 0, 0]}>
                       {chartData.map((entry, index) => (
                         <Cell
