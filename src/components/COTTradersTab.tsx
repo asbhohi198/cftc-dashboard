@@ -21,6 +21,7 @@ import { X, ChevronUp, ChevronDown } from "lucide-react";
 type TimeRange = "1y" | "2y" | "5y" | "all";
 type SortField = "name" | "tradersLong" | "tradersShort" | "pctLong";
 type SortDirection = "asc" | "desc";
+type ChartViewMode = "number" | "percent";
 
 const TIME_RANGE_OPTIONS: { id: TimeRange; label: string; weeks: number | null }[] = [
   { id: "1y", label: "1Y", weeks: 52 },
@@ -75,6 +76,8 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
   const [expandedChart, setExpandedChart] = useState<TradersRow | null>(null);
   const [timeRange, setTimeRange] = useState<TimeRange>("5y");
   const [expandedTimeRange, setExpandedTimeRange] = useState<TimeRange>("all");
+  const [chartViewMode, setChartViewMode] = useState<ChartViewMode>("number");
+  const [expandedChartViewMode, setExpandedChartViewMode] = useState<ChartViewMode>("number");
   const [sortField, setSortField] = useState<SortField>("pctLong");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
@@ -296,10 +299,33 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                 <div>
                   <h3 className="text-md font-semibold text-white">{selectedRow.name}</h3>
                   <p className="text-xs text-zinc-500">
-                    Number of Traders Long vs Short ({getChartData(selectedRow).length} weeks)
+                    {chartViewMode === "number" ? "Number of Traders Long vs Short" : "% Long"} ({getChartData(selectedRow).length} weeks)
                   </p>
                 </div>
                 <div className="flex items-center gap-4">
+                  {/* View Mode Toggle */}
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => setChartViewMode("number")}
+                      className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${
+                        chartViewMode === "number"
+                          ? "bg-blue-500 text-white"
+                          : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+                      }`}
+                    >
+                      #
+                    </button>
+                    <button
+                      onClick={() => setChartViewMode("percent")}
+                      className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${
+                        chartViewMode === "percent"
+                          ? "bg-blue-500 text-white"
+                          : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
+                      }`}
+                    >
+                      %
+                    </button>
+                  </div>
                   {/* Time Range Toggle */}
                   <div className="flex items-center gap-1">
                     {TIME_RANGE_OPTIONS.map((option) => (
@@ -356,6 +382,8 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                     />
                     <YAxis
                       tick={{ fill: "#ffffff", fontSize: 10 }}
+                      domain={chartViewMode === "percent" ? [0, 100] : ["auto", "auto"]}
+                      tickFormatter={chartViewMode === "percent" ? (v) => `${v}%` : undefined}
                     />
                     <Tooltip
                       contentStyle={{
@@ -368,24 +396,41 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                       labelStyle={{ color: "#ffffff" }}
                       itemStyle={{ color: "#ffffff" }}
                       labelFormatter={(label) => formatDate(label)}
+                      formatter={chartViewMode === "percent" ? (value: number) => [`${value.toFixed(1)}%`, "% Long"] : undefined}
                     />
                     <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="tradersLong"
-                      name="Long"
-                      stroke="#3b82f6"
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="tradersShort"
-                      name="Short"
-                      stroke="#ef4444"
-                      strokeWidth={2}
-                      dot={false}
-                    />
+                    {chartViewMode === "number" ? (
+                      <>
+                        <Line
+                          type="monotone"
+                          dataKey="tradersLong"
+                          name="Long"
+                          stroke="#3b82f6"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="tradersShort"
+                          name="Short"
+                          stroke="#ef4444"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <ReferenceLine y={50} stroke="#52525b" strokeDasharray="3 3" />
+                        <Line
+                          type="monotone"
+                          dataKey="pctLong"
+                          name="% Long"
+                          stroke="#22c55e"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                      </>
+                    )}
                   </LineChart>
                 </ResponsiveContainer>
               </div>
