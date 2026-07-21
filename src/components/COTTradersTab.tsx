@@ -654,19 +654,19 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
               </div>
 
               {/* Large Chart */}
-              <div className="h-96">
+              <div className="h-[500px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData} margin={{ top: 20, right: 30, left: 10, bottom: 40 }}>
+                  <LineChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 10 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                     <XAxis
                       dataKey="date"
                       tick={{ fill: "#ffffff", fontSize: 11 }}
                       angle={-90}
                       textAnchor="end"
-                      height={225}
+                      height={100}
                       tickFormatter={formatChartDate}
                       interval={Math.floor(chartData.length / intervalDivisor)}
-                      dy={25}
+                      dy={20}
                     />
                     <YAxis
                       tick={{ fill: "#ffffff", fontSize: 11 }}
