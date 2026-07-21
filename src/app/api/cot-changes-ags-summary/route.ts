@@ -28,6 +28,12 @@ interface ChangeRow {
   zScore: number;
   positionDate: string;
   historicalChanges: { date: string; change: number }[];
+  // Additional fields for summary charts
+  historicalMax: number;
+  historicalMin: number;
+  pctHistoricalMax: number; // current as % of historical max (can be negative)
+  openInterest: number;
+  pctOI: number; // MM net as % of open interest
 }
 
 // Calculate standard deviation
@@ -85,6 +91,26 @@ function calculateRow(data: COTRecord[], label: string, id: string): ChangeRow |
     });
   }
 
+  // Calculate historical max/min of MM net position
+  const allMmNet = data.map(d => d.mmNetAll);
+  const historicalMax = Math.max(...allMmNet);
+  const historicalMin = Math.min(...allMmNet);
+
+  // Calculate % of historical max
+  // If current is positive, compare to max; if negative, compare to min
+  let pctHistoricalMax: number;
+  if (mmNetCurrent >= 0) {
+    pctHistoricalMax = historicalMax !== 0 ? (mmNetCurrent / historicalMax) * 100 : 0;
+  } else {
+    pctHistoricalMax = historicalMin !== 0 ? (mmNetCurrent / historicalMin) * 100 : 0;
+    // Make it negative to show it's on the short side
+    pctHistoricalMax = -pctHistoricalMax;
+  }
+
+  // Open interest and % OI
+  const openInterest = latest.openInterestAll;
+  const pctOI = openInterest !== 0 ? (mmNetCurrent / openInterest) * 100 : 0;
+
   return {
     id,
     label,
@@ -94,6 +120,11 @@ function calculateRow(data: COTRecord[], label: string, id: string): ChangeRow |
     zScore,
     positionDate: latest.date,
     historicalChanges,
+    historicalMax,
+    historicalMin,
+    pctHistoricalMax,
+    openInterest,
+    pctOI,
   };
 }
 

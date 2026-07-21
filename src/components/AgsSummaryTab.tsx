@@ -32,6 +32,12 @@ interface ChangeRow {
   zScore: number;
   positionDate: string;
   historicalChanges: { date: string; change: number }[];
+  // Additional fields for summary charts
+  historicalMax: number;
+  historicalMin: number;
+  pctHistoricalMax: number;
+  openInterest: number;
+  pctOI: number;
 }
 
 interface APIResponse {
@@ -309,6 +315,204 @@ export function AgsSummaryTab() {
               <p className="text-zinc-500 text-sm">Select a commodity to view chart</p>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* 4 Summary Charts Section */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
+        <h3 className="text-lg font-semibold text-white mb-4">Sector Summary Charts</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Chart 1: Managed Money Net (F&O) */}
+          <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
+            <h4 className="text-sm font-medium text-white mb-3">Managed Money Net (F&O)</h4>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={data}
+                  margin={{ top: 20, right: 10, left: 10, bottom: 80 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                  <XAxis
+                    dataKey="label"
+                    tick={{ fill: "#71717a", fontSize: 9 }}
+                    angle={-90}
+                    textAnchor="end"
+                    height={80}
+                    interval={0}
+                  />
+                  <YAxis
+                    tick={{ fill: "#71717a", fontSize: 10 }}
+                    tickFormatter={(v) => formatNumber(v)}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#18181b",
+                      border: "1px solid #27272a",
+                      borderRadius: "0.5rem",
+                      fontSize: "12px",
+                      color: "#ffffff",
+                    }}
+                    labelStyle={{ color: "#ffffff" }}
+                    itemStyle={{ color: "#ffffff" }}
+                    formatter={(value: number) => [formatNumber(value), "MM Net"]}
+                  />
+                  <ReferenceLine y={0} stroke="#52525b" />
+                  <Bar dataKey="mmNetCurrent" radius={[2, 2, 0, 0]} label={{ position: 'top', fill: '#a1a1aa', fontSize: 8, formatter: (v: number) => formatNumber(v) }}>
+                    {data.map((entry, index) => (
+                      <Cell
+                        key={`cell-mmnet-${index}`}
+                        fill={entry.mmNetCurrent >= 0 ? "#3b82f6" : "#ef4444"}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Chart 2: Net MM Position as % Historical Max */}
+          <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
+            <h4 className="text-sm font-medium text-white mb-3">Net MM Position as % Historical Max</h4>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={data}
+                  margin={{ top: 20, right: 10, left: 10, bottom: 80 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                  <XAxis
+                    dataKey="label"
+                    tick={{ fill: "#71717a", fontSize: 9 }}
+                    angle={-90}
+                    textAnchor="end"
+                    height={80}
+                    interval={0}
+                  />
+                  <YAxis
+                    tick={{ fill: "#71717a", fontSize: 10 }}
+                    tickFormatter={(v) => `${v.toFixed(0)}%`}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#18181b",
+                      border: "1px solid #27272a",
+                      borderRadius: "0.5rem",
+                      fontSize: "12px",
+                      color: "#ffffff",
+                    }}
+                    labelStyle={{ color: "#ffffff" }}
+                    itemStyle={{ color: "#ffffff" }}
+                    formatter={(value: number) => [`${value.toFixed(1)}%`, "% of Max"]}
+                  />
+                  <ReferenceLine y={0} stroke="#52525b" />
+                  <Bar dataKey="pctHistoricalMax" radius={[2, 2, 0, 0]} label={{ position: 'top', fill: '#a1a1aa', fontSize: 8, formatter: (v: number) => `${v.toFixed(0)}%` }}>
+                    {data.map((entry, index) => (
+                      <Cell
+                        key={`cell-pctmax-${index}`}
+                        fill={entry.pctHistoricalMax >= 0 ? "#3b82f6" : "#ef4444"}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Chart 3: Managed Money Net Change (WoW) */}
+          <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
+            <h4 className="text-sm font-medium text-white mb-3">Managed Money Net Change (WoW)</h4>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={data}
+                  margin={{ top: 20, right: 10, left: 10, bottom: 80 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                  <XAxis
+                    dataKey="label"
+                    tick={{ fill: "#71717a", fontSize: 9 }}
+                    angle={-90}
+                    textAnchor="end"
+                    height={80}
+                    interval={0}
+                  />
+                  <YAxis
+                    tick={{ fill: "#71717a", fontSize: 10 }}
+                    tickFormatter={(v) => formatNumber(v)}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#18181b",
+                      border: "1px solid #27272a",
+                      borderRadius: "0.5rem",
+                      fontSize: "12px",
+                      color: "#ffffff",
+                    }}
+                    labelStyle={{ color: "#ffffff" }}
+                    itemStyle={{ color: "#ffffff" }}
+                    formatter={(value: number) => [formatNumber(value), "WoW Change"]}
+                  />
+                  <ReferenceLine y={0} stroke="#52525b" />
+                  <Bar dataKey="mmNetChange" radius={[2, 2, 0, 0]} label={{ position: 'top', fill: '#a1a1aa', fontSize: 8, formatter: (v: number) => formatNumber(v) }}>
+                    {data.map((entry, index) => (
+                      <Cell
+                        key={`cell-change-${index}`}
+                        fill={entry.mmNetChange >= 0 ? "#22c55e" : "#ef4444"}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Chart 4: MM Net Position as % OI */}
+          <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
+            <h4 className="text-sm font-medium text-white mb-3">MM Net Position as % Open Interest</h4>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={data}
+                  margin={{ top: 20, right: 10, left: 10, bottom: 80 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                  <XAxis
+                    dataKey="label"
+                    tick={{ fill: "#71717a", fontSize: 9 }}
+                    angle={-90}
+                    textAnchor="end"
+                    height={80}
+                    interval={0}
+                  />
+                  <YAxis
+                    tick={{ fill: "#71717a", fontSize: 10 }}
+                    tickFormatter={(v) => `${v.toFixed(0)}%`}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#18181b",
+                      border: "1px solid #27272a",
+                      borderRadius: "0.5rem",
+                      fontSize: "12px",
+                      color: "#ffffff",
+                    }}
+                    labelStyle={{ color: "#ffffff" }}
+                    itemStyle={{ color: "#ffffff" }}
+                    formatter={(value: number) => [`${value.toFixed(1)}%`, "% of OI"]}
+                  />
+                  <ReferenceLine y={0} stroke="#52525b" />
+                  <Bar dataKey="pctOI" radius={[2, 2, 0, 0]} label={{ position: 'top', fill: '#a1a1aa', fontSize: 8, formatter: (v: number) => `${v.toFixed(0)}%` }}>
+                    {data.map((entry, index) => (
+                      <Cell
+                        key={`cell-pctoi-${index}`}
+                        fill={entry.pctOI >= 0 ? "#3b82f6" : "#ef4444"}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
       </div>
 
