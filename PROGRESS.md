@@ -3,13 +3,13 @@
 ## Current Task
 
 ### 2026-07-21 - Add Gross Long/Short/Net Changes Chart
-**Status:** In Progress
+**Status:** Completed
 **Description:** Add grouped bar chart showing MM Long Change, MM Short Change, and Net Change per commodity
 
 **Steps:**
-- [ ] 1. Update API to include mmLongChange, mmShortChange
-- [ ] 2. Add grouped bar chart to AgsSummaryTab below the 4 summary charts
-- [ ] 3. Test and push
+- [x] 1. Update API to include mmLongChange, mmShortChange
+- [x] 2. Add grouped bar chart to AgsSummaryTab below the 4 summary charts
+- [x] 3. Test and push - d0f74f4
 
 ---
 
