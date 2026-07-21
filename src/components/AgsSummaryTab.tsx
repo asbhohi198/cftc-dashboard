@@ -383,7 +383,7 @@ export function AgsSummaryTab() {
           {/* Chart 1: Managed Money Net (F&O) */}
           <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
             <h4 className="text-sm font-semibold text-zinc-300 mb-3 tracking-wide uppercase">Managed Money Net (F&O)</h4>
-            <div className="h-[480px] cursor-pointer" onClick={() => setExpandedSummaryChart("mmNet")}>
+            <div className="h-[600px] cursor-pointer" onClick={() => setExpandedSummaryChart("mmNet")}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 100 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
@@ -409,7 +409,7 @@ export function AgsSummaryTab() {
               <span className="px-2 py-0.5 bg-orange-500 text-white text-[10px] font-bold rounded uppercase tracking-wider">Key Chart</span>
               <h4 className="text-sm font-bold text-orange-400 tracking-wide uppercase">Net MM Position as % Historical Max</h4>
             </div>
-            <div className="h-[480px] cursor-pointer" onClick={() => setExpandedSummaryChart("pctMax")}>
+            <div className="h-[600px] cursor-pointer" onClick={() => setExpandedSummaryChart("pctMax")}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 100 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
@@ -432,7 +432,7 @@ export function AgsSummaryTab() {
           {/* Chart 3: Managed Money Net Change (WoW) */}
           <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
             <h4 className="text-sm font-semibold text-zinc-300 mb-3 tracking-wide uppercase">Managed Money Net Change (WoW)</h4>
-            <div className="h-[480px] cursor-pointer" onClick={() => setExpandedSummaryChart("mmChange")}>
+            <div className="h-[600px] cursor-pointer" onClick={() => setExpandedSummaryChart("mmChange")}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 100 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
@@ -455,7 +455,7 @@ export function AgsSummaryTab() {
           {/* Chart 4: MM Net Position as % OI */}
           <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
             <h4 className="text-sm font-semibold text-zinc-300 mb-3 tracking-wide uppercase">MM Net Position as % Open Interest</h4>
-            <div className="h-[480px] cursor-pointer" onClick={() => setExpandedSummaryChart("pctOI")}>
+            <div className="h-[600px] cursor-pointer" onClick={() => setExpandedSummaryChart("pctOI")}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 100 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
@@ -481,7 +481,7 @@ export function AgsSummaryTab() {
       <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
         <h3 className="text-lg font-semibold text-zinc-300 mb-2 tracking-wide uppercase">Managed Money Changes: Gross Long, Gross Short & Total Net</h3>
         <p className="text-xs text-zinc-500 mb-4">Week-over-week changes in MM long positions, short positions, and net position</p>
-        <div className="h-96 cursor-pointer" onClick={() => setExpandedSummaryChart("grossChanges")}>
+        <div className="h-[480px] cursor-pointer" onClick={() => setExpandedSummaryChart("grossChanges")}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} margin={{ top: 20, right: 5, left: -15, bottom: 100 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
@@ -538,9 +538,15 @@ export function AgsSummaryTab() {
                     <YAxis tick={{ fill: "#71717a", fontSize: 11 }} tickFormatter={(v) => formatNumber(v)} />
                     <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number, name: string) => [formatNumber(value), name]} />
                     <ReferenceLine y={0} stroke="#52525b" strokeWidth={2} />
-                    <Bar dataKey="mmLongChange" name="MM Long" fill="#3b82f6" radius={[3, 3, 0, 0]} />
-                    <Bar dataKey="mmShortChange" name="MM Short" fill="#ef4444" radius={[3, 3, 0, 0]} />
-                    <Bar dataKey="mmNetChange" name="MM Net" fill="#22c55e" radius={[3, 3, 0, 0]} />
+                    <Bar dataKey="mmLongChange" name="MM Long" fill="#3b82f6" radius={[3, 3, 0, 0]}>
+                      <LabelList dataKey="mmLongChange" content={renderBarLabel} />
+                    </Bar>
+                    <Bar dataKey="mmShortChange" name="MM Short" fill="#ef4444" radius={[3, 3, 0, 0]}>
+                      <LabelList dataKey="mmShortChange" content={renderBarLabel} />
+                    </Bar>
+                    <Bar dataKey="mmNetChange" name="MM Net" fill="#22c55e" radius={[3, 3, 0, 0]}>
+                      <LabelList dataKey="mmNetChange" content={renderBarLabel} />
+                    </Bar>
                   </BarChart>
                 ) : (
                   <BarChart data={data} margin={{ top: 25, right: 20, left: -10, bottom: 120 }}>
@@ -554,6 +560,10 @@ export function AgsSummaryTab() {
                         const value = expandedSummaryChart === "mmNet" ? entry.mmNetCurrent : expandedSummaryChart === "pctMax" ? entry.pctHistoricalMax : expandedSummaryChart === "mmChange" ? entry.mmNetChange : entry.pctOI;
                         return <Cell key={`cell-expanded-${index}`} fill={value >= 0 ? "#22c55e" : "#ef4444"} />;
                       })}
+                      <LabelList
+                        dataKey={expandedSummaryChart === "mmNet" ? "mmNetCurrent" : expandedSummaryChart === "pctMax" ? "pctHistoricalMax" : expandedSummaryChart === "mmChange" ? "mmNetChange" : "pctOI"}
+                        content={expandedSummaryChart === "pctMax" || expandedSummaryChart === "pctOI" ? renderPctLabel : renderBarLabel}
+                      />
                     </Bar>
                   </BarChart>
                 )}
