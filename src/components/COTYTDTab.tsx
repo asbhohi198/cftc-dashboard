@@ -155,8 +155,8 @@ export function COTYTDTab({ sector }: COTYTDTabProps) {
 
   const renderChart = (contract: ContractData, isExpanded: boolean = false) => {
     const chartMargin = isExpanded
-      ? { top: 20, right: 20, left: -15, bottom: 35 }
-      : { top: 10, right: 5, left: -20, bottom: 35 };
+      ? { top: 20, right: 20, left: -15, bottom: 20 }
+      : { top: 10, right: 5, left: -20, bottom: 15 };
 
     // Get years to display (show all years, current year last for z-order)
     const sortedYears = [...contract.years].sort((a, b) => {
@@ -249,7 +249,7 @@ export function COTYTDTab({ sector }: COTYTDTabProps) {
             key={contract.id}
             className="bg-zinc-900 border border-zinc-800 rounded-lg p-4"
           >
-            <h3 className="text-sm font-semibold text-orange-400 mb-1">
+            <h3 className="text-xl font-bold text-orange-400 mb-1">
               {contract.name}
             </h3>
             <p className="text-xs text-zinc-500 mb-3">

@@ -147,8 +147,8 @@ const CustomXAxisTick = (props: { x?: number; y?: number; payload?: { value: str
   return (
     <g transform={`translate(${x},${y})`}>
       <text
-        x={0}
-        y={75}
+        x={5}
+        y={80}
         textAnchor="end"
         fill="#ffffff"
         fontSize={13}
