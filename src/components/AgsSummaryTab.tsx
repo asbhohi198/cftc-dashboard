@@ -140,6 +140,46 @@ const renderPctLabelLarge = (props: { x?: number; y?: number; width?: number; va
   );
 };
 
+// Custom tick for right-aligned vertical labels
+const CustomXAxisTick = (props: { x?: number; y?: number; payload?: { value: string } }) => {
+  const { x = 0, y = 0, payload } = props;
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={16}
+        textAnchor="end"
+        fill="#ffffff"
+        fontSize={13}
+        transform="rotate(-90)"
+      >
+        {payload?.value}
+      </text>
+    </g>
+  );
+};
+
+// Larger custom tick for expanded modals
+const CustomXAxisTickLarge = (props: { x?: number; y?: number; payload?: { value: string } }) => {
+  const { x = 0, y = 0, payload } = props;
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={16}
+        textAnchor="end"
+        fill="#ffffff"
+        fontSize={17}
+        transform="rotate(-90)"
+      >
+        {payload?.value}
+      </text>
+    </g>
+  );
+};
+
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
@@ -422,7 +462,7 @@ export function AgsSummaryTab() {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 100 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                  <XAxis dataKey="label" tick={{ fill: "#ffffff", fontSize: 13 }} angle={-90} textAnchor="end" height={100} interval={0} dy={45} dx={-5} />
+                  <XAxis dataKey="label" tick={<CustomXAxisTick />} height={100} interval={0} />
                   <YAxis tick={{ fill: "#ffffff", fontSize: 12 }} tickFormatter={(v) => formatNumber(v)} />
                   <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number) => [formatNumber(value), "MM Net"]} />
                   <ReferenceLine y={0} stroke="#52525b" />
@@ -448,7 +488,7 @@ export function AgsSummaryTab() {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 100 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                  <XAxis dataKey="label" tick={{ fill: "#ffffff", fontSize: 13 }} angle={-90} textAnchor="end" height={100} interval={0} dy={45} dx={-5} />
+                  <XAxis dataKey="label" tick={<CustomXAxisTick />} height={100} interval={0} />
                   <YAxis tick={{ fill: "#ffffff", fontSize: 12 }} tickFormatter={(v) => `${v.toFixed(0)}%`} />
                   <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number) => [`${value.toFixed(1)}%`, "% of Max"]} />
                   <ReferenceLine y={0} stroke="#52525b" />
@@ -471,7 +511,7 @@ export function AgsSummaryTab() {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 100 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                  <XAxis dataKey="label" tick={{ fill: "#ffffff", fontSize: 13 }} angle={-90} textAnchor="end" height={100} interval={0} dy={45} dx={-5} />
+                  <XAxis dataKey="label" tick={<CustomXAxisTick />} height={100} interval={0} />
                   <YAxis tick={{ fill: "#ffffff", fontSize: 12 }} tickFormatter={(v) => formatNumber(v)} />
                   <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number) => [formatNumber(value), "WoW Change"]} />
                   <ReferenceLine y={0} stroke="#52525b" />
@@ -494,7 +534,7 @@ export function AgsSummaryTab() {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} margin={{ top: 25, right: 5, left: -15, bottom: 100 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                  <XAxis dataKey="label" tick={{ fill: "#ffffff", fontSize: 13 }} angle={-90} textAnchor="end" height={100} interval={0} dy={45} dx={-5} />
+                  <XAxis dataKey="label" tick={<CustomXAxisTick />} height={100} interval={0} />
                   <YAxis tick={{ fill: "#ffffff", fontSize: 12 }} tickFormatter={(v) => `${v.toFixed(0)}%`} />
                   <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number) => [`${value.toFixed(1)}%`, "% of OI"]} />
                   <ReferenceLine y={0} stroke="#52525b" />
@@ -520,7 +560,7 @@ export function AgsSummaryTab() {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} margin={{ top: 20, right: 5, left: -15, bottom: 100 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-              <XAxis dataKey="label" tick={{ fill: "#ffffff", fontSize: 13 }} angle={-90} textAnchor="end" height={100} interval={0} dy={45} dx={-5} />
+              <XAxis dataKey="label" tick={<CustomXAxisTick />} height={100} interval={0} />
               <YAxis tick={{ fill: "#ffffff", fontSize: 12 }} tickFormatter={(v) => formatNumber(v)} />
               <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number, name: string) => [formatNumber(value), name]} />
               <ReferenceLine y={0} stroke="#52525b" />
@@ -569,7 +609,7 @@ export function AgsSummaryTab() {
                 {expandedSummaryChart === "grossChanges" ? (
                   <BarChart data={data} margin={{ top: 25, right: 20, left: -10, bottom: 120 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                    <XAxis dataKey="label" tick={{ fill: "#ffffff", fontSize: 17 }} angle={-90} textAnchor="end" height={140} interval={0} dy={60} dx={-5} />
+                    <XAxis dataKey="label" tick={<CustomXAxisTickLarge />} height={140} interval={0} />
                     <YAxis tick={{ fill: "#ffffff", fontSize: 13 }} tickFormatter={(v) => formatNumber(v)} />
                     <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number, name: string) => [formatNumber(value), name]} />
                     <ReferenceLine y={0} stroke="#52525b" strokeWidth={2} />
@@ -586,7 +626,7 @@ export function AgsSummaryTab() {
                 ) : (
                   <BarChart data={data} margin={{ top: 25, right: 20, left: -10, bottom: 120 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                    <XAxis dataKey="label" tick={{ fill: "#ffffff", fontSize: 17 }} angle={-90} textAnchor="end" height={140} interval={0} dy={60} dx={-5} />
+                    <XAxis dataKey="label" tick={<CustomXAxisTickLarge />} height={140} interval={0} />
                     <YAxis tick={{ fill: "#ffffff", fontSize: 13 }} tickFormatter={(v) => expandedSummaryChart === "pctMax" || expandedSummaryChart === "pctOI" ? `${v.toFixed(0)}%` : formatNumber(v)} />
                     <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number) => [expandedSummaryChart === "pctMax" || expandedSummaryChart === "pctOI" ? `${value.toFixed(1)}%` : formatNumber(value), expandedSummaryChart === "mmNet" ? "MM Net" : expandedSummaryChart === "pctMax" ? "% of Max" : expandedSummaryChart === "mmChange" ? "WoW Change" : "% of OI"]} />
                     <ReferenceLine y={0} stroke="#52525b" strokeWidth={2} />
