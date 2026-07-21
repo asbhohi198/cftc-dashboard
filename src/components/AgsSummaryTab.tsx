@@ -332,7 +332,7 @@ export function AgsSummaryTab() {
           {/* Chart 1: Managed Money Net (F&O) */}
           <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
             <h4 className="text-sm font-medium text-white mb-3">Managed Money Net (F&O)</h4>
-            <div className="h-80 cursor-pointer" onClick={() => setExpandedSummaryChart("mmNet")}>
+            <div className="h-[480px] cursor-pointer" onClick={() => setExpandedSummaryChart("mmNet")}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 80 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
@@ -354,7 +354,7 @@ export function AgsSummaryTab() {
           {/* Chart 2: Net MM Position as % Historical Max */}
           <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
             <h4 className="text-sm font-medium text-white mb-3">Net MM Position as % Historical Max</h4>
-            <div className="h-80 cursor-pointer" onClick={() => setExpandedSummaryChart("pctMax")}>
+            <div className="h-[480px] cursor-pointer" onClick={() => setExpandedSummaryChart("pctMax")}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 80 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
@@ -376,7 +376,7 @@ export function AgsSummaryTab() {
           {/* Chart 3: Managed Money Net Change (WoW) */}
           <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
             <h4 className="text-sm font-medium text-white mb-3">Managed Money Net Change (WoW)</h4>
-            <div className="h-80 cursor-pointer" onClick={() => setExpandedSummaryChart("mmChange")}>
+            <div className="h-[480px] cursor-pointer" onClick={() => setExpandedSummaryChart("mmChange")}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 80 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
@@ -398,7 +398,7 @@ export function AgsSummaryTab() {
           {/* Chart 4: MM Net Position as % OI */}
           <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
             <h4 className="text-sm font-medium text-white mb-3">MM Net Position as % Open Interest</h4>
-            <div className="h-80 cursor-pointer" onClick={() => setExpandedSummaryChart("pctOI")}>
+            <div className="h-[480px] cursor-pointer" onClick={() => setExpandedSummaryChart("pctOI")}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 80 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
