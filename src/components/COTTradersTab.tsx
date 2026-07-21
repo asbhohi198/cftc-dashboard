@@ -177,11 +177,14 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
     return "text-zinc-400";
   };
 
-  // Bar chart data for % Long overview
+  // Bar chart data for % Long/Short overview
+  // Show positive % for long bias (>=50%), negative % for short bias (<50%)
   const barChartData = data.map(row => ({
     name: row.name,
     pctLong: row.pctLong,
     pctShort: row.pctShort,
+    displayValue: row.pctLong >= 50 ? row.pctLong : -row.pctShort,
+    isLong: row.pctLong >= 50,
   }));
 
   return (
@@ -444,14 +447,14 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
         </div>
       </div>
 
-      {/* % Long Bar Chart Overview */}
+      {/* % Traders Long/Short Bar Chart Overview */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
-        <h3 className="text-md font-semibold text-white mb-4">% Long by Commodity</h3>
+        <h3 className="text-md font-semibold text-white mb-4">% Traders Long/Short by Commodity</h3>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={barChartData}
-              margin={{ top: 20, right: 10, left: 0, bottom: 25 }}
+              margin={{ top: 20, right: 10, left: 10, bottom: 25 }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
               <XAxis
@@ -460,11 +463,11 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                 angle={-90}
                 textAnchor="end"
                 height={70}
-                dy={35}
+                dy={45}
               />
               <YAxis
                 tick={{ fill: "#ffffff", fontSize: 12 }}
-                domain={[0, 100]}
+                domain={[-100, 100]}
                 tickFormatter={(v) => `${v}%`}
               />
               <Tooltip
@@ -477,21 +480,21 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                 }}
                 labelStyle={{ color: "#ffffff" }}
                 itemStyle={{ color: "#ffffff" }}
-                formatter={(value: number) => [`${value.toFixed(1)}%`, "% Long"]}
+                formatter={(value: number) => [`${value > 0 ? value.toFixed(1) : value.toFixed(1)}%`, value >= 0 ? "% Long" : "% Short"]}
               />
-              <ReferenceLine y={50} stroke="#ffffff" strokeDasharray="3 3" />
-              <Bar dataKey="pctLong" radius={[4, 4, 0, 0]}>
+              <ReferenceLine y={0} stroke="#52525b" />
+              <Bar dataKey="displayValue" radius={[4, 4, 0, 0]}>
                 <LabelList
-                  dataKey="pctLong"
+                  dataKey="displayValue"
                   position="top"
                   fill="#ffffff"
                   fontSize={13}
-                  formatter={(value: number) => `${value.toFixed(0)}%`}
+                  formatter={(value: number) => `${value > 0 ? value.toFixed(0) : value.toFixed(0)}%`}
                 />
                 {barChartData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={entry.pctLong >= 55 ? "#22c55e" : entry.pctLong <= 45 ? "#ef4444" : "#6b7280"}
+                    fill={entry.isLong ? "#22c55e" : "#ef4444"}
                   />
                 ))}
               </Bar>

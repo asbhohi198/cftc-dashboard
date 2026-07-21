@@ -19,6 +19,7 @@ import { COTChangesSummaryTab } from "./COTChangesSummaryTab";
 import { AgsSummaryTab } from "./AgsSummaryTab";
 import { COTYTDTab } from "./COTYTDTab";
 import { COTTradersTab } from "./COTTradersTab";
+import { COTSpreadsTab } from "./COTSpreadsTab";
 import { BarChart3 } from "lucide-react";
 
 // Map sub-tab IDs to contract IDs for the API
@@ -237,6 +238,9 @@ export function Dashboard() {
         {activeTab === "cot-traders" && activeSubTab === "traders-crypto" && (
           <COTTradersTab sector="crypto" />
         )}
+
+        {/* COT vs Spreads */}
+        {activeTab === "cot-spreads" && <COTSpreadsTab />}
 
         {/* Ags - Grains & Oilseeds */}
         {activeTab === "ags-grains" && activeSubTab === "all-us-wheat" && (
