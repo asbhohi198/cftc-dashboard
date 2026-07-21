@@ -2,6 +2,17 @@
 
 ## Current Task
 
+### 2026-07-21 - Add Gross Long/Short/Net Changes Chart
+**Status:** In Progress
+**Description:** Add grouped bar chart showing MM Long Change, MM Short Change, and Net Change per commodity
+
+**Steps:**
+- [ ] 1. Update API to include mmLongChange, mmShortChange
+- [ ] 2. Add grouped bar chart to AgsSummaryTab below the 4 summary charts
+- [ ] 3. Test and push
+
+---
+
 ### 2026-07-21 - Add 4 Summary Charts to COT Changes Summary Tab
 **Status:** Completed
 **Description:** Add 4 sector-wide bar charts below existing content showing all 14 US Ag commodities:

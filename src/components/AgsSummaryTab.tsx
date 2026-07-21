@@ -38,6 +38,9 @@ interface ChangeRow {
   pctHistoricalMax: number;
   openInterest: number;
   pctOI: number;
+  // Gross long/short changes
+  mmLongChange: number;
+  mmShortChange: number;
 }
 
 interface APIResponse {
@@ -512,6 +515,65 @@ export function AgsSummaryTab() {
                 </BarChart>
               </ResponsiveContainer>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Gross Long/Short/Net Changes Chart */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
+        <h3 className="text-lg font-semibold text-white mb-2">Managed Money Changes: Gross Long, Gross Short & Total Net</h3>
+        <p className="text-xs text-zinc-500 mb-4">Week-over-week changes in MM long positions, short positions, and net position</p>
+        <div className="h-96">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={data}
+              margin={{ top: 20, right: 30, left: 10, bottom: 80 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+              <XAxis
+                dataKey="label"
+                tick={{ fill: "#71717a", fontSize: 9 }}
+                angle={-90}
+                textAnchor="end"
+                height={80}
+                interval={0}
+              />
+              <YAxis
+                tick={{ fill: "#71717a", fontSize: 10 }}
+                tickFormatter={(v) => formatNumber(v)}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#18181b",
+                  border: "1px solid #27272a",
+                  borderRadius: "0.5rem",
+                  fontSize: "12px",
+                  color: "#ffffff",
+                }}
+                labelStyle={{ color: "#ffffff" }}
+                itemStyle={{ color: "#ffffff" }}
+                formatter={(value: number, name: string) => [formatNumber(value), name]}
+              />
+              <ReferenceLine y={0} stroke="#52525b" />
+              <Bar dataKey="mmLongChange" name="MM Long" fill="#3b82f6" radius={[2, 2, 0, 0]} label={{ position: 'top', fill: '#a1a1aa', fontSize: 7, formatter: (v: number) => formatNumber(v) }} />
+              <Bar dataKey="mmShortChange" name="MM Short" fill="#ef4444" radius={[2, 2, 0, 0]} label={{ position: 'top', fill: '#a1a1aa', fontSize: 7, formatter: (v: number) => formatNumber(v) }} />
+              <Bar dataKey="mmNetChange" name="MM Net" fill="#22c55e" radius={[2, 2, 0, 0]} label={{ position: 'top', fill: '#a1a1aa', fontSize: 7, formatter: (v: number) => formatNumber(v) }} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        {/* Legend */}
+        <div className="flex items-center justify-center gap-6 mt-4 text-xs">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-blue-500 rounded"></div>
+            <span className="text-zinc-400">MM Long Change</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-red-500 rounded"></div>
+            <span className="text-zinc-400">MM Short Change</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-green-500 rounded"></div>
+            <span className="text-zinc-400">MM Net Change</span>
           </div>
         </div>
       </div>

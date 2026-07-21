@@ -34,6 +34,9 @@ interface ChangeRow {
   pctHistoricalMax: number; // current as % of historical max (can be negative)
   openInterest: number;
   pctOI: number; // MM net as % of open interest
+  // Gross long/short changes
+  mmLongChange: number; // WoW change in MM long positions
+  mmShortChange: number; // WoW change in MM short positions
 }
 
 // Calculate standard deviation
@@ -111,6 +114,10 @@ function calculateRow(data: COTRecord[], label: string, id: string): ChangeRow |
   const openInterest = latest.openInterestAll;
   const pctOI = openInterest !== 0 ? (mmNetCurrent / openInterest) * 100 : 0;
 
+  // Gross long/short changes
+  const mmLongChange = latest.mmLongAll - previous.mmLongAll;
+  const mmShortChange = latest.mmShortAll - previous.mmShortAll;
+
   return {
     id,
     label,
@@ -125,6 +132,8 @@ function calculateRow(data: COTRecord[], label: string, id: string): ChangeRow |
     pctHistoricalMax,
     openInterest,
     pctOI,
+    mmLongChange,
+    mmShortChange,
   };
 }
 
