@@ -453,7 +453,7 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
       {/* % Traders Long/Short Bar Chart Overview */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
         <h3 className="text-md font-semibold text-white mb-4">% Traders Long/Short by Commodity</h3>
-        <div className="h-64">
+        <div className="h-[450px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={barChartData}

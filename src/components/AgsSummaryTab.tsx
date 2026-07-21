@@ -204,7 +204,73 @@ function getZScoreBg(zScore: number): string {
 }
 
 // Analyze what's driving the MM net change
-function getChangeDriver(row: ChangeRow): { driver: string; description: string } {
+function getChangeDriver(row: ChangeRow): { driver: string; description: string; color: string } {
+  const { mmNetChange, mmLongChange, mmShortChange } = row;
+  const absLong = Math.abs(mmLongChange);
+  const absShort = Math.abs(mmShortChange);
+
+  if (Math.abs(mmNetChange) < 1000) {
+    return { driver: "Flat", description: "Minimal change", color: "#71717a" };
+  }
+
+  if (mmNetChange > 0) {
+    if (mmShortChange < 0 && absShort > absLong) {
+      return { driver: "Short covering", description: `Shorts ${formatNumber(mmShortChange)}`, color: "#fb923c" };
+    } else if (mmLongChange > 0 && absLong > absShort) {
+      return { driver: "Long buying", description: `Longs +${formatNumber(mmLongChange)}`, color: "#22c55e" };
+    } else if (mmShortChange < 0 && mmLongChange > 0) {
+      return { driver: "Both", description: "Longs up, shorts down", color: "#facc15" };
+    }
+    return { driver: "Long buying", description: `Longs +${formatNumber(mmLongChange)}`, color: "#22c55e" };
+  } else {
+    if (mmLongChange < 0 && absLong > absShort) {
+      return { driver: "Long liquidation", description: `Longs ${formatNumber(mmLongChange)}`, color: "#ef4444" };
+    } else if (mmShortChange > 0 && absShort > absLong) {
+      return { driver: "Short selling", description: `Shorts +${formatNumber(mmShortChange)}`, color: "#a855f7" };
+    } else if (mmLongChange < 0 && mmShortChange > 0) {
+      return { driver: "Both", description: "Longs down, shorts up", color: "#facc15" };
+    }
+    return { driver: "Long liquidation", description: `Longs ${formatNumber(mmLongChange)}`, color: "#ef4444" };
+  }
+}
+
+// Custom XAxis tick for grossChanges expanded chart with driver annotations
+const GrossChangesXAxisTick = (props: { x?: number; y?: number; payload?: { value: string }; data: ChangeRow[] }) => {
+  const { x = 0, y = 0, payload, data } = props;
+  const row = data.find(r => r.label === payload?.value);
+  const driverInfo = row ? getChangeDriver(row) : null;
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={15}
+        textAnchor="start"
+        fill="#ffffff"
+        fontSize={14}
+        transform="rotate(-90)"
+      >
+        {payload?.value}
+      </text>
+      {driverInfo && (
+        <text
+          x={-85}
+          y={15}
+          textAnchor="start"
+          fill={driverInfo.color}
+          fontSize={11}
+          fontWeight="bold"
+          transform="rotate(-90)"
+        >
+          {driverInfo.driver}
+        </text>
+      )}
+    </g>
+  );
+};
+
+// Old version for backward compatibility
+function getChangeDriverOld(row: ChangeRow): { driver: string; description: string } {
   const { mmNetChange, mmLongChange, mmShortChange } = row;
   const absLong = Math.abs(mmLongChange);
   const absShort = Math.abs(mmShortChange);
@@ -640,9 +706,9 @@ export function AgsSummaryTab() {
             <div className="h-[70vh]">
               <ResponsiveContainer width="100%" height="100%">
                 {expandedSummaryChart === "grossChanges" ? (
-                  <BarChart data={data} margin={{ top: 25, right: 20, left: -10, bottom: 120 }}>
+                  <BarChart data={data} margin={{ top: 25, right: 20, left: -10, bottom: 150 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                    <XAxis dataKey="label" tick={{ fill: "#ffffff", fontSize: 14 }} angle={-90} textAnchor="start" height={120} interval={0} dy={70} dx={-5} />
+                    <XAxis dataKey="label" tick={<GrossChangesXAxisTick data={data} />} height={160} interval={0} />
                     <YAxis tick={{ fill: "#ffffff", fontSize: 13 }} tickFormatter={(v) => formatNumber(v)} />
                     <Tooltip contentStyle={{ backgroundColor: "#18181b", border: "1px solid #27272a", borderRadius: "0.5rem", fontSize: "12px", color: "#ffffff" }} labelStyle={{ color: "#ffffff" }} itemStyle={{ color: "#ffffff" }} formatter={(value: number, name: string) => [formatNumber(value), name]} />
                     <ReferenceLine y={0} stroke="#52525b" strokeWidth={2} />
@@ -678,49 +744,20 @@ export function AgsSummaryTab() {
               </ResponsiveContainer>
             </div>
             {expandedSummaryChart === "grossChanges" && (
-              <>
-                <div className="flex items-center justify-center gap-6 mt-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 bg-blue-500 rounded"></div>
-                    <span className="text-zinc-300">MM Long Change</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 bg-red-500 rounded"></div>
-                    <span className="text-zinc-300">MM Short Change</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 bg-green-500 rounded"></div>
-                    <span className="text-zinc-300">MM Net Change</span>
-                  </div>
+              <div className="flex items-center justify-center gap-6 mt-4 text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 bg-blue-500 rounded"></div>
+                  <span className="text-zinc-300">MM Long Change</span>
                 </div>
-                {/* Driver Analysis Table */}
-                <div className="mt-6 border-t border-zinc-700 pt-4">
-                  <h4 className="text-sm font-semibold text-zinc-300 mb-3 uppercase tracking-wide">Position Change Drivers</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                    {data.map((row) => {
-                      const { driver, description } = getChangeDriver(row);
-                      const isPositive = row.mmNetChange > 0;
-                      const driverColor = driver === "Short covering" ? "text-orange-400" :
-                                          driver === "Long buying" ? "text-green-400" :
-                                          driver === "Long liquidation" ? "text-red-400" :
-                                          driver === "Short selling" ? "text-purple-400" :
-                                          driver === "Both" ? "text-yellow-400" : "text-zinc-500";
-                      return (
-                        <div key={row.id} className="bg-zinc-800/50 rounded-lg p-3">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm font-medium text-white">{row.label}</span>
-                            <span className={`text-sm font-mono font-bold ${isPositive ? "text-green-400" : "text-red-400"}`}>
-                              {isPositive ? "+" : ""}{formatNumber(row.mmNetChange)}
-                            </span>
-                          </div>
-                          <div className={`text-xs font-medium ${driverColor}`}>{driver}</div>
-                          <div className="text-xs text-zinc-500">{description}</div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 bg-red-500 rounded"></div>
+                  <span className="text-zinc-300">MM Short Change</span>
                 </div>
-              </>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 bg-green-500 rounded"></div>
+                  <span className="text-zinc-300">MM Net Change</span>
+                </div>
+              </div>
             )}
           </div>
         </div>
