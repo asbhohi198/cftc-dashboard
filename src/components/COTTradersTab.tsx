@@ -14,10 +14,13 @@ import {
   ReferenceLine,
   Cell,
   Legend,
+  LabelList,
 } from "recharts";
-import { X } from "lucide-react";
+import { X, ChevronUp, ChevronDown } from "lucide-react";
 
 type TimeRange = "1y" | "2y" | "5y" | "all";
+type SortField = "name" | "tradersLong" | "tradersShort" | "pctLong";
+type SortDirection = "asc" | "desc";
 
 const TIME_RANGE_OPTIONS: { id: TimeRange; label: string; weeks: number | null }[] = [
   { id: "1y", label: "1Y", weeks: 52 },
@@ -70,7 +73,10 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
   const [error, setError] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<TradersRow | null>(null);
   const [expandedChart, setExpandedChart] = useState<TradersRow | null>(null);
-  const [timeRange, setTimeRange] = useState<TimeRange>("2y");
+  const [timeRange, setTimeRange] = useState<TimeRange>("5y");
+  const [expandedTimeRange, setExpandedTimeRange] = useState<TimeRange>("all");
+  const [sortField, setSortField] = useState<SortField>("pctLong");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
   useEffect(() => {
     async function fetchData() {
@@ -122,9 +128,38 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
     );
   }
 
+  // Handle column sort
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDirection(field === "name" ? "asc" : "desc");
+    }
+  };
+
+  // Sort data
+  const sortedData = [...data].sort((a, b) => {
+    let comparison = 0;
+    if (sortField === "name") {
+      comparison = a.name.localeCompare(b.name);
+    } else {
+      comparison = a[sortField] - b[sortField];
+    }
+    return sortDirection === "asc" ? comparison : -comparison;
+  });
+
   // Get chart data based on time range
   const getChartData = (row: TradersRow) => {
     const timeOption = TIME_RANGE_OPTIONS.find(t => t.id === timeRange);
+    return timeOption?.weeks
+      ? row.historicalData.slice(-timeOption.weeks)
+      : row.historicalData;
+  };
+
+  // Get chart data for expanded modal
+  const getExpandedChartData = (row: TradersRow) => {
+    const timeOption = TIME_RANGE_OPTIONS.find(t => t.id === expandedTimeRange);
     return timeOption?.weeks
       ? row.historicalData.slice(-timeOption.weeks)
       : row.historicalData;
@@ -190,14 +225,46 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-zinc-800/50 border-b border-zinc-700">
-                <th className="text-left py-3 px-4 text-zinc-400 font-medium">Commodity</th>
-                <th className="text-right py-3 px-2 text-zinc-400 font-medium">Long</th>
-                <th className="text-right py-3 px-2 text-zinc-400 font-medium">Short</th>
-                <th className="text-right py-3 px-3 text-zinc-400 font-medium">% Long</th>
+                <th
+                  className="text-left py-3 px-4 text-zinc-400 font-medium cursor-pointer hover:text-white transition-colors"
+                  onClick={() => handleSort("name")}
+                >
+                  <span className="flex items-center gap-1">
+                    Commodity
+                    {sortField === "name" && (sortDirection === "asc" ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />)}
+                  </span>
+                </th>
+                <th
+                  className="text-right py-3 px-2 text-zinc-400 font-medium cursor-pointer hover:text-white transition-colors"
+                  onClick={() => handleSort("tradersLong")}
+                >
+                  <span className="flex items-center justify-end gap-1">
+                    Long
+                    {sortField === "tradersLong" && (sortDirection === "asc" ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />)}
+                  </span>
+                </th>
+                <th
+                  className="text-right py-3 px-2 text-zinc-400 font-medium cursor-pointer hover:text-white transition-colors"
+                  onClick={() => handleSort("tradersShort")}
+                >
+                  <span className="flex items-center justify-end gap-1">
+                    Short
+                    {sortField === "tradersShort" && (sortDirection === "asc" ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />)}
+                  </span>
+                </th>
+                <th
+                  className="text-right py-3 px-3 text-zinc-400 font-medium cursor-pointer hover:text-white transition-colors"
+                  onClick={() => handleSort("pctLong")}
+                >
+                  <span className="flex items-center justify-end gap-1">
+                    % Long
+                    {sortField === "pctLong" && (sortDirection === "asc" ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />)}
+                  </span>
+                </th>
               </tr>
             </thead>
             <tbody>
-              {data.map((row) => (
+              {sortedData.map((row) => (
                 <tr
                   key={row.id}
                   className={`border-b border-zinc-800 transition-colors hover:bg-zinc-800/50 cursor-pointer ${
@@ -339,7 +406,7 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={barChartData}
-              margin={{ top: 10, right: 10, left: 0, bottom: 80 }}
+              margin={{ top: 20, right: 10, left: 0, bottom: 50 }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
               <XAxis
@@ -347,7 +414,7 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                 tick={{ fill: "#ffffff", fontSize: 10 }}
                 angle={-90}
                 textAnchor="end"
-                height={80}
+                height={50}
                 dy={15}
               />
               <YAxis
@@ -369,6 +436,13 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
               />
               <ReferenceLine y={50} stroke="#52525b" strokeDasharray="3 3" />
               <Bar dataKey="pctLong" radius={[4, 4, 0, 0]}>
+                <LabelList
+                  dataKey="pctLong"
+                  position="top"
+                  fill="#ffffff"
+                  fontSize={9}
+                  formatter={(value: number) => `${value.toFixed(0)}%`}
+                />
                 {barChartData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
@@ -427,7 +501,7 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
 
       {/* Expanded Chart Modal */}
       {expandedChart && (() => {
-        const chartData = getChartData(expandedChart);
+        const chartData = getExpandedChartData(expandedChart);
         const intervalDivisor = chartData.length > 100 ? 20 : chartData.length > 50 ? 12 : 8;
 
         return (
@@ -461,9 +535,9 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                 {TIME_RANGE_OPTIONS.map((option) => (
                   <button
                     key={option.id}
-                    onClick={() => setTimeRange(option.id)}
+                    onClick={() => setExpandedTimeRange(option.id)}
                     className={`px-3 py-1.5 text-xs font-medium rounded transition-colors ${
-                      timeRange === option.id
+                      expandedTimeRange === option.id
                         ? "bg-orange-500 text-white"
                         : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
                     }`}
