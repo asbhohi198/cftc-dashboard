@@ -427,11 +427,10 @@ export function AgsSummaryTab() {
                     />
                     <ReferenceLine y={0} stroke="#52525b" />
                     <Bar dataKey="change" radius={[2, 2, 0, 0]}>
-                      {getChartData(selectedRow).map((entry, index, arr) => (
+                      {getChartData(selectedRow).map((entry, index) => (
                         <Cell
                           key={`cell-${index}`}
                           fill={entry.change >= 0 ? "#22c55e" : "#ef4444"}
-                          opacity={index === arr.length - 1 ? 1 : 0.6}
                         />
                       ))}
                     </Bar>
@@ -775,11 +774,10 @@ export function AgsSummaryTab() {
                     />
                     <ReferenceLine y={0} stroke="#52525b" strokeWidth={2} />
                     <Bar dataKey="change" radius={[3, 3, 0, 0]}>
-                      {chartData.map((entry, index, arr) => (
+                      {chartData.map((entry, index) => (
                         <Cell
                           key={`cell-${index}`}
                           fill={entry.change >= 0 ? "#22c55e" : "#ef4444"}
-                          opacity={index === arr.length - 1 ? 1 : 0.6}
                         />
                       ))}
                     </Bar>
