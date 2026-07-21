@@ -268,7 +268,7 @@ const renderDriverLabel = (props: any, data: ChangeRow[]) => {
       y={25}
       fill={driverInfo.color}
       textAnchor="middle"
-      fontSize={10}
+      fontSize={13}
       fontWeight="bold"
     >
       {code}: {driverInfo.driver}
