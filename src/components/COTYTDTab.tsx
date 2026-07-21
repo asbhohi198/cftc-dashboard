@@ -155,8 +155,8 @@ export function COTYTDTab({ sector }: COTYTDTabProps) {
 
   const renderChart = (contract: ContractData, isExpanded: boolean = false) => {
     const chartMargin = isExpanded
-      ? { top: 20, right: 20, left: -15, bottom: 50 }
-      : { top: 10, right: 5, left: -20, bottom: 50 };
+      ? { top: 20, right: 20, left: -15, bottom: 35 }
+      : { top: 10, right: 5, left: -20, bottom: 35 };
 
     // Get years to display (show all years, current year last for z-order)
     const sortedYears = [...contract.years].sort((a, b) => {
@@ -176,7 +176,7 @@ export function COTYTDTab({ sector }: COTYTDTabProps) {
             dataKey="week"
             tick={<CustomXAxisTick />}
             ticks={monthStartWeeks}
-            height={50}
+            height={40}
           />
           <YAxis
             tick={{ fill: "#ffffff", fontSize: isExpanded ? 13 : 11 }}
@@ -208,7 +208,7 @@ export function COTYTDTab({ sector }: COTYTDTabProps) {
               dataKey={year.toString()}
               name={year.toString()}
               stroke={getYearColor(year)}
-              strokeWidth={year === CURRENT_YEAR ? 1.25 : 1}
+              strokeWidth={year === CURRENT_YEAR ? 4 : 1}
               dot={false}
               connectNulls={false}
             />

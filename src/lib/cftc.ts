@@ -141,6 +141,20 @@ export interface COTRecord {
   specNetAll: number;
   specNetOld: number;
   specNetOther: number;
+  // Number of Traders (All positions)
+  tradersProducerLong: number;
+  tradersProducerShort: number;
+  tradersSwapLong: number;
+  tradersSwapShort: number;
+  tradersSwapSpread: number;
+  tradersMMLong: number;
+  tradersMMShort: number;
+  tradersMMSpread: number;
+  tradersOtherLong: number;
+  tradersOtherShort: number;
+  tradersOtherSpread: number;
+  tradersTotalLong: number;
+  tradersTotalShort: number;
 }
 
 // Parse a single row of CFTC data
@@ -245,6 +259,22 @@ export function parseRow(row: string): COTRecord | null {
   const specNetOld = mmNetOld + otherNetOld;
   const specNetOther = mmNetOther + otherNetOther;
 
+  // Number of Traders (ALL) - columns 127-139 in disaggregated report
+  // These columns may not exist in all files, so we default to 0
+  const tradersProducerLong = fields.length > 127 ? parseNum(fields[127]) : 0;
+  const tradersProducerShort = fields.length > 128 ? parseNum(fields[128]) : 0;
+  const tradersSwapLong = fields.length > 129 ? parseNum(fields[129]) : 0;
+  const tradersSwapShort = fields.length > 130 ? parseNum(fields[130]) : 0;
+  const tradersSwapSpread = fields.length > 131 ? parseNum(fields[131]) : 0;
+  const tradersMMLong = fields.length > 132 ? parseNum(fields[132]) : 0;
+  const tradersMMShort = fields.length > 133 ? parseNum(fields[133]) : 0;
+  const tradersMMSpread = fields.length > 134 ? parseNum(fields[134]) : 0;
+  const tradersOtherLong = fields.length > 135 ? parseNum(fields[135]) : 0;
+  const tradersOtherShort = fields.length > 136 ? parseNum(fields[136]) : 0;
+  const tradersOtherSpread = fields.length > 137 ? parseNum(fields[137]) : 0;
+  const tradersTotalLong = fields.length > 138 ? parseNum(fields[138]) : 0;
+  const tradersTotalShort = fields.length > 139 ? parseNum(fields[139]) : 0;
+
   return {
     date,
     openInterestAll, openInterestOld, openInterestOther,
@@ -264,6 +294,11 @@ export function parseRow(row: string): COTRecord | null {
     nonReptLongOld, nonReptShortOld, nonReptNetOld,
     nonReptLongOther, nonReptShortOther, nonReptNetOther,
     specNetAll, specNetOld, specNetOther,
+    tradersProducerLong, tradersProducerShort,
+    tradersSwapLong, tradersSwapShort, tradersSwapSpread,
+    tradersMMLong, tradersMMShort, tradersMMSpread,
+    tradersOtherLong, tradersOtherShort, tradersOtherSpread,
+    tradersTotalLong, tradersTotalShort,
   };
 }
 
@@ -358,6 +393,22 @@ export function parseTFFRow(row: string): COTRecord | null {
   const nonReptNetAll = nonReptLong - nonReptShort;
   const specNetAll = mmNetAll + otherNetAll;
 
+  // Number of Traders (TFF report) - typically around columns 40-52
+  // Columns: Dealer Long/Short/Spread, Asset Mgr Long/Short/Spread, Lev Long/Short/Spread, Other Long/Short/Spread, Total Long/Short
+  const tradersDealerLong = fields.length > 40 ? parseNum(fields[40]) : 0;
+  const tradersDealerShort = fields.length > 41 ? parseNum(fields[41]) : 0;
+  const tradersAssetMgrLong = fields.length > 43 ? parseNum(fields[43]) : 0;
+  const tradersAssetMgrShort = fields.length > 44 ? parseNum(fields[44]) : 0;
+  const tradersAssetMgrSpread = fields.length > 45 ? parseNum(fields[45]) : 0;
+  const tradersLeveragedLong = fields.length > 46 ? parseNum(fields[46]) : 0;
+  const tradersLeveragedShort = fields.length > 47 ? parseNum(fields[47]) : 0;
+  const tradersLeveragedSpread = fields.length > 48 ? parseNum(fields[48]) : 0;
+  const tradersOtherLong = fields.length > 49 ? parseNum(fields[49]) : 0;
+  const tradersOtherShort = fields.length > 50 ? parseNum(fields[50]) : 0;
+  const tradersOtherSpread = fields.length > 51 ? parseNum(fields[51]) : 0;
+  const tradersTotalLong = fields.length > 52 ? parseNum(fields[52]) : 0;
+  const tradersTotalShort = fields.length > 53 ? parseNum(fields[53]) : 0;
+
   // Financial futures don't have old/new crop splits - use same values for all
   return {
     date,
@@ -378,5 +429,11 @@ export function parseTFFRow(row: string): COTRecord | null {
     nonReptLongOld: nonReptLong, nonReptShortOld: nonReptShort, nonReptNetOld: nonReptNetAll,
     nonReptLongOther: 0, nonReptShortOther: 0, nonReptNetOther: 0,
     specNetAll, specNetOld: specNetAll, specNetOther: 0,
+    // Map TFF traders to standard fields
+    tradersProducerLong: tradersDealerLong, tradersProducerShort: tradersDealerShort,
+    tradersSwapLong: tradersAssetMgrLong, tradersSwapShort: tradersAssetMgrShort, tradersSwapSpread: tradersAssetMgrSpread,
+    tradersMMLong: tradersLeveragedLong, tradersMMShort: tradersLeveragedShort, tradersMMSpread: tradersLeveragedSpread,
+    tradersOtherLong, tradersOtherShort, tradersOtherSpread,
+    tradersTotalLong, tradersTotalShort,
   };
 }
