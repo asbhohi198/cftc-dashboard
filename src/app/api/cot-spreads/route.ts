@@ -45,8 +45,27 @@ interface CombinedData {
   spread: number;
   spread_pct: number;
   spread_unit: string;
+  spread_months: string;
   spread_date: string;
   cot_date: string;
+}
+
+// Get spread months from summary data
+function getSpreadMonths(frontSymbol: string, thirdSymbol: string): string {
+  const frontCode = extractMonthCode(frontSymbol);
+  const thirdCode = extractMonthCode(thirdSymbol);
+  if (!frontCode || !thirdCode) return "";
+  return `${frontCode}-${thirdCode}`;
+}
+
+// Extract month code from symbol (e.g., "ZC-2026N" -> "N6")
+function extractMonthCode(symbol: string): string {
+  // Symbol format: PREFIX-YYYYM (e.g., ZC-2026N)
+  const match = symbol.match(/-(\d{4})([A-Z])$/);
+  if (!match) return "";
+  const year = match[1].slice(-1); // Last digit of year (e.g., "6" from "2026")
+  const month = match[2]; // Month code (e.g., "N")
+  return `${month}${year}`;
 }
 
 interface ScatterPoint {
@@ -227,6 +246,7 @@ export async function GET() {
           spread: spread.spread,
           spread_pct: spread.spread_pct,
           spread_unit: spread.spread_unit,
+          spread_months: getSpreadMonths(spread.front_symbol, spread.third_symbol),
           spread_date: spread.date,
           cot_date: latestCOT.date,
         });

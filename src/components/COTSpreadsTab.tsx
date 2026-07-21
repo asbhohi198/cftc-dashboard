@@ -24,6 +24,7 @@ interface CombinedData {
   spread: number;
   spread_pct: number;
   spread_unit: string;
+  spread_months: string;
   spread_date: string;
   cot_date: string;
 }
@@ -196,22 +197,26 @@ export function COTSpreadsTab() {
               <thead>
                 <tr className="border-b border-zinc-700">
                   <th className="text-left py-2 px-2 text-zinc-400 font-medium">Commodity</th>
-                  <th className="text-right py-2 px-2 text-zinc-400 font-medium">Net MM</th>
-                  <th className="text-right py-2 px-2 text-zinc-400 font-medium">1-3 Sprd</th>
-                  <th className="text-right py-2 px-2 text-zinc-400 font-medium">1-3 %</th>
+                  <th className="text-center py-2 px-2 text-zinc-400 font-medium">Net MM</th>
+                  <th className="text-center py-2 px-2 text-zinc-400 font-medium">1-3 Months</th>
+                  <th className="text-center py-2 px-2 text-zinc-400 font-medium">1-3 Sprd</th>
+                  <th className="text-center py-2 px-2 text-zinc-400 font-medium">1-3 %</th>
                 </tr>
               </thead>
               <tbody>
                 {summary.map((item) => (
                   <tr key={item.id} className="border-b border-zinc-800 hover:bg-zinc-800/50">
                     <td className="py-2 px-2 text-white font-medium">{item.name}</td>
-                    <td className="py-2 px-2 text-right text-zinc-300">
+                    <td className="py-2 px-2 text-center text-zinc-300">
                       {formatNumber(item.mmNetAll)}
                     </td>
-                    <td className="py-2 px-2 text-right text-zinc-300">
-                      {item.spread >= 0 ? "+" : ""}{item.spread.toFixed(0)}
+                    <td className="py-2 px-2 text-center text-zinc-400">
+                      {item.spread_months || "-"}
                     </td>
-                    <td className="py-2 px-2 text-right">
+                    <td className="py-2 px-2 text-center text-zinc-300">
+                      {item.spread >= 0 ? "+" : ""}{item.spread.toFixed(2)}
+                    </td>
+                    <td className="py-2 px-2 text-center">
                       <span
                         className="px-2 py-0.5 rounded text-xs font-bold"
                         style={{
@@ -219,7 +224,7 @@ export function COTSpreadsTab() {
                           color: item.spread_pct >= 98 && item.spread_pct <= 102 ? "#000" : "#fff",
                         }}
                       >
-                        {item.spread_pct.toFixed(0)}%
+                        {item.spread_pct.toFixed(1)}%
                       </span>
                     </td>
                   </tr>
