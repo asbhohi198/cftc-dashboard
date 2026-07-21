@@ -259,21 +259,21 @@ export function parseRow(row: string): COTRecord | null {
   const specNetOld = mmNetOld + otherNetOld;
   const specNetOther = mmNetOther + otherNetOther;
 
-  // Number of Traders (ALL) - columns 127-139 in disaggregated report
-  // These columns may not exist in all files, so we default to 0
-  const tradersProducerLong = fields.length > 127 ? parseNum(fields[127]) : 0;
-  const tradersProducerShort = fields.length > 128 ? parseNum(fields[128]) : 0;
-  const tradersSwapLong = fields.length > 129 ? parseNum(fields[129]) : 0;
-  const tradersSwapShort = fields.length > 130 ? parseNum(fields[130]) : 0;
-  const tradersSwapSpread = fields.length > 131 ? parseNum(fields[131]) : 0;
-  const tradersMMLong = fields.length > 132 ? parseNum(fields[132]) : 0;
-  const tradersMMShort = fields.length > 133 ? parseNum(fields[133]) : 0;
-  const tradersMMSpread = fields.length > 134 ? parseNum(fields[134]) : 0;
-  const tradersOtherLong = fields.length > 135 ? parseNum(fields[135]) : 0;
-  const tradersOtherShort = fields.length > 136 ? parseNum(fields[136]) : 0;
-  const tradersOtherSpread = fields.length > 137 ? parseNum(fields[137]) : 0;
-  const tradersTotalLong = fields.length > 138 ? parseNum(fields[138]) : 0;
-  const tradersTotalShort = fields.length > 139 ? parseNum(fields[139]) : 0;
+  // Number of Traders (ALL) - correct 0-based indices from CFTC disaggregated report
+  // Column 120: Traders_Prod_Merc_Long_All, Column 121: Traders_Prod_Merc_Short_All, etc.
+  const tradersProducerLong = fields.length > 120 ? parseNum(fields[120]) : 0;
+  const tradersProducerShort = fields.length > 121 ? parseNum(fields[121]) : 0;
+  const tradersSwapLong = fields.length > 122 ? parseNum(fields[122]) : 0;
+  const tradersSwapShort = fields.length > 123 ? parseNum(fields[123]) : 0;
+  const tradersSwapSpread = fields.length > 124 ? parseNum(fields[124]) : 0;
+  const tradersMMLong = fields.length > 125 ? parseNum(fields[125]) : 0;
+  const tradersMMShort = fields.length > 126 ? parseNum(fields[126]) : 0;
+  const tradersMMSpread = fields.length > 127 ? parseNum(fields[127]) : 0;
+  const tradersOtherLong = fields.length > 128 ? parseNum(fields[128]) : 0;
+  const tradersOtherShort = fields.length > 129 ? parseNum(fields[129]) : 0;
+  const tradersOtherSpread = fields.length > 130 ? parseNum(fields[130]) : 0;
+  const tradersTotalLong = fields.length > 131 ? parseNum(fields[131]) : 0;
+  const tradersTotalShort = fields.length > 132 ? parseNum(fields[132]) : 0;
 
   return {
     date,
@@ -393,21 +393,21 @@ export function parseTFFRow(row: string): COTRecord | null {
   const nonReptNetAll = nonReptLong - nonReptShort;
   const specNetAll = mmNetAll + otherNetAll;
 
-  // Number of Traders (TFF report) - typically around columns 40-52
-  // Columns: Dealer Long/Short/Spread, Asset Mgr Long/Short/Spread, Lev Long/Short/Spread, Other Long/Short/Spread, Total Long/Short
-  const tradersDealerLong = fields.length > 40 ? parseNum(fields[40]) : 0;
-  const tradersDealerShort = fields.length > 41 ? parseNum(fields[41]) : 0;
-  const tradersAssetMgrLong = fields.length > 43 ? parseNum(fields[43]) : 0;
-  const tradersAssetMgrShort = fields.length > 44 ? parseNum(fields[44]) : 0;
-  const tradersAssetMgrSpread = fields.length > 45 ? parseNum(fields[45]) : 0;
-  const tradersLeveragedLong = fields.length > 46 ? parseNum(fields[46]) : 0;
-  const tradersLeveragedShort = fields.length > 47 ? parseNum(fields[47]) : 0;
-  const tradersLeveragedSpread = fields.length > 48 ? parseNum(fields[48]) : 0;
-  const tradersOtherLong = fields.length > 49 ? parseNum(fields[49]) : 0;
-  const tradersOtherShort = fields.length > 50 ? parseNum(fields[50]) : 0;
-  const tradersOtherSpread = fields.length > 51 ? parseNum(fields[51]) : 0;
-  const tradersTotalLong = fields.length > 52 ? parseNum(fields[52]) : 0;
-  const tradersTotalShort = fields.length > 53 ? parseNum(fields[53]) : 0;
+  // Number of Traders (TFF report) - correct 0-based indices
+  // Dealer: 59-61, Asset Mgr: 62-64, Leveraged: 65-67, Other: 68-70, Total: 71-72
+  const tradersDealerLong = fields.length > 59 ? parseNum(fields[59]) : 0;
+  const tradersDealerShort = fields.length > 60 ? parseNum(fields[60]) : 0;
+  const tradersAssetMgrLong = fields.length > 62 ? parseNum(fields[62]) : 0;
+  const tradersAssetMgrShort = fields.length > 63 ? parseNum(fields[63]) : 0;
+  const tradersAssetMgrSpread = fields.length > 64 ? parseNum(fields[64]) : 0;
+  const tradersLeveragedLong = fields.length > 65 ? parseNum(fields[65]) : 0;
+  const tradersLeveragedShort = fields.length > 66 ? parseNum(fields[66]) : 0;
+  const tradersLeveragedSpread = fields.length > 67 ? parseNum(fields[67]) : 0;
+  const tradersOtherLong = fields.length > 68 ? parseNum(fields[68]) : 0;
+  const tradersOtherShort = fields.length > 69 ? parseNum(fields[69]) : 0;
+  const tradersOtherSpread = fields.length > 70 ? parseNum(fields[70]) : 0;
+  const tradersTotalLong = fields.length > 71 ? parseNum(fields[71]) : 0;
+  const tradersTotalShort = fields.length > 72 ? parseNum(fields[72]) : 0;
 
   // Financial futures don't have old/new crop splits - use same values for all
   return {
