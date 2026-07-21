@@ -551,7 +551,7 @@ export function AgsSummaryTab() {
       {/* Summary Chart Expanded Modal */}
       {expandedSummaryChart && (
         <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" onClick={() => setExpandedSummaryChart(null)}>
-          <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 max-w-[90vw] w-full max-h-[90vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 max-w-[75vw] w-full max-h-[90vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-white">
                 {expandedSummaryChart === "mmNet" && "Managed Money Net (F&O)"}
@@ -635,7 +635,7 @@ export function AgsSummaryTab() {
             onClick={() => setExpandedChart(null)}
           >
             <div
-              className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 max-w-[90vw] w-full max-h-[90vh] overflow-auto"
+              className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 max-w-[75vw] w-full max-h-[90vh] overflow-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
