@@ -152,20 +152,22 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
     return sortDirection === "asc" ? comparison : -comparison;
   });
 
-  // Get chart data based on time range
+  // Get chart data based on time range (with computed pctShort)
   const getChartData = (row: TradersRow) => {
     const timeOption = TIME_RANGE_OPTIONS.find(t => t.id === timeRange);
-    return timeOption?.weeks
+    const slicedData = timeOption?.weeks
       ? row.historicalData.slice(-timeOption.weeks)
       : row.historicalData;
+    return slicedData.map(d => ({ ...d, pctShort: 100 - d.pctLong }));
   };
 
-  // Get chart data for expanded modal
+  // Get chart data for expanded modal (with computed pctShort)
   const getExpandedChartData = (row: TradersRow) => {
     const timeOption = TIME_RANGE_OPTIONS.find(t => t.id === expandedTimeRange);
-    return timeOption?.weeks
+    const slicedData = timeOption?.weeks
       ? row.historicalData.slice(-timeOption.weeks)
       : row.historicalData;
+    return slicedData.map(d => ({ ...d, pctShort: 100 - d.pctLong }));
   };
 
   // Get % Long color
@@ -373,7 +375,7 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart
                     data={getChartData(selectedRow)}
-                    margin={{ top: 10, right: 10, left: 0, bottom: 40 }}
+                    margin={{ top: 10, right: 10, left: -10, bottom: 20 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                     <XAxis
@@ -384,7 +386,7 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                       height={50}
                       tickFormatter={formatChartDate}
                       interval={Math.floor(getChartData(selectedRow).length / 12)}
-                      dy={15}
+                      dy={25}
                     />
                     <YAxis
                       tick={{ fill: "#ffffff", fontSize: 12 }}
@@ -402,7 +404,7 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                       labelStyle={{ color: "#ffffff" }}
                       itemStyle={{ color: "#ffffff" }}
                       labelFormatter={(label) => formatDate(label)}
-                      formatter={chartViewMode === "percent" ? (value: number) => [`${value.toFixed(1)}%`, "% Long"] : undefined}
+                      formatter={chartViewMode === "percent" ? (value: number, name: string) => [`${value.toFixed(1)}%`, name] : undefined}
                     />
                     <Legend />
                     {chartViewMode === "number" ? (
@@ -432,6 +434,14 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                           dataKey="pctLong"
                           name="% Long"
                           stroke="#22c55e"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="pctShort"
+                          name="% Short"
+                          stroke="#ef4444"
                           strokeWidth={2}
                           dot={false}
                         />
@@ -704,6 +714,14 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                           dataKey="pctLong"
                           name="% Long"
                           stroke="#22c55e"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="pctShort"
+                          name="% Short"
+                          stroke="#ef4444"
                           strokeWidth={2}
                           dot={false}
                         />
