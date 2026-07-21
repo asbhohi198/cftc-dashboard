@@ -663,7 +663,7 @@ export function COTTradersTab({ sector }: COTTradersTabProps) {
                       tick={{ fill: "#ffffff", fontSize: 11 }}
                       angle={-90}
                       textAnchor="end"
-                      height={150}
+                      height={225}
                       tickFormatter={formatChartDate}
                       interval={Math.floor(chartData.length / intervalDivisor)}
                       dy={25}
