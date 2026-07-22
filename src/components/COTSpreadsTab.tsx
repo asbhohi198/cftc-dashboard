@@ -258,41 +258,51 @@ export function COTSpreadsTab() {
     name: p.name,
   }));
 
-  // Step 1: Calculate initial regression with all non-manually-excluded points
-  const manuallyIncluded = basePoints.filter(p => !excludedCommodities.has(p.name));
-  const initialRegression = calculateRegression(manuallyIncluded.map(p => ({ x: p.x, y: p.y })));
+  // Iteratively exclude outliers > 4 std dev until convergence
+  let autoExcludedNames = new Set<string>();
+  let currentPoints = basePoints.filter(p => !excludedCommodities.has(p.name));
 
-  // Step 2: Calculate residuals and z-scores for each point
-  const residuals = manuallyIncluded.map(p => {
-    const predicted = initialRegression.slope * p.x + initialRegression.intercept;
-    return p.y - predicted;
-  });
-  const meanResidual = residuals.reduce((a, b) => a + b, 0) / residuals.length;
-  const stdResidual = Math.sqrt(
-    residuals.reduce((sum, r) => sum + Math.pow(r - meanResidual, 2), 0) / residuals.length
+  // Iterate until no new outliers are found (max 10 iterations for safety)
+  for (let i = 0; i < 10; i++) {
+    const regression = calculateRegression(currentPoints.map(p => ({ x: p.x, y: p.y })));
+
+    // Calculate residuals and std dev
+    const residuals = currentPoints.map(p => {
+      const predicted = regression.slope * p.x + regression.intercept;
+      return p.y - predicted;
+    });
+    const stdResidual = Math.sqrt(
+      residuals.reduce((sum, r) => sum + Math.pow(r, 2), 0) / residuals.length
+    ) || 1;
+
+    // Find new outliers
+    let foundNewOutlier = false;
+    for (const p of currentPoints) {
+      const predicted = regression.slope * p.x + regression.intercept;
+      const residual = p.y - predicted;
+      const zScore = Math.abs(residual / stdResidual);
+      if (zScore > 4 && !autoExcludedNames.has(p.name)) {
+        autoExcludedNames.add(p.name);
+        foundNewOutlier = true;
+      }
+    }
+
+    if (!foundNewOutlier) break;
+
+    // Filter out newly excluded points for next iteration
+    currentPoints = basePoints.filter(p =>
+      !excludedCommodities.has(p.name) && !autoExcludedNames.has(p.name)
+    );
+  }
+
+  // Final regression with all outliers excluded
+  const includedPoints = basePoints.filter(p =>
+    !excludedCommodities.has(p.name) && !autoExcludedNames.has(p.name)
   );
-
-  // Step 3: Calculate z-scores and auto-exclude outliers (|z| > 4)
-  const pointsWithZScore = basePoints.map(p => {
-    const predicted = initialRegression.slope * p.x + initialRegression.intercept;
-    const residual = p.y - predicted;
-    const zScore = stdResidual > 0 ? residual / stdResidual : 0;
-    const isManuallyExcluded = excludedCommodities.has(p.name);
-    const isAutoExcluded = Math.abs(zScore) > 4;
-    return {
-      ...p,
-      zScore,
-      excluded: isManuallyExcluded || isAutoExcluded,
-      autoExcluded: isAutoExcluded && !isManuallyExcluded,
-    };
-  });
-
-  // Step 4: Final regression with outliers excluded
-  const includedPoints = pointsWithZScore.filter(p => !p.excluded);
   const currentRegression = calculateRegression(includedPoints.map(p => ({ x: p.x, y: p.y })));
 
-  // For display purposes, recalculate z-scores based on final regression
-  const finalResiduals = pointsWithZScore.filter(p => !p.excluded).map(p => {
+  // Calculate final z-scores based on final regression
+  const finalResiduals = includedPoints.map(p => {
     const predicted = currentRegression.slope * p.x + currentRegression.intercept;
     return p.y - predicted;
   });
@@ -300,11 +310,18 @@ export function COTSpreadsTab() {
     finalResiduals.reduce((sum, r) => sum + Math.pow(r, 2), 0) / finalResiduals.length
   ) || 1;
 
-  const allScatterPoints = pointsWithZScore.map(p => {
+  const allScatterPoints = basePoints.map(p => {
     const predicted = currentRegression.slope * p.x + currentRegression.intercept;
     const residual = p.y - predicted;
-    const finalZScore = residual / finalStdResidual;
-    return { ...p, zScore: finalZScore };
+    const zScore = residual / finalStdResidual;
+    const isManuallyExcluded = excludedCommodities.has(p.name);
+    const isAutoExcluded = autoExcludedNames.has(p.name);
+    return {
+      ...p,
+      zScore,
+      excluded: isManuallyExcluded || isAutoExcluded,
+      autoExcluded: isAutoExcluded,
+    };
   });
 
   // Create sorted summary with z-scores for table

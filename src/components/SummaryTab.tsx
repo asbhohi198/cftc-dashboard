@@ -454,8 +454,8 @@ export function SummaryTab() {
 
       {/* Sector Tables */}
       {sectors.map((sector) => {
-        // Only show CIT columns for ags sectors (not energy)
-        const isAgsSector = sector.sector.startsWith("ags-");
+        // Only show CIT columns for ags sector (not energy)
+        const isAgsSector = sector.sector === "ags";
         const sectorCitData = isAgsSector ? citData : undefined;
 
         return (
