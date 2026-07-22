@@ -121,28 +121,71 @@ const CustomXAxisTick = ({ x, y, payload }: { x?: number; y?: number; payload?: 
 };
 
 // Custom scatter dot with commodity code label
-const LabeledScatterDot = (props: { cx?: number; cy?: number; payload?: ScatterPoint }) => {
-  const { cx, cy, payload } = props;
+interface LabeledScatterDotProps {
+  cx?: number;
+  cy?: number;
+  payload?: ScatterPoint & { excluded?: boolean };
+  onToggle?: (name: string) => void;
+}
+
+const LabeledScatterDot = (props: LabeledScatterDotProps) => {
+  const { cx, cy, payload, onToggle } = props;
   if (!cx || !cy || !payload) return null;
 
   const code = COMMODITY_CODES[payload.name] || payload.name.slice(0, 2);
+  const isExcluded = payload.excluded;
 
   return (
-    <g>
-      <circle cx={cx} cy={cy} r={4} fill="#3b82f6" />
+    <g
+      style={{ cursor: "pointer" }}
+      onClick={(e) => {
+        e.stopPropagation();
+        onToggle?.(payload.name);
+      }}
+    >
+      <circle
+        cx={cx}
+        cy={cy}
+        r={5}
+        fill={isExcluded ? "#52525b" : "#3b82f6"}
+        opacity={isExcluded ? 0.5 : 1}
+      />
       <text
         x={cx}
-        y={cy - 8}
+        y={cy - 9}
         textAnchor="middle"
-        fill="#ffffff"
+        fill={isExcluded ? "#71717a" : "#ffffff"}
         fontSize={9}
         fontWeight="bold"
+        opacity={isExcluded ? 0.5 : 1}
       >
         {code}
       </text>
     </g>
   );
 };
+
+// Calculate linear regression
+function calculateRegression(points: { x: number; y: number }[]): Regression {
+  const n = points.length;
+  if (n === 0) return { slope: 0, intercept: 0, r2: 0 };
+
+  const sumX = points.reduce((sum, p) => sum + p.x, 0);
+  const sumY = points.reduce((sum, p) => sum + p.y, 0);
+  const sumXY = points.reduce((sum, p) => sum + p.x * p.y, 0);
+  const sumX2 = points.reduce((sum, p) => sum + p.x * p.x, 0);
+  const sumY2 = points.reduce((sum, p) => sum + p.y * p.y, 0);
+
+  const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+  const intercept = (sumY - slope * sumX) / n;
+
+  const yMean = sumY / n;
+  const ssTot = points.reduce((sum, p) => sum + Math.pow(p.y - yMean, 2), 0);
+  const ssRes = points.reduce((sum, p) => sum + Math.pow(p.y - (slope * p.x + intercept), 2), 0);
+  const r2 = ssTot === 0 ? 0 : 1 - ssRes / ssTot;
+
+  return { slope, intercept, r2 };
+}
 
 export function COTSpreadsTab() {
   const [data, setData] = useState<APIResponse | null>(null);
@@ -151,6 +194,19 @@ export function COTSpreadsTab() {
   const [expandedChart, setExpandedChart] = useState<{ id: string; name: string } | null>(null);
   const [xAxisMode, setXAxisMode] = useState<XAxisMode>("pctOI");
   const [mainScatterExpanded, setMainScatterExpanded] = useState(false);
+  const [excludedCommodities, setExcludedCommodities] = useState<Set<string>>(new Set());
+
+  const toggleCommodity = (name: string) => {
+    setExcludedCommodities(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(name)) {
+        newSet.delete(name);
+      } else {
+        newSet.add(name);
+      }
+      return newSet;
+    });
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -195,13 +251,24 @@ export function COTSpreadsTab() {
 
   const { summary, mainScatter, historicalScatter } = data;
 
-  // Get current regression based on mode
-  const currentRegression = xAxisMode === "pctOI" ? mainScatter.regressionPctOI : mainScatter.regressionAbs;
+  // Transform all points for current mode (including excluded for display)
+  const allScatterPoints = mainScatter.points.map(p => ({
+    x: xAxisMode === "pctOI" ? p.xPctOI : p.x,
+    y: p.y,
+    name: p.name,
+    excluded: excludedCommodities.has(p.name),
+  }));
 
-  // Generate regression line points based on mode
+  // Filter to only included points for regression
+  const includedPoints = allScatterPoints.filter(p => !p.excluded);
+
+  // Calculate regression dynamically based on included points only
+  const currentRegression = calculateRegression(includedPoints.map(p => ({ x: p.x, y: p.y })));
+
+  // Generate regression line points based on included data
   const regressionPoints = [];
-  if (mainScatter.points.length > 0) {
-    const xValues = mainScatter.points.map(p => xAxisMode === "pctOI" ? p.xPctOI : p.x);
+  if (includedPoints.length > 1) {
+    const xValues = includedPoints.map(p => p.x);
     const minX = Math.min(...xValues);
     const maxX = Math.max(...xValues);
     regressionPoints.push({
@@ -213,13 +280,6 @@ export function COTSpreadsTab() {
       y: currentRegression.slope * maxX + currentRegression.intercept,
     });
   }
-
-  // Transform points for current mode
-  const scatterPoints = mainScatter.points.map(p => ({
-    x: xAxisMode === "pctOI" ? p.xPctOI : p.x,
-    y: p.y,
-    name: p.name,
-  }));
 
   return (
     <div className="space-y-6">
@@ -296,14 +356,13 @@ export function COTSpreadsTab() {
 
         {/* Main Scatter Plot */}
         <div
-          className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 cursor-pointer hover:border-zinc-600 transition-colors"
-          onClick={() => setMainScatterExpanded(true)}
+          className="bg-zinc-900 border border-zinc-800 rounded-lg p-4"
         >
-          <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center justify-between mb-2">
             <h3 className="text-sm font-semibold text-orange-400">
               {xAxisMode === "pctOI" ? "Net MM as % OI" : "Net MM Position"} vs. 1-3 Month Curve (%)
             </h3>
-            <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
+            <div className="flex gap-1">
               <button
                 className={`px-2 py-1 text-xs rounded ${xAxisMode === "pctOI" ? "bg-orange-500 text-white" : "bg-zinc-700 text-zinc-300"}`}
                 onClick={() => setXAxisMode("pctOI")}
@@ -318,18 +377,30 @@ export function COTSpreadsTab() {
               </button>
             </div>
           </div>
-          <p className="text-xs text-zinc-500 mb-3">
-            R² = {currentRegression.r2.toFixed(4)}
-          </p>
+          <div className="flex items-center justify-between mb-3">
+            <div className="bg-zinc-800 px-4 py-2 rounded-lg">
+              <span className="text-zinc-400 text-sm">R² = </span>
+              <span className="text-white text-xl font-bold">{currentRegression.r2.toFixed(4)}</span>
+              {excludedCommodities.size > 0 && (
+                <span className="text-zinc-500 text-xs ml-2">({excludedCommodities.size} excluded)</span>
+              )}
+            </div>
+            <button
+              className="text-xs text-zinc-500 hover:text-white"
+              onClick={() => setMainScatterExpanded(true)}
+            >
+              Click to expand
+            </button>
+          </div>
           <ResponsiveContainer width="100%" height={350}>
-            <ComposedChart margin={{ top: 20, right: 20, left: 10, bottom: 60 }}>
+            <ComposedChart margin={{ top: 20, right: 20, left: 10, bottom: 40 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
               <XAxis
                 type="number"
                 dataKey="x"
                 tick={{ fill: "#ffffff", fontSize: 10 }}
                 domain={["auto", "auto"]}
-                tickFormatter={(v) => xAxisMode === "pctOI" ? `${v.toFixed(0)}%` : formatNumber(v)}
+                tickFormatter={(v) => xAxisMode === "pctOI" ? `${Math.round(v)}%` : formatNumber(v)}
               >
                 <Label value={xAxisMode === "pctOI" ? "Net MM as % of OI" : "Net MM Position (contracts)"} position="bottom" offset={10} fill="#9ca3af" fontSize={11} />
               </XAxis>
@@ -338,7 +409,7 @@ export function COTSpreadsTab() {
                 dataKey="y"
                 domain={[85, 115]}
                 tick={{ fill: "#ffffff", fontSize: 11 }}
-                tickFormatter={(v) => `${v}%`}
+                tickFormatter={(v) => `${Math.round(v)}%`}
               >
                 <Label value="1-3 Month Curve (%)" angle={-90} position="insideLeft" fill="#9ca3af" fontSize={11} />
               </YAxis>
@@ -376,14 +447,14 @@ export function COTSpreadsTab() {
 
               {/* Data points with labels */}
               <Scatter
-                data={scatterPoints}
+                data={allScatterPoints}
                 fill="#3b82f6"
-                shape={<LabeledScatterDot />}
+                shape={<LabeledScatterDot onToggle={toggleCommodity} />}
               />
             </ComposedChart>
           </ResponsiveContainer>
           <div className="mt-2 text-xs text-zinc-500 text-center">
-            Click to expand | Click commodity charts below for historical scatter
+            Click on a commodity label to exclude/include it from the regression
           </div>
         </div>
       </div>
@@ -573,13 +644,20 @@ export function COTSpreadsTab() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="text-xl font-semibold text-white">
-                  {xAxisMode === "pctOI" ? "Net MM as % OI" : "Net MM Position"} vs. 1-3 Month Curve (%)
-                </h3>
-                <p className="text-sm text-zinc-400">
-                  R² = {currentRegression.r2.toFixed(4)}
-                </p>
+              <div className="flex items-center gap-6">
+                <div>
+                  <h3 className="text-xl font-semibold text-white">
+                    {xAxisMode === "pctOI" ? "Net MM as % OI" : "Net MM Position"} vs. 1-3 Month Curve (%)
+                  </h3>
+                  <p className="text-xs text-zinc-500 mt-1">Click on commodity labels to exclude/include</p>
+                </div>
+                <div className="bg-zinc-800 px-5 py-3 rounded-lg">
+                  <span className="text-zinc-400 text-sm">R² = </span>
+                  <span className="text-white text-2xl font-bold">{currentRegression.r2.toFixed(4)}</span>
+                  {excludedCommodities.size > 0 && (
+                    <span className="text-zinc-500 text-xs ml-2">({excludedCommodities.size} excluded)</span>
+                  )}
+                </div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex gap-1">
@@ -614,7 +692,7 @@ export function COTSpreadsTab() {
                     dataKey="x"
                     tick={{ fill: "#ffffff", fontSize: 12 }}
                     domain={["auto", "auto"]}
-                    tickFormatter={(v) => xAxisMode === "pctOI" ? `${v.toFixed(0)}%` : formatNumber(v)}
+                    tickFormatter={(v) => xAxisMode === "pctOI" ? `${Math.round(v)}%` : formatNumber(v)}
                   >
                     <Label value={xAxisMode === "pctOI" ? "Net MM as % of OI" : "Net MM Position (contracts)"} position="bottom" offset={40} fill="#9ca3af" fontSize={12} />
                   </XAxis>
@@ -623,7 +701,7 @@ export function COTSpreadsTab() {
                     dataKey="y"
                     domain={[85, 115]}
                     tick={{ fill: "#ffffff", fontSize: 12 }}
-                    tickFormatter={(v) => `${v}%`}
+                    tickFormatter={(v) => `${Math.round(v)}%`}
                   >
                     <Label value="1-3 Month Curve (%)" angle={-90} position="insideLeft" fill="#9ca3af" fontSize={12} />
                   </YAxis>
@@ -661,9 +739,9 @@ export function COTSpreadsTab() {
 
                   {/* Data points with labels */}
                   <Scatter
-                    data={scatterPoints}
+                    data={allScatterPoints}
                     fill="#3b82f6"
-                    shape={<LabeledScatterDot />}
+                    shape={<LabeledScatterDot onToggle={toggleCommodity} />}
                   />
                 </ComposedChart>
               </ResponsiveContainer>
