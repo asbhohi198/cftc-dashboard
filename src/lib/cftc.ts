@@ -11,6 +11,7 @@ export const CFTC_CONTRACTS = {
   soybeans: { code: "005602", name: "Soybeans", exchange: "CBOT", marketName: "SOYBEANS - CHICAGO BOARD OF TRADE", category: "ags", reportType: "disagg" as ReportType },
   soymeal: { code: "026603", name: "Soybean Meal", exchange: "CBOT", marketName: "SOYBEAN MEAL - CHICAGO BOARD OF TRADE", category: "ags", reportType: "disagg" as ReportType },
   soyoil: { code: "007601", name: "Soybean Oil", exchange: "CBOT", marketName: "SOYBEAN OIL - CHICAGO BOARD OF TRADE", category: "ags", reportType: "disagg" as ReportType },
+  canola: { code: "135731", name: "Canola", exchange: "ICE", marketName: "CANOLA - ICE FUTURES U.S.", category: "ags", reportType: "disagg" as ReportType },
   oats: { code: "004603", name: "Oats", exchange: "CBOT", marketName: "OATS - CHICAGO BOARD OF TRADE", category: "ags", reportType: "disagg" as ReportType },
   "rough-rice": { code: "039601", name: "Rough Rice", exchange: "CBOT", marketName: "ROUGH RICE - CHICAGO BOARD OF TRADE", category: "ags", reportType: "disagg" as ReportType },
   "orange-juice": { code: "040701", name: "Orange Juice", exchange: "ICE", marketName: "FRZN CONCENTRATED ORANGE JUICE - ICE FUTURES U.S.", category: "ags", reportType: "disagg" as ReportType },
