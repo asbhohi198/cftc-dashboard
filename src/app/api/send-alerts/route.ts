@@ -611,17 +611,19 @@ export async function GET(request: NextRequest) {
     const reportDate = await getLatestReportDate(baseUrl);
     console.log(`Latest report date: ${reportDate}`);
 
-    const results: Array<{ id: string; name: string; success: boolean; error?: string; signalCount?: number }> = [];
+    const results: Array<{ id: string; name: string; success: boolean; error?: string; signalCount?: number; debug?: Record<string, number> }> = [];
 
     for (const sub of subsToProcess) {
       try {
         console.log(`Processing subscription: ${sub.name}`);
         const allSignals: COTSignalForEmail[] = [];
+        const debug: Record<string, number> = {};
 
         // MM Net as % of Historical Max
         if (sub.signals.mmPctHistMax?.enabled) {
           const signals = await getMmPctHistMaxSignals(baseUrl, sub.sectors, sub.signals.mmPctHistMax.threshold);
           allSignals.push(...signals);
+          debug.mmPctHistMax = signals.length;
           console.log(`Found ${signals.length} MM % Hist Max signals`);
         }
 
@@ -629,6 +631,7 @@ export async function GET(request: NextRequest) {
         if (sub.signals.mmPctOI?.enabled) {
           const signals = await getMmPctOISignals(baseUrl, sub.sectors, sub.signals.mmPctOI.threshold);
           allSignals.push(...signals);
+          debug.mmPctOI = signals.length;
           console.log(`Found ${signals.length} MM % OI signals`);
         }
 
@@ -636,6 +639,7 @@ export async function GET(request: NextRequest) {
         if (sub.signals.weeklyMmChange?.enabled) {
           const signals = await getWeeklyMmChangeSignals(baseUrl, sub.sectors, sub.signals.weeklyMmChange.threshold);
           allSignals.push(...signals);
+          debug.weeklyMmChange = signals.length;
           console.log(`Found ${signals.length} Weekly MM Change signals`);
         }
 
@@ -643,6 +647,7 @@ export async function GET(request: NextRequest) {
         if (sub.signals.tradersPctLongShort?.enabled) {
           const signals = await getTradersPctSignals(baseUrl, sub.sectors, sub.signals.tradersPctLongShort.threshold);
           allSignals.push(...signals);
+          debug.tradersPctLongShort = signals.length;
           console.log(`Found ${signals.length} Traders % Long/Short signals`);
         }
 
@@ -650,6 +655,7 @@ export async function GET(request: NextRequest) {
         if (sub.signals.cotRvs?.enabled) {
           const rvSignals = await getCOTRVSignals(baseUrl, sub.sectors, sub.signals.cotRvs.threshold);
           allSignals.push(...rvSignals);
+          debug.cotRvs = rvSignals.length;
           console.log(`Found ${rvSignals.length} COT RV signals`);
         }
 
@@ -657,6 +663,7 @@ export async function GET(request: NextRequest) {
         if (sub.signals.citRollPosition?.enabled && (sub.sectors.includes("ALL") || sub.sectors.includes("ags"))) {
           const citSignals = await getCITRollSignals(baseUrl, sub.signals.citRollPosition.threshold);
           allSignals.push(...citSignals);
+          debug.citRollPosition = citSignals.length;
           console.log(`Found ${citSignals.length} CIT Roll Position signals`);
         }
 
@@ -664,6 +671,7 @@ export async function GET(request: NextRequest) {
         if (sub.signals.cotVsSpreads?.enabled && (sub.sectors.includes("ALL") || sub.sectors.includes("ags"))) {
           const spreadSignals = await getCotVsSpreadsSignals(baseUrl, sub.signals.cotVsSpreads.threshold);
           allSignals.push(...spreadSignals);
+          debug.cotVsSpreads = spreadSignals.length;
           console.log(`Found ${spreadSignals.length} COT vs Spreads signals`);
         }
 
@@ -693,6 +701,7 @@ export async function GET(request: NextRequest) {
           name: sub.name,
           success: true,
           signalCount: allSignals.length,
+          debug,
         });
 
         console.log(`Email sent to ${sub.recipients.join(", ")} with ${allSignals.length} signals`);
