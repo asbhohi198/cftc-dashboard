@@ -95,6 +95,44 @@ export async function GET(request: NextRequest) {
   }
 
   const contract = CFTC_CONTRACTS[contractId];
+
+  // Handle Matif contracts by proxying to matif-cot API
+  if (contract.reportType === "matif") {
+    const baseUrl = new URL(request.url).origin;
+    try {
+      const res = await fetch(`${baseUrl}/api/matif-cot?contract=${contractId}&format=cot`, {
+        cache: "no-store",
+      });
+      const json = await res.json();
+      if (json.success) {
+        return NextResponse.json({
+          success: true,
+          contract: {
+            id: contractId,
+            name: contract.name,
+            exchange: contract.exchange,
+            code: contract.code,
+            category: contract.category,
+            reportType: contract.reportType,
+          },
+          data: json.data,
+          cached: false,
+        });
+      } else {
+        return NextResponse.json(
+          { success: false, error: json.error || "Failed to fetch Matif data" },
+          { status: 500 }
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching Matif COT data:", error);
+      return NextResponse.json(
+        { success: false, error: "Failed to fetch Matif data" },
+        { status: 500 }
+      );
+    }
+  }
+
   const cacheKey = `cot_${contractId}`;
 
   // Check cache

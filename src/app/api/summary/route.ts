@@ -28,9 +28,9 @@ const SECTOR_COMMODITIES: Record<AssetCategory, { id: ContractId; label: string 
     { id: "milk", label: "DA" },
   ],
   matif: [
-    { id: "matif-wheat", label: "MW" },
-    { id: "matif-corn", label: "MC" },
-    { id: "matif-rapeseed", label: "RS" },
+    { id: "matif-wheat", label: "CA" },
+    { id: "matif-corn", label: "EP" },
+    { id: "matif-rapeseed", label: "IJ" },
   ],
   energy: [
     { id: "wti-crude", label: "CL" },
