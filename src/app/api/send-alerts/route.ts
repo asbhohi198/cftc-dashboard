@@ -398,13 +398,20 @@ async function getCITRollSignals(
   const signals: COTSignalForEmail[] = [];
 
   try {
+    console.log(`CIT: Fetching from ${baseUrl}/api/cit-index?sector=ags`);
     const res = await fetch(`${baseUrl}/api/cit-index?sector=ags`, { cache: "no-store" });
+    console.log(`CIT: Response status ${res.status}`);
     const json = await res.json();
+    console.log(`CIT: success=${json.success}, contracts count=${json.contracts?.length || 0}`);
 
-    if (!json.success || !json.contracts) return signals;
+    if (!json.success || !json.contracts) {
+      console.log("CIT: No contracts found or request failed");
+      return signals;
+    }
 
     for (const contract of json.contracts) {
       const zScore = contract.rollZScore;
+      console.log(`CIT: ${contract.name} rollZScore=${zScore}, threshold=${threshold}, abs=${Math.abs(zScore)}, exceeds=${Math.abs(zScore) >= threshold}`);
 
       if (Math.abs(zScore) >= threshold) {
         signals.push({
@@ -421,6 +428,7 @@ async function getCITRollSignals(
         });
       }
     }
+    console.log(`CIT: Total signals found: ${signals.length}`);
   } catch (error) {
     console.error("Error fetching CIT data:", error);
   }
