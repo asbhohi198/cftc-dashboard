@@ -619,13 +619,15 @@ export async function GET(request: NextRequest) {
     const reportDate = await getLatestReportDate(baseUrl);
     console.log(`Latest report date: ${reportDate}`);
 
-    const results: Array<{ id: string; name: string; success: boolean; error?: string; signalCount?: number; debug?: Record<string, number | string | string[]> }> = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const results: Array<{ id: string; name: string; success: boolean; error?: string; signalCount?: number; debug?: Record<string, any> }> = [];
 
     for (const sub of subsToProcess) {
       try {
         console.log(`Processing subscription: ${sub.name}`);
         const allSignals: COTSignalForEmail[] = [];
-        const debug: Record<string, number> = {};
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const debug: Record<string, any> = {};
 
         // MM Net as % of Historical Max
         if (sub.signals.mmPctHistMax?.enabled) {
