@@ -336,8 +336,8 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                   tick={{ fill: "#a1a1aa", fontSize: 7 }}
                   angle={-90}
                   textAnchor="end"
-                  height={35}
-                  dy={18}
+                  height={40}
+                  dy={25}
                 />
                 <YAxis
                   tick={{ fill: "#ffffff", fontSize: 11 }}
