@@ -530,15 +530,15 @@ export function parseCITRow(row: string): CITRecord | null {
   const commShort = parseNum(fields[12]);
   const commNet = commLong - commShort;
 
-  // Index Traders
-  const indexLong = parseNum(fields[13]);
-  const indexShort = parseNum(fields[14]);
-  const indexNet = indexLong - indexShort;
-
-  // Non-Reportable
-  const nonReptLong = parseNum(fields[17]);
-  const nonReptShort = parseNum(fields[18]);
+  // Non-Reportable (fields 15-16)
+  const nonReptLong = parseNum(fields[15]);
+  const nonReptShort = parseNum(fields[16]);
   const nonReptNet = nonReptLong - nonReptShort;
+
+  // Index Traders / CIT (fields 17-18)
+  const indexLong = parseNum(fields[17]);
+  const indexShort = parseNum(fields[18]);
+  const indexNet = indexLong - indexShort;
 
   // Index as % of OI
   const indexPctOI = openInterest > 0 ? (indexNet / openInterest) * 100 : 0;
