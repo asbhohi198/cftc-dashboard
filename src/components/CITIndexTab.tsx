@@ -212,12 +212,32 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
     ...softs.map(r => ({ name: r.name, value: r.pctMax })),
   ];
 
+  // Short names for table display
+  const getShortName = (name: string): string => {
+    const shortNames: Record<string, string> = {
+      "Corn": "Corn",
+      "Soybeans": "Soy",
+      "Chicago Wheat": "C Wht",
+      "Kansas Wheat": "K Wht",
+      "Soybean Oil": "SBO",
+      "Soybean Meal": "SM",
+      "Live Cattle": "LC",
+      "Lean Hogs": "LH",
+      "Feeder Cattle": "FC",
+      "NY Sugar": "Sugar",
+      "NY Coffee": "Coffee",
+      "NY Cocoa": "Cocoa",
+      "NY Cotton": "Cotton",
+    };
+    return shortNames[name] || name;
+  };
+
   const renderTableRow = (row: CITRow, highlight?: string) => (
     <tr
       key={row.id}
       className={`border-b border-zinc-800 ${highlight || ""}`}
     >
-      <td className="py-1.5 px-2 text-left text-white">{row.name}</td>
+      <td className="py-1.5 px-1 text-left text-white truncate" title={row.name}>{getShortName(row.name)}</td>
       <td className="py-1.5 px-1 text-center font-mono text-white">{formatNumber(row.indexNet)}</td>
       <td className="py-1.5 px-1 text-center font-mono text-zinc-400">{row.indexPctOI.toFixed(0)}%</td>
       <td className={`py-1.5 px-1 text-center font-mono ${row.change >= 0 ? "text-green-400" : "text-red-400"}`}>
@@ -233,7 +253,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
 
   const renderAggRow = (name: string, agg: NonNullable<typeof cswkwAgg>, bgColor: string) => (
     <tr key={name} className={`border-b border-zinc-800 ${bgColor}`}>
-      <td className="py-1.5 px-2 text-left text-white font-semibold">{name}</td>
+      <td className="py-1.5 px-1 text-left text-white font-semibold truncate" title={name}>{name}</td>
       <td className="py-1.5 px-1 text-center font-mono text-white font-semibold">{formatNumber(agg.indexNet)}</td>
       <td className="py-1.5 px-1 text-center font-mono text-zinc-400">{agg.indexPctOI.toFixed(0)}%</td>
       <td className={`py-1.5 px-1 text-center font-mono font-semibold ${agg.change >= 0 ? "text-green-400" : "text-red-400"}`}>
@@ -270,13 +290,13 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
       </div>
 
       {/* Main Content - Table and Charts side by side */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-        {/* Left: Table */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
-          <table className="w-full text-xs">
+      <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
+        {/* Left: Table (2 cols) */}
+        <div className="xl:col-span-2 bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
+          <table className="w-full text-xs table-fixed">
             <thead>
               <tr className="bg-zinc-800/50 border-b border-zinc-700">
-                <th className="text-left py-2 px-2 text-zinc-400 font-medium">Commodity</th>
+                <th className="text-left py-2 px-1 text-zinc-400 font-medium w-[70px]">Cmdty</th>
                 <th className="text-center py-2 px-1 text-zinc-400 font-medium">Net</th>
                 <th className="text-center py-2 px-1 text-zinc-400 font-medium">%OI</th>
                 <th className="text-center py-2 px-1 text-zinc-400 font-medium">Chg</th>
@@ -302,8 +322,8 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
           </table>
         </div>
 
-        {/* Right: Charts Grid (2x2) */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* Right: Charts Grid (2x2) - 3 cols */}
+        <div className="xl:col-span-3 grid grid-cols-2 gap-3">
         {/* Change WoW Bar Chart */}
         <div
           className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 cursor-pointer hover:border-zinc-600 transition-colors"
