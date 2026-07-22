@@ -25,13 +25,16 @@ const PCT_OI_SERIES = [
 const CONTRACTS_TO_SCREEN: { id: string; label: string; contracts: ContractId[]; category: AssetCategory }[] = [
   // Ags - Grains & Oilseeds
   { id: "corn", label: "Corn", contracts: ["corn"], category: "ags" },
+  { id: "matif-corn", label: "Matif Corn", contracts: ["matif-corn"], category: "matif" },
   { id: "chicago-wheat", label: "Chicago Wheat", contracts: ["chicago-wheat"], category: "ags" },
   { id: "kansas-wheat", label: "Kansas Wheat", contracts: ["kansas-wheat"], category: "ags" },
   { id: "minneapolis-wheat", label: "Minneapolis Wheat", contracts: ["minneapolis-wheat"], category: "ags" },
+  { id: "matif-wheat", label: "Matif Wheat", contracts: ["matif-wheat"], category: "matif" },
   { id: "soybeans", label: "Soybeans", contracts: ["soybeans"], category: "ags" },
   { id: "soymeal", label: "Soymeal", contracts: ["soymeal"], category: "ags" },
   { id: "soyoil", label: "Soyoil", contracts: ["soyoil"], category: "ags" },
   { id: "canola", label: "Canola", contracts: ["canola"], category: "ags" },
+  { id: "matif-rapeseed", label: "Matif Rapeseed", contracts: ["matif-rapeseed"], category: "matif" },
   { id: "all-us-wheat", label: "All US Wheat", contracts: ["chicago-wheat", "kansas-wheat", "minneapolis-wheat"], category: "ags" },
   { id: "all-us-oilseeds", label: "All US Oilseeds", contracts: ["soybeans", "soymeal", "soyoil"], category: "ags" },
   { id: "all-us-grains", label: "All US Grains", contracts: ["corn", "chicago-wheat", "kansas-wheat", "minneapolis-wheat"], category: "ags" },
@@ -167,9 +170,17 @@ export async function GET(request: Request) {
     const contractIds = Object.keys(CFTC_CONTRACTS) as ContractId[];
     const contractDataMap = new Map<ContractId, COTRecord[]>();
 
+    // Helper to check if a contract is a Matif contract
+    const isMatifContract = (id: string) => id.startsWith("matif-");
+
     const fetchPromises = contractIds.map(async (contractId) => {
       try {
-        const res = await fetch(`${baseUrl}/api/cot?contract=${contractId}`, {
+        // Use matif-cot endpoint for Matif contracts, regular cot endpoint for others
+        const endpoint = isMatifContract(contractId)
+          ? `${baseUrl}/api/matif-cot?contract=${contractId}&format=cot`
+          : `${baseUrl}/api/cot?contract=${contractId}`;
+
+        const res = await fetch(endpoint, {
           cache: "no-store",
         });
         const json = await res.json();
