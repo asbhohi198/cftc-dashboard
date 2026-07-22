@@ -11,6 +11,23 @@ export function GuideTab() {
         </p>
       </div>
 
+      {/* COT Report Structure */}
+      <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6">
+        <h3 className="text-lg font-semibold text-orange-400 mb-4">Understanding COT Report Categories</h3>
+        <p className="text-zinc-300 text-sm mb-4">
+          The difference between Non-Commercial and Managed Money traders? The Managed Money category
+          includes some index-like ETF products that show up under Index (*not* Non-Commercial) in the
+          Supplemental COT report.
+        </p>
+        <div className="flex justify-center">
+          <img
+            src="/cftc-guide.png"
+            alt="CFTC COT Report Structure - Supplemental vs Disaggregated"
+            className="max-w-full h-auto rounded-lg border border-zinc-700"
+          />
+        </div>
+      </div>
+
       {/* Key Concept */}
       <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6">
         <h3 className="text-lg font-semibold text-orange-400 mb-4">Key Concept: The Fire Triangle</h3>

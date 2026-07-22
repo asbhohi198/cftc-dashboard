@@ -7,6 +7,17 @@ interface ChangeData {
   isSignificant: boolean;
 }
 
+interface CITRow {
+  id: string;
+  name: string;
+  indexNet: number;
+  indexPctOI: number;
+  change: number;
+  recordMax: number;
+  recordMin: number;
+  pctMax: number;
+}
+
 interface PctOIData {
   value: number;
   isExtreme: boolean;
@@ -270,8 +281,98 @@ function TFFTable({ rows }: { rows: SummaryRow[] }) {
   );
 }
 
+// CIT Index Table component
+function CITIndexTable({ rows, citReportDate }: { rows: CITRow[]; citReportDate: string }) {
+  // Calculate aggregates
+  const cswkwIds = ["corn", "soybeans", "chicago-wheat", "kansas-wheat"];
+  const cswkwSboSmIds = ["corn", "soybeans", "chicago-wheat", "kansas-wheat", "soyoil", "soymeal"];
+
+  const cswkwRows = rows.filter(r => cswkwIds.includes(r.id));
+  const cswkwSboSmRows = rows.filter(r => cswkwSboSmIds.includes(r.id));
+
+  const calcAgg = (aggRows: CITRow[]) => ({
+    indexNet: aggRows.reduce((s, r) => s + r.indexNet, 0),
+    indexPctOI: aggRows.reduce((s, r) => s + r.indexPctOI, 0) / aggRows.length,
+    change: aggRows.reduce((s, r) => s + r.change, 0),
+    recordMax: aggRows.reduce((s, r) => s + r.recordMax, 0),
+    recordMin: aggRows.reduce((s, r) => s + r.recordMin, 0),
+    pctMax: 0, // Will calculate below
+  });
+
+  const cswkwAgg = cswkwRows.length === 4 ? calcAgg(cswkwRows) : null;
+  const cswkwSboSmAgg = cswkwSboSmRows.length === 6 ? calcAgg(cswkwSboSmRows) : null;
+
+  if (cswkwAgg) cswkwAgg.pctMax = cswkwAgg.recordMax > 0 ? (cswkwAgg.indexNet / cswkwAgg.recordMax) * 100 : 0;
+  if (cswkwSboSmAgg) cswkwSboSmAgg.pctMax = cswkwSboSmAgg.recordMax > 0 ? (cswkwSboSmAgg.indexNet / cswkwSboSmAgg.recordMax) * 100 : 0;
+
+  const grains = rows.filter(r => ["corn", "soybeans", "chicago-wheat", "kansas-wheat", "soyoil", "soymeal"].includes(r.id));
+  const livestock = rows.filter(r => ["live-cattle", "lean-hogs", "feeder-cattle"].includes(r.id));
+  const softs = rows.filter(r => ["sugar", "arabica-coffee", "ny-cocoa", "cotton"].includes(r.id));
+
+  const getPctMaxColor = (pct: number): string => {
+    if (pct >= 80) return "bg-green-500/30 text-green-400 font-bold";
+    if (pct >= 60) return "bg-green-500/20 text-green-400";
+    if (pct <= 20) return "bg-red-500/30 text-red-400 font-bold";
+    if (pct <= 40) return "bg-red-500/20 text-red-400";
+    return "bg-yellow-500/20 text-yellow-400";
+  };
+
+  const renderRow = (row: CITRow, bgClass = "") => (
+    <tr key={row.id} className={`border-b border-zinc-800 hover:bg-zinc-800/50 ${bgClass}`}>
+      <td className="px-2 py-1.5 text-left font-medium text-white">{row.name}</td>
+      <td className="px-1 py-1.5 text-right text-zinc-300 border-l border-zinc-800">{formatNumber(row.indexNet)}</td>
+      <td className="px-1 py-1.5 text-right text-zinc-400">{row.indexPctOI.toFixed(0)}%</td>
+      <td className={`px-1 py-1.5 text-right ${row.change >= 0 ? "text-green-400" : "text-red-400"}`}>
+        {formatChange(row.change)}
+      </td>
+      <td className="px-1 py-1.5 text-right text-zinc-400 border-l border-zinc-800">{formatNumber(row.recordMax)}</td>
+      <td className={`px-1 py-1.5 text-right ${getPctMaxColor(row.pctMax)}`}>{row.pctMax.toFixed(0)}%</td>
+      <td className="px-1 py-1.5 text-right text-zinc-400">{formatNumber(row.recordMin)}</td>
+    </tr>
+  );
+
+  const renderAggRow = (name: string, agg: NonNullable<typeof cswkwAgg>, bgClass: string) => (
+    <tr key={name} className={`border-b border-zinc-800 font-semibold ${bgClass}`}>
+      <td className="px-2 py-1.5 text-left font-semibold text-white">{name}</td>
+      <td className="px-1 py-1.5 text-right text-zinc-300 border-l border-zinc-800">{formatNumber(agg.indexNet)}</td>
+      <td className="px-1 py-1.5 text-right text-zinc-400">{agg.indexPctOI.toFixed(0)}%</td>
+      <td className={`px-1 py-1.5 text-right ${agg.change >= 0 ? "text-green-400" : "text-red-400"}`}>
+        {formatChange(agg.change)}
+      </td>
+      <td className="px-1 py-1.5 text-right text-zinc-400 border-l border-zinc-800">{formatNumber(agg.recordMax)}</td>
+      <td className={`px-1 py-1.5 text-right ${getPctMaxColor(agg.pctMax)}`}>{agg.pctMax.toFixed(0)}%</td>
+      <td className="px-1 py-1.5 text-right text-zinc-400">{formatNumber(agg.recordMin)}</td>
+    </tr>
+  );
+
+  return (
+    <table className="w-full text-xs">
+      <thead>
+        <tr className="bg-zinc-800 border-b border-zinc-700">
+          <th className="px-2 py-2 text-left font-semibold text-zinc-300">Commodity</th>
+          <th className="px-1 py-2 text-right font-semibold text-cyan-400 border-l border-zinc-700">Net</th>
+          <th className="px-1 py-2 text-right font-semibold text-cyan-400">% OI</th>
+          <th className="px-1 py-2 text-right font-semibold text-cyan-400">Chg</th>
+          <th className="px-1 py-2 text-right font-semibold text-zinc-400 border-l border-zinc-700">Rec Max</th>
+          <th className="px-1 py-2 text-right font-semibold text-zinc-400">% Max</th>
+          <th className="px-1 py-2 text-right font-semibold text-zinc-400">Rec Min</th>
+        </tr>
+      </thead>
+      <tbody>
+        {grains.map(row => renderRow(row))}
+        {cswkwAgg && renderAggRow("C+S+W+KW", cswkwAgg, "bg-green-900/20")}
+        {cswkwSboSmAgg && renderAggRow("C+S+W+KW+SBO+SM", cswkwSboSmAgg, "bg-yellow-900/20")}
+        {livestock.map(row => renderRow(row))}
+        {softs.map(row => renderRow(row))}
+      </tbody>
+    </table>
+  );
+}
+
 export function SummaryTab() {
   const [sectors, setSectors] = useState<SectorData[]>([]);
+  const [citData, setCitData] = useState<CITRow[]>([]);
+  const [citReportDate, setCitReportDate] = useState<string>("");
   const [latestReport, setLatestReport] = useState<ReportDate | null>(null);
   const [priorReport, setPriorReport] = useState<ReportDate | null>(null);
   const [loading, setLoading] = useState(true);
@@ -283,15 +384,26 @@ export function SummaryTab() {
       setError(null);
 
       try {
-        const res = await fetch("/api/summary");
-        const json = await res.json();
+        // Fetch summary and CIT data in parallel
+        const [summaryRes, citRes] = await Promise.all([
+          fetch("/api/summary"),
+          fetch("/api/cit-index?sector=ags"),
+        ]);
 
-        if (json.success) {
-          setSectors(json.sectors);
-          setLatestReport(json.latestReport);
-          setPriorReport(json.priorReport);
+        const summaryJson = await summaryRes.json();
+        const citJson = await citRes.json();
+
+        if (summaryJson.success) {
+          setSectors(summaryJson.sectors);
+          setLatestReport(summaryJson.latestReport);
+          setPriorReport(summaryJson.priorReport);
         } else {
-          setError(json.error || "Failed to fetch summary data");
+          setError(summaryJson.error || "Failed to fetch summary data");
+        }
+
+        if (citJson.success) {
+          setCitData(citJson.contracts);
+          setCitReportDate(citJson.reportDate);
         }
       } catch (err) {
         setError("Failed to fetch data");
@@ -385,6 +497,22 @@ export function SummaryTab() {
           </div>
         </div>
       </div>
+
+      {/* CIT Index Traders Section */}
+      {citData.length > 0 && (
+        <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
+          <div className="px-4 py-3 border-b border-zinc-700 bg-zinc-800/50">
+            <h3 className="text-md font-semibold text-white">CIT - Index Traders (Ags Only)</h3>
+            <p className="text-xs text-zinc-500">
+              Supplemental Report - Index Trader net positions
+              {citReportDate && ` | ${formatDate(citReportDate)}`}
+            </p>
+          </div>
+          <div className="overflow-x-auto">
+            <CITIndexTable rows={citData} citReportDate={citReportDate} />
+          </div>
+        </div>
+      )}
 
       {/* Sector Tables */}
       {sectors.map((sector) => (
