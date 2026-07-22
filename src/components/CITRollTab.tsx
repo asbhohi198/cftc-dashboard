@@ -57,6 +57,121 @@ function formatNumber(num: number): string {
   return inK.toFixed(0) + "K";
 }
 
+// GSCI Roll Window Configuration
+// Roll windows are typically 5th-9th business day of the month
+const GSCI_CONTRACT_MONTHS: Record<string, number[]> = {
+  "corn": [3, 5, 7, 9, 12], // Mar, May, Jul, Sep, Dec
+  "soybeans": [1, 3, 5, 7, 8, 9, 11], // Jan, Mar, May, Jul, Aug, Sep, Nov
+  "chicago-wheat": [3, 5, 7, 9, 12],
+  "kansas-wheat": [3, 5, 7, 9, 12],
+  "soyoil": [1, 3, 5, 7, 8, 9, 10, 12],
+  "soymeal": [1, 3, 5, 7, 8, 9, 10, 12],
+  "live-cattle": [2, 4, 6, 8, 10, 12],
+  "lean-hogs": [2, 4, 5, 6, 7, 8, 10, 12],
+  "feeder-cattle": [1, 3, 4, 5, 8, 9, 10, 11],
+  "sugar": [3, 5, 7, 10],
+  "arabica-coffee": [3, 5, 7, 9, 12],
+  "ny-cocoa": [3, 5, 7, 9, 12],
+  "cotton": [3, 5, 7, 10, 12],
+};
+
+const MONTH_CODES: Record<number, string> = {
+  1: "F", 2: "G", 3: "H", 4: "J", 5: "K", 6: "M",
+  7: "N", 8: "Q", 9: "U", 10: "V", 11: "X", 12: "Z"
+};
+
+const MONTH_NAMES: Record<number, string> = {
+  1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun",
+  7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"
+};
+
+const COMMODITY_SYMBOLS: Record<string, string> = {
+  "corn": "C",
+  "soybeans": "S",
+  "chicago-wheat": "W",
+  "kansas-wheat": "KW",
+  "soyoil": "BO",
+  "soymeal": "SM",
+  "live-cattle": "LC",
+  "lean-hogs": "LH",
+  "feeder-cattle": "FC",
+  "sugar": "SB",
+  "arabica-coffee": "KC",
+  "ny-cocoa": "CC",
+  "cotton": "CT",
+};
+
+function getNextRollWindow(commodityId: string): { spread: string; rollDates: string } {
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1; // 1-12
+  const currentYear = now.getFullYear();
+
+  const contractMonths = GSCI_CONTRACT_MONTHS[commodityId] || [3, 5, 7, 9, 12];
+  const symbol = COMMODITY_SYMBOLS[commodityId] || commodityId.toUpperCase();
+
+  // Find the next contract month (the one we're rolling FROM)
+  let frontMonth = -1;
+  let frontYear = currentYear;
+
+  for (const month of contractMonths) {
+    if (month > currentMonth) {
+      frontMonth = month;
+      break;
+    }
+  }
+
+  // If no month found this year, use first month of next year
+  if (frontMonth === -1) {
+    frontMonth = contractMonths[0];
+    frontYear = currentYear + 1;
+  }
+
+  // Find the back month (what we're rolling TO)
+  const frontIdx = contractMonths.indexOf(frontMonth);
+  let backMonth: number;
+  let backYear = frontYear;
+
+  if (frontIdx < contractMonths.length - 1) {
+    backMonth = contractMonths[frontIdx + 1];
+  } else {
+    backMonth = contractMonths[0];
+    backYear = frontYear + 1;
+  }
+
+  // Format spread name
+  const frontCode = MONTH_CODES[frontMonth];
+  const backCode = MONTH_CODES[backMonth];
+  const frontYearShort = frontYear.toString().slice(-2);
+  const backYearShort = backYear.toString().slice(-2);
+
+  const spread = `${symbol}${frontCode}${frontYearShort}/${symbol}${backCode}${backYearShort}`;
+
+  // Calculate roll window dates (5th-9th business day of front month)
+  // Approximate: assume roll window is around 7th-11th calendar day
+  const rollStart = new Date(frontYear, frontMonth - 1, 5);
+  const rollEnd = new Date(frontYear, frontMonth - 1, 9);
+
+  const rollDates = `${MONTH_NAMES[frontMonth]} ${rollStart.getDate()}-${rollEnd.getDate()}`;
+
+  return { spread, rollDates };
+}
+
+function getSignal(commodityId: string, name: string, zScore: number): string | null {
+  if (Math.abs(zScore) < 1.5) return null;
+
+  const { spread, rollDates } = getNextRollWindow(commodityId);
+
+  if (zScore <= -1.5) {
+    // Negative Z-score: Index much larger than MM, heavy sell pressure on roll
+    // Signal: Buy the spread (buy nearby, sell deferred) to fade the pressure
+    return `BUY ${spread} into roll (${rollDates})`;
+  } else {
+    // Positive Z-score: MM larger than Index, less roll pressure
+    // Signal: Sell the spread (sell nearby, buy deferred)
+    return `SELL ${spread} into roll (${rollDates})`;
+  }
+}
+
 export function CITRollTab() {
   const [data, setData] = useState<CITRow[]>([]);
   const [reportDate, setReportDate] = useState<string>("");
@@ -164,10 +279,13 @@ export function CITRollTab() {
               <th className="text-center py-3 px-4 text-zinc-400 font-medium">Max</th>
               <th className="text-center py-3 px-4 text-zinc-400 font-medium">% of Min</th>
               <th className="text-center py-3 px-4 text-zinc-400 font-medium">Z-Score</th>
+              <th className="text-left py-3 px-4 text-zinc-400 font-medium">Signal</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((row) => (
+            {data.map((row) => {
+              const signal = getSignal(row.id, row.name, row.rollZScore);
+              return (
               <tr key={row.id} className="border-b border-zinc-800 hover:bg-zinc-800/30">
                 <td className="py-2 px-4 text-white font-medium">{row.name}</td>
                 <td className={`py-2 px-4 text-center font-mono ${row.mmNet >= 0 ? "text-green-400" : "text-red-400"}`}>
@@ -187,8 +305,11 @@ export function CITRollTab() {
                 <td className={`py-2 px-4 text-center font-mono font-bold rounded ${getZScoreColor(row.rollZScore)}`}>
                   {row.rollZScore.toFixed(2)}
                 </td>
+                <td className={`py-2 px-4 text-left text-xs ${signal?.startsWith("BUY") ? "text-green-400" : signal?.startsWith("SELL") ? "text-red-400" : "text-zinc-500"}`}>
+                  {signal || "-"}
+                </td>
               </tr>
-            ))}
+            );})}
           </tbody>
         </table>
       </div>
