@@ -23,6 +23,7 @@ export interface EmailSubscription {
     tradersPctLongShort: SignalConfig; // COT traders % long/short (% threshold)
     cotRvs: SignalConfig;            // COT - RVs (z-score threshold)
     cotVsSpreads: SignalConfig;      // COT vs Spreads (z-score threshold)
+    citRollPosition: SignalConfig;   // CIT Roll Position alerts (z-score threshold)
   };
   recipients: string[];
   enabled: boolean;
@@ -85,6 +86,13 @@ const SIGNAL_DEFINITIONS = {
     options: [1.5, 2.0, 2.5, 3.0],
     defaultThreshold: 2.0,
   },
+  citRollPosition: {
+    label: "CIT Roll Position",
+    description: "Alert on CIT roll pressure (Net MM - Index) z-score extremes",
+    thresholdType: "zscore" as const,
+    options: [1.5, 2.0, 2.5, 3.0],
+    defaultThreshold: 1.5,
+  },
 };
 
 type SignalKey = keyof typeof SIGNAL_DEFINITIONS;
@@ -96,6 +104,7 @@ const DEFAULT_SIGNALS: EmailSubscription["signals"] = {
   tradersPctLongShort: { enabled: false, threshold: 70 },
   cotRvs: { enabled: true, threshold: 2.0 },
   cotVsSpreads: { enabled: false, threshold: 2.0 },
+  citRollPosition: { enabled: false, threshold: 1.5 },
 };
 
 export function EmailSubsTab() {
