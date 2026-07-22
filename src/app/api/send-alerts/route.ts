@@ -461,7 +461,7 @@ interface SpreadInfo {
   rollStatus: string; // e.g., "Roll in 12 sessions" or "Roll active" or "Roll complete"
 }
 
-// Get current spread months and roll info for a commodity
+// Get the NEXT available roll spread (if current roll is complete, skip to next contract)
 function getCurrentSpreadWithRoll(contractId: string): SpreadInfo {
   const info = CIT_CONTRACT_INFO[contractId];
   if (!info) return { front: "?", back: "?", rollMonth: "?", rollStartDate: "?", tradingDaysUntilRoll: 0, rollStatus: "?" };
@@ -470,7 +470,6 @@ function getCurrentSpreadWithRoll(contractId: string): SpreadInfo {
   const currentMonth = now.getMonth() + 1; // 1-12
   const currentDay = now.getDate();
   const currentYear = now.getFullYear();
-  const yearShort = currentYear % 100; // Last 2 digits
 
   // Find the front month (first contract month that hasn't expired yet)
   // Contracts typically expire around the 5th of the delivery month
@@ -491,51 +490,68 @@ function getCurrentSpreadWithRoll(contractId: string): SpreadInfo {
     frontYear = currentYear + 1;
   }
 
-  // Back month is the next contract after front
-  let backIdx = frontIdx + 1;
-  let backYear = frontYear;
-  if (backIdx >= info.months.length) {
-    backIdx = 0;
-    backYear = frontYear + 1;
-  }
-
-  const frontMonth = info.months[frontIdx];
-  const backMonth = info.months[backIdx];
-  const frontMonthNum = MONTH_CODE_TO_NUM[frontMonth];
-
-  // Roll period: Goldman Roll is typically business days 5-9 of the month PRIOR to the front month
-  let rollMonthNum = frontMonthNum - 1;
-  let rollYear = frontYear;
-  if (rollMonthNum < 1) {
-    rollMonthNum = 12;
-    rollYear = frontYear - 1;
-  }
-
-  const rollStartDate = getFifthBusinessDay(rollMonthNum, rollYear);
-  const rollEndDate = new Date(rollStartDate);
-  rollEndDate.setDate(rollEndDate.getDate() + 6); // ~5 trading days
-
-  // Calculate trading days until roll
-  const tradingDaysUntilRoll = getTradingDaysBetween(now, rollStartDate);
-
-  // Determine roll status
-  let rollStatus: string;
-  if (now < rollStartDate) {
-    rollStatus = `Roll starts in ${tradingDaysUntilRoll} sessions`;
-  } else if (now <= rollEndDate) {
-    rollStatus = "ROLL ACTIVE NOW";
-  } else {
-    rollStatus = "Roll complete for this contract";
-  }
-
-  return {
-    front: `${frontMonth}${frontYear % 100}`,
-    back: `${backMonth}${backYear % 100}`,
-    rollMonth: MONTH_NAMES[rollMonthNum],
-    rollStartDate: `${MONTH_NAMES[rollMonthNum]} ${rollStartDate.getDate()}`,
-    tradingDaysUntilRoll,
-    rollStatus,
+  // Helper to get next contract index and year
+  const getNextContract = (idx: number, year: number): { idx: number; year: number } => {
+    let nextIdx = idx + 1;
+    let nextYear = year;
+    if (nextIdx >= info.months.length) {
+      nextIdx = 0;
+      nextYear = year + 1;
+    }
+    return { idx: nextIdx, year: nextYear };
   };
+
+  // Calculate roll info for a given front/back pair
+  const getRollInfo = (fIdx: number, fYear: number, bIdx: number, bYear: number): SpreadInfo => {
+    const frontMonth = info.months[fIdx];
+    const backMonth = info.months[bIdx];
+    const frontMonthNum = MONTH_CODE_TO_NUM[frontMonth];
+
+    // Roll period: Goldman Roll is typically business days 5-9 of the month PRIOR to the front month
+    let rollMonthNum = frontMonthNum - 1;
+    let rollYear = fYear;
+    if (rollMonthNum < 1) {
+      rollMonthNum = 12;
+      rollYear = fYear - 1;
+    }
+
+    const rollStartDate = getFifthBusinessDay(rollMonthNum, rollYear);
+    const rollEndDate = new Date(rollStartDate);
+    rollEndDate.setDate(rollEndDate.getDate() + 6); // ~5 trading days
+
+    const tradingDaysUntilRoll = getTradingDaysBetween(now, rollStartDate);
+
+    let rollStatus: string;
+    if (now < rollStartDate) {
+      rollStatus = `Roll starts in ${tradingDaysUntilRoll} sessions`;
+    } else if (now <= rollEndDate) {
+      rollStatus = "ROLL ACTIVE NOW";
+    } else {
+      rollStatus = "complete"; // Marker to skip to next
+    }
+
+    return {
+      front: `${frontMonth}${fYear % 100}`,
+      back: `${backMonth}${bYear % 100}`,
+      rollMonth: MONTH_NAMES[rollMonthNum],
+      rollStartDate: `${MONTH_NAMES[rollMonthNum]} ${rollStartDate.getDate()}`,
+      tradingDaysUntilRoll,
+      rollStatus,
+    };
+  };
+
+  // Get initial front/back pair
+  let back = getNextContract(frontIdx, frontYear);
+  let rollInfo = getRollInfo(frontIdx, frontYear, back.idx, back.year);
+
+  // If roll is complete, move to next contract pair
+  if (rollInfo.rollStatus === "complete") {
+    const newFront = back;
+    const newBack = getNextContract(newFront.idx, newFront.year);
+    rollInfo = getRollInfo(newFront.idx, newFront.year, newBack.idx, newBack.year);
+  }
+
+  return rollInfo;
 }
 
 // Signal: CIT Roll Position (z-score of MM - Index)

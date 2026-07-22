@@ -118,7 +118,43 @@ const CHART_ORDER: string[] = [
   "cotton",
 ];
 
-function getNextRollWindow(commodityId: string): { spread: string; rollDates: string } {
+// Calculate trading days between two dates (excludes weekends)
+function getTradingDaysBetween(start: Date, end: Date): number {
+  let count = 0;
+  const current = new Date(start);
+  while (current < end) {
+    const day = current.getDay();
+    if (day !== 0 && day !== 6) {
+      count++;
+    }
+    current.setDate(current.getDate() + 1);
+  }
+  return count;
+}
+
+// Get the 5th business day of a month
+function getFifthBusinessDay(month: number, year: number): Date {
+  const date = new Date(year, month - 1, 1);
+  let businessDays = 0;
+  while (businessDays < 5) {
+    const day = date.getDay();
+    if (day !== 0 && day !== 6) {
+      businessDays++;
+      if (businessDays === 5) break;
+    }
+    date.setDate(date.getDate() + 1);
+  }
+  return date;
+}
+
+interface RollInfo {
+  spread: string;
+  rollStatus: string;
+  isActive: boolean;
+}
+
+// Get the NEXT available roll (if current roll is complete, skip to next contract)
+function getNextRollWindow(commodityId: string): RollInfo {
   const now = new Date();
   const currentMonth = now.getMonth() + 1; // 1-12
   const currentYear = now.getFullYear();
@@ -126,7 +162,46 @@ function getNextRollWindow(commodityId: string): { spread: string; rollDates: st
   const contractMonths = GSCI_CONTRACT_MONTHS[commodityId] || [3, 5, 7, 9, 12];
   const symbol = COMMODITY_SYMBOLS[commodityId] || commodityId.toUpperCase();
 
-  // Find the next contract month (the one we're rolling FROM)
+  // Helper to get next contract
+  const getNextContract = (idx: number, year: number): { month: number; year: number } => {
+    if (idx < contractMonths.length - 1) {
+      return { month: contractMonths[idx + 1], year };
+    }
+    return { month: contractMonths[0], year: year + 1 };
+  };
+
+  // Calculate roll info for a front/back pair
+  const getRollInfo = (frontMonth: number, frontYear: number, backMonth: number, backYear: number): RollInfo => {
+    const frontCode = MONTH_CODES[frontMonth];
+    const backCode = MONTH_CODES[backMonth];
+    const frontYearShort = frontYear.toString().slice(-2);
+    const backYearShort = backYear.toString().slice(-2);
+    const spread = `${symbol}${frontCode}${frontYearShort}/${backCode}${backYearShort}`;
+
+    // Roll period: 5th-9th business day of the month PRIOR to front month
+    let rollMonthNum = frontMonth - 1;
+    let rollYear = frontYear;
+    if (rollMonthNum < 1) {
+      rollMonthNum = 12;
+      rollYear = frontYear - 1;
+    }
+
+    const rollStartDate = getFifthBusinessDay(rollMonthNum, rollYear);
+    const rollEndDate = new Date(rollStartDate);
+    rollEndDate.setDate(rollEndDate.getDate() + 6);
+
+    const tradingDays = getTradingDaysBetween(now, rollStartDate);
+
+    if (now < rollStartDate) {
+      return { spread, rollStatus: `Roll in ${tradingDays} sessions`, isActive: false };
+    } else if (now <= rollEndDate) {
+      return { spread, rollStatus: "ROLL ACTIVE", isActive: true };
+    } else {
+      return { spread, rollStatus: "complete", isActive: false };
+    }
+  };
+
+  // Find the initial front month
   let frontMonth = -1;
   let frontYear = currentYear;
 
@@ -137,55 +212,39 @@ function getNextRollWindow(commodityId: string): { spread: string; rollDates: st
     }
   }
 
-  // If no month found this year, use first month of next year
   if (frontMonth === -1) {
     frontMonth = contractMonths[0];
     frontYear = currentYear + 1;
   }
 
-  // Find the back month (what we're rolling TO)
   const frontIdx = contractMonths.indexOf(frontMonth);
-  let backMonth: number;
-  let backYear = frontYear;
+  const back = getNextContract(frontIdx, frontYear);
 
-  if (frontIdx < contractMonths.length - 1) {
-    backMonth = contractMonths[frontIdx + 1];
-  } else {
-    backMonth = contractMonths[0];
-    backYear = frontYear + 1;
+  let rollInfo = getRollInfo(frontMonth, frontYear, back.month, back.year);
+
+  // If roll is complete, move to next contract pair
+  if (rollInfo.rollStatus === "complete") {
+    const newFront = back;
+    const newBack = getNextContract(contractMonths.indexOf(newFront.month), newFront.year);
+    rollInfo = getRollInfo(newFront.month, newFront.year, newBack.month, newBack.year);
   }
 
-  // Format spread name
-  const frontCode = MONTH_CODES[frontMonth];
-  const backCode = MONTH_CODES[backMonth];
-  const frontYearShort = frontYear.toString().slice(-2);
-  const backYearShort = backYear.toString().slice(-2);
-
-  const spread = `${symbol}${frontCode}${frontYearShort}/${symbol}${backCode}${backYearShort}`;
-
-  // Calculate roll window dates (5th-9th business day of front month)
-  // Approximate: assume roll window is around 7th-11th calendar day
-  const rollStart = new Date(frontYear, frontMonth - 1, 5);
-  const rollEnd = new Date(frontYear, frontMonth - 1, 9);
-
-  const rollDates = `${MONTH_NAMES[frontMonth]} ${rollStart.getDate()}-${rollEnd.getDate()}`;
-
-  return { spread, rollDates };
+  return rollInfo;
 }
 
 function getSignal(commodityId: string, name: string, zScore: number): string | null {
   if (Math.abs(zScore) < 1.5) return null;
 
-  const { spread, rollDates } = getNextRollWindow(commodityId);
+  const { spread, rollStatus } = getNextRollWindow(commodityId);
 
   if (zScore <= -1.5) {
     // Negative Z-score: Index much larger than MM, heavy sell pressure on roll
     // Signal: Buy the spread (buy nearby, sell deferred) to fade the pressure
-    return `BUY ${spread} into roll (${rollDates})`;
+    return `BUY ${spread} | ${rollStatus}`;
   } else {
     // Positive Z-score: MM larger than Index, less roll pressure
     // Signal: Sell the spread (sell nearby, buy deferred)
-    return `SELL ${spread} into roll (${rollDates})`;
+    return `SELL ${spread} | ${rollStatus}`;
   }
 }
 
