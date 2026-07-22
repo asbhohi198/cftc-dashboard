@@ -1,14 +1,42 @@
 import { NextResponse } from "next/server";
 import { COTRecord } from "@/lib/cftc";
 
-// Define the spread pairs
-const SPREAD_PAIRS = [
-  { id: "soybeans-corn", name: "Soybeans - Corn", leg1: "soybeans", leg2: "corn" },
-  { id: "soymeal-soyoil", name: "Soymeal - Soyoil", leg1: "soymeal", leg2: "soyoil" },
-  { id: "kw-w", name: "Kansas Wheat - Chicago Wheat", leg1: "kansas-wheat", leg2: "chicago-wheat" },
-  { id: "mw-kw", name: "Minneapolis Wheat - Kansas Wheat", leg1: "minneapolis-wheat", leg2: "kansas-wheat" },
-  { id: "mw-w", name: "Minneapolis Wheat - Chicago Wheat", leg1: "minneapolis-wheat", leg2: "chicago-wheat" },
-];
+// Define spread pairs by sector
+const SPREAD_PAIRS_BY_SECTOR: Record<string, { id: string; name: string; leg1: string; leg2: string }[]> = {
+  ags: [
+    { id: "soybeans-corn", name: "Soybeans - Corn", leg1: "soybeans", leg2: "corn" },
+    { id: "soymeal-soyoil", name: "Soymeal - Soyoil", leg1: "soymeal", leg2: "soyoil" },
+    { id: "kw-w", name: "Kansas Wheat - Chicago Wheat", leg1: "kansas-wheat", leg2: "chicago-wheat" },
+    { id: "mw-kw", name: "Minneapolis Wheat - Kansas Wheat", leg1: "minneapolis-wheat", leg2: "kansas-wheat" },
+    { id: "mw-w", name: "Minneapolis Wheat - Chicago Wheat", leg1: "minneapolis-wheat", leg2: "chicago-wheat" },
+    { id: "lc-fc", name: "Live Cattle - Feeder Cattle", leg1: "live-cattle", leg2: "feeder-cattle" },
+    { id: "lc-lh", name: "Live Cattle - Lean Hogs", leg1: "live-cattle", leg2: "lean-hogs" },
+  ],
+  energy: [
+    { id: "wti-brent", name: "WTI Crude - Brent Crude", leg1: "wti-crude", leg2: "brent-crude" },
+    { id: "rbob-ho", name: "RBOB Gasoline - Heating Oil", leg1: "rbob-gasoline", leg2: "heating-oil" },
+  ],
+  metals: [
+    { id: "gold-silver", name: "Gold - Silver", leg1: "gold", leg2: "silver" },
+    { id: "platinum-palladium", name: "Platinum - Palladium", leg1: "platinum", leg2: "palladium" },
+    { id: "gold-copper", name: "Gold - Copper", leg1: "gold", leg2: "copper" },
+  ],
+  equities: [
+    { id: "sp500-nasdaq", name: "S&P 500 - Nasdaq 100", leg1: "sp500", leg2: "nasdaq100" },
+    { id: "sp500-russell", name: "S&P 500 - Russell 2000", leg1: "sp500", leg2: "russell2000" },
+    { id: "dow-sp500", name: "Dow Jones - S&P 500", leg1: "dow", leg2: "sp500" },
+  ],
+  rates: [
+    { id: "10y-2y", name: "10-Year - 2-Year", leg1: "10y-note", leg2: "2y-note" },
+    { id: "30y-10y", name: "30-Year - 10-Year", leg1: "30y-bond", leg2: "10y-note" },
+    { id: "5y-2y", name: "5-Year - 2-Year", leg1: "5y-note", leg2: "2y-note" },
+  ],
+  fx: [
+    { id: "eurusd-gbpusd", name: "EUR/USD - GBP/USD", leg1: "eurusd", leg2: "gbpusd" },
+    { id: "audusd-nzdusd", name: "AUD/USD - NZD/USD", leg1: "audusd", leg2: "nzdusd" },
+    { id: "usdcad-usdmxn", name: "USD/CAD - USD/MXN", leg1: "usdcad", leg2: "usdmxn" },
+  ],
+};
 
 interface SpreadDataPoint {
   date: string;
@@ -27,11 +55,15 @@ interface SpreadData {
 
 export async function GET(request: Request) {
   const baseUrl = new URL(request.url).origin;
+  const { searchParams } = new URL(request.url);
+  const sector = searchParams.get("sector") || "ags";
+
+  const spreadPairs = SPREAD_PAIRS_BY_SECTOR[sector] || SPREAD_PAIRS_BY_SECTOR.ags;
 
   try {
     const results: SpreadData[] = [];
 
-    for (const pair of SPREAD_PAIRS) {
+    for (const pair of spreadPairs) {
       // Fetch data for both legs
       const [leg1Res, leg2Res] = await Promise.all([
         fetch(`${baseUrl}/api/cot?contract=${pair.leg1}`, { cache: "no-store" }),

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
   LineChart,
   Line,
@@ -11,9 +11,11 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
-import { X } from "lucide-react";
+import { X, ArrowUpDown, AlertTriangle } from "lucide-react";
 
 type TimeRange = "1y" | "2y" | "5y" | "all";
+type SortField = "name" | "current" | "change" | "mean" | "stdDev" | "zScore";
+type SortDirection = "asc" | "desc";
 
 const TIME_RANGE_OPTIONS: { id: TimeRange; label: string; weeks: number | null }[] = [
   { id: "1y", label: "1Y", weeks: 52 },
@@ -37,9 +39,20 @@ interface SpreadData {
   spreadChange: number;
 }
 
+interface SpreadWithStats extends SpreadData {
+  mean: number;
+  stdDev: number;
+  zScore: number;
+  timeRange: TimeRange;
+}
+
 interface APIResponse {
   success: boolean;
   spreads: SpreadData[];
+}
+
+interface COTRVsTabProps {
+  sector?: string;
 }
 
 function formatNumber(num: number): string {
@@ -82,23 +95,38 @@ function calculateZScore(current: number, mean: number, stdDev: number): number 
   return (current - mean) / stdDev;
 }
 
-export function COTRVsTab() {
+const SECTOR_TITLES: Record<string, string> = {
+  ags: "Agricultural",
+  energy: "Energy",
+  metals: "Metals",
+  equities: "Equities",
+  rates: "Rates",
+  fx: "FX",
+};
+
+export function COTRVsTab({ sector = "ags" }: COTRVsTabProps) {
   const [data, setData] = useState<SpreadData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [expandedSpread, setExpandedSpread] = useState<SpreadData | null>(null);
-  const [timeRange, setTimeRange] = useState<TimeRange>("all");
+  const [expandedSpread, setExpandedSpread] = useState<SpreadWithStats | null>(null);
   const [expandedTimeRange, setExpandedTimeRange] = useState<TimeRange>("all");
+  const [sortField, setSortField] = useState<SortField>("zScore");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [chartTimeRanges, setChartTimeRanges] = useState<Record<string, TimeRange>>({});
 
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch("/api/cot-rvs");
+        const res = await fetch(`/api/cot-rvs?sector=${sector}`);
         const json: APIResponse = await res.json();
         if (json.success) {
           setData(json.spreads);
+          // Initialize time ranges for all charts to "all"
+          const initialTimeRanges: Record<string, TimeRange> = {};
+          json.spreads.forEach(s => { initialTimeRanges[s.id] = "all"; });
+          setChartTimeRanges(initialTimeRanges);
         } else {
           setError("Failed to load data");
         }
@@ -110,7 +138,76 @@ export function COTRVsTab() {
     }
 
     fetchData();
-  }, []);
+  }, [sector]);
+
+  // Calculate stats and add time range for each spread
+  const spreadsWithStats: SpreadWithStats[] = useMemo(() => {
+    return data.map(spread => {
+      const mean = calculateMean(spread.data);
+      const stdDev = calculateStdDev(spread.data, mean);
+      const zScore = calculateZScore(spread.latestSpread, mean, stdDev);
+      return {
+        ...spread,
+        mean,
+        stdDev,
+        zScore,
+        timeRange: chartTimeRanges[spread.id] || "all",
+      };
+    });
+  }, [data, chartTimeRanges]);
+
+  // Sort data
+  const sortedSpreads = useMemo(() => {
+    const sorted = [...spreadsWithStats];
+    sorted.sort((a, b) => {
+      let aVal: number | string, bVal: number | string;
+      switch (sortField) {
+        case "name":
+          aVal = a.name;
+          bVal = b.name;
+          break;
+        case "current":
+          aVal = a.latestSpread;
+          bVal = b.latestSpread;
+          break;
+        case "change":
+          aVal = a.spreadChange;
+          bVal = b.spreadChange;
+          break;
+        case "mean":
+          aVal = a.mean;
+          bVal = b.mean;
+          break;
+        case "stdDev":
+          aVal = a.stdDev;
+          bVal = b.stdDev;
+          break;
+        case "zScore":
+        default:
+          aVal = Math.abs(a.zScore);
+          bVal = Math.abs(b.zScore);
+          break;
+      }
+      if (typeof aVal === "string" && typeof bVal === "string") {
+        return sortDirection === "asc" ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+      }
+      return sortDirection === "asc" ? (aVal as number) - (bVal as number) : (bVal as number) - (aVal as number);
+    });
+    return sorted;
+  }, [spreadsWithStats, sortField, sortDirection]);
+
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDirection("desc");
+    }
+  };
+
+  const updateChartTimeRange = (spreadId: string, range: TimeRange) => {
+    setChartTimeRanges(prev => ({ ...prev, [spreadId]: range }));
+  };
 
   if (loading) {
     return (
@@ -135,43 +232,38 @@ export function COTRVsTab() {
     );
   }
 
-  // Filter data based on time range
-  const getChartData = (spread: SpreadData, range: TimeRange) => {
+  // Filter data based on time range for a specific spread
+  const getChartData = (spread: SpreadWithStats) => {
+    const range = spread.timeRange;
     const timeOption = TIME_RANGE_OPTIONS.find(t => t.id === range);
     return timeOption?.weeks
       ? spread.data.slice(-timeOption.weeks)
       : spread.data;
   };
 
+  const SortHeader = ({ field, label }: { field: SortField; label: string }) => (
+    <th
+      className="text-right py-3 px-3 text-zinc-400 font-medium cursor-pointer hover:text-white transition-colors"
+      onClick={() => handleSort(field)}
+    >
+      <div className="flex items-center justify-end gap-1">
+        {label}
+        <ArrowUpDown className={`w-3 h-3 ${sortField === field ? "text-orange-400" : ""}`} />
+      </div>
+    </th>
+  );
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-white">
-              COT Relative Values
-            </h2>
-            <p className="text-xs text-zinc-500 mt-1">
-              Net Managed Money spread between related contracts (Leg1 MM Net - Leg2 MM Net)
-            </p>
-          </div>
-          {/* Time Range Toggle */}
-          <div className="flex items-center gap-1">
-            {TIME_RANGE_OPTIONS.map((option) => (
-              <button
-                key={option.id}
-                onClick={() => setTimeRange(option.id)}
-                className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${
-                  timeRange === option.id
-                    ? "bg-orange-500 text-white"
-                    : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white"
-                }`}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
+        <div>
+          <h2 className="text-lg font-semibold text-white">
+            COT Relative Values - {SECTOR_TITLES[sector] || sector}
+          </h2>
+          <p className="text-xs text-zinc-500 mt-1">
+            Net Managed Money spread between related contracts (Leg1 MM Net - Leg2 MM Net)
+          </p>
         </div>
       </div>
 
@@ -180,26 +272,38 @@ export function COTRVsTab() {
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-zinc-800/50 border-b border-zinc-700">
-              <th className="text-left py-3 px-4 text-zinc-400 font-medium">Spread</th>
-              <th className="text-right py-3 px-3 text-zinc-400 font-medium">Current</th>
-              <th className="text-right py-3 px-3 text-zinc-400 font-medium">WoW Chg</th>
-              <th className="text-right py-3 px-3 text-zinc-400 font-medium">LT Mean</th>
-              <th className="text-right py-3 px-3 text-zinc-400 font-medium">Std Dev</th>
-              <th className="text-right py-3 px-3 text-zinc-400 font-medium">Z-Score</th>
+              <th
+                className="text-left py-3 px-4 text-zinc-400 font-medium cursor-pointer hover:text-white transition-colors"
+                onClick={() => handleSort("name")}
+              >
+                <div className="flex items-center gap-1">
+                  Spread
+                  <ArrowUpDown className={`w-3 h-3 ${sortField === "name" ? "text-orange-400" : ""}`} />
+                </div>
+              </th>
+              <SortHeader field="current" label="Current" />
+              <SortHeader field="change" label="WoW Chg" />
+              <SortHeader field="mean" label="LT Mean" />
+              <SortHeader field="stdDev" label="Std Dev" />
+              <SortHeader field="zScore" label="Z-Score" />
+              <th className="text-center py-3 px-3 text-zinc-400 font-medium">Signal</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((spread) => {
-              const mean = calculateMean(spread.data);
-              const stdDev = calculateStdDev(spread.data, mean);
-              const zScore = calculateZScore(spread.latestSpread, mean, stdDev);
-              const zScoreColor = Math.abs(zScore) >= 2 ? (zScore > 0 ? "text-green-400" : "text-red-400") :
-                                  Math.abs(zScore) >= 1 ? (zScore > 0 ? "text-green-400/70" : "text-red-400/70") : "text-zinc-400";
-              const zScoreBg = Math.abs(zScore) >= 2 ? (zScore > 0 ? "bg-green-500/20" : "bg-red-500/20") : "";
+            {sortedSpreads.map((spread) => {
+              const isExtreme = Math.abs(spread.zScore) >= 2;
+              const zScoreColor = isExtreme ? (spread.zScore > 0 ? "text-green-400" : "text-red-400") :
+                                  Math.abs(spread.zScore) >= 1 ? (spread.zScore > 0 ? "text-green-400/70" : "text-red-400/70") : "text-zinc-400";
+              const zScoreBg = isExtreme ? (spread.zScore > 0 ? "bg-green-500/20" : "bg-red-500/20") : "";
 
               return (
-                <tr key={spread.id} className="border-b border-zinc-800 hover:bg-zinc-800/50">
-                  <td className="py-2.5 px-4 text-white font-medium">{spread.name}</td>
+                <tr key={spread.id} className={`border-b border-zinc-800 hover:bg-zinc-800/50 ${isExtreme ? "bg-yellow-500/5" : ""}`}>
+                  <td className="py-2.5 px-4 text-white font-medium">
+                    <div className="flex items-center gap-2">
+                      {isExtreme && <AlertTriangle className="w-4 h-4 text-yellow-400" />}
+                      {spread.name}
+                    </div>
+                  </td>
                   <td className={`py-2.5 px-3 text-right font-mono ${spread.latestSpread >= 0 ? "text-green-400" : "text-red-400"}`}>
                     {spread.latestSpread >= 0 ? "+" : ""}{formatNumber(spread.latestSpread)}
                   </td>
@@ -207,13 +311,22 @@ export function COTRVsTab() {
                     {spread.spreadChange >= 0 ? "+" : ""}{formatNumber(spread.spreadChange)}
                   </td>
                   <td className="py-2.5 px-3 text-right font-mono text-zinc-300">
-                    {formatNumber(mean)}
+                    {formatNumber(spread.mean)}
                   </td>
                   <td className="py-2.5 px-3 text-right font-mono text-zinc-300">
-                    {formatNumber(stdDev)}
+                    {formatNumber(spread.stdDev)}
                   </td>
                   <td className={`py-2.5 px-3 text-right font-mono font-bold ${zScoreBg} ${zScoreColor}`}>
-                    {zScore >= 0 ? "+" : ""}{zScore.toFixed(2)}
+                    {spread.zScore >= 0 ? "+" : ""}{spread.zScore.toFixed(2)}
+                  </td>
+                  <td className="py-2.5 px-3 text-center">
+                    {isExtreme && (
+                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold ${
+                        spread.zScore > 0 ? "bg-red-500/30 text-red-300" : "bg-green-500/30 text-green-300"
+                      }`}>
+                        {spread.zScore > 0 ? "FADE LONG" : "FADE SHORT"}
+                      </span>
+                    )}
                   </td>
                 </tr>
               );
@@ -222,31 +335,72 @@ export function COTRVsTab() {
         </table>
       </div>
 
+      {/* Mean Reversion Alert */}
+      {sortedSpreads.some(s => Math.abs(s.zScore) >= 2) && (
+        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" />
+            <div>
+              <h4 className="text-yellow-400 font-semibold text-sm">Potential Mean Reversion Trade</h4>
+              <p className="text-yellow-200/70 text-xs mt-1">
+                Z-Scores above ±2 indicate extreme positioning that may revert to the mean.
+                Consider fading spreads where MM positioning is historically stretched.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {data.map((spread) => {
-          const chartData = getChartData(spread, timeRange);
+        {sortedSpreads.map((spread) => {
+          const chartData = getChartData(spread);
           const intervalCount = Math.max(1, Math.floor(chartData.length / 8));
+          const isExtreme = Math.abs(spread.zScore) >= 2;
 
           return (
-            <div key={spread.id} className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
+            <div key={spread.id} className={`bg-zinc-900 border rounded-lg p-4 ${isExtreme ? "border-yellow-500/50" : "border-zinc-800"}`}>
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h3 className="text-md font-semibold text-white">{spread.name}</h3>
-                  <p className="text-xs text-zinc-500">MM Net Spread</p>
+                  <div className="flex items-center gap-2">
+                    {isExtreme && <AlertTriangle className="w-4 h-4 text-yellow-400" />}
+                    <h3 className="text-md font-semibold text-white">{spread.name}</h3>
+                  </div>
+                  <p className="text-xs text-zinc-500">MM Net Spread | Z: {spread.zScore >= 0 ? "+" : ""}{spread.zScore.toFixed(2)}</p>
                 </div>
-                <div className="text-right">
-                  <p className={`text-lg font-bold font-mono ${spread.latestSpread >= 0 ? "text-green-400" : "text-red-400"}`}>
-                    {spread.latestSpread >= 0 ? "+" : ""}{formatNumber(spread.latestSpread)}
-                  </p>
-                  <p className={`text-xs font-mono ${spread.spreadChange >= 0 ? "text-green-400" : "text-red-400"}`}>
-                    WoW: {spread.spreadChange >= 0 ? "+" : ""}{formatNumber(spread.spreadChange)}
-                  </p>
+                <div className="flex flex-col items-end gap-2">
+                  <div className="text-right">
+                    <p className={`text-lg font-bold font-mono ${spread.latestSpread >= 0 ? "text-green-400" : "text-red-400"}`}>
+                      {spread.latestSpread >= 0 ? "+" : ""}{formatNumber(spread.latestSpread)}
+                    </p>
+                  </div>
+                  {/* Individual Time Range Toggle */}
+                  <div className="flex items-center gap-0.5">
+                    {TIME_RANGE_OPTIONS.map((option) => (
+                      <button
+                        key={option.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          updateChartTimeRange(spread.id, option.id);
+                        }}
+                        className={`px-1.5 py-0.5 text-[10px] font-medium rounded transition-colors ${
+                          spread.timeRange === option.id
+                            ? "bg-orange-500 text-white"
+                            : "bg-zinc-800 text-zinc-500 hover:bg-zinc-700 hover:text-white"
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
               <div
                 className="h-[280px] cursor-pointer"
-                onClick={() => setExpandedSpread(spread)}
+                onClick={() => {
+                  setExpandedSpread(spread);
+                  setExpandedTimeRange(spread.timeRange);
+                }}
               >
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 5 }}>
@@ -256,10 +410,10 @@ export function COTRVsTab() {
                       tick={{ fill: "#ffffff", fontSize: 11 }}
                       angle={-90}
                       textAnchor="start"
-                      height={70}
+                      height={60}
                       interval={intervalCount}
                       tickFormatter={formatChartDate}
-                      dy={35}
+                      dy={25}
                       dx={-5}
                     />
                     <YAxis
@@ -283,7 +437,7 @@ export function COTRVsTab() {
                     <Line
                       type="monotone"
                       dataKey="mmNetSpread"
-                      stroke="#f97316"
+                      stroke={isExtreme ? "#eab308" : "#f97316"}
                       strokeWidth={2}
                       dot={false}
                     />
@@ -298,8 +452,12 @@ export function COTRVsTab() {
 
       {/* Expanded Modal */}
       {expandedSpread && (() => {
-        const chartData = getChartData(expandedSpread, expandedTimeRange);
+        const timeOption = TIME_RANGE_OPTIONS.find(t => t.id === expandedTimeRange);
+        const chartData = timeOption?.weeks
+          ? expandedSpread.data.slice(-timeOption.weeks)
+          : expandedSpread.data;
         const intervalCount = Math.max(1, Math.floor(chartData.length / 15));
+        const isExtreme = Math.abs(expandedSpread.zScore) >= 2;
 
         return (
           <div
@@ -307,14 +465,24 @@ export function COTRVsTab() {
             onClick={() => setExpandedSpread(null)}
           >
             <div
-              className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 max-w-[85vw] w-full max-h-[90vh] overflow-auto"
+              className={`bg-zinc-900 border rounded-lg p-6 max-w-[85vw] w-full max-h-[90vh] overflow-auto ${isExtreme ? "border-yellow-500/50" : "border-zinc-700"}`}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-xl font-semibold text-white">
-                    {expandedSpread.name}
-                  </h3>
+                  <div className="flex items-center gap-2">
+                    {isExtreme && <AlertTriangle className="w-5 h-5 text-yellow-400" />}
+                    <h3 className="text-xl font-semibold text-white">
+                      {expandedSpread.name}
+                    </h3>
+                    {isExtreme && (
+                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold ${
+                        expandedSpread.zScore > 0 ? "bg-red-500/30 text-red-300" : "bg-green-500/30 text-green-300"
+                      }`}>
+                        {expandedSpread.zScore > 0 ? "FADE LONG" : "FADE SHORT"}
+                      </span>
+                    )}
+                  </div>
                   <p className="text-sm text-zinc-400">
                     Net Managed Money Spread ({chartData.length} weeks)
                   </p>
@@ -345,7 +513,7 @@ export function COTRVsTab() {
               </div>
 
               {/* Stats Row */}
-              <div className="grid grid-cols-4 gap-3 mb-6">
+              <div className="grid grid-cols-5 gap-3 mb-6">
                 <div className="bg-zinc-800 rounded-lg p-3">
                   <p className="text-xs text-zinc-500">Current Spread</p>
                   <p className={`text-lg font-bold font-mono ${expandedSpread.latestSpread >= 0 ? "text-green-400" : "text-red-400"}`}>
@@ -359,15 +527,24 @@ export function COTRVsTab() {
                   </p>
                 </div>
                 <div className="bg-zinc-800 rounded-lg p-3">
-                  <p className="text-xs text-zinc-500">Period High</p>
+                  <p className="text-xs text-zinc-500">LT Mean</p>
                   <p className="text-lg font-bold font-mono text-white">
-                    {formatNumber(Math.max(...chartData.map(d => d.mmNetSpread)))}
+                    {formatNumber(expandedSpread.mean)}
                   </p>
                 </div>
                 <div className="bg-zinc-800 rounded-lg p-3">
-                  <p className="text-xs text-zinc-500">Period Low</p>
+                  <p className="text-xs text-zinc-500">Std Dev</p>
                   <p className="text-lg font-bold font-mono text-white">
-                    {formatNumber(Math.min(...chartData.map(d => d.mmNetSpread)))}
+                    {formatNumber(expandedSpread.stdDev)}
+                  </p>
+                </div>
+                <div className={`rounded-lg p-3 ${isExtreme ? "bg-yellow-500/20" : "bg-zinc-800"}`}>
+                  <p className="text-xs text-zinc-500">Z-Score</p>
+                  <p className={`text-lg font-bold font-mono ${
+                    isExtreme ? "text-yellow-400" :
+                    expandedSpread.zScore >= 0 ? "text-green-400" : "text-red-400"
+                  }`}>
+                    {expandedSpread.zScore >= 0 ? "+" : ""}{expandedSpread.zScore.toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -382,10 +559,10 @@ export function COTRVsTab() {
                       tick={{ fill: "#ffffff", fontSize: 12 }}
                       angle={-90}
                       textAnchor="start"
-                      height={80}
+                      height={70}
                       interval={intervalCount}
                       tickFormatter={formatChartDate}
-                      dy={40}
+                      dy={30}
                       dx={-5}
                     />
                     <YAxis
@@ -414,7 +591,7 @@ export function COTRVsTab() {
                     <Line
                       type="monotone"
                       dataKey="mmNetSpread"
-                      stroke="#f97316"
+                      stroke={isExtreme ? "#eab308" : "#f97316"}
                       strokeWidth={2.5}
                       dot={false}
                       name="mmNetSpread"

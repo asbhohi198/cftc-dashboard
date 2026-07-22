@@ -136,7 +136,7 @@ export function Dashboard() {
       </header>
 
       {/* Main Content */}
-      <main className={`mx-auto p-4 ${activeTab === "summary" ? "max-w-[1800px]" : "max-w-7xl"}`}>
+      <main className={`mx-auto p-4 ${activeTab === "summary" ? "max-w-[2100px]" : "max-w-7xl"}`}>
         {/* Breadcrumb showing current selection */}
         <div className="mb-4 text-sm text-zinc-500">
           <span className="text-zinc-400">{currentTabConfig?.label}</span>
@@ -245,7 +245,24 @@ export function Dashboard() {
         {activeTab === "cot-spreads" && <COTSpreadsTab />}
 
         {/* COT RVs */}
-        {activeTab === "cot-rvs" && <COTRVsTab />}
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-ags" && (
+          <COTRVsTab sector="ags" />
+        )}
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-energy" && (
+          <COTRVsTab sector="energy" />
+        )}
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-metals" && (
+          <COTRVsTab sector="metals" />
+        )}
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-equities" && (
+          <COTRVsTab sector="equities" />
+        )}
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-rates" && (
+          <COTRVsTab sector="rates" />
+        )}
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-fx" && (
+          <COTRVsTab sector="fx" />
+        )}
 
         {/* CIT - Index */}
         {activeTab === "cit-index" && activeSubTab === "cit-ags" && (

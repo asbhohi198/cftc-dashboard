@@ -136,7 +136,15 @@ export type COTTradersSubTab =
 export type CITIndexSubTab =
   | "cit-ags";
 
-export type SubTab = AgsGrainsSubTab | AgsOtherSubTab | AgsSoftsSubTab | AgsLivestockSubTab | EnergySubTab | MetalsSubTab | EquitiesSubTab | RatesSubTab | FXSubTab | CryptoSubTab | COTChangesSubTab | COTYTDSubTab | COTTradersSubTab | CITIndexSubTab | null;
+export type COTRVsSubTab =
+  | "rvs-ags"
+  | "rvs-energy"
+  | "rvs-metals"
+  | "rvs-equities"
+  | "rvs-rates"
+  | "rvs-fx";
+
+export type SubTab = AgsGrainsSubTab | AgsOtherSubTab | AgsSoftsSubTab | AgsLivestockSubTab | EnergySubTab | MetalsSubTab | EquitiesSubTab | RatesSubTab | FXSubTab | CryptoSubTab | COTChangesSubTab | COTYTDSubTab | COTTradersSubTab | CITIndexSubTab | COTRVsSubTab | null;
 
 // Tab configuration
 export interface TabConfig {
@@ -208,6 +216,14 @@ export const TAB_CONFIG: TabConfig[] = [
   {
     id: "cot-rvs",
     label: "COT - RVs",
+    subTabs: [
+      { id: "rvs-ags", label: "Ags" },
+      { id: "rvs-energy", label: "Energy" },
+      { id: "rvs-metals", label: "Metals" },
+      { id: "rvs-equities", label: "Equities" },
+      { id: "rvs-rates", label: "Rates" },
+      { id: "rvs-fx", label: "FX" },
+    ],
   },
   {
     id: "cit-index",
