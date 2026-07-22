@@ -13,6 +13,7 @@ const SECTOR_COMMODITIES: Record<AssetCategory, { id: ContractId; label: string 
     { id: "soybeans", label: "Soybeans" },
     { id: "soymeal", label: "Soybean Meal" },
     { id: "soyoil", label: "Soybean Oil" },
+    { id: "canola", label: "Canola" },
   ],
   "ags-softs": [
     { id: "sugar", label: "Sugar" },

@@ -11,6 +11,7 @@ const GO_CONTRACTS = [
   { id: "soybeans" as const, label: "S", name: "Soybeans" },
   { id: "soymeal" as const, label: "SM", name: "Soymeal" },
   { id: "soyoil" as const, label: "BO", name: "Soyoil" },
+  { id: "canola" as const, label: "RS", name: "Canola" },
 ];
 
 interface MMSplitData {

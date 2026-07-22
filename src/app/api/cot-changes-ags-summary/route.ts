@@ -10,6 +10,7 @@ const AGS_COMMODITIES: { id: ContractId; label: string }[] = [
   { id: "minneapolis-wheat", label: "Minneapolis Wheat" },
   { id: "soyoil", label: "Soybean Oil" },
   { id: "soymeal", label: "Soybean Meal" },
+  { id: "canola", label: "Canola" },
   { id: "live-cattle", label: "Live Cattle" },
   { id: "lean-hogs", label: "Lean Hogs" },
   { id: "feeder-cattle", label: "Feeder Cattle" },

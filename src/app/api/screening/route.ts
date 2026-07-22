@@ -31,6 +31,7 @@ const CONTRACTS_TO_SCREEN: { id: string; label: string; contracts: ContractId[];
   { id: "soybeans", label: "Soybeans", contracts: ["soybeans"], category: "ags" },
   { id: "soymeal", label: "Soymeal", contracts: ["soymeal"], category: "ags" },
   { id: "soyoil", label: "Soyoil", contracts: ["soyoil"], category: "ags" },
+  { id: "canola", label: "Canola", contracts: ["canola"], category: "ags" },
   { id: "all-us-wheat", label: "All US Wheat", contracts: ["chicago-wheat", "kansas-wheat", "minneapolis-wheat"], category: "ags" },
   { id: "all-us-oilseeds", label: "All US Oilseeds", contracts: ["soybeans", "soymeal", "soyoil"], category: "ags" },
   { id: "all-us-grains", label: "All US Grains", contracts: ["corn", "chicago-wheat", "kansas-wheat", "minneapolis-wheat"], category: "ags" },
