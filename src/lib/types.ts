@@ -173,6 +173,10 @@ export const TAB_CONFIG: TabConfig[] = [
     label: "Summary",
   },
   {
+    id: "cot-vs-price",
+    label: "COT vs Price",
+  },
+  {
     id: "cot-changes",
     label: "COT Changes",
     subTabs: [

@@ -24,6 +24,7 @@ import { COTRVsTab } from "./COTRVsTab";
 import { CITIndexTab } from "./CITIndexTab";
 import { CITRollTab } from "./CITRollTab";
 import { EmailSubsTab } from "./EmailSubsTab";
+import { COTvsPriceTab } from "./COTvsPriceTab";
 import { BarChart3 } from "lucide-react";
 
 // Map sub-tab IDs to contract IDs for the API
@@ -162,6 +163,9 @@ export function Dashboard() {
 
         {/* Summary */}
         {activeTab === "summary" && <SummaryTab />}
+
+        {/* COT vs Price */}
+        {activeTab === "cot-vs-price" && <COTvsPriceTab />}
 
         {/* COT Changes */}
         {activeTab === "cot-changes" && activeSubTab === "ags-summary" && (
