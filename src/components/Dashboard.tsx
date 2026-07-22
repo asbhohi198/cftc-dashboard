@@ -24,6 +24,7 @@ import { COTRVsTab } from "./COTRVsTab";
 import { CITIndexTab } from "./CITIndexTab";
 import { CITRollTab } from "./CITRollTab";
 import { COTPxWeightedTab } from "./COTPxWeightedTab";
+import { COTVolWeightedTab } from "./COTVolWeightedTab";
 import { EmailSubsTab } from "./EmailSubsTab";
 import { COTvsPriceTab } from "./COTvsPriceTab";
 import { BarChart3 } from "lucide-react";
@@ -310,6 +311,35 @@ export function Dashboard() {
         )}
         {activeTab === "cot-px-weighted" && activeSubTab === "px-crypto" && (
           <COTPxWeightedTab sector="crypto" />
+        )}
+
+        {/* COT - Vol Weighted */}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-ags" && (
+          <COTVolWeightedTab sector="ags" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-softs" && (
+          <COTVolWeightedTab sector="softs" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-livestock" && (
+          <COTVolWeightedTab sector="livestock" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-energy" && (
+          <COTVolWeightedTab sector="energy" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-metals" && (
+          <COTVolWeightedTab sector="metals" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-equities" && (
+          <COTVolWeightedTab sector="equities" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-rates" && (
+          <COTVolWeightedTab sector="rates" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-fx" && (
+          <COTVolWeightedTab sector="fx" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-crypto" && (
+          <COTVolWeightedTab sector="crypto" />
         )}
 
         {/* Ags - Grains & Oilseeds */}
