@@ -146,16 +146,16 @@ const LabeledScatterDot = (props: LabeledScatterDotProps) => {
       <circle
         cx={cx}
         cy={cy}
-        r={5}
+        r={6}
         fill={isExcluded ? "#52525b" : "#3b82f6"}
         opacity={isExcluded ? 0.5 : 1}
       />
       <text
         x={cx}
-        y={cy - 9}
+        y={cy - 10}
         textAnchor="middle"
         fill={isExcluded ? "#71717a" : "#ffffff"}
-        fontSize={9}
+        fontSize={11}
         fontWeight="bold"
         opacity={isExcluded ? 0.5 : 1}
       >
