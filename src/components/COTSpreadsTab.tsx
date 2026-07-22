@@ -524,9 +524,9 @@ export function COTSpreadsTab() {
               <ReferenceLine y={100} stroke="#52525b" strokeDasharray="5 5" />
               <ReferenceLine x={0} stroke="#52525b" strokeDasharray="5 5" />
 
-              {/* Quadrant labels */}
-              <text x={50} y={40} fill="#22c55e" fontSize={14} fontWeight="bold">BUY</text>
-              <text x={350} y={320} fill="#ef4444" fontSize={14} fontWeight="bold">SELL</text>
+              {/* Quadrant labels - BUY: top-left (MM short + backwardation), SELL: bottom-right (MM long + contango) */}
+              <text x={30} y={60} fill="#22c55e" fontSize={14} fontWeight="bold">BUY</text>
+              <text x={320} y={260} fill="#ef4444" fontSize={14} fontWeight="bold">SELL</text>
 
               {/* Regression line */}
               <Line
@@ -816,9 +816,9 @@ export function COTSpreadsTab() {
                   <ReferenceLine y={100} stroke="#52525b" strokeDasharray="5 5" />
                   <ReferenceLine x={0} stroke="#52525b" strokeDasharray="5 5" />
 
-                  {/* Quadrant labels */}
-                  <text x={60} y={50} fill="#22c55e" fontSize={16} fontWeight="bold">BUY</text>
-                  <text x={700} y={500} fill="#ef4444" fontSize={16} fontWeight="bold">SELL</text>
+                  {/* Quadrant labels - BUY: top-left (MM short + backwardation), SELL: bottom-right (MM long + contango) */}
+                  <text x={50} y={80} fill="#22c55e" fontSize={16} fontWeight="bold">BUY</text>
+                  <text x={600} y={400} fill="#ef4444" fontSize={16} fontWeight="bold">SELL</text>
 
                   {/* Regression line */}
                   <Line
