@@ -437,3 +437,119 @@ export function parseTFFRow(row: string): COTRecord | null {
     tradersTotalLong, tradersTotalShort,
   };
 }
+
+// ============================================
+// CIT (Supplemental Commitments of Index Traders) Report
+// ============================================
+
+// CIT Contract definitions (only available for agricultural commodities)
+export const CIT_CONTRACTS = {
+  corn: { code: "002602", name: "Corn", marketName: "CORN - CHICAGO BOARD OF TRADE" },
+  soybeans: { code: "005602", name: "Soybeans", marketName: "SOYBEANS - CHICAGO BOARD OF TRADE" },
+  "chicago-wheat": { code: "001602", name: "Chicago Wheat", marketName: "WHEAT-SRW - CHICAGO BOARD OF TRADE" },
+  "kansas-wheat": { code: "001612", name: "Kansas Wheat", marketName: "WHEAT-HRW - KANSAS CITY BOARD OF TRADE" },
+  soyoil: { code: "007601", name: "Soybean Oil", marketName: "SOYBEAN OIL - CHICAGO BOARD OF TRADE" },
+  soymeal: { code: "026603", name: "Soybean Meal", marketName: "SOYBEAN MEAL - CHICAGO BOARD OF TRADE" },
+  "live-cattle": { code: "057642", name: "Live Cattle", marketName: "LIVE CATTLE - CHICAGO MERCANTILE EXCHANGE" },
+  "lean-hogs": { code: "054642", name: "Lean Hogs", marketName: "LEAN HOGS - CHICAGO MERCANTILE EXCHANGE" },
+  "feeder-cattle": { code: "061641", name: "Feeder Cattle", marketName: "FEEDER CATTLE - CHICAGO MERCANTILE EXCHANGE" },
+  sugar: { code: "080732", name: "NY Sugar", marketName: "SUGAR NO. 11 - ICE FUTURES U.S." },
+  "arabica-coffee": { code: "083731", name: "NY Coffee", marketName: "COFFEE C - ICE FUTURES U.S." },
+  "ny-cocoa": { code: "073732", name: "NY Cocoa", marketName: "COCOA - ICE FUTURES U.S." },
+  cotton: { code: "033661", name: "NY Cotton", marketName: "COTTON NO. 2 - ICE FUTURES U.S." },
+} as const;
+
+export type CITContractId = keyof typeof CIT_CONTRACTS;
+
+// CIT Record interface
+export interface CITRecord {
+  date: string;
+  openInterest: number;
+  // Non-Commercial (Speculators)
+  nonCommLong: number;
+  nonCommShort: number;
+  nonCommSpread: number;
+  nonCommNet: number;
+  // Commercial (Hedgers)
+  commLong: number;
+  commShort: number;
+  commNet: number;
+  // Index Traders (the key category)
+  indexLong: number;
+  indexShort: number;
+  indexNet: number;
+  // Non-Reportable
+  nonReptLong: number;
+  nonReptShort: number;
+  nonReptNet: number;
+  // Calculated: Index as % of OI
+  indexPctOI: number;
+}
+
+// Get CIT report URL
+export function getCITUrl(year: number): string {
+  return `https://www.cftc.gov/files/dea/history/dea_cit_txt_${year}.zip`;
+}
+
+// Parse a CIT report row
+export function parseCITRow(row: string): CITRecord | null {
+  const fields: string[] = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (const char of row) {
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      fields.push(current.trim());
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+  fields.push(current.trim());
+
+  if (fields.length < 20) return null;
+
+  const parseNum = (s: string): number => {
+    const cleaned = s.replace(/[^0-9.-]/g, "");
+    return cleaned ? parseFloat(cleaned) : 0;
+  };
+
+  const date = fields[2]; // Report_Date_as_YYYY-MM-DD
+  const openInterest = parseNum(fields[7]);
+
+  // Non-Commercial
+  const nonCommLong = parseNum(fields[8]);
+  const nonCommShort = parseNum(fields[9]);
+  const nonCommSpread = parseNum(fields[10]);
+  const nonCommNet = nonCommLong - nonCommShort;
+
+  // Commercial
+  const commLong = parseNum(fields[11]);
+  const commShort = parseNum(fields[12]);
+  const commNet = commLong - commShort;
+
+  // Index Traders
+  const indexLong = parseNum(fields[13]);
+  const indexShort = parseNum(fields[14]);
+  const indexNet = indexLong - indexShort;
+
+  // Non-Reportable
+  const nonReptLong = parseNum(fields[17]);
+  const nonReptShort = parseNum(fields[18]);
+  const nonReptNet = nonReptLong - nonReptShort;
+
+  // Index as % of OI
+  const indexPctOI = openInterest > 0 ? (indexNet / openInterest) * 100 : 0;
+
+  return {
+    date,
+    openInterest,
+    nonCommLong, nonCommShort, nonCommSpread, nonCommNet,
+    commLong, commShort, commNet,
+    indexLong, indexShort, indexNet,
+    nonReptLong, nonReptShort, nonReptNet,
+    indexPctOI,
+  };
+}

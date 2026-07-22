@@ -1,0 +1,189 @@
+import { NextRequest, NextResponse } from "next/server";
+import JSZip from "jszip";
+import { CIT_CONTRACTS, CITContractId, CITRecord, parseCITRow, getYearsToFetch, getCITUrl } from "@/lib/cftc";
+
+// In-memory cache
+const cache: Map<string, { data: CITRecord[]; timestamp: number }> = new Map();
+const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours
+
+async function fetchYearData(year: number, contractCode: string): Promise<CITRecord[]> {
+  const url = getCITUrl(year);
+
+  try {
+    const response = await fetch(url, {
+      headers: { "Accept-Encoding": "gzip, deflate" },
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+    const zip = await JSZip.loadAsync(arrayBuffer);
+
+    const txtFile = Object.keys(zip.files).find(name => name.endsWith('.txt'));
+    if (!txtFile) {
+      return [];
+    }
+
+    const content = await zip.files[txtFile].async("string");
+    const lines = content.split("\n");
+
+    const records: CITRecord[] = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+
+      // Check if this line contains our contract code
+      if (!line.includes(`"${contractCode}"`)) continue;
+
+      const record = parseCITRow(line);
+      if (record) {
+        records.push(record);
+      }
+    }
+
+    return records;
+  } catch {
+    return [];
+  }
+}
+
+async function fetchAllData(contractCode: string): Promise<CITRecord[]> {
+  const cacheKey = `cit_${contractCode}`;
+  const cached = cache.get(cacheKey);
+  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    return cached.data;
+  }
+
+  // CIT data goes back to 2006
+  const currentYear = new Date().getFullYear();
+  const years: number[] = [];
+  for (let y = 2006; y <= currentYear; y++) {
+    years.push(y);
+  }
+
+  const allRecords: CITRecord[] = [];
+
+  const batchSize = 4;
+  for (let i = 0; i < years.length; i += batchSize) {
+    const batch = years.slice(i, i + batchSize);
+    const batchResults = await Promise.all(
+      batch.map(year => fetchYearData(year, contractCode))
+    );
+    for (const records of batchResults) {
+      allRecords.push(...records);
+    }
+  }
+
+  allRecords.sort((a, b) => a.date.localeCompare(b.date));
+  cache.set(cacheKey, { data: allRecords, timestamp: Date.now() });
+
+  return allRecords;
+}
+
+export interface CITContractData {
+  id: CITContractId;
+  name: string;
+  // Latest data point
+  latestDate: string;
+  indexNet: number;
+  indexPctOI: number;
+  change: number; // Week-over-week change
+  recordMax: number;
+  recordMin: number;
+  pctMax: number; // Current as % of record max
+  // Historical data for charts
+  historicalData: {
+    date: string;
+    indexNet: number;
+    indexPctOI: number;
+  }[];
+}
+
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+  const sector = searchParams.get("sector") || "ags";
+
+  // CIT only available for ags
+  if (sector !== "ags") {
+    return NextResponse.json({
+      success: false,
+      error: "CIT report only available for agricultural commodities",
+    });
+  }
+
+  try {
+    const contractIds = Object.keys(CIT_CONTRACTS) as CITContractId[];
+    const results: CITContractData[] = [];
+
+    // Fetch all contracts in parallel
+    const allDataPromises = contractIds.map(async (contractId) => {
+      const contract = CIT_CONTRACTS[contractId];
+      const records = await fetchAllData(contract.code);
+
+      if (records.length === 0) {
+        return null;
+      }
+
+      // Get latest record and previous for change calculation
+      const latest = records[records.length - 1];
+      const previous = records.length > 1 ? records[records.length - 2] : null;
+      const change = previous ? latest.indexNet - previous.indexNet : 0;
+
+      // Calculate record max/min
+      let recordMax = -Infinity;
+      let recordMin = Infinity;
+      for (const r of records) {
+        if (r.indexNet > recordMax) recordMax = r.indexNet;
+        if (r.indexNet < recordMin) recordMin = r.indexNet;
+      }
+
+      // % of max
+      const pctMax = recordMax > 0 ? (latest.indexNet / recordMax) * 100 : 0;
+
+      // Historical data for charts
+      const historicalData = records.map(r => ({
+        date: r.date,
+        indexNet: r.indexNet,
+        indexPctOI: r.indexPctOI,
+      }));
+
+      return {
+        id: contractId,
+        name: contract.name,
+        latestDate: latest.date,
+        indexNet: latest.indexNet,
+        indexPctOI: latest.indexPctOI,
+        change,
+        recordMax: recordMax === -Infinity ? 0 : recordMax,
+        recordMin: recordMin === Infinity ? 0 : recordMin,
+        pctMax,
+        historicalData,
+      } as CITContractData;
+    });
+
+    const allData = await Promise.all(allDataPromises);
+
+    for (const data of allData) {
+      if (data) results.push(data);
+    }
+
+    // Get latest report date
+    const reportDate = results.length > 0 ? results[0].latestDate : "";
+
+    return NextResponse.json({
+      success: true,
+      sector,
+      reportDate,
+      contracts: results,
+    });
+  } catch (error) {
+    console.error("Error fetching CIT data:", error);
+    return NextResponse.json({
+      success: false,
+      error: "Failed to fetch CIT data",
+    });
+  }
+}

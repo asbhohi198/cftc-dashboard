@@ -68,6 +68,32 @@ function formatNumber(num: number): string {
   return Math.round(num).toLocaleString();
 }
 
+// Commodity codes for scatter plot labels
+const COMMODITY_CODES: Record<string, string> = {
+  "Corn": "C",
+  "Soybeans": "S",
+  "Chicago Wheat": "W",
+  "Kansas Wheat": "KW",
+  "Soyoil": "BO",
+  "Soymeal": "SM",
+  "NY Sugar": "SB",
+  "NY Coffee": "KC",
+  "NY Cocoa": "CC",
+  "Cotton": "CT",
+  "Live Cattle": "LC",
+  "Lean Hogs": "LH",
+  "Feeder Cattle": "FC",
+  "WTI Crude": "CL",
+  "Brent Crude": "BRN",
+  "Natural Gas": "NG",
+  "RBOB Gasoline": "RB",
+  "Heating Oil": "HO",
+  "Gold": "GC",
+  "Silver": "SI",
+  "Copper": "HG",
+  "Platinum": "PL",
+};
+
 // Get color for spread percentage (green = backwardation/bullish, red = contango/bearish)
 function getSpreadColor(pct: number): string {
   if (pct >= 105) return "#22c55e"; // Strong backwardation - bright green
@@ -91,6 +117,30 @@ const CustomXAxisTick = ({ x, y, payload }: { x?: number; y?: number; payload?: 
         transform="rotate(-90)"
       >
         {formatNumber(payload?.value || 0)}
+      </text>
+    </g>
+  );
+};
+
+// Custom scatter dot with commodity code label
+const LabeledScatterDot = (props: { cx?: number; cy?: number; payload?: ScatterPoint }) => {
+  const { cx, cy, payload } = props;
+  if (!cx || !cy || !payload) return null;
+
+  const code = COMMODITY_CODES[payload.name] || payload.name.slice(0, 2);
+
+  return (
+    <g>
+      <circle cx={cx} cy={cy} r={4} fill="#3b82f6" />
+      <text
+        x={cx}
+        y={cy - 8}
+        textAnchor="middle"
+        fill="#ffffff"
+        fontSize={9}
+        fontWeight="bold"
+      >
+        {code}
       </text>
     </g>
   );
@@ -295,12 +345,12 @@ export function COTSpreadsTab() {
                 dot={false}
               />
 
-              {/* Data points */}
-              <Scatter data={mainScatter.points} fill="#3b82f6">
-                {mainScatter.points.map((entry, index) => (
-                  <Cell key={index} fill="#3b82f6" />
-                ))}
-              </Scatter>
+              {/* Data points with labels */}
+              <Scatter
+                data={mainScatter.points}
+                fill="#3b82f6"
+                shape={<LabeledScatterDot />}
+              />
             </ComposedChart>
           </ResponsiveContainer>
           <div className="mt-2 text-xs text-zinc-500 text-center">

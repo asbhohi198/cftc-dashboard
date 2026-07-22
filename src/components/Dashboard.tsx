@@ -21,6 +21,7 @@ import { COTYTDTab } from "./COTYTDTab";
 import { COTTradersTab } from "./COTTradersTab";
 import { COTSpreadsTab } from "./COTSpreadsTab";
 import { COTRVsTab } from "./COTRVsTab";
+import { CITIndexTab } from "./CITIndexTab";
 import { BarChart3 } from "lucide-react";
 
 // Map sub-tab IDs to contract IDs for the API
@@ -245,6 +246,11 @@ export function Dashboard() {
 
         {/* COT RVs */}
         {activeTab === "cot-rvs" && <COTRVsTab />}
+
+        {/* CIT - Index */}
+        {activeTab === "cit-index" && activeSubTab === "cit-ags" && (
+          <CITIndexTab sector="ags" />
+        )}
 
         {/* Ags - Grains & Oilseeds */}
         {activeTab === "ags-grains" && activeSubTab === "all-us-wheat" && (

@@ -61,12 +61,33 @@ function formatFullDate(dateStr: string): string {
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
+// Calculate mean of spread values
+function calculateMean(data: SpreadDataPoint[]): number {
+  if (data.length === 0) return 0;
+  const sum = data.reduce((acc, d) => acc + d.mmNetSpread, 0);
+  return sum / data.length;
+}
+
+// Calculate standard deviation
+function calculateStdDev(data: SpreadDataPoint[], mean: number): number {
+  if (data.length < 2) return 0;
+  const squaredDiffs = data.map(d => Math.pow(d.mmNetSpread - mean, 2));
+  const avgSquaredDiff = squaredDiffs.reduce((a, b) => a + b, 0) / data.length;
+  return Math.sqrt(avgSquaredDiff);
+}
+
+// Calculate z-score (how many std devs from mean)
+function calculateZScore(current: number, mean: number, stdDev: number): number {
+  if (stdDev === 0) return 0;
+  return (current - mean) / stdDev;
+}
+
 export function COTRVsTab() {
   const [data, setData] = useState<SpreadData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedSpread, setExpandedSpread] = useState<SpreadData | null>(null);
-  const [timeRange, setTimeRange] = useState<TimeRange>("2y");
+  const [timeRange, setTimeRange] = useState<TimeRange>("all");
   const [expandedTimeRange, setExpandedTimeRange] = useState<TimeRange>("all");
 
   useEffect(() => {
@@ -154,6 +175,53 @@ export function COTRVsTab() {
         </div>
       </div>
 
+      {/* Summary Table */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="bg-zinc-800/50 border-b border-zinc-700">
+              <th className="text-left py-3 px-4 text-zinc-400 font-medium">Spread</th>
+              <th className="text-right py-3 px-3 text-zinc-400 font-medium">Current</th>
+              <th className="text-right py-3 px-3 text-zinc-400 font-medium">WoW Chg</th>
+              <th className="text-right py-3 px-3 text-zinc-400 font-medium">LT Mean</th>
+              <th className="text-right py-3 px-3 text-zinc-400 font-medium">Std Dev</th>
+              <th className="text-right py-3 px-3 text-zinc-400 font-medium">Z-Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((spread) => {
+              const mean = calculateMean(spread.data);
+              const stdDev = calculateStdDev(spread.data, mean);
+              const zScore = calculateZScore(spread.latestSpread, mean, stdDev);
+              const zScoreColor = Math.abs(zScore) >= 2 ? (zScore > 0 ? "text-green-400" : "text-red-400") :
+                                  Math.abs(zScore) >= 1 ? (zScore > 0 ? "text-green-400/70" : "text-red-400/70") : "text-zinc-400";
+              const zScoreBg = Math.abs(zScore) >= 2 ? (zScore > 0 ? "bg-green-500/20" : "bg-red-500/20") : "";
+
+              return (
+                <tr key={spread.id} className="border-b border-zinc-800 hover:bg-zinc-800/50">
+                  <td className="py-2.5 px-4 text-white font-medium">{spread.name}</td>
+                  <td className={`py-2.5 px-3 text-right font-mono ${spread.latestSpread >= 0 ? "text-green-400" : "text-red-400"}`}>
+                    {spread.latestSpread >= 0 ? "+" : ""}{formatNumber(spread.latestSpread)}
+                  </td>
+                  <td className={`py-2.5 px-3 text-right font-mono ${spread.spreadChange >= 0 ? "text-green-400" : "text-red-400"}`}>
+                    {spread.spreadChange >= 0 ? "+" : ""}{formatNumber(spread.spreadChange)}
+                  </td>
+                  <td className="py-2.5 px-3 text-right font-mono text-zinc-300">
+                    {formatNumber(mean)}
+                  </td>
+                  <td className="py-2.5 px-3 text-right font-mono text-zinc-300">
+                    {formatNumber(stdDev)}
+                  </td>
+                  <td className={`py-2.5 px-3 text-right font-mono font-bold ${zScoreBg} ${zScoreColor}`}>
+                    {zScore >= 0 ? "+" : ""}{zScore.toFixed(2)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {data.map((spread) => {
@@ -181,17 +249,17 @@ export function COTRVsTab() {
                 onClick={() => setExpandedSpread(spread)}
               >
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 60 }}>
+                  <LineChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                     <XAxis
                       dataKey="date"
                       tick={{ fill: "#ffffff", fontSize: 11 }}
                       angle={-90}
                       textAnchor="start"
-                      height={80}
+                      height={70}
                       interval={intervalCount}
                       tickFormatter={formatChartDate}
-                      dy={55}
+                      dy={35}
                       dx={-5}
                     />
                     <YAxis
@@ -307,17 +375,17 @@ export function COTRVsTab() {
               {/* Large Chart */}
               <div className="h-[50vh]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData} margin={{ top: 20, right: 30, left: 10, bottom: 100 }}>
+                  <LineChart data={chartData} margin={{ top: 20, right: 30, left: 10, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                     <XAxis
                       dataKey="date"
                       tick={{ fill: "#ffffff", fontSize: 12 }}
                       angle={-90}
                       textAnchor="start"
-                      height={100}
+                      height={80}
                       interval={intervalCount}
                       tickFormatter={formatChartDate}
-                      dy={55}
+                      dy={40}
                       dx={-5}
                     />
                     <YAxis
