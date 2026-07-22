@@ -235,6 +235,7 @@ export const TAB_CONFIG: TabConfig[] = [
     label: "CIT - Index",
     subTabs: [
       { id: "cit-ags", label: "Ags" },
+      { id: "cit-roll", label: "Roll Position" },
     ],
   },
   {
