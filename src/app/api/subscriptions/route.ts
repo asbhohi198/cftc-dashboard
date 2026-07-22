@@ -8,13 +8,26 @@ const redis = new Redis({
 
 const SUBSCRIPTIONS_KEY = "cftc_email_subscriptions";
 
+// Signal configuration with individual thresholds
+interface SignalConfig {
+  enabled: boolean;
+  threshold: number;
+}
+
 export interface EmailSubscription {
   id: string;
   name: string;
   frequency: "daily" | "weekly";
-  signalTypes: string[]; // "ALL", "rvs", "changes", "extremes"
   sectors: string[]; // "ALL", "ags", "energy", "metals", "equities", "rates", "fx", "crypto"
-  minZScore: number;
+  // Individual signal configs with thresholds
+  signals: {
+    mmPctHistMax: SignalConfig;      // Net MM as % historical max (% threshold)
+    mmPctOI: SignalConfig;           // Net MM as % of OI (z-score threshold)
+    weeklyMmChange: SignalConfig;    // Weekly net MM change (z-score threshold)
+    tradersPctLongShort: SignalConfig; // COT traders % long/short (% threshold)
+    cotRvs: SignalConfig;            // COT - RVs (z-score threshold)
+    cotVsSpreads: SignalConfig;      // COT vs Spreads (z-score threshold)
+  };
   recipients: string[];
   enabled: boolean;
   createdAt: string;
@@ -41,9 +54,8 @@ export async function POST(request: NextRequest) {
       id: `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       name: body.name,
       frequency: body.frequency,
-      signalTypes: body.signalTypes,
       sectors: body.sectors,
-      minZScore: body.minZScore,
+      signals: body.signals,
       recipients: body.recipients,
       enabled: body.enabled ?? true,
       createdAt: new Date().toISOString(),
@@ -91,9 +103,8 @@ export async function PUT(request: NextRequest) {
       ...subscriptions[index],
       name: body.name ?? subscriptions[index].name,
       frequency: body.frequency ?? subscriptions[index].frequency,
-      signalTypes: body.signalTypes ?? subscriptions[index].signalTypes,
       sectors: body.sectors ?? subscriptions[index].sectors,
-      minZScore: body.minZScore ?? subscriptions[index].minZScore,
+      signals: body.signals ?? subscriptions[index].signals,
       recipients: body.recipients ?? subscriptions[index].recipients,
       enabled: body.enabled ?? subscriptions[index].enabled,
     };
