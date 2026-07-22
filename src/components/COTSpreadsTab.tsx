@@ -574,7 +574,7 @@ export function COTSpreadsTab() {
               >
                 <h4 className="text-sm font-bold text-orange-400 mb-2">{item.name}</h4>
                 <ResponsiveContainer width="100%" height={180}>
-                  <ScatterChart margin={{ top: 10, right: 10, left: -10, bottom: 20 }}>
+                  <ScatterChart margin={{ top: 10, right: 10, left: -25, bottom: 20 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
                     <XAxis
                       type="number"
