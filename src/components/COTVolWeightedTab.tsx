@@ -140,12 +140,16 @@ export function COTVolWeightedTab({ sector }: COTVolWeightedTabProps) {
   }
 
   // Calculate aggregate historical data (sum of all contracts by date)
+  // Filter to start from 2011 to align with API's 1-year lookback period
+  const VOL_LOOKBACK_START = "2011-01-01";
   const calcAggregate = (rows: VolWeightedRow[]) => {
     if (rows.length === 0) return null;
 
     const dateMap = new Map<string, { volAdjustedPosition: number; count: number }>();
     for (const row of rows) {
       for (const h of row.historicalData) {
+        // Skip dates before 2011 (already filtered in API, but ensure consistency)
+        if (h.date < VOL_LOOKBACK_START) continue;
         const existing = dateMap.get(h.date);
         if (existing) {
           existing.volAdjustedPosition += h.volAdjustedPosition;
@@ -156,9 +160,10 @@ export function COTVolWeightedTab({ sector }: COTVolWeightedTabProps) {
       }
     }
 
-    // Only include dates where we have all contracts
+    // Include dates where we have at least 75% of contracts (handles missing data for some contracts)
+    const minCount = Math.ceil(rows.length * 0.75);
     const historicalData = Array.from(dateMap.entries())
-      .filter(([, v]) => v.count === rows.length)
+      .filter(([, v]) => v.count >= minCount)
       .map(([date, v]) => ({ date, volAdjustedPosition: v.volAdjustedPosition }))
       .sort((a, b) => a.date.localeCompare(b.date));
 

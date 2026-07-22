@@ -163,18 +163,22 @@ export async function GET(request: NextRequest) {
         const changePct = prevVolAdj !== 0 ? ((latestVolAdj - prevVolAdj) / Math.abs(prevVolAdj)) * 100 : 0;
 
         // Calculate historical vol-adjusted data
-        const historicalData = data.map((d, i) => ({
-          date: d.date,
-          mmNet: d.mmNetAll,
-          volAdjustedPosition: volAdjustedPositions[i],
-        }));
+        // Filter to start from 2011 to allow for 1-year lookback period
+        const VOL_LOOKBACK_START = "2011-01-01";
+        const historicalData = data
+          .map((d, i) => ({
+            date: d.date,
+            mmNet: d.mmNetAll,
+            volAdjustedPosition: volAdjustedPositions[i],
+          }))
+          .filter(d => d.date >= VOL_LOOKBACK_START);
 
-        // Calculate record max/min of vol-adjusted position
+        // Calculate record max/min from filtered data only (2011+)
         let recordMax = -Infinity;
         let recordMin = Infinity;
-        for (const volAdj of volAdjustedPositions) {
-          if (volAdj > recordMax) recordMax = volAdj;
-          if (volAdj < recordMin) recordMin = volAdj;
+        for (const h of historicalData) {
+          if (h.volAdjustedPosition > recordMax) recordMax = h.volAdjustedPosition;
+          if (h.volAdjustedPosition < recordMin) recordMin = h.volAdjustedPosition;
         }
 
         // % of max
