@@ -122,9 +122,70 @@ interface COTRecord {
   mmNetAll: number;
   mmLongAll: number;
   mmShortAll: number;
+  specNetAll: number;
+  specLongAll: number;
+  specShortAll: number;
   openInterest: number;
   [key: string]: string | number;
 }
+
+// Contracts by sector for scanning
+const CONTRACTS_BY_SECTOR: Record<string, { id: string; name: string }[]> = {
+  ags: [
+    { id: "corn", name: "Corn" },
+    { id: "soybeans", name: "Soybeans" },
+    { id: "chicago-wheat", name: "Chicago Wheat" },
+    { id: "kansas-wheat", name: "Kansas Wheat" },
+    { id: "soymeal", name: "Soymeal" },
+    { id: "soyoil", name: "Soyoil" },
+    { id: "live-cattle", name: "Live Cattle" },
+    { id: "feeder-cattle", name: "Feeder Cattle" },
+    { id: "lean-hogs", name: "Lean Hogs" },
+    { id: "sugar", name: "Sugar" },
+    { id: "cotton", name: "Cotton" },
+    { id: "arabica-coffee", name: "Coffee" },
+    { id: "ny-cocoa", name: "Cocoa" },
+  ],
+  energy: [
+    { id: "wti-crude", name: "WTI Crude" },
+    { id: "brent-crude", name: "Brent Crude" },
+    { id: "natural-gas", name: "Natural Gas" },
+    { id: "rbob-gasoline", name: "RBOB Gasoline" },
+    { id: "heating-oil", name: "Heating Oil" },
+  ],
+  metals: [
+    { id: "gold", name: "Gold" },
+    { id: "silver", name: "Silver" },
+    { id: "copper", name: "Copper" },
+    { id: "platinum", name: "Platinum" },
+    { id: "palladium", name: "Palladium" },
+  ],
+  equities: [
+    { id: "sp500", name: "S&P 500" },
+    { id: "nasdaq100", name: "Nasdaq 100" },
+    { id: "dow", name: "Dow Jones" },
+    { id: "russell2000", name: "Russell 2000" },
+    { id: "vix", name: "VIX" },
+  ],
+  rates: [
+    { id: "10y-note", name: "10-Year Note" },
+    { id: "2y-note", name: "2-Year Note" },
+    { id: "5y-note", name: "5-Year Note" },
+    { id: "30y-bond", name: "30-Year Bond" },
+  ],
+  fx: [
+    { id: "eurusd", name: "EUR/USD" },
+    { id: "usdjpy", name: "USD/JPY" },
+    { id: "gbpusd", name: "GBP/USD" },
+    { id: "usdcad", name: "USD/CAD" },
+    { id: "audusd", name: "AUD/USD" },
+    { id: "dxy", name: "DXY Index" },
+  ],
+  crypto: [
+    { id: "bitcoin", name: "Bitcoin" },
+    { id: "ethereum", name: "Ethereum" },
+  ],
+};
 
 // Fetch COT data for a contract
 async function fetchCOTData(baseUrl: string, contractId: string): Promise<COTRecord[]> {
@@ -136,6 +197,199 @@ async function fetchCOTData(baseUrl: string, contractId: string): Promise<COTRec
   } catch {
     return [];
   }
+}
+
+// Get contracts for sectors
+function getContractsForSectors(sectors: string[]): { id: string; name: string; sector: string }[] {
+  const includeSectors = sectors.includes("ALL") ? Object.keys(CONTRACTS_BY_SECTOR) : sectors;
+  const contracts: { id: string; name: string; sector: string }[] = [];
+
+  for (const sector of includeSectors) {
+    const sectorContracts = CONTRACTS_BY_SECTOR[sector] || [];
+    for (const contract of sectorContracts) {
+      contracts.push({ ...contract, sector });
+    }
+  }
+
+  return contracts;
+}
+
+// Signal: MM Net as % of Historical Max
+async function getMmPctHistMaxSignals(
+  baseUrl: string,
+  sectors: string[],
+  threshold: number
+): Promise<COTSignalForEmail[]> {
+  const signals: COTSignalForEmail[] = [];
+  const contracts = getContractsForSectors(sectors);
+
+  for (const contract of contracts) {
+    const data = await fetchCOTData(baseUrl, contract.id);
+    if (data.length < 10) continue;
+
+    const mmNetValues = data.map((d) => d.mmNetAll);
+    const maxLong = Math.max(...mmNetValues);
+    const maxShort = Math.min(...mmNetValues);
+    const latest = mmNetValues[mmNetValues.length - 1];
+
+    let pctOfMax = 0;
+    let direction: "long" | "short" | "neutral" = "neutral";
+
+    if (latest > 0 && maxLong > 0) {
+      pctOfMax = (latest / maxLong) * 100;
+      direction = "long";
+    } else if (latest < 0 && maxShort < 0) {
+      pctOfMax = (latest / maxShort) * 100;
+      direction = "short";
+    }
+
+    if (pctOfMax >= threshold) {
+      signals.push({
+        signalType: "mmPctHistMax",
+        signalLabel: "MM Net % Historical Max",
+        commodity: contract.name,
+        sector: contract.sector,
+        value: pctOfMax,
+        threshold,
+        direction,
+        tradeInstruction: direction === "long" ? "FADE LONG" : "FADE SHORT",
+      });
+    }
+  }
+
+  return signals;
+}
+
+// Signal: MM Net as % of Open Interest (z-score)
+async function getMmPctOISignals(
+  baseUrl: string,
+  sectors: string[],
+  threshold: number
+): Promise<COTSignalForEmail[]> {
+  const signals: COTSignalForEmail[] = [];
+  const contracts = getContractsForSectors(sectors);
+
+  for (const contract of contracts) {
+    const data = await fetchCOTData(baseUrl, contract.id);
+    if (data.length < 10) continue;
+
+    const pctOIValues = data.map((d) => {
+      if (d.openInterest === 0) return 0;
+      return (d.mmNetAll / d.openInterest) * 100;
+    });
+
+    const { mean, stdDev } = calculateStats(pctOIValues);
+    const latest = pctOIValues[pctOIValues.length - 1];
+    const zScore = calculateZScore(latest, mean, stdDev);
+
+    if (Math.abs(zScore) >= threshold) {
+      signals.push({
+        signalType: "mmPctOI",
+        signalLabel: "MM Net % OI (Z-Score)",
+        commodity: contract.name,
+        sector: contract.sector,
+        value: zScore,
+        threshold,
+        direction: zScore > 0 ? "long" : "short",
+        tradeInstruction: zScore > 0 ? "FADE LONG" : "FADE SHORT",
+      });
+    }
+  }
+
+  return signals;
+}
+
+// Signal: Weekly MM Net Change (z-score)
+async function getWeeklyMmChangeSignals(
+  baseUrl: string,
+  sectors: string[],
+  threshold: number
+): Promise<COTSignalForEmail[]> {
+  const signals: COTSignalForEmail[] = [];
+  const contracts = getContractsForSectors(sectors);
+
+  for (const contract of contracts) {
+    const data = await fetchCOTData(baseUrl, contract.id);
+    if (data.length < 10) continue;
+
+    // Calculate weekly changes
+    const weeklyChanges: number[] = [];
+    for (let i = 1; i < data.length; i++) {
+      weeklyChanges.push(data[i].mmNetAll - data[i - 1].mmNetAll);
+    }
+
+    if (weeklyChanges.length < 5) continue;
+
+    const { mean, stdDev } = calculateStats(weeklyChanges);
+    const latestChange = weeklyChanges[weeklyChanges.length - 1];
+    const zScore = calculateZScore(latestChange, mean, stdDev);
+
+    if (Math.abs(zScore) >= threshold) {
+      signals.push({
+        signalType: "weeklyMmChange",
+        signalLabel: "Weekly MM Change (Z-Score)",
+        commodity: contract.name,
+        sector: contract.sector,
+        value: zScore,
+        threshold,
+        direction: zScore > 0 ? "long" : "short",
+        tradeInstruction: zScore > 0 ? "MM buying aggressively" : "MM selling aggressively",
+      });
+    }
+  }
+
+  return signals;
+}
+
+// Signal: Traders % Long or Short exceeds threshold
+async function getTradersPctSignals(
+  baseUrl: string,
+  sectors: string[],
+  threshold: number
+): Promise<COTSignalForEmail[]> {
+  const signals: COTSignalForEmail[] = [];
+  const contracts = getContractsForSectors(sectors);
+
+  for (const contract of contracts) {
+    const data = await fetchCOTData(baseUrl, contract.id);
+    if (data.length < 1) continue;
+
+    const latest = data[data.length - 1];
+    const totalMM = latest.mmLongAll + latest.mmShortAll;
+
+    if (totalMM === 0) continue;
+
+    const pctLong = (latest.mmLongAll / totalMM) * 100;
+    const pctShort = (latest.mmShortAll / totalMM) * 100;
+
+    if (pctLong >= threshold) {
+      signals.push({
+        signalType: "tradersPctLongShort",
+        signalLabel: "MM % Long",
+        commodity: contract.name,
+        sector: contract.sector,
+        value: pctLong,
+        threshold,
+        direction: "long",
+        tradeInstruction: "FADE LONG - crowded positioning",
+      });
+    }
+
+    if (pctShort >= threshold) {
+      signals.push({
+        signalType: "tradersPctLongShort",
+        signalLabel: "MM % Short",
+        commodity: contract.name,
+        sector: contract.sector,
+        value: pctShort,
+        threshold,
+        direction: "short",
+        tradeInstruction: "FADE SHORT - crowded positioning",
+      });
+    }
+  }
+
+  return signals;
 }
 
 // Get COT RV signals
@@ -268,6 +522,34 @@ export async function GET(request: NextRequest) {
         console.log(`Processing subscription: ${sub.name}`);
         const allSignals: COTSignalForEmail[] = [];
 
+        // MM Net as % of Historical Max
+        if (sub.signals.mmPctHistMax?.enabled) {
+          const signals = await getMmPctHistMaxSignals(baseUrl, sub.sectors, sub.signals.mmPctHistMax.threshold);
+          allSignals.push(...signals);
+          console.log(`Found ${signals.length} MM % Hist Max signals`);
+        }
+
+        // MM Net as % of Open Interest (z-score)
+        if (sub.signals.mmPctOI?.enabled) {
+          const signals = await getMmPctOISignals(baseUrl, sub.sectors, sub.signals.mmPctOI.threshold);
+          allSignals.push(...signals);
+          console.log(`Found ${signals.length} MM % OI signals`);
+        }
+
+        // Weekly MM Net Change (z-score)
+        if (sub.signals.weeklyMmChange?.enabled) {
+          const signals = await getWeeklyMmChangeSignals(baseUrl, sub.sectors, sub.signals.weeklyMmChange.threshold);
+          allSignals.push(...signals);
+          console.log(`Found ${signals.length} Weekly MM Change signals`);
+        }
+
+        // Traders % Long or Short
+        if (sub.signals.tradersPctLongShort?.enabled) {
+          const signals = await getTradersPctSignals(baseUrl, sub.sectors, sub.signals.tradersPctLongShort.threshold);
+          allSignals.push(...signals);
+          console.log(`Found ${signals.length} Traders % Long/Short signals`);
+        }
+
         // COT RVs signals
         if (sub.signals.cotRvs?.enabled) {
           const rvSignals = await getCOTRVSignals(baseUrl, sub.sectors, sub.signals.cotRvs.threshold);
@@ -275,8 +557,8 @@ export async function GET(request: NextRequest) {
           console.log(`Found ${rvSignals.length} COT RV signals`);
         }
 
-        // TODO: Add other signal types as needed
-        // mmPctHistMax, mmPctOI, weeklyMmChange, tradersPctLongShort, cotVsSpreads, citRollPosition
+        // Note: cotVsSpreads and citRollPosition would need additional API data
+        // These can be added later when the underlying data is available
 
         // Generate email
         const html = generateCOTAlertEmail(sub.name, allSignals, reportDate);
