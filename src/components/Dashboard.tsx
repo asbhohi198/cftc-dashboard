@@ -22,6 +22,7 @@ import { COTTradersTab } from "./COTTradersTab";
 import { COTSpreadsTab } from "./COTSpreadsTab";
 import { COTRVsTab } from "./COTRVsTab";
 import { CITIndexTab } from "./CITIndexTab";
+import { CITRollTab } from "./CITRollTab";
 import { EmailSubsTab } from "./EmailSubsTab";
 import { BarChart3 } from "lucide-react";
 
@@ -272,6 +273,9 @@ export function Dashboard() {
         {/* CIT - Index */}
         {activeTab === "cit-index" && activeSubTab === "cit-ags" && (
           <CITIndexTab sector="ags" />
+        )}
+        {activeTab === "cit-index" && activeSubTab === "cit-roll" && (
+          <CITRollTab />
         )}
 
         {/* Ags - Grains & Oilseeds */}

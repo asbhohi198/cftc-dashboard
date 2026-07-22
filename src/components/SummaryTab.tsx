@@ -33,7 +33,7 @@ interface ParticipantData {
   pctOI: PctOIData;
 }
 
-type ReportType = "disagg" | "tff";
+type ReportType = "disagg" | "tff" | "matif";
 
 interface SummaryRow {
   id: string;

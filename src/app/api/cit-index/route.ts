@@ -90,6 +90,8 @@ export interface CITContractData {
   latestDate: string;
   indexNet: number;
   indexPctOI: number;
+  mmNet: number; // Money Manager (Non-Commercial) net position
+  mmMinusIndex: number; // MM Net - Index Net (roll pressure indicator)
   change: number; // Week-over-week change
   isChangeSignificant: boolean; // > 2 std dev
   isPctOIExtreme: boolean; // 98th or 2nd percentile
@@ -97,11 +99,18 @@ export interface CITContractData {
   recordMax: number;
   recordMin: number;
   pctMax: number; // Current as % of record max
+  // Roll position stats
+  rollMin: number; // Historical min of (MM - Index)
+  rollMax: number; // Historical max of (MM - Index)
+  rollZScore: number; // Z-score of current (MM - Index)
+  pctOfMin: number; // Current as % of historical min
   // Historical data for charts
   historicalData: {
     date: string;
     indexNet: number;
     indexPctOI: number;
+    mmNet: number;
+    mmMinusIndex: number;
   }[];
 }
 
@@ -169,11 +178,28 @@ export async function GET(request: NextRequest) {
       // % of max (current position as % of record maximum)
       const pctMax = recordMax > 0 ? (latest.indexNet / recordMax) * 100 : 0;
 
+      // Calculate roll position metrics (MM - Index)
+      const rollValues = records.map(r => r.nonCommNet - r.indexNet);
+      let rollMin = Math.min(...rollValues);
+      let rollMax = Math.max(...rollValues);
+      const currentRoll = latest.nonCommNet - latest.indexNet;
+
+      // Calculate Z-score for roll position
+      const rollMean = rollValues.reduce((a, b) => a + b, 0) / rollValues.length;
+      const rollVariance = rollValues.reduce((sum, val) => sum + Math.pow(val - rollMean, 2), 0) / rollValues.length;
+      const rollStdDev = Math.sqrt(rollVariance);
+      const rollZScore = rollStdDev > 0 ? (currentRoll - rollMean) / rollStdDev : 0;
+
+      // % of min (current as % of historical minimum - for tracking extremes)
+      const pctOfMin = rollMin < 0 ? (currentRoll / rollMin) * 100 : 0;
+
       // Historical data for charts
       const historicalData = records.map(r => ({
         date: r.date,
         indexNet: r.indexNet,
         indexPctOI: r.indexPctOI,
+        mmNet: r.nonCommNet,
+        mmMinusIndex: r.nonCommNet - r.indexNet,
       }));
 
       return {
@@ -182,6 +208,8 @@ export async function GET(request: NextRequest) {
         latestDate: latest.date,
         indexNet: latest.indexNet,
         indexPctOI: latest.indexPctOI,
+        mmNet: latest.nonCommNet,
+        mmMinusIndex: currentRoll,
         change,
         isChangeSignificant,
         isPctOIExtreme,
@@ -189,6 +217,10 @@ export async function GET(request: NextRequest) {
         recordMax: recordMax === -Infinity ? 0 : recordMax,
         recordMin: recordMin === Infinity ? 0 : recordMin,
         pctMax,
+        rollMin,
+        rollMax,
+        rollZScore,
+        pctOfMin,
         historicalData,
       } as CITContractData;
     });
