@@ -1,17 +1,14 @@
 """
-Scrape Euronext MATIF COT (Commitment of Traders) data.
+Scrape Euronext MATIF COT (Commitment of Traders) historical data.
 
-This script scrapes the weekly COT reports from Euronext for:
+Downloads weekly COT reports from Euronext for:
 - Milling Wheat (EBM)
-- Corn (EMA)
+- Corn/Maize (EMA)
 - Rapeseed (ECO)
 
-The data is saved to public/data/matif_cot.json for use by the dashboard.
+URL format: https://live.euronext.com/sites/default/files/commodities_reporting/YYYY/MM/DD/en/cdwpr_{PRODUCT}_{YYYYMMDD}.html
 
-Requirements:
-- selenium
-- webdriver-manager
-- beautifulsoup4
+Reports are published on Wednesdays, reflecting Friday position data.
 
 Usage:
     python scrape_matif_cot.py
@@ -21,185 +18,282 @@ import json
 import os
 import re
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, List, Optional
-
-try:
-    from selenium import webdriver
-    from selenium.webdriver.chrome.service import Service
-    from selenium.webdriver.chrome.options import Options
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.support.ui import WebDriverWait
-    from selenium.webdriver.support import expected_conditions as EC
-    from webdriver_manager.chrome import ChromeDriverManager
-    from bs4 import BeautifulSoup
-except ImportError as e:
-    print(f"Missing dependency: {e}")
-    print("Install with: pip install selenium webdriver-manager beautifulsoup4")
-    exit(1)
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError, URLError
+from html.parser import HTMLParser
 
 # Output directory
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "public", "data")
-
-# Euronext COT page URL
-COT_URL = "https://live.euronext.com/en/products/commodities/commitments_of_traders"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR = os.path.join(SCRIPT_DIR, "..", "public", "data")
 
 # Product codes
 PRODUCTS = {
-    "matif-wheat": {"name": "Milling Wheat", "code": "EBM"},
-    "matif-corn": {"name": "Corn", "code": "EMA"},
-    "matif-rapeseed": {"name": "Rapeseed", "code": "ECO"},
+    "matif-wheat": "EBM",
+    "matif-corn": "EMA",
+    "matif-rapeseed": "ECO",
 }
 
-
-def setup_driver() -> webdriver.Chrome:
-    """Set up headless Chrome driver."""
-    options = Options()
-    options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--window-size=1920,1080")
-    options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-
-    service = Service(ChromeDriverManager().install())
-    return webdriver.Chrome(service=service, options=options)
+# Start date for historical data
+START_DATE = datetime(2018, 1, 1)
 
 
-def parse_number(text: str) -> int:
+class EuronextCOTParser(HTMLParser):
+    """Parse Euronext COT HTML report to extract position data."""
+
+    def __init__(self):
+        super().__init__()
+        self.in_table = False
+        self.in_row = False
+        self.in_cell = False
+        self.current_row = []
+        self.rows = []
+        self.cell_content = ""
+        self.report_date = ""
+        self.position_date = ""
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "table":
+            self.in_table = True
+        elif tag == "tr" and self.in_table:
+            self.in_row = True
+            self.current_row = []
+        elif tag in ("td", "th") and self.in_row:
+            self.in_cell = True
+            self.cell_content = ""
+        elif tag == "span":
+            # Check for date spans
+            for attr_name, attr_val in attrs:
+                if attr_name == "id":
+                    if attr_val == "ReferedDate":
+                        self.in_cell = True
+                        self.cell_content = ""
+
+    def handle_endtag(self, tag):
+        if tag == "table":
+            self.in_table = False
+        elif tag == "tr" and self.in_row:
+            self.in_row = False
+            if self.current_row:
+                self.rows.append(self.current_row)
+        elif tag in ("td", "th") and self.in_cell:
+            self.in_cell = False
+            self.current_row.append(self.cell_content.strip())
+        elif tag == "span" and self.in_cell:
+            self.in_cell = False
+
+    def handle_data(self, data):
+        if self.in_cell:
+            self.cell_content += data
+
+
+def parse_number(text: str) -> float:
     """Parse a number from text, handling commas and spaces."""
-    if not text or text.strip() in ["-", "", "N/A"]:
-        return 0
-    cleaned = re.sub(r"[^\d.-]", "", text.strip())
-    try:
-        return int(float(cleaned))
-    except ValueError:
-        return 0
-
-
-def parse_percentage(text: str) -> float:
-    """Parse a percentage from text."""
-    if not text or text.strip() in ["-", "", "N/A"]:
+    if not text or text.strip() in ["-", "", "N/A", "n/a"]:
         return 0.0
-    cleaned = re.sub(r"[^\d.-]", "", text.strip().replace("%", ""))
+    # Remove spaces and handle European number format (space as thousands separator)
+    cleaned = text.strip().replace(" ", "").replace(",", ".")
+    # Keep only digits, minus, and dot
+    cleaned = re.sub(r"[^\d.-]", "", cleaned)
     try:
         return float(cleaned)
     except ValueError:
         return 0.0
 
 
-def scrape_cot_data(driver: webdriver.Chrome) -> Dict[str, List[Dict]]:
-    """Scrape COT data from Euronext page."""
-    print(f"Navigating to: {COT_URL}")
-    driver.get(COT_URL)
+def fetch_report(product_code: str, report_date: datetime) -> Optional[str]:
+    """Fetch a single COT report HTML."""
+    date_str = report_date.strftime("%Y%m%d")
+    year = report_date.strftime("%Y")
+    month = report_date.strftime("%m")
+    day = report_date.strftime("%d")
 
-    # Wait for page to load
-    print("Waiting for page to load...")
-    time.sleep(5)  # Initial wait
+    url = f"https://live.euronext.com/sites/default/files/commodities_reporting/{year}/{month}/{day}/en/cdwpr_{product_code}_{date_str}.html"
 
     try:
-        # Wait for any data tables to appear
-        WebDriverWait(driver, 30).until(
-            EC.presence_of_element_located((By.TAG_NAME, "table"))
-        )
-    except Exception as e:
-        print(f"Warning: Timeout waiting for tables: {e}")
+        req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urlopen(req, timeout=30) as response:
+            return response.read().decode("utf-8", errors="ignore")
+    except HTTPError as e:
+        if e.code == 404:
+            return None
+        return None
+    except (URLError, Exception):
+        return None
 
-    # Get page source
-    html = driver.page_source
-    soup = BeautifulSoup(html, "html.parser")
 
-    # Debug: save HTML for inspection
-    debug_path = os.path.join(OUTPUT_DIR, "euronext_debug.html")
-    with open(debug_path, "w", encoding="utf-8") as f:
-        f.write(html)
-    print(f"Saved debug HTML to: {debug_path}")
+def parse_report(html: str, report_date: datetime) -> Optional[Dict]:
+    """Parse COT report HTML and extract position data."""
+    parser = EuronextCOTParser()
+    parser.feed(html)
 
-    results = {}
+    # Position date is the Friday before the Wednesday report
+    # Wednesday - 5 days = Friday
+    position_date = report_date - timedelta(days=5)
 
-    # Try to find COT data tables
-    # The page structure may vary, so we'll try multiple approaches
+    data = {
+        "date": position_date.strftime("%Y-%m-%d"),
+        "reportDate": report_date.strftime("%Y-%m-%d"),
+        "openInterest": 0,
+        "invFirmsLong": 0, "invFirmsShort": 0, "invFirmsNet": 0, "invFirmsTraders": 0, "invFirmsPctOI": 0.0,
+        "invFundsLong": 0, "invFundsShort": 0, "invFundsNet": 0, "invFundsTraders": 0, "invFundsPctOI": 0.0,
+        "otherFinLong": 0, "otherFinShort": 0, "otherFinNet": 0, "otherFinTraders": 0, "otherFinPctOI": 0.0,
+        "commercialLong": 0, "commercialShort": 0, "commercialNet": 0, "commercialTraders": 0, "commercialPctOI": 0.0,
+        "emissionsLong": 0, "emissionsShort": 0, "emissionsNet": 0, "emissionsTraders": 0, "emissionsPctOI": 0.0,
+    }
 
-    # Look for tables with position data
-    tables = soup.find_all("table")
-    print(f"Found {len(tables)} tables on page")
+    # Find the "Total" row under "Number of positions"
+    # Table structure:
+    # Row 0: Headers (Trading venue info)
+    # Row 1: Category headers (Investment Firms, Investment Funds, etc)
+    # Row 2: Long/Short subheaders
+    # Row 3: "Number of positions", "LOTS", "Risk Reducing...", data...
+    # Row 4: "Other", data...
+    # Row 5: "Total", data for all categories
 
-    for product_id, product_info in PRODUCTS.items():
-        print(f"\nLooking for {product_info['name']} data...")
+    in_positions_section = False
 
-        # Try to find data for this product
-        # This is a placeholder - actual parsing will depend on page structure
-        record = create_placeholder_record(product_info["name"])
-        results[product_id] = [record]
+    for row in parser.rows:
+        if not row:
+            continue
+
+        first_cell = row[0].lower() if row[0] else ""
+
+        # Detect we're in the positions section
+        if "number of position" in first_cell:
+            in_positions_section = True
+            continue
+
+        # End of positions section
+        if "change" in first_cell or "percentage" in first_cell:
+            in_positions_section = False
+            continue
+
+        # Look for Total row
+        if in_positions_section and "total" in first_cell:
+            # Row format: [Total, InvFirmsLong, InvFirmsShort, InvFundsLong, InvFundsShort,
+            #              OtherFinLong, OtherFinShort, CommercialLong, CommercialShort,
+            #              EmissionsLong, EmissionsShort]
+            # But first column might be "Total" itself
+
+            nums = []
+            for cell in row:
+                if cell.lower() != "total":
+                    nums.append(parse_number(cell))
+
+            if len(nums) >= 10:
+                data["invFirmsLong"] = int(nums[0])
+                data["invFirmsShort"] = int(nums[1])
+                data["invFundsLong"] = int(nums[2])
+                data["invFundsShort"] = int(nums[3])
+                data["otherFinLong"] = int(nums[4])
+                data["otherFinShort"] = int(nums[5])
+                data["commercialLong"] = int(nums[6])
+                data["commercialShort"] = int(nums[7])
+                data["emissionsLong"] = int(nums[8])
+                data["emissionsShort"] = int(nums[9])
+
+                # Calculate nets
+                data["invFirmsNet"] = data["invFirmsLong"] - data["invFirmsShort"]
+                data["invFundsNet"] = data["invFundsLong"] - data["invFundsShort"]
+                data["otherFinNet"] = data["otherFinLong"] - data["otherFinShort"]
+                data["commercialNet"] = data["commercialLong"] - data["commercialShort"]
+                data["emissionsNet"] = data["emissionsLong"] - data["emissionsShort"]
+
+                # Calculate total open interest
+                data["openInterest"] = (
+                    data["invFirmsLong"] + data["invFundsLong"] +
+                    data["otherFinLong"] + data["commercialLong"] + data["emissionsLong"]
+                )
+
+                break
+
+    # Calculate %OI
+    if data["openInterest"] > 0:
+        oi = data["openInterest"]
+        for prefix in ["invFirms", "invFunds", "otherFin", "commercial", "emissions"]:
+            net = data[f"{prefix}Net"]
+            data[f"{prefix}PctOI"] = round((net / oi) * 100, 2)
+
+    return data if data["openInterest"] > 0 else None
+
+
+def get_wednesdays(start_date: datetime, end_date: datetime) -> List[datetime]:
+    """Get all Wednesdays between start and end dates."""
+    wednesdays = []
+    current = start_date
+
+    # Find first Wednesday
+    while current.weekday() != 2:
+        current += timedelta(days=1)
+
+    while current <= end_date:
+        wednesdays.append(current)
+        current += timedelta(days=7)
+
+    return wednesdays
+
+
+def scrape_all_data() -> Dict[str, List[Dict]]:
+    """Scrape all historical COT data for all products."""
+    end_date = datetime.now()
+    wednesdays = get_wednesdays(START_DATE, end_date)
+
+    print(f"Fetching data from {START_DATE.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}")
+    print(f"Total Wednesdays to check: {len(wednesdays)}")
+
+    results = {product_id: [] for product_id in PRODUCTS.keys()}
+
+    for product_id, product_code in PRODUCTS.items():
+        print(f"\n{'='*60}")
+        print(f"Fetching {product_id} ({product_code})...")
+        print(f"{'='*60}")
+
+        success_count = 0
+        fail_count = 0
+
+        for i, wed in enumerate(wednesdays):
+            if i % 20 == 0:
+                print(f"  Progress: {i}/{len(wednesdays)} ({wed.strftime('%Y-%m-%d')})")
+
+            html = fetch_report(product_code, wed)
+            if html:
+                record = parse_report(html, wed)
+                if record:
+                    results[product_id].append(record)
+                    success_count += 1
+                else:
+                    fail_count += 1
+            else:
+                fail_count += 1
+
+            # Be nice to the server
+            time.sleep(0.1)
+
+        print(f"  Completed: {success_count} reports fetched, {fail_count} missing/failed")
+        results[product_id].sort(key=lambda x: x["date"])
 
     return results
-
-
-def create_placeholder_record(name: str) -> Dict:
-    """Create a placeholder record with sample data.
-
-    This will be replaced with actual scraped data once we understand
-    the page structure better.
-    """
-    today = datetime.now()
-    # Calculate last Friday
-    days_since_friday = (today.weekday() - 4) % 7
-    last_friday = today.replace(hour=0, minute=0, second=0, microsecond=0)
-    from datetime import timedelta
-    last_friday = last_friday - timedelta(days=days_since_friday if days_since_friday else 7)
-
-    return {
-        "date": last_friday.strftime("%Y-%m-%d"),
-        "reportDate": today.strftime("%Y-%m-%d"),
-        "openInterest": 350000,
-        "invFirmsLong": 15000,
-        "invFirmsShort": 12000,
-        "invFirmsNet": 3000,
-        "invFirmsTraders": 25,
-        "invFirmsPctOI": 4.3,
-        "invFundsLong": 85000,
-        "invFundsShort": 45000,
-        "invFundsNet": 40000,
-        "invFundsTraders": 120,
-        "invFundsPctOI": 24.3,
-        "otherFinLong": 8000,
-        "otherFinShort": 10000,
-        "otherFinNet": -2000,
-        "otherFinTraders": 15,
-        "otherFinPctOI": 2.3,
-        "commercialLong": 180000,
-        "commercialShort": 220000,
-        "commercialNet": -40000,
-        "commercialTraders": 85,
-        "commercialPctOI": 51.4,
-        "emissionsLong": 0,
-        "emissionsShort": 0,
-        "emissionsNet": 0,
-        "emissionsTraders": 0,
-        "emissionsPctOI": 0,
-    }
 
 
 def main():
     """Main function to scrape and save Matif COT data."""
     print("=" * 60)
-    print("Matif COT Data Scraper")
+    print("Matif COT Historical Data Scraper")
     print(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60)
 
-    # Create output directory
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    driver = None
     try:
-        driver = setup_driver()
-        data = scrape_cot_data(driver)
+        data = scrape_all_data()
+        total = sum(len(records) for records in data.values())
 
-        # Save results
         output = {
             "updated": datetime.now().isoformat(),
             "source": "Euronext MATIF",
-            "note": "Data scraped from live.euronext.com COT reports",
+            "note": f"Historical data scraped from live.euronext.com ({total} records)",
             "data": data,
         }
 
@@ -208,17 +302,19 @@ def main():
             json.dump(output, f, indent=2)
 
         print(f"\n{'=' * 60}")
-        print(f"Scrape complete!")
+        print(f"Scrape complete! Total records: {total}")
+        for product_id, records in data.items():
+            if records:
+                print(f"  {product_id}: {len(records)} records ({records[0]['date']} to {records[-1]['date']})")
         print(f"Output: {output_path}")
         print(f"{'=' * 60}")
 
+    except KeyboardInterrupt:
+        print("\nScrape interrupted by user")
     except Exception as e:
         print(f"Error: {e}")
         import traceback
         traceback.print_exc()
-    finally:
-        if driver:
-            driver.quit()
 
 
 if __name__ == "__main__":

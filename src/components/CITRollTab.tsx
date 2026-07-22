@@ -157,6 +157,8 @@ export function CITRollTab() {
           <thead>
             <tr className="bg-zinc-800/50 border-b border-zinc-700">
               <th className="text-left py-3 px-4 text-zinc-400 font-medium">Commodity</th>
+              <th className="text-center py-3 px-4 text-zinc-400 font-medium">Net MM</th>
+              <th className="text-center py-3 px-4 text-zinc-400 font-medium">Index</th>
               <th className="text-center py-3 px-4 text-zinc-400 font-medium">Min</th>
               <th className="text-center py-3 px-4 text-zinc-400 font-medium">Net MM - Index</th>
               <th className="text-center py-3 px-4 text-zinc-400 font-medium">Max</th>
@@ -168,6 +170,12 @@ export function CITRollTab() {
             {data.map((row) => (
               <tr key={row.id} className="border-b border-zinc-800 hover:bg-zinc-800/30">
                 <td className="py-2 px-4 text-white font-medium">{row.name}</td>
+                <td className={`py-2 px-4 text-center font-mono ${row.mmNet >= 0 ? "text-green-400" : "text-red-400"}`}>
+                  {row.mmNet.toLocaleString()}
+                </td>
+                <td className="py-2 px-4 text-center font-mono text-blue-400">
+                  {row.indexNet.toLocaleString()}
+                </td>
                 <td className="py-2 px-4 text-center font-mono text-zinc-400">{formatNumber(row.rollMin)}</td>
                 <td className={`py-2 px-4 text-center font-mono font-bold ${row.mmMinusIndex >= 0 ? "text-green-400" : "text-red-400"}`}>
                   {formatNumber(row.mmMinusIndex)}
