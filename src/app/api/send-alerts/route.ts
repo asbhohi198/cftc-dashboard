@@ -394,22 +394,78 @@ async function getTradersPctSignals(
   return signals;
 }
 
-// CIT spread symbols for roll trades
-const CIT_SPREAD_SYMBOLS: Record<string, string> = {
-  corn: "C",
-  soybeans: "S",
-  "chicago-wheat": "W",
-  "kansas-wheat": "KW",
-  soyoil: "BO",
-  soymeal: "SM",
-  "live-cattle": "LC",
-  "lean-hogs": "LH",
-  "feeder-cattle": "FC",
-  sugar: "SB",
-  "arabica-coffee": "KC",
-  "ny-cocoa": "CC",
-  cotton: "CT",
+// CIT contract info for roll trades
+interface CITContractInfo {
+  symbol: string;
+  months: string[]; // Contract month codes in order (F=Jan, G=Feb, H=Mar, etc.)
+}
+
+const CIT_CONTRACT_INFO: Record<string, CITContractInfo> = {
+  corn: { symbol: "C", months: ["H", "K", "N", "U", "Z"] }, // Mar, May, Jul, Sep, Dec
+  soybeans: { symbol: "S", months: ["F", "H", "K", "N", "Q", "U", "X"] }, // Jan, Mar, May, Jul, Aug, Sep, Nov
+  "chicago-wheat": { symbol: "W", months: ["H", "K", "N", "U", "Z"] }, // Mar, May, Jul, Sep, Dec
+  "kansas-wheat": { symbol: "KW", months: ["H", "K", "N", "U", "Z"] }, // Mar, May, Jul, Sep, Dec
+  soyoil: { symbol: "BO", months: ["F", "H", "K", "N", "Q", "U", "V", "Z"] }, // Jan, Mar, May, Jul, Aug, Sep, Oct, Dec
+  soymeal: { symbol: "SM", months: ["F", "H", "K", "N", "Q", "U", "V", "Z"] }, // Jan, Mar, May, Jul, Aug, Sep, Oct, Dec
+  "live-cattle": { symbol: "LC", months: ["G", "J", "M", "Q", "V", "Z"] }, // Feb, Apr, Jun, Aug, Oct, Dec
+  "lean-hogs": { symbol: "LH", months: ["G", "J", "M", "N", "Q", "V", "Z"] }, // Feb, Apr, Jun, Jul, Aug, Oct, Dec
+  "feeder-cattle": { symbol: "FC", months: ["F", "H", "J", "K", "Q", "U", "V", "X"] }, // Jan, Mar, Apr, May, Aug, Sep, Oct, Nov
+  sugar: { symbol: "SB", months: ["H", "K", "N", "V"] }, // Mar, May, Jul, Oct
+  "arabica-coffee": { symbol: "KC", months: ["H", "K", "N", "U", "Z"] }, // Mar, May, Jul, Sep, Dec
+  "ny-cocoa": { symbol: "CC", months: ["H", "K", "N", "U", "Z"] }, // Mar, May, Jul, Sep, Dec
+  cotton: { symbol: "CT", months: ["H", "K", "N", "V", "Z"] }, // Mar, May, Jul, Oct, Dec
 };
+
+// Month code to month number mapping
+const MONTH_CODE_TO_NUM: Record<string, number> = {
+  F: 1, G: 2, H: 3, J: 4, K: 5, M: 6, N: 7, Q: 8, U: 9, V: 10, X: 11, Z: 12
+};
+
+// Get current spread months for a commodity
+function getCurrentSpread(contractId: string): { front: string; back: string } {
+  const info = CIT_CONTRACT_INFO[contractId];
+  if (!info) return { front: "?", back: "?" };
+
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1; // 1-12
+  const currentDay = now.getDate();
+  const currentYear = now.getFullYear() % 100; // Last 2 digits
+
+  // Find the front month (first contract month that hasn't expired yet)
+  // Contracts typically expire around the 5th of the delivery month
+  let frontIdx = -1;
+  let frontYear = currentYear;
+
+  for (let i = 0; i < info.months.length; i++) {
+    const monthNum = MONTH_CODE_TO_NUM[info.months[i]];
+    if (monthNum > currentMonth || (monthNum === currentMonth && currentDay < 5)) {
+      frontIdx = i;
+      break;
+    }
+  }
+
+  // If no contract found this year, use first contract of next year
+  if (frontIdx === -1) {
+    frontIdx = 0;
+    frontYear = currentYear + 1;
+  }
+
+  // Back month is the next contract after front
+  let backIdx = frontIdx + 1;
+  let backYear = frontYear;
+  if (backIdx >= info.months.length) {
+    backIdx = 0;
+    backYear = frontYear + 1;
+  }
+
+  const frontMonth = info.months[frontIdx];
+  const backMonth = info.months[backIdx];
+
+  return {
+    front: `${frontMonth}${frontYear}`,
+    back: `${backMonth}${backYear}`,
+  };
+}
 
 // Signal: CIT Roll Position (z-score of MM - Index)
 async function getCITRollSignals(
@@ -428,12 +484,15 @@ async function getCITRollSignals(
       const zScore = contract.rollZScore;
 
       if (Math.abs(zScore) >= threshold) {
-        const symbol = CIT_SPREAD_SYMBOLS[contract.id] || contract.name.toUpperCase().substring(0, 2);
+        const info = CIT_CONTRACT_INFO[contract.id];
+        const symbol = info?.symbol || contract.name.toUpperCase().substring(0, 2);
+        const spread = getCurrentSpread(contract.id);
+
         // Positive z-score = MM more long than Index = roll pressure = sell calendar spread
         // Negative z-score = MM more short than Index = short covering = buy calendar spread
         const spreadAction = zScore > 0
-          ? `SELL ${symbol} calendar spread (sell front/buy back)`
-          : `BUY ${symbol} calendar spread (buy front/sell back)`;
+          ? `SELL ${symbol} ${spread.front}/${spread.back}`
+          : `BUY ${symbol} ${spread.front}/${spread.back}`;
 
         signals.push({
           signalType: "citRollPosition",
