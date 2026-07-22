@@ -251,19 +251,71 @@ export function COTSpreadsTab() {
 
   const { summary, mainScatter, historicalScatter } = data;
 
-  // Transform all points for current mode (including excluded for display)
-  const allScatterPoints = mainScatter.points.map(p => ({
+  // Transform all points for current mode
+  const basePoints = mainScatter.points.map(p => ({
     x: xAxisMode === "pctOI" ? p.xPctOI : p.x,
     y: p.y,
     name: p.name,
-    excluded: excludedCommodities.has(p.name),
   }));
 
-  // Filter to only included points for regression
-  const includedPoints = allScatterPoints.filter(p => !p.excluded);
+  // Step 1: Calculate initial regression with all non-manually-excluded points
+  const manuallyIncluded = basePoints.filter(p => !excludedCommodities.has(p.name));
+  const initialRegression = calculateRegression(manuallyIncluded.map(p => ({ x: p.x, y: p.y })));
 
-  // Calculate regression dynamically based on included points only
+  // Step 2: Calculate residuals and z-scores for each point
+  const residuals = manuallyIncluded.map(p => {
+    const predicted = initialRegression.slope * p.x + initialRegression.intercept;
+    return p.y - predicted;
+  });
+  const meanResidual = residuals.reduce((a, b) => a + b, 0) / residuals.length;
+  const stdResidual = Math.sqrt(
+    residuals.reduce((sum, r) => sum + Math.pow(r - meanResidual, 2), 0) / residuals.length
+  );
+
+  // Step 3: Calculate z-scores and auto-exclude outliers (|z| > 4)
+  const pointsWithZScore = basePoints.map(p => {
+    const predicted = initialRegression.slope * p.x + initialRegression.intercept;
+    const residual = p.y - predicted;
+    const zScore = stdResidual > 0 ? residual / stdResidual : 0;
+    const isManuallyExcluded = excludedCommodities.has(p.name);
+    const isAutoExcluded = Math.abs(zScore) > 4;
+    return {
+      ...p,
+      zScore,
+      excluded: isManuallyExcluded || isAutoExcluded,
+      autoExcluded: isAutoExcluded && !isManuallyExcluded,
+    };
+  });
+
+  // Step 4: Final regression with outliers excluded
+  const includedPoints = pointsWithZScore.filter(p => !p.excluded);
   const currentRegression = calculateRegression(includedPoints.map(p => ({ x: p.x, y: p.y })));
+
+  // For display purposes, recalculate z-scores based on final regression
+  const finalResiduals = pointsWithZScore.filter(p => !p.excluded).map(p => {
+    const predicted = currentRegression.slope * p.x + currentRegression.intercept;
+    return p.y - predicted;
+  });
+  const finalStdResidual = Math.sqrt(
+    finalResiduals.reduce((sum, r) => sum + Math.pow(r, 2), 0) / finalResiduals.length
+  ) || 1;
+
+  const allScatterPoints = pointsWithZScore.map(p => {
+    const predicted = currentRegression.slope * p.x + currentRegression.intercept;
+    const residual = p.y - predicted;
+    const finalZScore = residual / finalStdResidual;
+    return { ...p, zScore: finalZScore };
+  });
+
+  // Create sorted summary with z-scores for table
+  const summaryWithZScore = summary.map(item => {
+    const point = allScatterPoints.find(p => p.name === item.name);
+    return {
+      ...item,
+      zScore: point?.zScore || 0,
+      excluded: point?.excluded || false,
+    };
+  }).sort((a, b) => Math.abs(b.zScore) - Math.abs(a.zScore));
 
   // Generate regression line points based on included data
   const regressionPoints = [];
@@ -321,12 +373,19 @@ export function COTSpreadsTab() {
                   <th className="text-center py-2 px-2 text-zinc-400 font-medium">1-3 Months</th>
                   <th className="text-center py-2 px-2 text-zinc-400 font-medium">1-3 Sprd</th>
                   <th className="text-center py-2 px-2 text-zinc-400 font-medium">1-3 %</th>
+                  <th className="text-center py-2 px-2 text-zinc-400 font-medium">Z-Score</th>
                 </tr>
               </thead>
               <tbody>
-                {summary.map((item) => (
-                  <tr key={item.id} className="border-b border-zinc-800 hover:bg-zinc-800/50">
-                    <td className="py-2 px-2 text-white font-medium">{item.name}</td>
+                {summaryWithZScore.map((item) => (
+                  <tr
+                    key={item.id}
+                    className={`border-b border-zinc-800 hover:bg-zinc-800/50 ${item.excluded ? "opacity-50" : ""}`}
+                  >
+                    <td className="py-2 px-2 text-white font-medium">
+                      {item.name}
+                      {item.excluded && <span className="text-zinc-500 text-xs ml-1">(excl)</span>}
+                    </td>
                     <td className="py-2 px-2 text-center text-zinc-300">
                       {formatNumber(item.mmNetAll)}
                     </td>
@@ -345,6 +404,23 @@ export function COTSpreadsTab() {
                         }}
                       >
                         {item.spread_pct.toFixed(1)}%
+                      </span>
+                    </td>
+                    <td className="py-2 px-2 text-center">
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs font-bold ${
+                          Math.abs(item.zScore) > 2
+                            ? item.zScore > 0
+                              ? "bg-green-600 text-white"
+                              : "bg-red-600 text-white"
+                            : Math.abs(item.zScore) > 1
+                            ? item.zScore > 0
+                              ? "bg-green-800 text-white"
+                              : "bg-red-800 text-white"
+                            : "bg-zinc-700 text-zinc-300"
+                        }`}
+                      >
+                        {item.zScore >= 0 ? "+" : ""}{item.zScore.toFixed(2)}
                       </span>
                     </td>
                   </tr>
