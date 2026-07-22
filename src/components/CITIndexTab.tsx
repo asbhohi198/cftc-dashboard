@@ -451,7 +451,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                   <YAxis
                     tick={{ fill: "#ffffff", fontSize: 9 }}
                     tickFormatter={(v) => formatNumber(v)}
-                    domain={[400000, 'auto']}
+                    domain={[400000, 1000000]}
                   />
                   <Tooltip
                     contentStyle={{
