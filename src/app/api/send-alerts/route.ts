@@ -250,7 +250,9 @@ async function getMmPctHistMaxSignals(
         value: pctOfMax,
         threshold,
         direction,
-        tradeInstruction: direction === "long" ? "FADE LONG" : "FADE SHORT",
+        tradeInstruction: direction === "long"
+          ? `SELL ${contract.name.toUpperCase()} - MM at historical long extreme`
+          : `BUY ${contract.name.toUpperCase()} - MM at historical short extreme`,
       });
     }
   }
@@ -289,7 +291,9 @@ async function getMmPctOISignals(
         value: zScore,
         threshold,
         direction: zScore > 0 ? "long" : "short",
-        tradeInstruction: zScore > 0 ? "FADE LONG" : "FADE SHORT",
+        tradeInstruction: zScore > 0
+          ? `SELL ${contract.name.toUpperCase()} - MM positioning extended long`
+          : `BUY ${contract.name.toUpperCase()} - MM positioning extended short`,
       });
     }
   }
@@ -369,7 +373,7 @@ async function getTradersPctSignals(
         value: pctLong,
         threshold,
         direction: "long",
-        tradeInstruction: "FADE LONG - crowded positioning",
+        tradeInstruction: `SELL ${contract.name.toUpperCase()} - crowded long positioning`,
       });
     }
 
@@ -382,13 +386,30 @@ async function getTradersPctSignals(
         value: pctShort,
         threshold,
         direction: "short",
-        tradeInstruction: "FADE SHORT - crowded positioning",
+        tradeInstruction: `BUY ${contract.name.toUpperCase()} - crowded short positioning`,
       });
     }
   }
 
   return signals;
 }
+
+// CIT spread symbols for roll trades
+const CIT_SPREAD_SYMBOLS: Record<string, string> = {
+  corn: "C",
+  soybeans: "S",
+  "chicago-wheat": "W",
+  "kansas-wheat": "KW",
+  soyoil: "BO",
+  soymeal: "SM",
+  "live-cattle": "LC",
+  "lean-hogs": "LH",
+  "feeder-cattle": "FC",
+  sugar: "SB",
+  "arabica-coffee": "KC",
+  "ny-cocoa": "CC",
+  cotton: "CT",
+};
 
 // Signal: CIT Roll Position (z-score of MM - Index)
 async function getCITRollSignals(
@@ -407,6 +428,13 @@ async function getCITRollSignals(
       const zScore = contract.rollZScore;
 
       if (Math.abs(zScore) >= threshold) {
+        const symbol = CIT_SPREAD_SYMBOLS[contract.id] || contract.name.toUpperCase().substring(0, 2);
+        // Positive z-score = MM more long than Index = roll pressure = sell calendar spread
+        // Negative z-score = MM more short than Index = short covering = buy calendar spread
+        const spreadAction = zScore > 0
+          ? `SELL ${symbol} calendar spread (sell front/buy back)`
+          : `BUY ${symbol} calendar spread (buy front/sell back)`;
+
         signals.push({
           signalType: "citRollPosition",
           signalLabel: "CIT Roll Position",
@@ -415,9 +443,7 @@ async function getCITRollSignals(
           value: zScore,
           threshold,
           direction: zScore > 0 ? "long" : "short",
-          tradeInstruction: zScore > 0
-            ? "MM long vs Index - potential roll pressure"
-            : "MM short vs Index - potential roll support",
+          tradeInstruction: spreadAction,
         });
       }
     }
