@@ -707,17 +707,17 @@ export function COTSpreadsTab() {
                             fontSize: "12px",
                             color: "#ffffff",
                           }}
-                          labelStyle={{ color: "#ffffff" }}
+                          labelStyle={{ color: "#ffffff", fontWeight: "bold" }}
                           itemStyle={{ color: "#ffffff" }}
-                          formatter={(value: number, name: string) => {
+                          formatter={(value: number, name: string, props: { payload?: HistoricalPoint }) => {
                             if (name === "spread") return [value.toFixed(2), "Spread"];
                             if (name === "mmNetPctOI") return [`${value.toFixed(1)}%`, "% OI"];
-                            return [formatNumber(value), "Net MM"];
+                            if (name === "mmNetAll") return [formatNumber(value), "Net MM"];
+                            return [value, name];
                           }}
-                          labelFormatter={(_, payload) => {
-                            if (payload && payload[0]) {
-                              const point = payload[0].payload as HistoricalPoint;
-                              return `CFTC Report: ${point.date}`;
+                          labelFormatter={(label: unknown, payload: Array<{ payload?: HistoricalPoint }>) => {
+                            if (payload && payload.length > 0 && payload[0]?.payload?.date) {
+                              return `CFTC Report: ${payload[0].payload.date}`;
                             }
                             return "";
                           }}
