@@ -193,6 +193,7 @@ export function COTSpreadsTab() {
   const [error, setError] = useState<string | null>(null);
   const [expandedChart, setExpandedChart] = useState<{ id: string; name: string } | null>(null);
   const [xAxisMode, setXAxisMode] = useState<XAxisMode>("pctOI");
+  const [miniChartXAxisMode, setMiniChartXAxisMode] = useState<XAxisMode>("absolute");
   const [mainScatterExpanded, setMainScatterExpanded] = useState(false);
   const [excludedCommodities, setExcludedCommodities] = useState<Set<string>>(new Set());
 
@@ -637,18 +638,34 @@ export function COTSpreadsTab() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-xl font-semibold text-white">
-                  {expandedChart.name}: COT Net MM Position vs. Spread
+                  {expandedChart.name}: COT {miniChartXAxisMode === "pctOI" ? "% OI" : "Net MM"} vs. Spread
                 </h3>
                 <p className="text-sm text-zinc-400">
                   Historical relationship between positioning and curve structure
                 </p>
               </div>
-              <button
-                onClick={() => setExpandedChart(null)}
-                className="text-zinc-400 hover:text-white transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
+              <div className="flex items-center gap-4">
+                <div className="flex gap-1">
+                  <button
+                    className={`px-2 py-1 text-xs rounded ${miniChartXAxisMode === "absolute" ? "bg-orange-500 text-white" : "bg-zinc-700 text-zinc-300"}`}
+                    onClick={() => setMiniChartXAxisMode("absolute")}
+                  >
+                    Contracts
+                  </button>
+                  <button
+                    className={`px-2 py-1 text-xs rounded ${miniChartXAxisMode === "pctOI" ? "bg-orange-500 text-white" : "bg-zinc-700 text-zinc-300"}`}
+                    onClick={() => setMiniChartXAxisMode("pctOI")}
+                  >
+                    % OI
+                  </button>
+                </div>
+                <button
+                  onClick={() => setExpandedChart(null)}
+                  className="text-zinc-400 hover:text-white transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
             </div>
 
             {(() => {
@@ -663,11 +680,11 @@ export function COTSpreadsTab() {
                         <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                         <XAxis
                           type="number"
-                          dataKey="mmNetAll"
+                          dataKey={miniChartXAxisMode === "pctOI" ? "mmNetPctOI" : "mmNetAll"}
                           tick={{ fill: "#ffffff", fontSize: 12 }}
-                          tickFormatter={(v) => formatNumber(v)}
+                          tickFormatter={(v) => miniChartXAxisMode === "pctOI" ? `${Math.round(v)}%` : formatNumber(v)}
                         >
-                          <Label value="Net MM Position (contracts)" position="bottom" offset={40} fill="#9ca3af" fontSize={12} />
+                          <Label value={miniChartXAxisMode === "pctOI" ? "Net MM as % of OI" : "Net MM Position (contracts)"} position="bottom" offset={40} fill="#9ca3af" fontSize={12} />
                         </XAxis>
                         <YAxis
                           type="number"
@@ -688,6 +705,7 @@ export function COTSpreadsTab() {
                           itemStyle={{ color: "#ffffff" }}
                           formatter={(value: number, name: string) => {
                             if (name === "spread") return [value.toFixed(2), "Spread"];
+                            if (name === "mmNetPctOI") return [`${value.toFixed(1)}%`, "% OI"];
                             return [formatNumber(value), "Net MM"];
                           }}
                           labelFormatter={(_, payload) => {
