@@ -332,15 +332,13 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
           <h3 className="text-xs font-semibold text-white mb-2">CHG WoW</h3>
           <div className="h-[160px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={changeChartData} margin={{ top: 20, right: 10, left: -15, bottom: 45 }}>
+              <BarChart data={changeChartData} margin={{ top: 10, right: 5, left: -20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                 <XAxis
                   dataKey="name"
-                  tick={{ fill: "#ffffff", fontSize: 10 }}
-                  angle={-90}
-                  textAnchor="end"
-                  height={50}
-                  dy={35}
+                  tick={false}
+                  axisLine={{ stroke: "#27272a" }}
+                  height={5}
                 />
                 <YAxis
                   tick={{ fill: "#ffffff", fontSize: 11 }}

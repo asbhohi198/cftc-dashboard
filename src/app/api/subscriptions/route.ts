@@ -37,11 +37,17 @@ export interface EmailSubscription {
 // GET - Fetch all subscriptions
 export async function GET() {
   try {
+    console.log("Fetching subscriptions from Redis...");
+    console.log("Redis URL configured:", !!process.env.KV_REST_API_URL);
+    console.log("Redis Token configured:", !!process.env.KV_REST_API_TOKEN);
+
     const subscriptions = await redis.get<EmailSubscription[]>(SUBSCRIPTIONS_KEY);
+    console.log("Fetched subscriptions:", subscriptions?.length || 0);
     return NextResponse.json({ subscriptions: subscriptions || [] });
   } catch (error) {
     console.error("Failed to fetch subscriptions:", error);
-    return NextResponse.json({ subscriptions: [] });
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ subscriptions: [], error: errorMessage });
   }
 }
 
@@ -49,6 +55,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    console.log("Creating subscription with body:", JSON.stringify(body));
 
     const newSub: EmailSubscription = {
       id: `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -62,15 +69,21 @@ export async function POST(request: NextRequest) {
       lastSentAt: null,
     };
 
+    console.log("New subscription object:", JSON.stringify(newSub));
+
     const subscriptions = await redis.get<EmailSubscription[]>(SUBSCRIPTIONS_KEY) || [];
+    console.log("Existing subscriptions count:", subscriptions.length);
+
     subscriptions.push(newSub);
     await redis.set(SUBSCRIPTIONS_KEY, subscriptions);
+    console.log("Subscription saved successfully");
 
     return NextResponse.json({ subscription: newSub });
   } catch (error) {
     console.error("Failed to create subscription:", error);
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-      { error: "Failed to create subscription" },
+      { error: `Failed to create subscription: ${errorMessage}` },
       { status: 500 }
     );
   }
