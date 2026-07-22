@@ -384,15 +384,13 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
           <h3 className="text-xs font-semibold text-white mb-2">% Max</h3>
           <div className="h-[160px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={pctMaxChartData} margin={{ top: 20, right: 10, left: -15, bottom: 45 }}>
+              <BarChart data={pctMaxChartData} margin={{ top: 10, right: 5, left: -20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                 <XAxis
                   dataKey="name"
-                  tick={{ fill: "#ffffff", fontSize: 10 }}
-                  angle={-90}
-                  textAnchor="end"
-                  height={50}
-                  dy={35}
+                  tick={false}
+                  axisLine={{ stroke: "#27272a" }}
+                  height={5}
                 />
                 <YAxis
                   tick={{ fill: "#ffffff", fontSize: 11 }}
@@ -433,17 +431,13 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
             <h3 className="text-xs font-semibold text-white mb-2">C+S+W+KW</h3>
             <div className="h-[160px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={cswkwAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 15 }}>
+                <LineChart data={cswkwAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis
                     dataKey="date"
-                    tick={{ fill: "#ffffff", fontSize: 8 }}
-                    angle={-90}
-                    textAnchor="end"
-                    height={25}
-                    tickFormatter={formatChartDate}
-                    interval={Math.floor(cswkwAgg.historicalData.length / 6)}
-                    dy={20}
+                    tick={false}
+                    axisLine={{ stroke: "#27272a" }}
+                    height={5}
                   />
                   <YAxis
                     tick={{ fill: "#ffffff", fontSize: 9 }}
@@ -484,17 +478,13 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
             <h3 className="text-xs font-semibold text-white mb-2">C+S+W+KW+SBO+SM</h3>
             <div className="h-[160px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={cswkwSboSmAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 15 }}>
+                <LineChart data={cswkwSboSmAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis
                     dataKey="date"
-                    tick={{ fill: "#ffffff", fontSize: 8 }}
-                    angle={-90}
-                    textAnchor="end"
-                    height={25}
-                    tickFormatter={formatChartDate}
-                    interval={Math.floor(cswkwSboSmAgg.historicalData.length / 6)}
-                    dy={20}
+                    tick={false}
+                    axisLine={{ stroke: "#27272a" }}
+                    height={5}
                   />
                   <YAxis
                     tick={{ fill: "#ffffff", fontSize: 9 }}
