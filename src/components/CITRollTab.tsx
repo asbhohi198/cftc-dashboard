@@ -101,6 +101,23 @@ const COMMODITY_SYMBOLS: Record<string, string> = {
   "cotton": "CT",
 };
 
+// Chart order to match Summary tab (C, W, KW, S, SM, BO, LC, LH, FC, SB, KC, CC, CT)
+const CHART_ORDER: string[] = [
+  "corn",
+  "chicago-wheat",
+  "kansas-wheat",
+  "soybeans",
+  "soymeal",
+  "soyoil",
+  "live-cattle",
+  "lean-hogs",
+  "feeder-cattle",
+  "sugar",
+  "arabica-coffee",
+  "ny-cocoa",
+  "cotton",
+];
+
 function getNextRollWindow(commodityId: string): { spread: string; rollDates: string } {
   const now = new Date();
   const currentMonth = now.getMonth() + 1; // 1-12
@@ -321,7 +338,11 @@ export function CITRollTab() {
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-white">Individual Commodity Roll Positions</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {data.map((row) => (
+          {[...data].sort((a, b) => {
+            const aIdx = CHART_ORDER.indexOf(a.id);
+            const bIdx = CHART_ORDER.indexOf(b.id);
+            return (aIdx === -1 ? 999 : aIdx) - (bIdx === -1 ? 999 : bIdx);
+          }).map((row) => (
             <div
               key={row.id}
               className="bg-zinc-900 border border-zinc-800 rounded-lg p-3 cursor-pointer hover:border-zinc-600 transition-colors"
