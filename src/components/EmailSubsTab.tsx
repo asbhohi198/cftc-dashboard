@@ -3,26 +3,32 @@
 import { useState, useEffect } from "react";
 import { Mail, Plus, Pencil, Trash2, X, Check, AlertCircle } from "lucide-react";
 
+// Signal configuration with individual thresholds
+interface SignalConfig {
+  enabled: boolean;
+  threshold: number;
+}
+
 // Subscription interface for CFTC alerts
 export interface EmailSubscription {
   id: string;
   name: string;
   frequency: "daily" | "weekly";
-  signalTypes: string[]; // "ALL", "rvs", "changes", "extremes"
   sectors: string[]; // "ALL", "ags", "energy", "metals", "equities", "rates", "fx", "crypto"
-  minZScore: number; // 1.5, 2.0, 2.5, 3.0
+  // Individual signal configs with thresholds
+  signals: {
+    mmPctHistMax: SignalConfig;      // Net MM as % historical max (% threshold)
+    mmPctOI: SignalConfig;           // Net MM as % of OI (z-score threshold)
+    weeklyMmChange: SignalConfig;    // Weekly net MM change (z-score threshold)
+    tradersPctLongShort: SignalConfig; // COT traders % long/short (% threshold)
+    cotRvs: SignalConfig;            // COT - RVs (z-score threshold)
+    cotVsSpreads: SignalConfig;      // COT vs Spreads (z-score threshold)
+  };
   recipients: string[];
   enabled: boolean;
   createdAt: string;
   lastSentAt: string | null;
 }
-
-const SIGNAL_TYPE_OPTIONS = [
-  { value: "ALL", label: "All Signals" },
-  { value: "rvs", label: "COT RVs (Spread Z-Scores)" },
-  { value: "changes", label: "COT Changes (Big Moves)" },
-  { value: "extremes", label: "Extreme Positioning" },
-];
 
 const SECTOR_OPTIONS = [
   { value: "ALL", label: "All Sectors" },
@@ -35,12 +41,62 @@ const SECTOR_OPTIONS = [
   { value: "crypto", label: "Crypto" },
 ];
 
-const Z_SCORE_OPTIONS = [
-  { value: 1.5, label: "≥1.5σ" },
-  { value: 2.0, label: "≥2.0σ" },
-  { value: 2.5, label: "≥2.5σ" },
-  { value: 3.0, label: "≥3.0σ" },
-];
+// Signal definitions with threshold options
+const SIGNAL_DEFINITIONS = {
+  mmPctHistMax: {
+    label: "Net MM as % Historical Max",
+    description: "Alert when MM positioning reaches X% of historical max",
+    thresholdType: "percent" as const,
+    options: [70, 80, 85, 90, 95],
+    defaultThreshold: 80,
+  },
+  mmPctOI: {
+    label: "Net MM as % of Open Interest",
+    description: "Alert when MM % of OI z-score exceeds threshold",
+    thresholdType: "zscore" as const,
+    options: [1.5, 2.0, 2.5, 3.0],
+    defaultThreshold: 2.0,
+  },
+  weeklyMmChange: {
+    label: "Weekly Net MM Change",
+    description: "Alert when weekly MM change z-score exceeds threshold",
+    thresholdType: "zscore" as const,
+    options: [1.5, 2.0, 2.5, 3.0],
+    defaultThreshold: 2.0,
+  },
+  tradersPctLongShort: {
+    label: "COT Traders % Long/Short",
+    description: "Alert when trader % long or short exceeds threshold",
+    thresholdType: "percent" as const,
+    options: [60, 65, 70, 75, 80],
+    defaultThreshold: 70,
+  },
+  cotRvs: {
+    label: "COT - RVs (Spread Z-Scores)",
+    description: "Alert when RV spread z-score exceeds threshold",
+    thresholdType: "zscore" as const,
+    options: [1.5, 2.0, 2.5, 3.0],
+    defaultThreshold: 2.0,
+  },
+  cotVsSpreads: {
+    label: "COT vs Spreads",
+    description: "Alert when COT vs price spread z-score exceeds threshold",
+    thresholdType: "zscore" as const,
+    options: [1.5, 2.0, 2.5, 3.0],
+    defaultThreshold: 2.0,
+  },
+};
+
+type SignalKey = keyof typeof SIGNAL_DEFINITIONS;
+
+const DEFAULT_SIGNALS: EmailSubscription["signals"] = {
+  mmPctHistMax: { enabled: false, threshold: 80 },
+  mmPctOI: { enabled: false, threshold: 2.0 },
+  weeklyMmChange: { enabled: false, threshold: 2.0 },
+  tradersPctLongShort: { enabled: false, threshold: 70 },
+  cotRvs: { enabled: true, threshold: 2.0 },
+  cotVsSpreads: { enabled: false, threshold: 2.0 },
+};
 
 export function EmailSubsTab() {
   const [subscriptions, setSubscriptions] = useState<EmailSubscription[]>([]);
@@ -53,9 +109,8 @@ export function EmailSubsTab() {
   // Form state
   const [formName, setFormName] = useState("");
   const [formFrequency, setFormFrequency] = useState<"daily" | "weekly">("weekly");
-  const [formSignalTypes, setFormSignalTypes] = useState<string[]>(["ALL"]);
   const [formSectors, setFormSectors] = useState<string[]>(["ALL"]);
-  const [formMinZScore, setFormMinZScore] = useState(2.0);
+  const [formSignals, setFormSignals] = useState<EmailSubscription["signals"]>(DEFAULT_SIGNALS);
   const [formRecipients, setFormRecipients] = useState("");
   const [formEnabled, setFormEnabled] = useState(true);
 
@@ -82,9 +137,8 @@ export function EmailSubsTab() {
     setEditingSub(null);
     setFormName("");
     setFormFrequency("weekly");
-    setFormSignalTypes(["ALL"]);
     setFormSectors(["ALL"]);
-    setFormMinZScore(2.0);
+    setFormSignals(DEFAULT_SIGNALS);
     setFormRecipients("");
     setFormEnabled(true);
     setShowModal(true);
@@ -94,9 +148,8 @@ export function EmailSubsTab() {
     setEditingSub(sub);
     setFormName(sub.name);
     setFormFrequency(sub.frequency);
-    setFormSignalTypes(sub.signalTypes);
     setFormSectors(sub.sectors);
-    setFormMinZScore(sub.minZScore);
+    setFormSignals(sub.signals || DEFAULT_SIGNALS);
     setFormRecipients(sub.recipients.join(", "));
     setFormEnabled(sub.enabled);
     setShowModal(true);
@@ -112,6 +165,13 @@ export function EmailSubsTab() {
       return;
     }
 
+    // Check at least one signal is enabled
+    const hasEnabledSignal = Object.values(formSignals).some(s => s.enabled);
+    if (!hasEnabledSignal) {
+      alert("Please enable at least one signal type");
+      return;
+    }
+
     const recipients = formRecipients.split(",").map(e => e.trim()).filter(e => e);
     if (recipients.length === 0) {
       alert("Please enter valid email addresses");
@@ -123,9 +183,8 @@ export function EmailSubsTab() {
       const payload: Partial<EmailSubscription> = {
         name: formName.trim(),
         frequency: formFrequency,
-        signalTypes: formSignalTypes,
         sectors: formSectors,
-        minZScore: formMinZScore,
+        signals: formSignals,
         recipients,
         enabled: formEnabled,
       };
@@ -180,20 +239,6 @@ export function EmailSubsTab() {
     }
   };
 
-  const handleSignalTypeToggle = (value: string) => {
-    if (value === "ALL") {
-      setFormSignalTypes(["ALL"]);
-    } else {
-      const newTypes = formSignalTypes.filter(s => s !== "ALL");
-      if (newTypes.includes(value)) {
-        const filtered = newTypes.filter(s => s !== value);
-        setFormSignalTypes(filtered.length > 0 ? filtered : ["ALL"]);
-      } else {
-        setFormSignalTypes([...newTypes, value]);
-      }
-    }
-  };
-
   const handleSectorToggle = (value: string) => {
     if (value === "ALL") {
       setFormSectors(["ALL"]);
@@ -208,6 +253,20 @@ export function EmailSubsTab() {
     }
   };
 
+  const toggleSignal = (key: SignalKey) => {
+    setFormSignals(prev => ({
+      ...prev,
+      [key]: { ...prev[key], enabled: !prev[key].enabled },
+    }));
+  };
+
+  const setSignalThreshold = (key: SignalKey, threshold: number) => {
+    setFormSignals(prev => ({
+      ...prev,
+      [key]: { ...prev[key], threshold },
+    }));
+  };
+
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return "Never";
     return new Date(dateStr).toLocaleString("en-US", {
@@ -217,6 +276,22 @@ export function EmailSubsTab() {
       hour: "numeric",
       minute: "2-digit",
     });
+  };
+
+  const formatThreshold = (key: SignalKey, threshold: number) => {
+    const def = SIGNAL_DEFINITIONS[key];
+    return def.thresholdType === "percent" ? `≥${threshold}%` : `≥${threshold}σ`;
+  };
+
+  const getEnabledSignalsSummary = (signals: EmailSubscription["signals"]) => {
+    const enabled = (Object.keys(signals) as SignalKey[])
+      .filter(key => signals[key].enabled)
+      .map(key => {
+        const def = SIGNAL_DEFINITIONS[key];
+        const shortLabel = def.label.split(" ")[0];
+        return `${shortLabel} (${formatThreshold(key, signals[key].threshold)})`;
+      });
+    return enabled.length > 0 ? enabled.join(", ") : "None";
   };
 
   if (loading) {
@@ -299,14 +374,11 @@ export function EmailSubsTab() {
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-3">
+                  <div className="space-y-2 text-sm mb-3">
                     <div>
-                      <span className="text-zinc-500">Signal Types:</span>
+                      <span className="text-zinc-500">Signals:</span>
                       <span className="text-zinc-300 ml-2">
-                        {sub.signalTypes.includes("ALL") ? "All" : sub.signalTypes.map(s => {
-                          const opt = SIGNAL_TYPE_OPTIONS.find(o => o.value === s);
-                          return opt?.label.split(" ")[0] || s;
-                        }).join(", ")}
+                        {sub.signals ? getEnabledSignalsSummary(sub.signals) : "Legacy format"}
                       </span>
                     </div>
                     <div>
@@ -314,10 +386,6 @@ export function EmailSubsTab() {
                       <span className="text-zinc-300 ml-2">
                         {sub.sectors.includes("ALL") ? "All" : sub.sectors.join(", ")}
                       </span>
-                    </div>
-                    <div>
-                      <span className="text-zinc-500">Min Z-Score:</span>
-                      <span className="text-zinc-300 ml-2">≥{sub.minZScore}σ</span>
                     </div>
                   </div>
 
@@ -358,7 +426,7 @@ export function EmailSubsTab() {
       {/* Create/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-zinc-900 rounded-lg border border-zinc-700 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-zinc-900 rounded-lg border border-zinc-700 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-zinc-900 border-b border-zinc-800 p-4 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-white">
                 {editingSub ? "Edit Subscription" : "Create Subscription"}
@@ -371,7 +439,7 @@ export function EmailSubsTab() {
               </button>
             </div>
 
-            <div className="p-4 space-y-4">
+            <div className="p-4 space-y-5">
               {/* Name */}
               <div>
                 <label className="block text-sm text-zinc-400 mb-1">Subscription Name</label>
@@ -414,23 +482,68 @@ export function EmailSubsTab() {
                 </p>
               </div>
 
-              {/* Signal Types */}
+              {/* Signal Types with Individual Thresholds */}
               <div>
-                <label className="block text-sm text-zinc-400 mb-1">Signal Types</label>
-                <div className="flex flex-wrap gap-2">
-                  {SIGNAL_TYPE_OPTIONS.map((opt) => (
-                    <button
-                      key={opt.value}
-                      onClick={() => handleSignalTypeToggle(opt.value)}
-                      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                        formSignalTypes.includes(opt.value)
-                          ? "bg-orange-500 text-white"
-                          : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
+                <label className="block text-sm text-zinc-400 mb-2">Signal Types & Thresholds</label>
+                <div className="space-y-3">
+                  {(Object.keys(SIGNAL_DEFINITIONS) as SignalKey[]).map((key) => {
+                    const def = SIGNAL_DEFINITIONS[key];
+                    const signal = formSignals[key];
+
+                    return (
+                      <div
+                        key={key}
+                        className={`rounded-lg border p-3 transition-colors ${
+                          signal.enabled
+                            ? "bg-zinc-800/70 border-orange-500/50"
+                            : "bg-zinc-800/30 border-zinc-700"
+                        }`}
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex items-start gap-3 flex-1">
+                            {/* Toggle */}
+                            <button
+                              onClick={() => toggleSignal(key)}
+                              className={`mt-0.5 w-10 h-5 rounded-full transition-colors flex-shrink-0 ${
+                                signal.enabled ? "bg-orange-500" : "bg-zinc-600"
+                              }`}
+                            >
+                              <div
+                                className={`w-4 h-4 rounded-full bg-white transition-transform ${
+                                  signal.enabled ? "translate-x-5" : "translate-x-0.5"
+                                }`}
+                              />
+                            </button>
+
+                            <div className="flex-1">
+                              <div className="text-white text-sm font-medium">{def.label}</div>
+                              <div className="text-zinc-500 text-xs mt-0.5">{def.description}</div>
+                            </div>
+                          </div>
+
+                          {/* Threshold selector */}
+                          <div className="flex gap-1">
+                            {def.options.map((opt) => (
+                              <button
+                                key={opt}
+                                onClick={() => setSignalThreshold(key, opt)}
+                                disabled={!signal.enabled}
+                                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                                  signal.threshold === opt && signal.enabled
+                                    ? "bg-orange-500 text-white"
+                                    : signal.enabled
+                                    ? "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
+                                    : "bg-zinc-800 text-zinc-600 cursor-not-allowed"
+                                }`}
+                              >
+                                {def.thresholdType === "percent" ? `${opt}%` : `${opt}σ`}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -452,29 +565,6 @@ export function EmailSubsTab() {
                     </button>
                   ))}
                 </div>
-              </div>
-
-              {/* Min Z-Score */}
-              <div>
-                <label className="block text-sm text-zinc-400 mb-1">Minimum Z-Score (for RVs)</label>
-                <div className="flex gap-2">
-                  {Z_SCORE_OPTIONS.map((opt) => (
-                    <button
-                      key={opt.value}
-                      onClick={() => setFormMinZScore(opt.value)}
-                      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                        formMinZScore === opt.value
-                          ? "bg-orange-500 text-white"
-                          : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-                <p className="text-zinc-500 text-xs mt-1">
-                  Only include COT RV spreads with z-scores at or above this threshold
-                </p>
               </div>
 
               {/* Recipients */}

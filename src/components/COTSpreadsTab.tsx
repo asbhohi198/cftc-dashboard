@@ -700,28 +700,20 @@ export function COTSpreadsTab() {
                           <Label value="1-3 Month Spread" angle={-90} position="insideLeft" dy={50} fill="#9ca3af" fontSize={12} />
                         </YAxis>
                         <Tooltip
-                          contentStyle={{
-                            backgroundColor: "#18181b",
-                            border: "1px solid #27272a",
-                            borderRadius: "0.5rem",
-                            fontSize: "12px",
-                            color: "#ffffff",
-                          }}
-                          labelStyle={{ color: "#ffffff", fontWeight: "bold" }}
-                          itemStyle={{ color: "#ffffff" }}
-                          formatter={(value: number, name: string) => {
-                            if (name === "spread") return [value.toFixed(2), "Spread"];
-                            if (name === "mmNetPctOI") return [`${value.toFixed(1)}%`, "% OI"];
-                            if (name === "mmNetAll") return [formatNumber(value), "Net MM"];
-                            return [value, name];
-                          }}
-                          labelFormatter={(_, payload) => {
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            const point = (payload as any)?.[0]?.payload as HistoricalPoint | undefined;
-                            if (point?.date) {
-                              return `CFTC Report: ${point.date}`;
+                          content={({ active, payload }) => {
+                            if (active && payload && payload.length > 0) {
+                              const point = payload[0].payload as HistoricalPoint;
+                              return (
+                                <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-3 text-sm">
+                                  <p className="text-white font-bold mb-1">CFTC Report: {point.date}</p>
+                                  <p className="text-zinc-300">
+                                    {miniChartXAxisMode === "pctOI" ? "% OI" : "Net MM"}: {miniChartXAxisMode === "pctOI" ? `${point.mmNetPctOI.toFixed(1)}%` : formatNumber(point.mmNetAll)}
+                                  </p>
+                                  <p className="text-zinc-300">Spread: {point.spread.toFixed(2)}</p>
+                                </div>
+                              );
                             }
-                            return "";
+                            return null;
                           }}
                         />
                         <Scatter data={points} fill="#3b82f6" fillOpacity={0.6}>
