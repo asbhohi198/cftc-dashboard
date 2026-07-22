@@ -490,7 +490,7 @@ export function COTSpreadsTab() {
             </button>
           </div>
           <ResponsiveContainer width="100%" height={350}>
-            <ComposedChart margin={{ top: 20, right: 20, left: 10, bottom: 40 }}>
+            <ComposedChart margin={{ top: 10, right: 20, left: 10, bottom: 25 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
               <XAxis
                 type="number"
@@ -499,7 +499,7 @@ export function COTSpreadsTab() {
                 domain={["auto", "auto"]}
                 tickFormatter={(v) => xAxisMode === "pctOI" ? `${Math.round(v)}%` : formatNumber(v)}
               >
-                <Label value={xAxisMode === "pctOI" ? "Net MM as % of OI" : "Net MM Position (contracts)"} position="bottom" offset={25} fill="#9ca3af" fontSize={11} />
+                <Label value={xAxisMode === "pctOI" ? "Net MM as % of OI" : "Net MM Position (contracts)"} position="bottom" offset={8} fill="#9ca3af" fontSize={11} />
               </XAxis>
               <YAxis
                 type="number"

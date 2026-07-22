@@ -13,6 +13,9 @@ interface CITRow {
   indexNet: number;
   indexPctOI: number;
   change: number;
+  isChangeSignificant: boolean;
+  isPctOIExtreme: boolean;
+  isPctOIHigh: boolean;
   recordMax: number;
   recordMin: number;
   pctMax: number;
@@ -224,10 +227,10 @@ function DisaggregatedTable({ rows, citData }: { rows: SummaryRow[]; citData?: C
                   <td className="px-1 py-1.5 text-right text-cyan-400/70 border-l border-zinc-800">
                     {cit ? formatNumber(cit.indexNet) : "-"}
                   </td>
-                  <td className={`px-1 py-1.5 text-right ${cit ? getChangeColor(cit.change) : "text-zinc-600"}`}>
+                  <td className={`px-1 py-1.5 text-right ${cit ? getChangeColor(cit.change) : "text-zinc-600"} ${cit?.isChangeSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
                     {cit ? formatChange(cit.change) : "-"}
                   </td>
-                  <td className="px-1 py-1.5 text-right text-cyan-400/70">
+                  <td className={`px-1 py-1.5 text-right ${cit?.isPctOIExtreme ? (cit.isPctOIHigh ? "font-bold bg-green-500/20 text-green-400" : "font-bold bg-red-500/20 text-red-400") : "text-cyan-400/70"}`}>
                     {cit ? `${cit.indexPctOI.toFixed(1)}%` : "-"}
                   </td>
                 </>

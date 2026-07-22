@@ -91,6 +91,9 @@ export interface CITContractData {
   indexNet: number;
   indexPctOI: number;
   change: number; // Week-over-week change
+  isChangeSignificant: boolean; // > 2 std dev
+  isPctOIExtreme: boolean; // 98th or 2nd percentile
+  isPctOIHigh: boolean; // true if 98th, false if 2nd
   recordMax: number;
   recordMin: number;
   pctMax: number; // Current as % of record max
@@ -132,6 +135,29 @@ export async function GET(request: NextRequest) {
       const previous = records.length > 1 ? records[records.length - 2] : null;
       const change = previous ? latest.indexNet - previous.indexNet : 0;
 
+      // Calculate weekly changes for std dev calculation
+      const weeklyChanges: number[] = [];
+      for (let i = 1; i < records.length; i++) {
+        weeklyChanges.push(records[i].indexNet - records[i - 1].indexNet);
+      }
+
+      // Calculate std dev of changes
+      let isChangeSignificant = false;
+      if (weeklyChanges.length > 10) {
+        const mean = weeklyChanges.reduce((a, b) => a + b, 0) / weeklyChanges.length;
+        const variance = weeklyChanges.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / weeklyChanges.length;
+        const stdDev = Math.sqrt(variance);
+        isChangeSignificant = Math.abs(change) > 2 * stdDev;
+      }
+
+      // Calculate percentile for %OI
+      const pctOIValues = records.map(r => r.indexPctOI).sort((a, b) => a - b);
+      const currentPctOI = latest.indexPctOI;
+      const rank = pctOIValues.filter(v => v < currentPctOI).length;
+      const percentile = (rank / pctOIValues.length) * 100;
+      const isPctOIExtreme = percentile >= 98 || percentile <= 2;
+      const isPctOIHigh = percentile >= 98;
+
       // Calculate record max/min
       let recordMax = -Infinity;
       let recordMin = Infinity;
@@ -157,6 +183,9 @@ export async function GET(request: NextRequest) {
         indexNet: latest.indexNet,
         indexPctOI: latest.indexPctOI,
         change,
+        isChangeSignificant,
+        isPctOIExtreme,
+        isPctOIHigh,
         recordMax: recordMax === -Infinity ? 0 : recordMax,
         recordMin: recordMin === Infinity ? 0 : recordMin,
         pctMax,
