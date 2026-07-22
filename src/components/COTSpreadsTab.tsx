@@ -90,7 +90,7 @@ const COMMODITY_CODES: Record<string, string> = {
   "Live Cattle": "LC",
   "Lean Hogs": "LH",
   "Feeder Cattle": "FC",
-  "Canola": "CA",
+  "Canola": "RS",
 };
 
 // Get color for spread percentage (green = backwardation/bullish, red = contango/bearish)

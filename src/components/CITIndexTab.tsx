@@ -329,11 +329,11 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
           <h3 className="text-xs font-semibold text-white mb-2">CHG WoW</h3>
           <div className="h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={changeChartData} margin={{ top: 12, right: 5, left: -20, bottom: 30 }}>
+              <BarChart data={changeChartData} margin={{ top: 12, right: 5, left: -25, bottom: 30 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                 <XAxis
                   dataKey="name"
-                  tick={{ fill: "#a1a1aa", fontSize: 7 }}
+                  tick={{ fill: "#ffffff", fontSize: 7 }}
                   angle={-90}
                   textAnchor="end"
                   height={40}
@@ -440,7 +440,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis
                     dataKey="date"
-                    tick={{ fill: "#a1a1aa", fontSize: 7 }}
+                    tick={{ fill: "#ffffff", fontSize: 7 }}
                     angle={-90}
                     textAnchor="end"
                     height={25}
@@ -451,6 +451,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                   <YAxis
                     tick={{ fill: "#ffffff", fontSize: 9 }}
                     tickFormatter={(v) => formatNumber(v)}
+                    domain={[400000, 'auto']}
                   />
                   <Tooltip
                     contentStyle={{
@@ -491,7 +492,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis
                     dataKey="date"
-                    tick={{ fill: "#a1a1aa", fontSize: 7 }}
+                    tick={{ fill: "#ffffff", fontSize: 7 }}
                     angle={-90}
                     textAnchor="end"
                     height={25}
@@ -502,6 +503,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                   <YAxis
                     tick={{ fill: "#ffffff", fontSize: 9 }}
                     tickFormatter={(v) => formatNumber(v)}
+                    domain={[400000, 'auto']}
                   />
                   <Tooltip
                     contentStyle={{
@@ -561,19 +563,19 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                 {(expandedChart === "change" || expandedChart === "pctMax") ? (
                   <BarChart
                     data={expandedChart === "change" ? changeChartData : pctMaxChartData}
-                    margin={{ top: 20, right: 20, left: -10, bottom: 60 }}
+                    margin={{ top: 30, right: 20, left: -5, bottom: 80 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                     <XAxis
                       dataKey="name"
-                      tick={{ fill: "#ffffff", fontSize: 11 }}
+                      tick={{ fill: "#ffffff", fontSize: 14 }}
                       angle={-90}
                       textAnchor="end"
-                      height={70}
-                      dy={35}
+                      height={90}
+                      dy={40}
                     />
                     <YAxis
-                      tick={{ fill: "#ffffff", fontSize: 11 }}
+                      tick={{ fill: "#ffffff", fontSize: 14 }}
                       tickFormatter={expandedChart === "pctMax" ? (v) => `${v}%` : (v) => formatNumber(v)}
                       domain={expandedChart === "pctMax" ? [0, 100] : undefined}
                     />
@@ -582,7 +584,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                         backgroundColor: "#18181b",
                         border: "1px solid #27272a",
                         borderRadius: "0.5rem",
-                        fontSize: "12px",
+                        fontSize: "14px",
                         color: "#ffffff",
                       }}
                       labelStyle={{ color: "#ffffff" }}
@@ -596,7 +598,8 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                         dataKey="value"
                         position="top"
                         fill="#ffffff"
-                        fontSize={10}
+                        fontSize={14}
+                        fontWeight="bold"
                         formatter={(value: number) => expandedChart === "pctMax"
                           ? `${value.toFixed(0)}%`
                           : formatNumber(value)}
@@ -614,21 +617,21 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                 ) : (
                   <LineChart
                     data={expandedChart === "cswkw" ? cswkwAgg?.historicalData : cswkwSboSmAgg?.historicalData}
-                    margin={{ top: 10, right: 20, left: -10, bottom: 35 }}
+                    margin={{ top: 10, right: 20, left: -5, bottom: 50 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                     <XAxis
                       dataKey="date"
-                      tick={{ fill: "#ffffff", fontSize: 11 }}
+                      tick={{ fill: "#ffffff", fontSize: 14 }}
                       angle={-90}
                       textAnchor="end"
-                      height={50}
+                      height={60}
                       tickFormatter={formatChartDate}
                       interval={Math.floor((expandedChart === "cswkw" ? cswkwAgg?.historicalData.length || 100 : cswkwSboSmAgg?.historicalData.length || 100) / 20)}
-                      dy={30}
+                      dy={35}
                     />
                     <YAxis
-                      tick={{ fill: "#ffffff", fontSize: 11 }}
+                      tick={{ fill: "#ffffff", fontSize: 14 }}
                       tickFormatter={(v) => formatNumber(v)}
                     />
                     <Tooltip
@@ -636,7 +639,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                         backgroundColor: "#18181b",
                         border: "1px solid #27272a",
                         borderRadius: "0.5rem",
-                        fontSize: "12px",
+                        fontSize: "14px",
                         color: "#ffffff",
                       }}
                       labelStyle={{ color: "#ffffff" }}
