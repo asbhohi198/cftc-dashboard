@@ -8,7 +8,7 @@ const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours
 
 // Define which contracts belong to each sector
 const SECTOR_CONTRACTS: Record<string, ContractId[]> = {
-  ags: ["corn", "soybeans", "chicago-wheat", "kansas-wheat", "soyoil", "soymeal", "canola", "sugar", "arabica-coffee", "ny-cocoa", "cotton", "live-cattle", "lean-hogs", "feeder-cattle"],
+  ags: ["corn", "matif-corn", "soybeans", "chicago-wheat", "kansas-wheat", "matif-wheat", "soyoil", "soymeal", "canola", "matif-rapeseed", "sugar", "arabica-coffee", "ny-cocoa", "cotton", "live-cattle", "lean-hogs", "feeder-cattle"],
   energy: ["wti-crude", "brent-crude", "natural-gas", "rbob-gasoline", "heating-oil"],
   metals: ["gold", "silver", "copper", "platinum", "palladium"],
   equities: ["sp500", "nasdaq100", "dow", "russell2000", "vix"],
@@ -16,6 +16,11 @@ const SECTOR_CONTRACTS: Record<string, ContractId[]> = {
   fx: ["eurusd", "usdjpy", "gbpusd", "usdcad", "audusd", "usdchf", "dxy"],
   crypto: ["bitcoin", "ethereum"],
 };
+
+// Check if a contract is a Matif contract
+function isMatifContract(contractId: string): boolean {
+  return contractId.startsWith("matif-");
+}
 
 async function fetchYearData(year: number, contractCode: string, reportType: ReportType): Promise<COTRecord[]> {
   const url = getCFTCUrl(year, reportType);
@@ -184,13 +189,31 @@ export async function GET(request: NextRequest) {
 
   const contractIds = SECTOR_CONTRACTS[sector];
 
+  const baseUrl = new URL(request.url).origin;
+
   try {
     const results: YTDContractData[] = [];
 
     // Fetch data for each contract in the sector
     for (const contractId of contractIds) {
       const contract = CFTC_CONTRACTS[contractId];
-      const records = await fetchAllData(contract.code, contract.reportType);
+      let records: COTRecord[];
+
+      if (isMatifContract(contractId)) {
+        // Fetch Matif data from matif-cot API
+        try {
+          const res = await fetch(`${baseUrl}/api/matif-cot?contract=${contractId}&format=cot`, {
+            cache: "no-store",
+          });
+          const json = await res.json();
+          records = json.success && json.data ? json.data : [];
+        } catch {
+          records = [];
+        }
+      } else {
+        // Fetch CFTC data from zip files
+        records = await fetchAllData(contract.code, contract.reportType);
+      }
 
       if (records.length === 0) continue;
 

@@ -7,13 +7,16 @@ type AssetCategory = "ags-grains" | "ags-softs" | "ags-livestock" | "ags-other" 
 const SECTOR_COMMODITIES: Record<AssetCategory, { id: ContractId; label: string }[]> = {
   "ags-grains": [
     { id: "corn", label: "Corn" },
+    { id: "matif-corn", label: "Matif Corn" },
     { id: "chicago-wheat", label: "Chicago Wheat" },
     { id: "kansas-wheat", label: "Kansas Wheat" },
     { id: "minneapolis-wheat", label: "Minneapolis Wheat" },
+    { id: "matif-wheat", label: "Matif Wheat" },
     { id: "soybeans", label: "Soybeans" },
     { id: "soymeal", label: "Soybean Meal" },
     { id: "soyoil", label: "Soybean Oil" },
     { id: "canola", label: "Canola" },
+    { id: "matif-rapeseed", label: "Matif Rapeseed" },
   ],
   "ags-softs": [
     { id: "sugar", label: "Sugar" },
@@ -290,7 +293,13 @@ export async function GET(request: Request) {
 
     const fetchPromises = Array.from(allContractIds).map(async (contractId) => {
       try {
-        const res = await fetch(`${baseUrl}/api/cot?contract=${contractId}`, {
+        // Use matif-cot endpoint for Matif contracts, regular cot endpoint for others
+        const isMatif = contractId.startsWith("matif-");
+        const endpoint = isMatif
+          ? `${baseUrl}/api/matif-cot?contract=${contractId}&format=cot`
+          : `${baseUrl}/api/cot?contract=${contractId}`;
+
+        const res = await fetch(endpoint, {
           cache: "no-store",
         });
         const json = await res.json();

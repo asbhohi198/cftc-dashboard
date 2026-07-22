@@ -481,7 +481,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                     type="monotone"
                     dataKey="indexNet"
                     name="C+S+W+KW Index Total"
-                    stroke="#3b82f6"
+                    stroke="#ffffff"
                     strokeWidth={1.5}
                     dot={false}
                   />
@@ -533,7 +533,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                     type="monotone"
                     dataKey="indexNet"
                     name="C+S+W+KW+SBO+SM Index Total"
-                    stroke="#3b82f6"
+                    stroke="#ffffff"
                     strokeWidth={1.5}
                     dot={false}
                   />
@@ -589,7 +589,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                     type="monotone"
                     dataKey="indexNet"
                     name="LC+LH+FC Index Total"
-                    stroke="#3b82f6"
+                    stroke="#ffffff"
                     strokeWidth={1.5}
                     dot={false}
                   />
@@ -641,7 +641,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                     type="monotone"
                     dataKey="indexNet"
                     name="SB+KC+CC+CT Index Total"
-                    stroke="#3b82f6"
+                    stroke="#ffffff"
                     strokeWidth={1.5}
                     dot={false}
                   />
@@ -693,7 +693,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                     type="monotone"
                     dataKey="indexNet"
                     name="G+O+LVS+SFTS Index Total"
-                    stroke="#3b82f6"
+                    stroke="#ffffff"
                     strokeWidth={1.5}
                     dot={false}
                   />

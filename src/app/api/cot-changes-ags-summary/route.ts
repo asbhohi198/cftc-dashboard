@@ -1,16 +1,19 @@
 import { NextResponse } from "next/server";
 import { CFTC_CONTRACTS, COTRecord, ContractId } from "@/lib/cftc";
 
-// 14 US Ag commodities matching Excel CFTC_Changes tab
+// Ag commodities including Matif (Euronext)
 const AGS_COMMODITIES: { id: ContractId; label: string }[] = [
   { id: "corn", label: "Corn" },
+  { id: "matif-corn", label: "Matif Corn" },
   { id: "soybeans", label: "Soybeans" },
   { id: "chicago-wheat", label: "Chicago Wheat" },
   { id: "kansas-wheat", label: "Kansas Wheat" },
   { id: "minneapolis-wheat", label: "Minneapolis Wheat" },
+  { id: "matif-wheat", label: "Matif Wheat" },
   { id: "soyoil", label: "Soybean Oil" },
   { id: "soymeal", label: "Soybean Meal" },
   { id: "canola", label: "Canola" },
+  { id: "matif-rapeseed", label: "Matif Rapeseed" },
   { id: "live-cattle", label: "Live Cattle" },
   { id: "lean-hogs", label: "Lean Hogs" },
   { id: "feeder-cattle", label: "Feeder Cattle" },
@@ -147,7 +150,13 @@ export async function GET(request: Request) {
 
     const fetchPromises = AGS_COMMODITIES.map(async (commodity) => {
       try {
-        const res = await fetch(`${baseUrl}/api/cot?contract=${commodity.id}`, {
+        // Use matif-cot endpoint for Matif contracts, regular cot endpoint for others
+        const isMatif = commodity.id.startsWith("matif-");
+        const endpoint = isMatif
+          ? `${baseUrl}/api/matif-cot?contract=${commodity.id}&format=cot`
+          : `${baseUrl}/api/cot?contract=${commodity.id}`;
+
+        const res = await fetch(endpoint, {
           cache: "no-store",
         });
         const json = await res.json();
