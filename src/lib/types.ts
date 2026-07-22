@@ -3,6 +3,7 @@ export type MainCategory =
   | "home"
   | "guide"
   | "summary"
+  | "cot-vs-price"
   | "cot-changes"
   | "cot-ytd"
   | "cot-traders"
