@@ -711,7 +711,7 @@ export function COTSpreadsTab() {
                           labelFormatter={(_, payload) => {
                             if (payload && payload[0]) {
                               const point = payload[0].payload as HistoricalPoint;
-                              return `Date: ${point.date}`;
+                              return `CFTC Report: ${point.date}`;
                             }
                             return "";
                           }}
