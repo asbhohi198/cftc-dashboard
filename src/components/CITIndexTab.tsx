@@ -76,7 +76,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
   const [reportDate, setReportDate] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [expandedChart, setExpandedChart] = useState<"cswkw" | "cswkw_sbo_sm" | null>(null);
+  const [expandedChart, setExpandedChart] = useState<"cswkw" | "cswkw_sbo_sm" | "change" | "pctMax" | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -217,33 +217,33 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
       key={row.id}
       className={`border-b border-zinc-800 ${highlight || ""}`}
     >
-      <td className="py-2 px-3 text-left text-white">{row.name}</td>
-      <td className="py-2 px-3 text-center font-mono text-white">{formatNumber(row.indexNet)}</td>
-      <td className="py-2 px-3 text-center font-mono text-zinc-400">{row.indexPctOI.toFixed(0)}%</td>
-      <td className={`py-2 px-3 text-center font-mono ${row.change >= 0 ? "text-green-400" : "text-red-400"}`}>
+      <td className="py-1.5 px-2 text-left text-white">{row.name}</td>
+      <td className="py-1.5 px-1 text-center font-mono text-white">{formatNumber(row.indexNet)}</td>
+      <td className="py-1.5 px-1 text-center font-mono text-zinc-400">{row.indexPctOI.toFixed(0)}%</td>
+      <td className={`py-1.5 px-1 text-center font-mono ${row.change >= 0 ? "text-green-400" : "text-red-400"}`}>
         {row.change >= 0 ? "+" : ""}{formatNumber(row.change)}
       </td>
-      <td className="py-2 px-3 text-center font-mono text-zinc-400">{formatNumber(row.recordMax)}</td>
-      <td className={`py-2 px-3 text-center font-mono font-bold ${getPctMaxColor(row.pctMax)}`}>
+      <td className="py-1.5 px-1 text-center font-mono text-zinc-400">{formatNumber(row.recordMax)}</td>
+      <td className={`py-1.5 px-1 text-center font-mono font-bold ${getPctMaxColor(row.pctMax)}`}>
         {row.pctMax.toFixed(0)}%
       </td>
-      <td className="py-2 px-3 text-center font-mono text-zinc-400">{formatNumber(row.recordMin)}</td>
+      <td className="py-1.5 px-1 text-center font-mono text-zinc-400">{formatNumber(row.recordMin)}</td>
     </tr>
   );
 
   const renderAggRow = (name: string, agg: NonNullable<typeof cswkwAgg>, bgColor: string) => (
     <tr key={name} className={`border-b border-zinc-800 ${bgColor}`}>
-      <td className="py-2 px-3 text-left text-white font-semibold">{name}</td>
-      <td className="py-2 px-3 text-center font-mono text-white font-semibold">{formatNumber(agg.indexNet)}</td>
-      <td className="py-2 px-3 text-center font-mono text-zinc-400">{agg.indexPctOI.toFixed(0)}%</td>
-      <td className={`py-2 px-3 text-center font-mono font-semibold ${agg.change >= 0 ? "text-green-400" : "text-red-400"}`}>
+      <td className="py-1.5 px-2 text-left text-white font-semibold">{name}</td>
+      <td className="py-1.5 px-1 text-center font-mono text-white font-semibold">{formatNumber(agg.indexNet)}</td>
+      <td className="py-1.5 px-1 text-center font-mono text-zinc-400">{agg.indexPctOI.toFixed(0)}%</td>
+      <td className={`py-1.5 px-1 text-center font-mono font-semibold ${agg.change >= 0 ? "text-green-400" : "text-red-400"}`}>
         {agg.change >= 0 ? "+" : ""}{formatNumber(agg.change)}
       </td>
-      <td className="py-2 px-3 text-center font-mono text-zinc-400">{formatNumber(agg.recordMax)}</td>
-      <td className={`py-2 px-3 text-center font-mono font-bold ${getPctMaxColor(agg.pctMax)}`}>
+      <td className="py-1.5 px-1 text-center font-mono text-zinc-400">{formatNumber(agg.recordMax)}</td>
+      <td className={`py-1.5 px-1 text-center font-mono font-bold ${getPctMaxColor(agg.pctMax)}`}>
         {agg.pctMax.toFixed(0)}%
       </td>
-      <td className="py-2 px-3 text-center font-mono text-zinc-400">{formatNumber(agg.recordMin)}</td>
+      <td className="py-1.5 px-1 text-center font-mono text-zinc-400">{formatNumber(agg.recordMin)}</td>
     </tr>
   );
 
@@ -269,53 +269,58 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
         </div>
       </div>
 
-      {/* Main Table */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-zinc-800/50 border-b border-zinc-700">
-              <th className="text-left py-3 px-3 text-zinc-400 font-medium">Commodity</th>
-              <th className="text-center py-3 px-3 text-zinc-400 font-medium">Net</th>
-              <th className="text-center py-3 px-3 text-zinc-400 font-medium">% OI</th>
-              <th className="text-center py-3 px-3 text-zinc-400 font-medium">Change</th>
-              <th className="text-center py-3 px-3 text-zinc-400 font-medium">Record Max</th>
-              <th className="text-center py-3 px-3 text-zinc-400 font-medium">% Max</th>
-              <th className="text-center py-3 px-3 text-zinc-400 font-medium">Record Min</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Grains */}
-            {grains.map(row => renderTableRow(row))}
+      {/* Main Content - Table and Charts side by side */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        {/* Left: Table */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="bg-zinc-800/50 border-b border-zinc-700">
+                <th className="text-left py-2 px-2 text-zinc-400 font-medium">Commodity</th>
+                <th className="text-center py-2 px-1 text-zinc-400 font-medium">Net</th>
+                <th className="text-center py-2 px-1 text-zinc-400 font-medium">%OI</th>
+                <th className="text-center py-2 px-1 text-zinc-400 font-medium">Chg</th>
+                <th className="text-center py-2 px-1 text-zinc-400 font-medium">Max</th>
+                <th className="text-center py-2 px-1 text-zinc-400 font-medium">%Max</th>
+                <th className="text-center py-2 px-1 text-zinc-400 font-medium">Min</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* Grains */}
+              {grains.map(row => renderTableRow(row))}
 
-            {/* Aggregated rows */}
-            {cswkwAgg && renderAggRow("C+S+W+KW", cswkwAgg, "bg-green-900/20")}
-            {cswkwSboSmAgg && renderAggRow("C+S+W+KW+SBO+SM", cswkwSboSmAgg, "bg-yellow-900/20")}
+              {/* Aggregated rows */}
+              {cswkwAgg && renderAggRow("C+S+W+KW", cswkwAgg, "bg-green-900/20")}
+              {cswkwSboSmAgg && renderAggRow("C+S+W+KW+SBO+SM", cswkwSboSmAgg, "bg-yellow-900/20")}
 
-            {/* Livestock */}
-            {livestock.map(row => renderTableRow(row))}
+              {/* Livestock */}
+              {livestock.map(row => renderTableRow(row))}
 
-            {/* Softs */}
-            {softs.map(row => renderTableRow(row))}
-          </tbody>
-        </table>
-      </div>
+              {/* Softs */}
+              {softs.map(row => renderTableRow(row))}
+            </tbody>
+          </table>
+        </div>
 
-      {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Right: Charts Grid (2x2) */}
+        <div className="grid grid-cols-2 gap-3">
         {/* Change WoW Bar Chart */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
-          <h3 className="text-md font-semibold text-white mb-4">CIT Index Position CHG WoW</h3>
-          <div className="h-[300px]">
+        <div
+          className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 cursor-pointer hover:border-zinc-600 transition-colors"
+          onClick={() => setExpandedChart("change")}
+        >
+          <h3 className="text-xs font-semibold text-white mb-2">CHG WoW</h3>
+          <div className="h-[160px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={changeChartData} margin={{ top: 20, right: 10, left: 0, bottom: 50 }}>
+              <BarChart data={changeChartData} margin={{ top: 20, right: 10, left: -15, bottom: 45 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                 <XAxis
                   dataKey="name"
                   tick={{ fill: "#ffffff", fontSize: 10 }}
                   angle={-90}
                   textAnchor="end"
-                  height={55}
-                  dy={30}
+                  height={50}
+                  dy={35}
                 />
                 <YAxis
                   tick={{ fill: "#ffffff", fontSize: 11 }}
@@ -354,19 +359,22 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
         </div>
 
         {/* % Max Bar Chart */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
-          <h3 className="text-md font-semibold text-white mb-4">CIT Index Position % Max</h3>
-          <div className="h-[300px]">
+        <div
+          className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 cursor-pointer hover:border-zinc-600 transition-colors"
+          onClick={() => setExpandedChart("pctMax")}
+        >
+          <h3 className="text-xs font-semibold text-white mb-2">% Max</h3>
+          <div className="h-[160px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={pctMaxChartData} margin={{ top: 20, right: 10, left: 0, bottom: 50 }}>
+              <BarChart data={pctMaxChartData} margin={{ top: 20, right: 10, left: -15, bottom: 45 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                 <XAxis
                   dataKey="name"
                   tick={{ fill: "#ffffff", fontSize: 10 }}
                   angle={-90}
                   textAnchor="end"
-                  height={55}
-                  dy={30}
+                  height={50}
+                  dy={35}
                 />
                 <YAxis
                   tick={{ fill: "#ffffff", fontSize: 11 }}
@@ -401,26 +409,26 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
         {/* C+S+W+KW Historical Chart */}
         {cswkwAgg && (
           <div
-            className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 cursor-pointer hover:border-zinc-600 transition-colors"
+            className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 cursor-pointer hover:border-zinc-600 transition-colors"
             onClick={() => setExpandedChart("cswkw")}
           >
-            <h3 className="text-md font-semibold text-white mb-4">CIT Index Position (Combined C,S,W,KW)</h3>
-            <div className="h-[300px]">
+            <h3 className="text-xs font-semibold text-white mb-2">C+S+W+KW</h3>
+            <div className="h-[160px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={cswkwAgg.historicalData} margin={{ top: 10, right: 10, left: 0, bottom: 25 }}>
+                <LineChart data={cswkwAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 15 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis
                     dataKey="date"
-                    tick={{ fill: "#ffffff", fontSize: 10 }}
+                    tick={{ fill: "#ffffff", fontSize: 8 }}
                     angle={-90}
                     textAnchor="end"
-                    height={35}
+                    height={25}
                     tickFormatter={formatChartDate}
-                    interval={Math.floor(cswkwAgg.historicalData.length / 10)}
+                    interval={Math.floor(cswkwAgg.historicalData.length / 6)}
                     dy={20}
                   />
                   <YAxis
-                    tick={{ fill: "#ffffff", fontSize: 11 }}
+                    tick={{ fill: "#ffffff", fontSize: 9 }}
                     tickFormatter={(v) => formatNumber(v)}
                   />
                   <Tooltip
@@ -446,30 +454,29 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                 </LineChart>
               </ResponsiveContainer>
             </div>
-            <p className="text-xs text-zinc-600 mt-2 text-center">Click to expand</p>
           </div>
         )}
 
         {/* C+S+W+KW+SBO+SM Historical Chart */}
         {cswkwSboSmAgg && (
           <div
-            className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 cursor-pointer hover:border-zinc-600 transition-colors"
+            className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 cursor-pointer hover:border-zinc-600 transition-colors"
             onClick={() => setExpandedChart("cswkw_sbo_sm")}
           >
-            <h3 className="text-md font-semibold text-white mb-4">CIT Index Position (Combined C,S,W,KW,SBO,SM)</h3>
-            <div className="h-[300px]">
+            <h3 className="text-xs font-semibold text-white mb-2">C+S+W+KW+SBO+SM</h3>
+            <div className="h-[160px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={cswkwSboSmAgg.historicalData} margin={{ top: 10, right: 10, left: 0, bottom: 25 }}>
+                <LineChart data={cswkwSboSmAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 15 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis
                     dataKey="date"
-                    tick={{ fill: "#ffffff", fontSize: 10 }}
+                    tick={{ fill: "#ffffff", fontSize: 8 }}
                     angle={-90}
                     textAnchor="end"
-                    height={35}
+                    height={25}
                     tickFormatter={formatChartDate}
                     interval={Math.floor(cswkwSboSmAgg.historicalData.length / 10)}
-                    dy={20}
+                    dy={25}
                   />
                   <YAxis
                     tick={{ fill: "#ffffff", fontSize: 11 }}
@@ -515,7 +522,10 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-white">
-                CIT Index Position ({expandedChart === "cswkw" ? "Combined C,S,W,KW" : "Combined C,S,W,KW,SBO,SM"})
+                {expandedChart === "change" && "CIT Index Position CHG WoW"}
+                {expandedChart === "pctMax" && "CIT Index Position % Max"}
+                {expandedChart === "cswkw" && "CIT Index Position (Combined C,S,W,KW)"}
+                {expandedChart === "cswkw_sbo_sm" && "CIT Index Position (Combined C,S,W,KW,SBO,SM)"}
               </h3>
               <button
                 onClick={() => setExpandedChart(null)}
@@ -527,46 +537,101 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
 
             <div className="h-[500px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                  data={expandedChart === "cswkw" ? cswkwAgg?.historicalData : cswkwSboSmAgg?.historicalData}
-                  margin={{ top: 10, right: 20, left: 0, bottom: 40 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                  <XAxis
-                    dataKey="date"
-                    tick={{ fill: "#ffffff", fontSize: 11 }}
-                    angle={-90}
-                    textAnchor="end"
-                    height={55}
-                    tickFormatter={formatChartDate}
-                    interval={Math.floor((expandedChart === "cswkw" ? cswkwAgg?.historicalData.length || 100 : cswkwSboSmAgg?.historicalData.length || 100) / 20)}
-                    dy={25}
-                  />
-                  <YAxis
-                    tick={{ fill: "#ffffff", fontSize: 11 }}
-                    tickFormatter={(v) => formatNumber(v)}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#18181b",
-                      border: "1px solid #27272a",
-                      borderRadius: "0.5rem",
-                      fontSize: "12px",
-                      color: "#ffffff",
-                    }}
-                    labelStyle={{ color: "#ffffff" }}
-                    labelFormatter={(label) => formatDate(label)}
-                    formatter={(value: number) => [formatNumber(value), "Index Total"]}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="indexNet"
-                    name="Index Total"
-                    stroke="#3b82f6"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                </LineChart>
+                {(expandedChart === "change" || expandedChart === "pctMax") ? (
+                  <BarChart
+                    data={expandedChart === "change" ? changeChartData : pctMaxChartData}
+                    margin={{ top: 20, right: 20, left: -10, bottom: 60 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fill: "#ffffff", fontSize: 11 }}
+                      angle={-90}
+                      textAnchor="end"
+                      height={70}
+                      dy={35}
+                    />
+                    <YAxis
+                      tick={{ fill: "#ffffff", fontSize: 11 }}
+                      tickFormatter={expandedChart === "pctMax" ? (v) => `${v}%` : (v) => formatNumber(v)}
+                      domain={expandedChart === "pctMax" ? [0, 100] : undefined}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "#18181b",
+                        border: "1px solid #27272a",
+                        borderRadius: "0.5rem",
+                        fontSize: "12px",
+                        color: "#ffffff",
+                      }}
+                      labelStyle={{ color: "#ffffff" }}
+                      formatter={(value: number) => expandedChart === "pctMax"
+                        ? [`${value.toFixed(0)}%`, "% Max"]
+                        : [formatNumber(value), "Change"]}
+                    />
+                    {expandedChart === "change" && <ReferenceLine y={0} stroke="#52525b" />}
+                    <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                      <LabelList
+                        dataKey="value"
+                        position="top"
+                        fill="#ffffff"
+                        fontSize={10}
+                        formatter={(value: number) => expandedChart === "pctMax"
+                          ? `${value.toFixed(0)}%`
+                          : formatNumber(value)}
+                      />
+                      {(expandedChart === "change" ? changeChartData : pctMaxChartData).map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={expandedChart === "change"
+                            ? (entry.value >= 0 ? "#3b82f6" : "#ef4444")
+                            : "#3b82f6"}
+                        />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                ) : (
+                  <LineChart
+                    data={expandedChart === "cswkw" ? cswkwAgg?.historicalData : cswkwSboSmAgg?.historicalData}
+                    margin={{ top: 10, right: 20, left: -10, bottom: 35 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                    <XAxis
+                      dataKey="date"
+                      tick={{ fill: "#ffffff", fontSize: 11 }}
+                      angle={-90}
+                      textAnchor="end"
+                      height={50}
+                      tickFormatter={formatChartDate}
+                      interval={Math.floor((expandedChart === "cswkw" ? cswkwAgg?.historicalData.length || 100 : cswkwSboSmAgg?.historicalData.length || 100) / 20)}
+                      dy={30}
+                    />
+                    <YAxis
+                      tick={{ fill: "#ffffff", fontSize: 11 }}
+                      tickFormatter={(v) => formatNumber(v)}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "#18181b",
+                        border: "1px solid #27272a",
+                        borderRadius: "0.5rem",
+                        fontSize: "12px",
+                        color: "#ffffff",
+                      }}
+                      labelStyle={{ color: "#ffffff" }}
+                      labelFormatter={(label) => formatDate(label)}
+                      formatter={(value: number) => [formatNumber(value), "Index Total"]}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="indexNet"
+                      name="Index Total"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                  </LineChart>
+                )}
               </ResponsiveContainer>
             </div>
           </div>

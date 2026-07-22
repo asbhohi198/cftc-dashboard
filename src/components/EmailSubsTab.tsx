@@ -68,7 +68,7 @@ const SIGNAL_DEFINITIONS = {
     label: "COT Traders % Long/Short",
     description: "Alert when trader % long or short exceeds threshold",
     thresholdType: "percent" as const,
-    options: [60, 65, 70, 75, 80],
+    options: [70, 75, 80, 90],
     defaultThreshold: 70,
   },
   cotRvs: {
