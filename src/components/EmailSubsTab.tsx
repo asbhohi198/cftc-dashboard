@@ -360,7 +360,7 @@ export function EmailSubsTab() {
                           : "bg-purple-500/20 text-purple-400"
                       }`}
                     >
-                      {sub.frequency === "daily" ? "Daily" : "Weekly (Sat)"}
+                      {sub.frequency === "daily" ? "Daily" : "Weekly (Fri)"}
                     </span>
                     <button
                       onClick={() => toggleEnabled(sub)}
@@ -474,7 +474,7 @@ export function EmailSubsTab() {
                         : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
                     }`}
                   >
-                    Weekly (Saturday 9am ET)
+                    Weekly (Friday 4pm ET)
                   </button>
                 </div>
                 <p className="text-zinc-500 text-xs mt-1">

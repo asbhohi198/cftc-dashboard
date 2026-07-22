@@ -475,11 +475,11 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                     textAnchor="end"
                     height={25}
                     tickFormatter={formatChartDate}
-                    interval={Math.floor(cswkwSboSmAgg.historicalData.length / 10)}
-                    dy={25}
+                    interval={Math.floor(cswkwSboSmAgg.historicalData.length / 6)}
+                    dy={20}
                   />
                   <YAxis
-                    tick={{ fill: "#ffffff", fontSize: 11 }}
+                    tick={{ fill: "#ffffff", fontSize: 9 }}
                     tickFormatter={(v) => formatNumber(v)}
                   />
                   <Tooltip
@@ -505,9 +505,9 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                 </LineChart>
               </ResponsiveContainer>
             </div>
-            <p className="text-xs text-zinc-600 mt-2 text-center">Click to expand</p>
           </div>
         )}
+        </div>
       </div>
 
       {/* Expanded Chart Modal */}
