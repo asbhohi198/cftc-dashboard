@@ -68,7 +68,7 @@ function formatNumber(num: number): string {
   return Math.round(num).toLocaleString();
 }
 
-// Commodity codes for scatter plot labels
+// Commodity codes for scatter plot labels (Ags only)
 const COMMODITY_CODES: Record<string, string> = {
   "Corn": "C",
   "Soybeans": "S",
@@ -83,15 +83,6 @@ const COMMODITY_CODES: Record<string, string> = {
   "Live Cattle": "LC",
   "Lean Hogs": "LH",
   "Feeder Cattle": "FC",
-  "WTI Crude": "CL",
-  "Brent Crude": "BRN",
-  "Natural Gas": "NG",
-  "RBOB Gasoline": "RB",
-  "Heating Oil": "HO",
-  "Gold": "GC",
-  "Silver": "SI",
-  "Copper": "HG",
-  "Platinum": "PL",
 };
 
 // Get color for spread percentage (green = backwardation/bullish, red = contango/bearish)
