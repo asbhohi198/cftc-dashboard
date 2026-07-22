@@ -732,7 +732,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
               </button>
             </div>
 
-            <div className="h-[500px]">
+            <div className="h-[665px]">
               <ResponsiveContainer width="100%" height="100%">
                 {(expandedChart === "change" || expandedChart === "pctMax") ? (
                   <BarChart

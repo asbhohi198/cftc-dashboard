@@ -1,5 +1,5 @@
 // Report types
-export type ReportType = "disagg" | "tff";
+export type ReportType = "disagg" | "tff" | "matif";
 
 // CFTC Contract Codes
 export const CFTC_CONTRACTS = {
@@ -12,6 +12,10 @@ export const CFTC_CONTRACTS = {
   soymeal: { code: "026603", name: "Soybean Meal", exchange: "CBOT", marketName: "SOYBEAN MEAL - CHICAGO BOARD OF TRADE", category: "ags", reportType: "disagg" as ReportType },
   soyoil: { code: "007601", name: "Soybean Oil", exchange: "CBOT", marketName: "SOYBEAN OIL - CHICAGO BOARD OF TRADE", category: "ags", reportType: "disagg" as ReportType },
   canola: { code: "135731", name: "Canola", exchange: "ICE", marketName: "CANOLA - ICE FUTURES U.S.", category: "ags", reportType: "disagg" as ReportType },
+  // Matif/Euronext (MiFID II Report)
+  "matif-wheat": { code: "EBM", name: "Matif Wheat", exchange: "MATIF", marketName: "MILLING WHEAT - EURONEXT PARIS", category: "matif", reportType: "matif" as ReportType },
+  "matif-corn": { code: "EMA", name: "Matif Corn", exchange: "MATIF", marketName: "CORN - EURONEXT PARIS", category: "matif", reportType: "matif" as ReportType },
+  "matif-rapeseed": { code: "ECO", name: "Matif Rapeseed", exchange: "MATIF", marketName: "RAPESEED - EURONEXT PARIS", category: "matif", reportType: "matif" as ReportType },
   oats: { code: "004603", name: "Oats", exchange: "CBOT", marketName: "OATS - CHICAGO BOARD OF TRADE", category: "ags", reportType: "disagg" as ReportType },
   "rough-rice": { code: "039601", name: "Rough Rice", exchange: "CBOT", marketName: "ROUGH RICE - CHICAGO BOARD OF TRADE", category: "ags", reportType: "disagg" as ReportType },
   "orange-juice": { code: "040701", name: "Orange Juice", exchange: "ICE", marketName: "FRZN CONCENTRATED ORANGE JUICE - ICE FUTURES U.S.", category: "ags", reportType: "disagg" as ReportType },
@@ -68,7 +72,7 @@ export const CFTC_CONTRACTS = {
   "ethereum": { code: "146021", name: "Ethereum", exchange: "CME", marketName: "ETHER", category: "crypto", reportType: "tff" as ReportType },
 } as const;
 
-export type AssetCategory = "ags" | "energy" | "metals" | "equities" | "rates" | "fx" | "crypto";
+export type AssetCategory = "ags" | "matif" | "energy" | "metals" | "equities" | "rates" | "fx" | "crypto";
 
 export type ContractId = keyof typeof CFTC_CONTRACTS;
 
