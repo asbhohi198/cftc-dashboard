@@ -114,13 +114,13 @@ function getChangeColor(num: number): string {
 function ParticipantCells({ data, baseColor }: { data: ParticipantData; baseColor: string }) {
   return (
     <>
-      <td className="px-px py-0.5 text-right text-zinc-300 border-l border-zinc-800 whitespace-nowrap">
+      <td className="px-px py-0.5 text-right text-zinc-300 border-l border-zinc-800 overflow-hidden">
         {formatNumber(data.net)}
       </td>
-      <td className={`px-px py-0.5 text-right whitespace-nowrap ${getChangeColor(data.change.value)} ${data.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
+      <td className={`px-px py-0.5 text-right overflow-hidden ${getChangeColor(data.change.value)} ${data.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
         {formatChange(data.change.value)}
       </td>
-      <td className={`px-px py-0.5 text-right whitespace-nowrap ${data.pctOI.isExtreme ? (data.pctOI.isHigh ? "font-bold bg-green-500/20 text-green-400" : "font-bold bg-red-500/20 text-red-400") : baseColor}`}>
+      <td className={`px-px py-0.5 text-right overflow-hidden ${data.pctOI.isExtreme ? (data.pctOI.isHigh ? "font-bold bg-green-500/20 text-green-400" : "font-bold bg-red-500/20 text-red-400") : baseColor}`}>
         {formatPct(data.pctOI.value)}
       </td>
     </>
@@ -137,11 +137,15 @@ function DisaggregatedTable({ rows, citData }: { rows: SummaryRow[]; citData?: C
 
   const showCIT = citData && citData.length > 0;
 
+  // Calculate column widths - with CIT we have 25 data columns + 1 contract column
+  // Contract: 70px, each data col: ~32px = 70 + 24*32 = 838px for non-CIT, 70 + 27*32 = 934px for CIT
+  const colWidth = "w-[30px]";
+
   return (
-    <table className="w-full text-[10px]">
+    <table className="table-fixed text-[10px]" style={{ width: showCIT ? "950px" : "850px" }}>
       <thead>
         <tr className="bg-zinc-800 border-b border-zinc-700">
-          <th className="px-0.5 py-0.5 text-left font-semibold text-zinc-300 sticky left-0 bg-zinc-800 z-10 whitespace-nowrap" rowSpan={2}>
+          <th className="w-[70px] px-0.5 py-0.5 text-left font-semibold text-zinc-300 sticky left-0 bg-zinc-800 z-10" rowSpan={2}>
             Contract
           </th>
           <th className="px-px py-px text-center font-semibold text-zinc-300 border-l border-zinc-700" colSpan={3}>
@@ -172,21 +176,21 @@ function DisaggregatedTable({ rows, citData }: { rows: SummaryRow[]; citData?: C
           )}
         </tr>
         <tr className="bg-zinc-800/50 border-b border-zinc-700 text-zinc-500">
-          <th className="px-px py-px text-right font-normal border-l border-zinc-700">Sz</th>
-          <th className="px-px py-px text-right font-normal">Δ</th>
-          <th className="px-px py-px text-right font-normal">%</th>
+          <th className={`${colWidth} px-px py-px text-right font-normal border-l border-zinc-700`}>Sz</th>
+          <th className={`${colWidth} px-px py-px text-right font-normal`}>Δ</th>
+          <th className={`${colWidth} px-px py-px text-right font-normal`}>%</th>
           {[...Array(6)].map((_, i) => (
             <React.Fragment key={i}>
-              <th className="px-px py-px text-right font-normal border-l border-zinc-700">Net</th>
-              <th className="px-px py-px text-right font-normal">Δ</th>
-              <th className="px-px py-px text-right font-normal">%</th>
+              <th className={`${colWidth} px-px py-px text-right font-normal border-l border-zinc-700`}>Net</th>
+              <th className={`${colWidth} px-px py-px text-right font-normal`}>Δ</th>
+              <th className={`${colWidth} px-px py-px text-right font-normal`}>%</th>
             </React.Fragment>
           ))}
           {showCIT && (
             <>
-              <th className="px-px py-px text-right font-normal border-l border-zinc-700">Net</th>
-              <th className="px-px py-px text-right font-normal">Δ</th>
-              <th className="px-px py-px text-right font-normal">%</th>
+              <th className={`${colWidth} px-px py-px text-right font-normal border-l border-zinc-700`}>Net</th>
+              <th className={`${colWidth} px-px py-px text-right font-normal`}>Δ</th>
+              <th className={`${colWidth} px-px py-px text-right font-normal`}>%</th>
             </>
           )}
         </tr>
@@ -201,16 +205,16 @@ function DisaggregatedTable({ rows, citData }: { rows: SummaryRow[]; citData?: C
                 row.isAggregate ? "bg-zinc-800/30 font-semibold" : ""
               } ${idx % 2 === 0 ? "" : "bg-zinc-900/50"}`}
             >
-              <td className="px-0.5 py-0.5 text-left font-medium text-white sticky left-0 bg-inherit z-10 whitespace-nowrap" title={row.fullName}>
+              <td className="px-0.5 py-0.5 text-left font-medium text-white sticky left-0 bg-inherit z-10 overflow-hidden text-ellipsis" title={row.fullName}>
                 {row.label}
               </td>
-              <td className="px-px py-0.5 text-right text-zinc-300 border-l border-zinc-800 whitespace-nowrap">
+              <td className="px-px py-0.5 text-right text-zinc-300 border-l border-zinc-800 overflow-hidden">
                 {formatNumber(row.openInterest.size)}
               </td>
-              <td className={`px-px py-0.5 text-right whitespace-nowrap ${getChangeColor(row.openInterest.change.value)} ${row.openInterest.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
+              <td className={`px-px py-0.5 text-right overflow-hidden ${getChangeColor(row.openInterest.change.value)} ${row.openInterest.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
                 {formatChange(row.openInterest.change.value)}
               </td>
-              <td className={`px-px py-0.5 text-right whitespace-nowrap ${getChangeColor(row.openInterest.pctChange)}`}>
+              <td className={`px-px py-0.5 text-right overflow-hidden ${getChangeColor(row.openInterest.pctChange)}`}>
                 {formatPctChange(row.openInterest.pctChange)}
               </td>
               {row.producer && <ParticipantCells data={row.producer} baseColor="text-blue-400/70" />}
@@ -221,13 +225,13 @@ function DisaggregatedTable({ rows, citData }: { rows: SummaryRow[]; citData?: C
               <ParticipantCells data={row.spec} baseColor="text-emerald-400/70" />
               {showCIT && (
                 <>
-                  <td className="px-px py-0.5 text-right text-cyan-400/70 border-l border-zinc-800 whitespace-nowrap">
+                  <td className="px-px py-0.5 text-right text-cyan-400/70 border-l border-zinc-800 overflow-hidden">
                     {cit ? formatNumber(cit.indexNet) : "-"}
                   </td>
-                  <td className={`px-px py-0.5 text-right whitespace-nowrap ${cit ? getChangeColor(cit.change) : "text-zinc-600"}`}>
+                  <td className={`px-px py-0.5 text-right overflow-hidden ${cit ? getChangeColor(cit.change) : "text-zinc-600"}`}>
                     {cit ? formatChange(cit.change) : "-"}
                   </td>
-                  <td className="px-px py-0.5 text-right text-cyan-400/70 whitespace-nowrap">
+                  <td className="px-px py-0.5 text-right text-cyan-400/70 overflow-hidden">
                     {cit ? `${cit.indexPctOI.toFixed(0)}%` : "-"}
                   </td>
                 </>
@@ -242,11 +246,13 @@ function DisaggregatedTable({ rows, citData }: { rows: SummaryRow[]; citData?: C
 
 // TFF table for equities/rates/fx/crypto
 function TFFTable({ rows }: { rows: SummaryRow[] }) {
+  const colWidth = "w-[30px]";
+
   return (
-    <table className="w-full text-[10px]">
+    <table className="table-fixed text-[10px]" style={{ width: "850px" }}>
       <thead>
         <tr className="bg-zinc-800 border-b border-zinc-700">
-          <th className="px-0.5 py-0.5 text-left font-semibold text-zinc-300 sticky left-0 bg-zinc-800 z-10 whitespace-nowrap" rowSpan={2}>
+          <th className="w-[70px] px-0.5 py-0.5 text-left font-semibold text-zinc-300 sticky left-0 bg-zinc-800 z-10" rowSpan={2}>
             Contract
           </th>
           <th className="px-px py-px text-center font-semibold text-zinc-300 border-l border-zinc-700" colSpan={3}>
@@ -272,14 +278,14 @@ function TFFTable({ rows }: { rows: SummaryRow[] }) {
           </th>
         </tr>
         <tr className="bg-zinc-800/50 border-b border-zinc-700 text-zinc-500">
-          <th className="px-px py-px text-right font-normal border-l border-zinc-700">Sz</th>
-          <th className="px-px py-px text-right font-normal">Δ</th>
-          <th className="px-px py-px text-right font-normal">%</th>
+          <th className={`${colWidth} px-px py-px text-right font-normal border-l border-zinc-700`}>Sz</th>
+          <th className={`${colWidth} px-px py-px text-right font-normal`}>Δ</th>
+          <th className={`${colWidth} px-px py-px text-right font-normal`}>%</th>
           {[...Array(6)].map((_, i) => (
             <React.Fragment key={i}>
-              <th className="px-px py-px text-right font-normal border-l border-zinc-700">Net</th>
-              <th className="px-px py-px text-right font-normal">Δ</th>
-              <th className="px-px py-px text-right font-normal">%</th>
+              <th className={`${colWidth} px-px py-px text-right font-normal border-l border-zinc-700`}>Net</th>
+              <th className={`${colWidth} px-px py-px text-right font-normal`}>Δ</th>
+              <th className={`${colWidth} px-px py-px text-right font-normal`}>%</th>
             </React.Fragment>
           ))}
         </tr>
@@ -292,16 +298,16 @@ function TFFTable({ rows }: { rows: SummaryRow[] }) {
               row.isAggregate ? "bg-zinc-800/30 font-semibold" : ""
             } ${idx % 2 === 0 ? "" : "bg-zinc-900/50"}`}
           >
-            <td className="px-0.5 py-0.5 text-left font-medium text-white sticky left-0 bg-inherit z-10 whitespace-nowrap" title={row.fullName}>
+            <td className="px-0.5 py-0.5 text-left font-medium text-white sticky left-0 bg-inherit z-10 overflow-hidden text-ellipsis" title={row.fullName}>
               {row.label}
             </td>
-            <td className="px-px py-0.5 text-right text-zinc-300 border-l border-zinc-800 whitespace-nowrap">
+            <td className="px-px py-0.5 text-right text-zinc-300 border-l border-zinc-800 overflow-hidden">
               {formatNumber(row.openInterest.size)}
             </td>
-            <td className={`px-px py-0.5 text-right whitespace-nowrap ${getChangeColor(row.openInterest.change.value)} ${row.openInterest.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
+            <td className={`px-px py-0.5 text-right overflow-hidden ${getChangeColor(row.openInterest.change.value)} ${row.openInterest.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
               {formatChange(row.openInterest.change.value)}
             </td>
-            <td className={`px-px py-0.5 text-right whitespace-nowrap ${getChangeColor(row.openInterest.pctChange)}`}>
+            <td className={`px-px py-0.5 text-right overflow-hidden ${getChangeColor(row.openInterest.pctChange)}`}>
               {formatPctChange(row.openInterest.pctChange)}
             </td>
             {row.dealer && <ParticipantCells data={row.dealer} baseColor="text-blue-400/70" />}
