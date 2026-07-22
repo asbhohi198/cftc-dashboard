@@ -183,6 +183,22 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
 
   const totalAgg = calcAggregate(data);
 
+  // Get sector aggregate label
+  const getSectorAggLabel = (): string => {
+    switch (sector) {
+      case "ags": return "All G&O";
+      case "softs": return "All Softs";
+      case "livestock": return "All Livestock";
+      case "energy": return "All Energy";
+      case "metals": return "All Metals";
+      case "equities": return "All Equities";
+      case "rates": return "All Rates";
+      case "fx": return "All FX";
+      case "crypto": return "All Crypto";
+      default: return "Total";
+    }
+  };
+
   // Get % Max color
   const getPctMaxColor = (pct: number): string => {
     if (pct >= 80) return "bg-green-500/30 text-green-400";
@@ -192,14 +208,23 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
     return "bg-yellow-500/20 text-yellow-400";
   };
 
-  // Bar chart data for Notional Positions
-  const notionalChartData = data.map(r => ({ name: r.name, value: r.notionalValue }));
+  // Bar chart data for Notional Positions (include aggregate)
+  const notionalChartData = [
+    ...data.map(r => ({ name: r.name, value: r.notionalValue })),
+    { name: getSectorAggLabel(), value: totalNotional },
+  ];
 
-  // Bar chart data for Change WoW
-  const changeChartData = data.map(r => ({ name: r.name, value: r.change }));
+  // Bar chart data for Change WoW (include aggregate)
+  const changeChartData = [
+    ...data.map(r => ({ name: r.name, value: r.change })),
+    { name: getSectorAggLabel(), value: totalChange },
+  ];
 
-  // Bar chart data for % Max
-  const pctMaxChartData = data.map(r => ({ name: r.name, value: r.pctMax }));
+  // Bar chart data for % Max (include aggregate if available)
+  const pctMaxChartData = [
+    ...data.map(r => ({ name: r.name, value: r.pctMax })),
+    ...(totalAgg ? [{ name: getSectorAggLabel(), value: totalAgg.pctMax }] : []),
+  ];
 
   // Short names for table display
   const getShortName = (name: string): string => {
@@ -321,9 +346,9 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
             </thead>
             <tbody>
               {data.map(row => renderTableRow(row))}
-              {/* Total row */}
+              {/* Aggregate row */}
               <tr className="bg-blue-900/20 border-t-2 border-zinc-600">
-                <td className="py-1.5 px-1 text-center text-white font-semibold">Total</td>
+                <td className="py-1.5 px-1 text-center text-white font-semibold">{getSectorAggLabel()}</td>
                 <td className="py-1.5 px-1 text-center font-mono text-zinc-400">-</td>
                 <td className="py-1.5 px-1 text-center font-mono text-zinc-400">-</td>
                 <td className={`py-1.5 px-1 text-center font-mono font-bold ${totalNotional >= 0 ? "text-green-400" : "text-red-400"}`}>
@@ -332,7 +357,9 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
                 <td className={`py-1.5 px-1 text-center font-mono font-semibold ${totalChange >= 0 ? "text-green-400" : "text-red-400"}`}>
                   {totalChange >= 0 ? "+" : ""}{formatNotional(totalChange)}
                 </td>
-                <td className="py-1.5 px-1 text-center font-mono text-zinc-400">-</td>
+                <td className={`py-1.5 px-1 text-center font-mono font-bold ${totalAgg ? getPctMaxColor(totalAgg.pctMax) : "text-zinc-400"}`}>
+                  {totalAgg ? `${totalAgg.pctMax.toFixed(0)}%` : "-"}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -352,7 +379,7 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis
                     dataKey="name"
-                    tick={{ fill: "#ffffff", fontSize: 7 }}
+                    tick={{ fill: "#ffffff", fontSize: 9 }}
                     angle={-90}
                     textAnchor="end"
                     height={40}
@@ -371,6 +398,7 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
                       color: "#ffffff",
                     }}
                     labelStyle={{ color: "#ffffff" }}
+                    itemStyle={{ color: "#ffffff" }}
                     formatter={(value: number) => [formatNotional(value), "Notional"]}
                   />
                   <ReferenceLine y={0} stroke="#52525b" />
@@ -406,7 +434,7 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis
                     dataKey="name"
-                    tick={{ fill: "#ffffff", fontSize: 7 }}
+                    tick={{ fill: "#ffffff", fontSize: 9 }}
                     angle={-90}
                     textAnchor="end"
                     height={40}
@@ -425,6 +453,7 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
                       color: "#ffffff",
                     }}
                     labelStyle={{ color: "#ffffff" }}
+                    itemStyle={{ color: "#ffffff" }}
                     formatter={(value: number) => [formatNotional(value), "Change"]}
                   />
                   <ReferenceLine y={0} stroke="#52525b" />
@@ -465,8 +494,7 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
                   />
                   <YAxis
                     tick={{ fill: "#ffffff", fontSize: 11 }}
-                    domain={[0, 100]}
-                    tickFormatter={(v) => `${v}%`}
+                    tickFormatter={(v) => `${v.toFixed(0)}%`}
                   />
                   <Tooltip
                     contentStyle={{
@@ -477,6 +505,7 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
                       color: "#ffffff",
                     }}
                     labelStyle={{ color: "#ffffff" }}
+                    itemStyle={{ color: "#ffffff" }}
                     formatter={(value: number) => [`${value.toFixed(0)}%`, "% Max"]}
                   />
                   <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]}>
@@ -484,7 +513,7 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
                       dataKey="name"
                       position="inside"
                       fill="#ffffff"
-                      fontSize={7}
+                      fontSize={9}
                       angle={-90}
                     />
                     <LabelList
@@ -534,6 +563,7 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
                         color: "#ffffff",
                       }}
                       labelStyle={{ color: "#ffffff" }}
+                      itemStyle={{ color: "#ffffff" }}
                       labelFormatter={(label) => formatDate(label)}
                       formatter={(value: number) => [formatNotional(value), "Total Notional"]}
                     />
@@ -570,7 +600,7 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
               <h4 className="text-sm font-semibold text-white mb-2">{row.name} Notional ($M)</h4>
               <div className="h-[180px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={row.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 18 }}>
+                  <LineChart data={row.historicalData} margin={{ top: 5, right: 5, left: -30, bottom: 18 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                     <XAxis
                       dataKey="date"
@@ -595,6 +625,7 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
                         color: "#ffffff",
                       }}
                       labelStyle={{ color: "#ffffff" }}
+                      itemStyle={{ color: "#ffffff" }}
                       labelFormatter={(label) => formatDate(label)}
                       formatter={(value: number) => [formatNotional(value), "Notional"]}
                     />
@@ -663,8 +694,7 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
                     />
                     <YAxis
                       tick={{ fill: "#ffffff", fontSize: 14 }}
-                      tickFormatter={expandedChart === "pctMax" ? (v) => `${v}%` : (v) => formatNotional(v)}
-                      domain={expandedChart === "pctMax" ? [0, 100] : undefined}
+                      tickFormatter={expandedChart === "pctMax" ? (v) => `${v.toFixed(0)}%` : (v) => formatNotional(v)}
                     />
                     <Tooltip
                       contentStyle={{
@@ -675,6 +705,7 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
                         color: "#ffffff",
                       }}
                       labelStyle={{ color: "#ffffff" }}
+                      itemStyle={{ color: "#ffffff" }}
                       formatter={(value: number) => expandedChart === "pctMax"
                         ? [`${value.toFixed(0)}%`, "% Max"]
                         : [formatNotional(value), expandedChart === "change" ? "Change" : "Notional"]}
@@ -740,6 +771,7 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
                         color: "#ffffff",
                       }}
                       labelStyle={{ color: "#ffffff" }}
+                      itemStyle={{ color: "#ffffff" }}
                       labelFormatter={(label) => formatDate(label)}
                       formatter={(value: number) => [formatNotional(value), "Notional"]}
                     />

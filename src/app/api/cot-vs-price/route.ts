@@ -50,6 +50,7 @@ const SECTOR_MAPPING: Record<string, string[]> = {
   "equities": ["sp500", "nasdaq100"],
   "rates": ["10y-note", "2y-note", "5y-note", "30y-bond"],
   "fx": ["eurusd", "usdjpy", "gbpusd", "audusd"],
+  "crypto": ["bitcoin", "ethereum"],
 };
 
 async function loadData(): Promise<CotVsPriceData | null> {
@@ -64,7 +65,6 @@ async function loadData(): Promise<CotVsPriceData | null> {
     cacheTimestamp = Date.now();
     return dataCache;
   } catch {
-    // Return null if file doesn't exist
     return null;
   }
 }
@@ -80,11 +80,10 @@ export async function GET(request: NextRequest) {
     if (!data) {
       return NextResponse.json({
         success: false,
-        error: "COT vs Price data not available. Run export_cot_vs_price.py to generate data.",
+        error: "COT vs Price data not available. Add export_cot_vs_price.py to your scheduled task.",
       });
     }
 
-    // If specific contract requested
     if (contractId) {
       const result = data.data.find(d => d.id === contractId);
       if (!result) {
@@ -100,7 +99,6 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Filter by sector
     const sectorContracts = SECTOR_MAPPING[sector] || [];
     const filteredData = data.data.filter(d => sectorContracts.includes(d.id));
 
