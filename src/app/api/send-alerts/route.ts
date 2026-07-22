@@ -398,20 +398,13 @@ async function getCITRollSignals(
   const signals: COTSignalForEmail[] = [];
 
   try {
-    console.log(`CIT: Fetching from ${baseUrl}/api/cit-index?sector=ags`);
     const res = await fetch(`${baseUrl}/api/cit-index?sector=ags`, { cache: "no-store" });
-    console.log(`CIT: Response status ${res.status}`);
     const json = await res.json();
-    console.log(`CIT: success=${json.success}, contracts count=${json.contracts?.length || 0}`);
 
-    if (!json.success || !json.contracts) {
-      console.log("CIT: No contracts found or request failed");
-      return signals;
-    }
+    if (!json.success || !json.contracts) return signals;
 
     for (const contract of json.contracts) {
       const zScore = contract.rollZScore;
-      console.log(`CIT: ${contract.name} rollZScore=${zScore}, threshold=${threshold}, abs=${Math.abs(zScore)}, exceeds=${Math.abs(zScore) >= threshold}`);
 
       if (Math.abs(zScore) >= threshold) {
         signals.push({
@@ -428,7 +421,6 @@ async function getCITRollSignals(
         });
       }
     }
-    console.log(`CIT: Total signals found: ${signals.length}`);
   } catch (error) {
     console.error("Error fetching CIT data:", error);
   }
@@ -669,20 +661,6 @@ export async function GET(request: NextRequest) {
 
         // CIT Roll Position signals (only for ags sector)
         if (sub.signals.citRollPosition?.enabled && (sub.sectors.includes("ALL") || sub.sectors.includes("ags"))) {
-          debug.citBaseUrl = baseUrl;
-          debug.citThreshold = sub.signals.citRollPosition.threshold;
-          try {
-            const citRes = await fetch(`${baseUrl}/api/cit-index?sector=ags`, { cache: "no-store" });
-            const citJson = await citRes.json();
-            debug.citStatus = citRes.status;
-            debug.citSuccess = citJson.success ? 1 : 0;
-            debug.citContractCount = citJson.contracts?.length || 0;
-            if (citJson.contracts) {
-              debug.citZScores = citJson.contracts.map((c: { name: string; rollZScore: number }) => `${c.name}:${c.rollZScore?.toFixed(2) || 'N/A'}`);
-            }
-          } catch (e) {
-            debug.citError = String(e);
-          }
           const citSignals = await getCITRollSignals(baseUrl, sub.signals.citRollPosition.threshold);
           allSignals.push(...citSignals);
           debug.citRollPosition = citSignals.length;
