@@ -619,7 +619,7 @@ export async function GET(request: NextRequest) {
     const reportDate = await getLatestReportDate(baseUrl);
     console.log(`Latest report date: ${reportDate}`);
 
-    const results: Array<{ id: string; name: string; success: boolean; error?: string; signalCount?: number; debug?: Record<string, number> }> = [];
+    const results: Array<{ id: string; name: string; success: boolean; error?: string; signalCount?: number; debug?: Record<string, number | string | string[]> }> = [];
 
     for (const sub of subsToProcess) {
       try {
@@ -669,6 +669,20 @@ export async function GET(request: NextRequest) {
 
         // CIT Roll Position signals (only for ags sector)
         if (sub.signals.citRollPosition?.enabled && (sub.sectors.includes("ALL") || sub.sectors.includes("ags"))) {
+          debug.citBaseUrl = baseUrl;
+          debug.citThreshold = sub.signals.citRollPosition.threshold;
+          try {
+            const citRes = await fetch(`${baseUrl}/api/cit-index?sector=ags`, { cache: "no-store" });
+            const citJson = await citRes.json();
+            debug.citStatus = citRes.status;
+            debug.citSuccess = citJson.success ? 1 : 0;
+            debug.citContractCount = citJson.contracts?.length || 0;
+            if (citJson.contracts) {
+              debug.citZScores = citJson.contracts.map((c: { name: string; rollZScore: number }) => `${c.name}:${c.rollZScore?.toFixed(2) || 'N/A'}`);
+            }
+          } catch (e) {
+            debug.citError = String(e);
+          }
           const citSignals = await getCITRollSignals(baseUrl, sub.signals.citRollPosition.threshold);
           allSignals.push(...citSignals);
           debug.citRollPosition = citSignals.length;
