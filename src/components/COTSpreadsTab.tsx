@@ -615,7 +615,7 @@ export function COTSpreadsTab() {
                   </ScatterChart>
                 </ResponsiveContainer>
                 {latestPoint && (
-                  <div className="text-xs text-zinc-400 -mt-1 text-center">
+                  <div className="text-xs text-zinc-400 -mt-4 text-center">
                     Latest: ({formatNumber(latestPoint.mmNetAll)}, {latestPoint.spread.toFixed(1)})
                   </div>
                 )}
