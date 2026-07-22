@@ -42,6 +42,8 @@ interface CombinedData {
   id: string;
   name: string;
   mmNetAll: number;
+  mmNetPctOI: number;
+  openInterest: number;
   spread: number;
   spread_pct: number;
   spread_unit: string;
@@ -71,6 +73,7 @@ function extractMonthCode(symbol: string): string {
 interface ScatterPoint {
   date: string;
   mmNetAll: number;
+  mmNetPctOI: number;
   spread: number;
   spread_pct: number;
 }
@@ -239,10 +242,14 @@ export async function GET() {
       const latestCOT = cotRecords[cotRecords.length - 1];
 
       if (latestCOT) {
+        const openInterest = latestCOT.openInterestAll || 1;
+        const mmNetPctOI = (latestCOT.mmNetAll / openInterest) * 100;
         combinedData.push({
           id: spread.id,
           name: spread.name,
           mmNetAll: latestCOT.mmNetAll,
+          mmNetPctOI: mmNetPctOI,
+          openInterest: openInterest,
           spread: spread.spread,
           spread_pct: spread.spread_pct,
           spread_unit: spread.spread_unit,
@@ -267,9 +274,11 @@ export async function GET() {
           // Find COT record for this date or closest prior date
           const cotRecord = cotByDate.get(spreadPoint.date);
           if (cotRecord) {
+            const oi = cotRecord.openInterestAll || 1;
             points.push({
               date: spreadPoint.date,
               mmNetAll: cotRecord.mmNetAll,
+              mmNetPctOI: (cotRecord.mmNetAll / oi) * 100,
               spread: spreadPoint.spread,
               spread_pct: spreadPoint.spread_pct,
             });
@@ -286,14 +295,18 @@ export async function GET() {
       }
     }
 
-    // Calculate regression for the main scatter plot
+    // Calculate regression for the main scatter plot (using % OI as default x)
     const mainScatterPoints = combinedData.map(d => ({
       x: d.mmNetAll,
+      xPctOI: d.mmNetPctOI,
       y: d.spread_pct,
       name: d.name,
     }));
 
-    const regression = linearRegression(mainScatterPoints.map(p => ({ x: p.x, y: p.y })));
+    // Regression for % OI (default)
+    const regressionPctOI = linearRegression(mainScatterPoints.map(p => ({ x: p.xPctOI, y: p.y })));
+    // Regression for absolute position
+    const regressionAbs = linearRegression(mainScatterPoints.map(p => ({ x: p.x, y: p.y })));
 
     return NextResponse.json({
       success: true,
@@ -301,10 +314,15 @@ export async function GET() {
       summary: combinedData,
       mainScatter: {
         points: mainScatterPoints,
-        regression: {
-          slope: regression.slope,
-          intercept: regression.intercept,
-          r2: regression.r2,
+        regressionPctOI: {
+          slope: regressionPctOI.slope,
+          intercept: regressionPctOI.intercept,
+          r2: regressionPctOI.r2,
+        },
+        regressionAbs: {
+          slope: regressionAbs.slope,
+          intercept: regressionAbs.intercept,
+          r2: regressionAbs.r2,
         },
       },
       historicalScatter: scatterData,

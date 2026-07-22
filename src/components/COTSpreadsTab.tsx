@@ -21,6 +21,8 @@ interface CombinedData {
   id: string;
   name: string;
   mmNetAll: number;
+  mmNetPctOI: number;
+  openInterest: number;
   spread: number;
   spread_pct: number;
   spread_unit: string;
@@ -31,6 +33,7 @@ interface CombinedData {
 
 interface ScatterPoint {
   x: number;
+  xPctOI: number;
   y: number;
   name: string;
 }
@@ -38,6 +41,7 @@ interface ScatterPoint {
 interface HistoricalPoint {
   date: string;
   mmNetAll: number;
+  mmNetPctOI: number;
   spread: number;
   spread_pct: number;
 }
@@ -54,10 +58,13 @@ interface APIResponse {
   summary: CombinedData[];
   mainScatter: {
     points: ScatterPoint[];
-    regression: Regression;
+    regressionPctOI: Regression;
+    regressionAbs: Regression;
   };
   historicalScatter: Record<string, HistoricalPoint[]>;
 }
+
+type XAxisMode = "pctOI" | "absolute";
 
 function formatNumber(num: number): string {
   if (Math.abs(num) >= 1000000) {
@@ -142,6 +149,8 @@ export function COTSpreadsTab() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedChart, setExpandedChart] = useState<{ id: string; name: string } | null>(null);
+  const [xAxisMode, setXAxisMode] = useState<XAxisMode>("pctOI");
+  const [mainScatterExpanded, setMainScatterExpanded] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -186,21 +195,31 @@ export function COTSpreadsTab() {
 
   const { summary, mainScatter, historicalScatter } = data;
 
-  // Generate regression line points
+  // Get current regression based on mode
+  const currentRegression = xAxisMode === "pctOI" ? mainScatter.regressionPctOI : mainScatter.regressionAbs;
+
+  // Generate regression line points based on mode
   const regressionPoints = [];
   if (mainScatter.points.length > 0) {
-    const xValues = mainScatter.points.map(p => p.x);
+    const xValues = mainScatter.points.map(p => xAxisMode === "pctOI" ? p.xPctOI : p.x);
     const minX = Math.min(...xValues);
     const maxX = Math.max(...xValues);
     regressionPoints.push({
       x: minX,
-      y: mainScatter.regression.slope * minX + mainScatter.regression.intercept,
+      y: currentRegression.slope * minX + currentRegression.intercept,
     });
     regressionPoints.push({
       x: maxX,
-      y: mainScatter.regression.slope * maxX + mainScatter.regression.intercept,
+      y: currentRegression.slope * maxX + currentRegression.intercept,
     });
   }
+
+  // Transform points for current mode
+  const scatterPoints = mainScatter.points.map(p => ({
+    x: xAxisMode === "pctOI" ? p.xPctOI : p.x,
+    y: p.y,
+    name: p.name,
+  }));
 
   return (
     <div className="space-y-6">
