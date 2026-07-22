@@ -155,9 +155,10 @@ export function COTPxWeightedTab({ sector }: COTPxWeightedTabProps) {
       }
     }
 
-    // Only include dates where we have all contracts
+    // Include dates where we have at least 75% of contracts (handles missing data for some contracts)
+    const minCount = Math.ceil(rows.length * 0.75);
     const historicalData = Array.from(dateMap.entries())
-      .filter(([, v]) => v.count === rows.length)
+      .filter(([, v]) => v.count >= minCount)
       .map(([date, v]) => ({ date, notionalValue: v.notionalValue }))
       .sort((a, b) => a.date.localeCompare(b.date));
 
