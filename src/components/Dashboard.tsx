@@ -35,6 +35,7 @@ const SUB_TAB_TO_CONTRACT: Record<string, string> = {
   soybeans: "soybeans",
   soymeal: "soymeal",
   soyoil: "soyoil",
+  canola: "canola",
   // Ags - Other
   oats: "oats",
   "rough-rice": "rough-rice",

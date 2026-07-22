@@ -8,7 +8,7 @@ const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours
 
 // Define which contracts belong to each sector
 const SECTOR_CONTRACTS: Record<string, ContractId[]> = {
-  ags: ["corn", "soybeans", "chicago-wheat", "kansas-wheat", "soyoil", "soymeal", "sugar", "arabica-coffee", "ny-cocoa", "cotton", "live-cattle", "lean-hogs", "feeder-cattle"],
+  ags: ["corn", "soybeans", "chicago-wheat", "kansas-wheat", "soyoil", "soymeal", "canola", "sugar", "arabica-coffee", "ny-cocoa", "cotton", "live-cattle", "lean-hogs", "feeder-cattle"],
   energy: ["wti-crude", "brent-crude", "natural-gas", "rbob-gasoline", "heating-oil"],
   metals: ["gold", "silver", "copper", "platinum", "palladium"],
   equities: ["sp500", "nasdaq100", "dow", "russell2000", "vix"],

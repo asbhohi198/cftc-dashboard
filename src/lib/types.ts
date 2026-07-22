@@ -30,6 +30,7 @@ export type AgsGrainsSubTab =
   | "soybeans"
   | "soymeal"
   | "soyoil"
+  | "canola"
   | "all-us-wheat"
   | "all-us-oilseeds"
   | "all-us-grains"
@@ -244,6 +245,7 @@ export const TAB_CONFIG: TabConfig[] = [
       { id: "soybeans", label: "Soybeans" },
       { id: "soymeal", label: "Soymeal" },
       { id: "soyoil", label: "Soyoil" },
+      { id: "canola", label: "Canola" },
       { id: "all-us-wheat", label: "All US Wheat" },
       { id: "all-us-oilseeds", label: "All US Oilseeds" },
       { id: "all-us-grains", label: "All US Grains" },
