@@ -840,6 +840,12 @@ export function COTSpreadsTab() {
                       if (name === "y") return [`${value.toFixed(1)}%`, "1-3 %"];
                       return [xAxisMode === "pctOI" ? `${value.toFixed(1)}%` : formatNumber(value), xAxisMode === "pctOI" ? "% OI" : "Net MM"];
                     }}
+                    labelFormatter={(_, payload) => {
+                      if (payload && payload[0]) {
+                        return payload[0].payload?.name || "";
+                      }
+                      return "";
+                    }}
                   />
                   <ReferenceLine y={100} stroke="#52525b" strokeDasharray="5 5" />
                   <ReferenceLine x={0} stroke="#52525b" strokeDasharray="5 5" />
