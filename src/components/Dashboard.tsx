@@ -137,7 +137,7 @@ export function Dashboard() {
       </header>
 
       {/* Main Content */}
-      <main className={`mx-auto p-4 ${activeTab === "summary" ? "max-w-full px-2" : "max-w-7xl"}`}>
+      <main className={`mx-auto p-4 ${activeTab === "summary" ? "max-w-[1800px]" : "max-w-7xl"}`}>
         {/* Breadcrumb showing current selection */}
         <div className="mb-4 text-sm text-zinc-500">
           <span className="text-zinc-400">{currentTabConfig?.label}</span>

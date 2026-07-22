@@ -301,6 +301,17 @@ export function COTSpreadsTab() {
   );
   const currentRegression = calculateRegression(includedPoints.map(p => ({ x: p.x, y: p.y })));
 
+  // Debug: Log auto-excluded commodities
+  console.log("Auto-excluded commodities:", Array.from(autoExcludedNames));
+  console.log("Z-scores:", basePoints.map(p => {
+    const reg = calculateRegression(basePoints.map(bp => ({ x: bp.x, y: bp.y })));
+    const residuals = basePoints.map(bp => bp.y - (reg.slope * bp.x + reg.intercept));
+    const std = Math.sqrt(residuals.reduce((s, r) => s + r * r, 0) / residuals.length) || 1;
+    const predicted = reg.slope * p.x + reg.intercept;
+    const residual = p.y - predicted;
+    return { name: p.name, zScore: residual / std };
+  }));
+
   // Calculate final z-scores based on final regression
   const finalResiduals = includedPoints.map(p => {
     const predicted = currentRegression.slope * p.x + currentRegression.intercept;
@@ -525,7 +536,7 @@ export function COTSpreadsTab() {
               <ReferenceLine x={0} stroke="#52525b" strokeDasharray="5 5" />
 
               {/* Quadrant labels - BUY: top-left (MM short + backwardation), SELL: bottom-right (MM long + contango) */}
-              <text x={30} y={60} fill="#22c55e" fontSize={14} fontWeight="bold">BUY</text>
+              <text x={80} y={70} fill="#22c55e" fontSize={14} fontWeight="bold">BUY</text>
               <text x={320} y={260} fill="#ef4444" fontSize={14} fontWeight="bold">SELL</text>
 
               {/* Regression line */}
@@ -817,7 +828,7 @@ export function COTSpreadsTab() {
                   <ReferenceLine x={0} stroke="#52525b" strokeDasharray="5 5" />
 
                   {/* Quadrant labels - BUY: top-left (MM short + backwardation), SELL: bottom-right (MM long + contango) */}
-                  <text x={50} y={80} fill="#22c55e" fontSize={16} fontWeight="bold">BUY</text>
+                  <text x={120} y={100} fill="#22c55e" fontSize={16} fontWeight="bold">BUY</text>
                   <text x={600} y={400} fill="#ef4444" fontSize={16} fontWeight="bold">SELL</text>
 
                   {/* Regression line */}
