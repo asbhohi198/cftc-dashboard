@@ -123,10 +123,8 @@ interface COTRecord {
   mmLongAll: number;
   mmShortAll: number;
   specNetAll: number;
-  specLongAll: number;
-  specShortAll: number;
-  openInterest: number;
-  [key: string]: string | number;
+  openInterestAll: number;
+  [key: string]: string | number | null;
 }
 
 // Contracts by sector for scanning
@@ -274,8 +272,8 @@ async function getMmPctOISignals(
     if (data.length < 10) continue;
 
     const pctOIValues = data.map((d) => {
-      if (d.openInterest === 0) return 0;
-      return (d.mmNetAll / d.openInterest) * 100;
+      if (d.openInterestAll === 0) return 0;
+      return (d.mmNetAll / d.openInterestAll) * 100;
     });
 
     const { mean, stdDev } = calculateStats(pctOIValues);
@@ -392,6 +390,44 @@ async function getTradersPctSignals(
   return signals;
 }
 
+// Signal: CIT Roll Position (z-score of MM - Index)
+async function getCITRollSignals(
+  baseUrl: string,
+  threshold: number
+): Promise<COTSignalForEmail[]> {
+  const signals: COTSignalForEmail[] = [];
+
+  try {
+    const res = await fetch(`${baseUrl}/api/cit-index?sector=ags`, { cache: "no-store" });
+    const json = await res.json();
+
+    if (!json.success || !json.contracts) return signals;
+
+    for (const contract of json.contracts) {
+      const zScore = contract.rollZScore;
+
+      if (Math.abs(zScore) >= threshold) {
+        signals.push({
+          signalType: "citRollPosition",
+          signalLabel: "CIT Roll Position",
+          commodity: contract.name,
+          sector: "ags",
+          value: zScore,
+          threshold,
+          direction: zScore > 0 ? "long" : "short",
+          tradeInstruction: zScore > 0
+            ? "MM long vs Index - potential roll pressure"
+            : "MM short vs Index - potential roll support",
+        });
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching CIT data:", error);
+  }
+
+  return signals;
+}
+
 // Get COT RV signals
 async function getCOTRVSignals(
   baseUrl: string,
@@ -448,6 +484,66 @@ async function getCOTRVSignals(
         });
       }
     }
+  }
+
+  return signals;
+}
+
+// Signal: COT vs Spreads - positioning misaligned with curve structure
+async function getCotVsSpreadsSignals(
+  baseUrl: string,
+  threshold: number
+): Promise<COTSignalForEmail[]> {
+  const signals: COTSignalForEmail[] = [];
+
+  try {
+    const res = await fetch(`${baseUrl}/api/cot-spreads`, { cache: "no-store" });
+    const json = await res.json();
+
+    if (!json.success || !json.mainScatter?.points) return signals;
+
+    const { points, regressionPctOI } = json.mainScatter;
+    const { slope, intercept } = regressionPctOI;
+
+    // Calculate residuals (actual mmNetPctOI - predicted based on spread)
+    const residuals: { name: string; residual: number; mmNetPctOI: number; spread_pct: number }[] = [];
+    for (const point of points) {
+      const predicted = slope * point.y + intercept; // y is spread_pct
+      const residual = point.xPctOI - predicted; // xPctOI is actual mmNetPctOI
+      residuals.push({
+        name: point.name,
+        residual,
+        mmNetPctOI: point.xPctOI,
+        spread_pct: point.y,
+      });
+    }
+
+    // Calculate z-scores of residuals
+    const residualValues = residuals.map((r) => r.residual);
+    const { mean, stdDev } = calculateStats(residualValues);
+
+    for (const item of residuals) {
+      const zScore = calculateZScore(item.residual, mean, stdDev);
+
+      if (Math.abs(zScore) >= threshold) {
+        // Positive z-score = positioning MORE bullish than spread suggests
+        // Negative z-score = positioning MORE bearish than spread suggests
+        signals.push({
+          signalType: "cotVsSpreads",
+          signalLabel: "COT vs Spreads",
+          commodity: item.name,
+          sector: "ags", // cot-spreads is primarily ags
+          value: zScore,
+          threshold,
+          direction: zScore > 0 ? "long" : "short",
+          tradeInstruction: zScore > 0
+            ? "MM overly long vs curve structure"
+            : "MM overly short vs curve structure",
+        });
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching COT vs Spreads data:", error);
   }
 
   return signals;
@@ -557,8 +653,19 @@ export async function GET(request: NextRequest) {
           console.log(`Found ${rvSignals.length} COT RV signals`);
         }
 
-        // Note: cotVsSpreads and citRollPosition would need additional API data
-        // These can be added later when the underlying data is available
+        // CIT Roll Position signals (only for ags sector)
+        if (sub.signals.citRollPosition?.enabled && (sub.sectors.includes("ALL") || sub.sectors.includes("ags"))) {
+          const citSignals = await getCITRollSignals(baseUrl, sub.signals.citRollPosition.threshold);
+          allSignals.push(...citSignals);
+          console.log(`Found ${citSignals.length} CIT Roll Position signals`);
+        }
+
+        // COT vs Spreads signals (ags sector - positioning vs curve structure)
+        if (sub.signals.cotVsSpreads?.enabled && (sub.sectors.includes("ALL") || sub.sectors.includes("ags"))) {
+          const spreadSignals = await getCotVsSpreadsSignals(baseUrl, sub.signals.cotVsSpreads.threshold);
+          allSignals.push(...spreadSignals);
+          console.log(`Found ${spreadSignals.length} COT vs Spreads signals`);
+        }
 
         // Generate email
         const html = generateCOTAlertEmail(sub.name, allSignals, reportDate);
