@@ -529,14 +529,25 @@ export function SummaryTab() {
         const isAgsSector = sector.sector === "ags";
         const sectorCitData = isAgsSector ? citData : undefined;
 
+        // Get position date from first row with data
+        const sectorPositionDate = sector.rows.length > 0 ? sector.rows[0].positionDate : "";
+
         return (
           <div key={sector.sector} className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
-            <div className="px-4 py-3 border-b border-zinc-700 bg-zinc-800/50">
-              <h3 className="text-md font-semibold text-white">{sector.label}</h3>
-              <p className="text-xs text-zinc-500">
-                {sector.reportType === "disagg" ? "Disaggregated Report" : sector.reportType === "matif" ? "MiFID II Position Report" : "Traders in Financial Futures (TFF)"}
-                {isAgsSector && citData.length > 0 && " + CIT Supplemental"}
-              </p>
+            <div className="px-4 py-3 border-b border-zinc-700 bg-zinc-800/50 flex items-center justify-between">
+              <div>
+                <h3 className="text-md font-semibold text-white">{sector.label}</h3>
+                <p className="text-xs text-zinc-500">
+                  {sector.reportType === "disagg" ? "Disaggregated Report" : sector.reportType === "matif" ? "MiFID II Position Report (Euronext)" : "Traders in Financial Futures (TFF)"}
+                  {isAgsSector && citData.length > 0 && " + CIT Supplemental"}
+                </p>
+              </div>
+              {sectorPositionDate && (
+                <div className="text-right">
+                  <p className="text-xs text-zinc-500">Position Date</p>
+                  <p className="text-sm font-medium text-zinc-300">{formatDate(sectorPositionDate)}</p>
+                </div>
+              )}
             </div>
             <div className="overflow-x-auto">
               {sector.reportType === "disagg" ? (
