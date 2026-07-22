@@ -22,6 +22,7 @@ import { COTTradersTab } from "./COTTradersTab";
 import { COTSpreadsTab } from "./COTSpreadsTab";
 import { COTRVsTab } from "./COTRVsTab";
 import { CITIndexTab } from "./CITIndexTab";
+import { EmailSubsTab } from "./EmailSubsTab";
 import { BarChart3 } from "lucide-react";
 
 // Map sub-tab IDs to contract IDs for the API
@@ -339,6 +340,9 @@ export function Dashboard() {
         {activeTab === "crypto" && contractId && (
           <CornTab contractId={contractId} />
         )}
+
+        {/* Email Subscriptions */}
+        {activeTab === "email-subs" && <EmailSubsTab />}
       </main>
     </div>
   );

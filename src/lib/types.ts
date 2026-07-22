@@ -18,7 +18,8 @@ export type MainCategory =
   | "equities"
   | "rates"
   | "fx"
-  | "crypto";
+  | "crypto"
+  | "email-subs";
 
 // Sub-tabs for each category
 export type AgsGrainsSubTab =
@@ -351,6 +352,10 @@ export const TAB_CONFIG: TabConfig[] = [
       { id: "bitcoin", label: "Bitcoin" },
       { id: "ethereum", label: "Ethereum" },
     ],
+  },
+  {
+    id: "email-subs",
+    label: "Email Subs",
   },
 ];
 
