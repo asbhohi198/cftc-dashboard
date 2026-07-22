@@ -258,12 +258,16 @@ export function COTSpreadsTab() {
     name: p.name,
   }));
 
-  // Iteratively exclude outliers > 4 std dev until convergence
+  // Iteratively exclude outliers > 2.5 std dev until convergence
+  // Using 2.5σ because with small sample sizes (13 commodities), extreme outliers
+  // inflate the std dev so much they might not reach 4σ threshold
   let autoExcludedNames = new Set<string>();
   let currentPoints = basePoints.filter(p => !excludedCommodities.has(p.name));
 
   // Iterate until no new outliers are found (max 10 iterations for safety)
   for (let i = 0; i < 10; i++) {
+    if (currentPoints.length < 3) break; // Need at least 3 points for meaningful regression
+
     const regression = calculateRegression(currentPoints.map(p => ({ x: p.x, y: p.y })));
 
     // Calculate residuals and std dev
@@ -275,13 +279,13 @@ export function COTSpreadsTab() {
       residuals.reduce((sum, r) => sum + Math.pow(r, 2), 0) / residuals.length
     ) || 1;
 
-    // Find new outliers
+    // Find new outliers (> 2.5 std dev)
     let foundNewOutlier = false;
     for (const p of currentPoints) {
       const predicted = regression.slope * p.x + regression.intercept;
       const residual = p.y - predicted;
       const zScore = Math.abs(residual / stdResidual);
-      if (zScore > 4 && !autoExcludedNames.has(p.name)) {
+      if (zScore > 2.5 && !autoExcludedNames.has(p.name)) {
         autoExcludedNames.add(p.name);
         foundNewOutlier = true;
       }
@@ -300,17 +304,6 @@ export function COTSpreadsTab() {
     !excludedCommodities.has(p.name) && !autoExcludedNames.has(p.name)
   );
   const currentRegression = calculateRegression(includedPoints.map(p => ({ x: p.x, y: p.y })));
-
-  // Debug: Log auto-excluded commodities
-  console.log("Auto-excluded commodities:", Array.from(autoExcludedNames));
-  console.log("Z-scores:", basePoints.map(p => {
-    const reg = calculateRegression(basePoints.map(bp => ({ x: bp.x, y: bp.y })));
-    const residuals = basePoints.map(bp => bp.y - (reg.slope * bp.x + reg.intercept));
-    const std = Math.sqrt(residuals.reduce((s, r) => s + r * r, 0) / residuals.length) || 1;
-    const predicted = reg.slope * p.x + reg.intercept;
-    const residual = p.y - predicted;
-    return { name: p.name, zScore: residual / std };
-  }));
 
   // Calculate final z-scores based on final regression
   const finalResiduals = includedPoints.map(p => {
