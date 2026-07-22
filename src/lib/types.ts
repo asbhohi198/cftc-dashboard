@@ -10,6 +10,7 @@ export type MainCategory =
   | "cot-spreads"
   | "cot-rvs"
   | "cit-index"
+  | "cot-px-weighted"
   | "ags-grains"
   | "ags-softs"
   | "ags-livestock"
@@ -142,6 +143,17 @@ export type COTTradersSubTab =
 export type CITIndexSubTab =
   | "cit-ags";
 
+export type COTPxWeightedSubTab =
+  | "px-ags"
+  | "px-softs"
+  | "px-livestock"
+  | "px-energy"
+  | "px-metals"
+  | "px-equities"
+  | "px-rates"
+  | "px-fx"
+  | "px-crypto";
+
 export type COTRVsSubTab =
   | "rvs-ags"
   | "rvs-energy"
@@ -150,7 +162,7 @@ export type COTRVsSubTab =
   | "rvs-rates"
   | "rvs-fx";
 
-export type SubTab = AgsGrainsSubTab | AgsOtherSubTab | AgsSoftsSubTab | AgsLivestockSubTab | EnergySubTab | MetalsSubTab | EquitiesSubTab | RatesSubTab | FXSubTab | CryptoSubTab | COTChangesSubTab | COTYTDSubTab | COTTradersSubTab | CITIndexSubTab | COTRVsSubTab | null;
+export type SubTab = AgsGrainsSubTab | AgsOtherSubTab | AgsSoftsSubTab | AgsLivestockSubTab | EnergySubTab | MetalsSubTab | EquitiesSubTab | RatesSubTab | FXSubTab | CryptoSubTab | COTChangesSubTab | COTYTDSubTab | COTTradersSubTab | CITIndexSubTab | COTPxWeightedSubTab | COTRVsSubTab | null;
 
 // Tab configuration
 export interface TabConfig {
@@ -241,6 +253,21 @@ export const TAB_CONFIG: TabConfig[] = [
     subTabs: [
       { id: "cit-ags", label: "Ags" },
       { id: "cit-roll", label: "Roll Position" },
+    ],
+  },
+  {
+    id: "cot-px-weighted",
+    label: "COT - Px Weighted",
+    subTabs: [
+      { id: "px-ags", label: "Ags - G&O" },
+      { id: "px-softs", label: "Ags - Softs" },
+      { id: "px-livestock", label: "Ags - Livestock" },
+      { id: "px-energy", label: "Energy" },
+      { id: "px-metals", label: "Metals" },
+      { id: "px-equities", label: "Equities" },
+      { id: "px-rates", label: "Rates" },
+      { id: "px-fx", label: "FX" },
+      { id: "px-crypto", label: "Crypto" },
     ],
   },
   {

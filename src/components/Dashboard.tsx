@@ -23,6 +23,7 @@ import { COTSpreadsTab } from "./COTSpreadsTab";
 import { COTRVsTab } from "./COTRVsTab";
 import { CITIndexTab } from "./CITIndexTab";
 import { CITRollTab } from "./CITRollTab";
+import { COTPxWeightedTab } from "./COTPxWeightedTab";
 import { EmailSubsTab } from "./EmailSubsTab";
 import { COTvsPriceTab } from "./COTvsPriceTab";
 import { BarChart3 } from "lucide-react";
@@ -280,6 +281,35 @@ export function Dashboard() {
         )}
         {activeTab === "cit-index" && activeSubTab === "cit-roll" && (
           <CITRollTab />
+        )}
+
+        {/* COT - Px Weighted */}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-ags" && (
+          <COTPxWeightedTab sector="ags" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-softs" && (
+          <COTPxWeightedTab sector="softs" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-livestock" && (
+          <COTPxWeightedTab sector="livestock" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-energy" && (
+          <COTPxWeightedTab sector="energy" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-metals" && (
+          <COTPxWeightedTab sector="metals" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-equities" && (
+          <COTPxWeightedTab sector="equities" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-rates" && (
+          <COTPxWeightedTab sector="rates" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-fx" && (
+          <COTPxWeightedTab sector="fx" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-crypto" && (
+          <COTPxWeightedTab sector="crypto" />
         )}
 
         {/* Ags - Grains & Oilseeds */}
