@@ -104,6 +104,50 @@ const SECTOR_TITLES: Record<string, string> = {
   fx: "FX",
 };
 
+// Map spread IDs to short leg symbols for trade instructions
+const SPREAD_LEG_SYMBOLS: Record<string, { leg1: string; leg2: string }> = {
+  // Ags
+  "soybeans-corn": { leg1: "S", leg2: "C" },
+  "soymeal-soyoil": { leg1: "SM", leg2: "BO" },
+  "kw-w": { leg1: "KW", leg2: "W" },
+  "mw-kw": { leg1: "MW", leg2: "KW" },
+  "mw-w": { leg1: "MW", leg2: "W" },
+  "lc-fc": { leg1: "LC", leg2: "FC" },
+  "lc-lh": { leg1: "LC", leg2: "LH" },
+  // Energy
+  "wti-brent": { leg1: "CL", leg2: "BRN" },
+  "rbob-ho": { leg1: "RB", leg2: "HO" },
+  // Metals
+  "gold-silver": { leg1: "GC", leg2: "SI" },
+  "platinum-palladium": { leg1: "PL", leg2: "PA" },
+  "gold-copper": { leg1: "GC", leg2: "HG" },
+  // Equities
+  "sp500-nasdaq": { leg1: "ES", leg2: "NQ" },
+  "sp500-russell": { leg1: "ES", leg2: "RTY" },
+  "dow-sp500": { leg1: "YM", leg2: "ES" },
+  // Rates
+  "10y-2y": { leg1: "ZN", leg2: "ZT" },
+  "30y-10y": { leg1: "ZB", leg2: "ZN" },
+  "5y-2y": { leg1: "ZF", leg2: "ZT" },
+  // FX
+  "eurusd-gbpusd": { leg1: "EUR", leg2: "GBP" },
+  "audusd-nzdusd": { leg1: "AUD", leg2: "NZD" },
+  "usdcad-usdmxn": { leg1: "CAD", leg2: "MXN" },
+};
+
+function getTradeInstruction(spreadId: string, zScore: number): string {
+  const symbols = SPREAD_LEG_SYMBOLS[spreadId];
+  if (!symbols) return zScore > 0 ? "FADE LONG" : "FADE SHORT";
+
+  if (zScore > 0) {
+    // MM is long the spread, fade by selling leg1/buying leg2
+    return `sell ${symbols.leg1}/buy ${symbols.leg2}`;
+  } else {
+    // MM is short the spread, fade by buying leg1/selling leg2
+    return `buy ${symbols.leg1}/sell ${symbols.leg2}`;
+  }
+}
+
 export function COTRVsTab({ sector = "ags" }: COTRVsTabProps) {
   const [data, setData] = useState<SpreadData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -324,7 +368,7 @@ export function COTRVsTab({ sector = "ags" }: COTRVsTabProps) {
                       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold ${
                         spread.zScore > 0 ? "bg-red-500/30 text-red-300" : "bg-green-500/30 text-green-300"
                       }`}>
-                        {spread.zScore > 0 ? "FADE LONG" : "FADE SHORT"}
+                        {getTradeInstruction(spread.id, spread.zScore)}
                       </span>
                     )}
                   </td>
@@ -334,22 +378,6 @@ export function COTRVsTab({ sector = "ags" }: COTRVsTabProps) {
           </tbody>
         </table>
       </div>
-
-      {/* Mean Reversion Alert */}
-      {sortedSpreads.some(s => Math.abs(s.zScore) >= 2) && (
-        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" />
-            <div>
-              <h4 className="text-yellow-400 font-semibold text-sm">Potential Mean Reversion Trade</h4>
-              <p className="text-yellow-200/70 text-xs mt-1">
-                Z-Scores above ±2 indicate extreme positioning that may revert to the mean.
-                Consider fading spreads where MM positioning is historically stretched.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -479,7 +507,7 @@ export function COTRVsTab({ sector = "ags" }: COTRVsTabProps) {
                       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold ${
                         expandedSpread.zScore > 0 ? "bg-red-500/30 text-red-300" : "bg-green-500/30 text-green-300"
                       }`}>
-                        {expandedSpread.zScore > 0 ? "FADE LONG" : "FADE SHORT"}
+                        {getTradeInstruction(expandedSpread.id, expandedSpread.zScore)}
                       </span>
                     )}
                   </div>
