@@ -243,6 +243,80 @@ function DisaggregatedTable({ rows, citData }: { rows: SummaryRow[]; citData?: C
   );
 }
 
+// Matif table for Euronext MiFID II categories
+function MatifTable({ rows }: { rows: SummaryRow[] }) {
+  return (
+    <table className="w-full text-xs">
+      <thead>
+        <tr className="bg-zinc-800 border-b border-zinc-700">
+          <th className="px-2 py-2 text-left font-semibold text-zinc-300 sticky left-0 bg-zinc-800 z-10" rowSpan={2}>
+            Contract
+          </th>
+          <th className="px-1 py-1 text-center font-semibold text-zinc-300 border-l border-zinc-700" colSpan={3}>
+            Open Interest
+          </th>
+          <th className="px-1 py-1 text-center font-semibold text-blue-400 border-l border-zinc-700" colSpan={3}>
+            Commercial
+          </th>
+          <th className="px-1 py-1 text-center font-semibold text-orange-400 border-l border-zinc-700" colSpan={3}>
+            Inv Funds
+          </th>
+          <th className="px-1 py-1 text-center font-semibold text-yellow-400 border-l border-zinc-700" colSpan={3}>
+            Inv Firms
+          </th>
+          <th className="px-1 py-1 text-center font-semibold text-pink-400 border-l border-zinc-700" colSpan={3}>
+            Other Fin
+          </th>
+          <th className="px-1 py-1 text-center font-semibold text-emerald-400 border-l border-zinc-700" colSpan={3}>
+            Spec
+          </th>
+        </tr>
+        <tr className="bg-zinc-800/50 border-b border-zinc-700 text-zinc-500">
+          <th className="px-1 py-1 text-right font-normal border-l border-zinc-700">Size</th>
+          <th className="px-1 py-1 text-right font-normal">Chg</th>
+          <th className="px-1 py-1 text-right font-normal">%Chg</th>
+          {[...Array(5)].map((_, i) => (
+            <React.Fragment key={i}>
+              <th className="px-1 py-1 text-right font-normal border-l border-zinc-700">Net</th>
+              <th className="px-1 py-1 text-right font-normal">Chg</th>
+              <th className="px-1 py-1 text-right font-normal">%OI</th>
+            </React.Fragment>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row, idx) => (
+          <tr
+            key={row.id}
+            className={`border-b border-zinc-800 hover:bg-zinc-800/50 ${
+              row.isAggregate ? "bg-zinc-800/30 font-semibold" : ""
+            } ${idx % 2 === 0 ? "" : "bg-zinc-900/50"}`}
+          >
+            <td className="px-2 py-1.5 text-left font-medium text-white sticky left-0 bg-inherit z-10" title={row.fullName}>
+              {row.label}
+            </td>
+            <td className="px-1 py-1.5 text-right text-zinc-300 border-l border-zinc-800">
+              {formatNumber(row.openInterest.size)}
+            </td>
+            <td className={`px-1 py-1.5 text-right ${getChangeColor(row.openInterest.change.value)} ${row.openInterest.change.isSignificant ? "font-bold bg-yellow-500/20" : ""}`}>
+              {formatChange(row.openInterest.change.value)}
+            </td>
+            <td className={`px-1 py-1.5 text-right ${getChangeColor(row.openInterest.pctChange)}`}>
+              {formatPctChange(row.openInterest.pctChange)}
+            </td>
+            {/* Matif uses producer for Commercial, swapDealer for Inv Firms, managedMoney for Inv Funds, otherReportables for Other Fin */}
+            {row.producer && <ParticipantCells data={row.producer} baseColor="text-blue-400/70" />}
+            {row.managedMoney && <ParticipantCells data={row.managedMoney} baseColor="text-orange-400/70" />}
+            {row.swapDealer && <ParticipantCells data={row.swapDealer} baseColor="text-yellow-400/70" />}
+            {row.otherReportables && <ParticipantCells data={row.otherReportables} baseColor="text-pink-400/70" />}
+            <ParticipantCells data={row.spec} baseColor="text-emerald-400/70" />
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
 // TFF table for equities/rates/fx/crypto
 function TFFTable({ rows }: { rows: SummaryRow[] }) {
   return (
@@ -460,13 +534,15 @@ export function SummaryTab() {
             <div className="px-4 py-3 border-b border-zinc-700 bg-zinc-800/50">
               <h3 className="text-md font-semibold text-white">{sector.label}</h3>
               <p className="text-xs text-zinc-500">
-                {sector.reportType === "disagg" ? "Disaggregated Report" : "Traders in Financial Futures (TFF)"}
+                {sector.reportType === "disagg" ? "Disaggregated Report" : sector.reportType === "matif" ? "MiFID II Position Report" : "Traders in Financial Futures (TFF)"}
                 {isAgsSector && citData.length > 0 && " + CIT Supplemental"}
               </p>
             </div>
             <div className="overflow-x-auto">
               {sector.reportType === "disagg" ? (
                 <DisaggregatedTable rows={sector.rows} citData={sectorCitData} />
+              ) : sector.reportType === "matif" ? (
+                <MatifTable rows={sector.rows} />
               ) : (
                 <TFFTable rows={sector.rows} />
               )}
