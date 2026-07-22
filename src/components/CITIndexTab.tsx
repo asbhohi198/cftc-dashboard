@@ -338,7 +338,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
           className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 cursor-pointer hover:border-zinc-600 transition-colors"
           onClick={() => setExpandedChart("change")}
         >
-          <h3 className="text-xs font-semibold text-white mb-2">Index Net Chg WoW</h3>
+          <h3 className="text-sm font-semibold text-white mb-2">Index Net Chg WoW</h3>
           <div className="h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={changeChartData} margin={{ top: 12, right: 5, left: -25, bottom: 30 }}>
@@ -392,7 +392,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
           className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 cursor-pointer hover:border-zinc-600 transition-colors"
           onClick={() => setExpandedChart("pctMax")}
         >
-          <h3 className="text-xs font-semibold text-white mb-2">Index Net % of Record Max</h3>
+          <h3 className="text-sm font-semibold text-white mb-2">Index Net % of Record Max</h3>
           <div className="h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={pctMaxChartData} margin={{ top: 12, right: 5, left: -20, bottom: 5 }}>
@@ -445,7 +445,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
             className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 cursor-pointer hover:border-zinc-600 transition-colors"
             onClick={() => setExpandedChart("cswkw")}
           >
-            <h3 className="text-xs font-semibold text-white mb-2">C+S+W+KW Index Net (Historical)</h3>
+            <h3 className="text-sm font-semibold text-white mb-2">C+S+W+KW Index Net (Historical)</h3>
             <div className="h-[240px]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={cswkwAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 18 }}>
@@ -458,7 +458,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                     height={28}
                     tickFormatter={formatChartDate}
                     interval={Math.floor(cswkwAgg.historicalData.length / 5)}
-                    dy={12}
+                    dy={18}
                   />
                   <YAxis
                     tick={{ fill: "#ffffff", fontSize: 9 }}
@@ -497,7 +497,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
             className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 cursor-pointer hover:border-zinc-600 transition-colors"
             onClick={() => setExpandedChart("cswkw_sbo_sm")}
           >
-            <h3 className="text-xs font-semibold text-white mb-2">All Grains Index Net (Historical)</h3>
+            <h3 className="text-sm font-semibold text-white mb-2">All Grains Index Net (Historical)</h3>
             <div className="h-[240px]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={cswkwSboSmAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 18 }}>
@@ -510,7 +510,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                     height={28}
                     tickFormatter={formatChartDate}
                     interval={Math.floor(cswkwSboSmAgg.historicalData.length / 5)}
-                    dy={12}
+                    dy={18}
                   />
                   <YAxis
                     tick={{ fill: "#ffffff", fontSize: 9 }}
@@ -566,11 +566,12 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                     height={28}
                     tickFormatter={formatChartDate}
                     interval={Math.floor(livestockAgg.historicalData.length / 5)}
-                    dy={12}
+                    dy={18}
                   />
                   <YAxis
                     tick={{ fill: "#ffffff", fontSize: 9 }}
                     tickFormatter={(v) => formatNumber(v)}
+                    domain={[75000, 'auto']}
                   />
                   <Tooltip
                     contentStyle={{
@@ -617,11 +618,12 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                     height={28}
                     tickFormatter={formatChartDate}
                     interval={Math.floor(softsAgg.historicalData.length / 5)}
-                    dy={12}
+                    dy={18}
                   />
                   <YAxis
                     tick={{ fill: "#ffffff", fontSize: 9 }}
                     tickFormatter={(v) => formatNumber(v)}
+                    domain={[150000, 'auto']}
                   />
                   <Tooltip
                     contentStyle={{
@@ -668,11 +670,12 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                     height={28}
                     tickFormatter={formatChartDate}
                     interval={Math.floor(totalAgg.historicalData.length / 5)}
-                    dy={12}
+                    dy={18}
                   />
                   <YAxis
                     tick={{ fill: "#ffffff", fontSize: 9 }}
                     tickFormatter={(v) => formatNumber(v)}
+                    domain={[900000, 'auto']}
                   />
                   <Tooltip
                     contentStyle={{
