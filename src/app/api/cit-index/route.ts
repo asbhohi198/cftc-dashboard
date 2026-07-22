@@ -166,8 +166,9 @@ export async function GET(request: NextRequest) {
         if (r.indexNet < recordMin) recordMin = r.indexNet;
       }
 
-      // % of max
-      const pctMax = recordMax > 0 ? (latest.indexNet / recordMax) * 100 : 0;
+      // % of range (where current falls between min and max, 0% = at min, 100% = at max)
+      const range = recordMax - recordMin;
+      const pctMax = range > 0 ? ((latest.indexNet - recordMin) / range) * 100 : 50;
 
       // Historical data for charts
       const historicalData = records.map(r => ({

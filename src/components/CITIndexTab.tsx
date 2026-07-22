@@ -160,7 +160,9 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
       if (h.indexNet < recordMin) recordMin = h.indexNet;
     }
 
-    const pctMax = recordMax > 0 ? (indexNet / recordMax) * 100 : 0;
+    // % of range (where current falls between min and max, 0% = at min, 100% = at max)
+    const range = recordMax - recordMin;
+    const pctMax = range > 0 ? ((indexNet - recordMin) / range) * 100 : 50;
 
     return {
       indexNet,
@@ -213,33 +215,33 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
       key={row.id}
       className={`border-b border-zinc-800 ${highlight || ""}`}
     >
-      <td className="py-2 px-3 text-white">{row.name}</td>
-      <td className="py-2 px-3 text-right font-mono text-white">{formatNumber(row.indexNet)}</td>
-      <td className="py-2 px-3 text-right font-mono text-zinc-400">{row.indexPctOI.toFixed(0)}%</td>
-      <td className={`py-2 px-3 text-right font-mono ${row.change >= 0 ? "text-green-400" : "text-red-400"}`}>
+      <td className="py-2 px-3 text-left text-white">{row.name}</td>
+      <td className="py-2 px-3 text-center font-mono text-white">{formatNumber(row.indexNet)}</td>
+      <td className="py-2 px-3 text-center font-mono text-zinc-400">{row.indexPctOI.toFixed(0)}%</td>
+      <td className={`py-2 px-3 text-center font-mono ${row.change >= 0 ? "text-green-400" : "text-red-400"}`}>
         {row.change >= 0 ? "+" : ""}{formatNumber(row.change)}
       </td>
-      <td className="py-2 px-3 text-right font-mono text-zinc-400">{formatNumber(row.recordMax)}</td>
-      <td className={`py-2 px-3 text-right font-mono font-bold ${getPctMaxColor(row.pctMax)}`}>
+      <td className="py-2 px-3 text-center font-mono text-zinc-400">{formatNumber(row.recordMax)}</td>
+      <td className={`py-2 px-3 text-center font-mono font-bold ${getPctMaxColor(row.pctMax)}`}>
         {row.pctMax.toFixed(0)}%
       </td>
-      <td className="py-2 px-3 text-right font-mono text-zinc-400">{formatNumber(row.recordMin)}</td>
+      <td className="py-2 px-3 text-center font-mono text-zinc-400">{formatNumber(row.recordMin)}</td>
     </tr>
   );
 
   const renderAggRow = (name: string, agg: NonNullable<typeof cswkwAgg>, bgColor: string) => (
     <tr key={name} className={`border-b border-zinc-800 ${bgColor}`}>
-      <td className="py-2 px-3 text-white font-semibold">{name}</td>
-      <td className="py-2 px-3 text-right font-mono text-white font-semibold">{formatNumber(agg.indexNet)}</td>
-      <td className="py-2 px-3 text-right font-mono text-zinc-400">{agg.indexPctOI.toFixed(0)}%</td>
-      <td className={`py-2 px-3 text-right font-mono font-semibold ${agg.change >= 0 ? "text-green-400" : "text-red-400"}`}>
+      <td className="py-2 px-3 text-left text-white font-semibold">{name}</td>
+      <td className="py-2 px-3 text-center font-mono text-white font-semibold">{formatNumber(agg.indexNet)}</td>
+      <td className="py-2 px-3 text-center font-mono text-zinc-400">{agg.indexPctOI.toFixed(0)}%</td>
+      <td className={`py-2 px-3 text-center font-mono font-semibold ${agg.change >= 0 ? "text-green-400" : "text-red-400"}`}>
         {agg.change >= 0 ? "+" : ""}{formatNumber(agg.change)}
       </td>
-      <td className="py-2 px-3 text-right font-mono text-zinc-400">{formatNumber(agg.recordMax)}</td>
-      <td className={`py-2 px-3 text-right font-mono font-bold ${getPctMaxColor(agg.pctMax)}`}>
+      <td className="py-2 px-3 text-center font-mono text-zinc-400">{formatNumber(agg.recordMax)}</td>
+      <td className={`py-2 px-3 text-center font-mono font-bold ${getPctMaxColor(agg.pctMax)}`}>
         {agg.pctMax.toFixed(0)}%
       </td>
-      <td className="py-2 px-3 text-right font-mono text-zinc-400">{formatNumber(agg.recordMin)}</td>
+      <td className="py-2 px-3 text-center font-mono text-zinc-400">{formatNumber(agg.recordMin)}</td>
     </tr>
   );
 
@@ -271,12 +273,12 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
           <thead>
             <tr className="bg-zinc-800/50 border-b border-zinc-700">
               <th className="text-left py-3 px-3 text-zinc-400 font-medium">Commodity</th>
-              <th className="text-right py-3 px-3 text-zinc-400 font-medium">Net</th>
-              <th className="text-right py-3 px-3 text-zinc-400 font-medium">% OI</th>
-              <th className="text-right py-3 px-3 text-zinc-400 font-medium">Change</th>
-              <th className="text-right py-3 px-3 text-zinc-400 font-medium">Record Max</th>
-              <th className="text-right py-3 px-3 text-zinc-400 font-medium">% Max</th>
-              <th className="text-right py-3 px-3 text-zinc-400 font-medium">Record Min</th>
+              <th className="text-center py-3 px-3 text-zinc-400 font-medium">Net</th>
+              <th className="text-center py-3 px-3 text-zinc-400 font-medium">% OI</th>
+              <th className="text-center py-3 px-3 text-zinc-400 font-medium">Change</th>
+              <th className="text-center py-3 px-3 text-zinc-400 font-medium">Record Max</th>
+              <th className="text-center py-3 px-3 text-zinc-400 font-medium">% Max</th>
+              <th className="text-center py-3 px-3 text-zinc-400 font-medium">Record Min</th>
             </tr>
           </thead>
           <tbody>
