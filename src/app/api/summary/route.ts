@@ -271,6 +271,23 @@ function calculateRow(data: COTRecord[], label: string, fullName: string, id: st
       nonReportables,
       spec,
     };
+  } else if (reportType === "matif") {
+    // Matif MiFID II report
+    // matifToCOTRecord maps: Commercial->producer, InvFunds->mm, InvFirms->other, OtherFin->swap
+    const producer = calculateParticipantData(data, latest, previous, r => r.producerNetAll); // Commercial
+    const managedMoney = calculateParticipantData(data, latest, previous, r => r.mmNetAll); // Investment Funds
+    const swapDealer = calculateParticipantData(data, latest, previous, r => r.otherNetAll); // Investment Firms (mapped to other in matifToCOTRecord)
+    const otherReportables = calculateParticipantData(data, latest, previous, r => r.swapNetAll); // Other Financial (mapped to swap in matifToCOTRecord)
+    const spec = calculateParticipantData(data, latest, previous, r => r.mmNetAll + r.otherNetAll); // Inv Funds + Inv Firms
+
+    return {
+      ...baseRow,
+      producer,
+      swapDealer,
+      managedMoney,
+      otherReportables,
+      spec,
+    };
   } else {
     // TFF report (equities, rates, fx, crypto)
     // In TFF: Dealer=Producer, AssetManager=SwapDealer, LeveragedFunds=MM, Other=Other
