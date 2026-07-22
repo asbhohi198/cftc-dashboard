@@ -135,6 +135,14 @@ COMMODITIES = {
         "multiplier": 1,
         "spread_unit": "c/lb"
     },
+    # ICE Canada
+    "canola": {
+        "name": "Canola",
+        "norgate_prefix": "RS",
+        "months": ["F", "H", "K", "N", "X"],  # Jan, Mar, May, Jul, Nov
+        "multiplier": 1,
+        "spread_unit": "CAD/MT"
+    },
 }
 
 # Month code to number mapping

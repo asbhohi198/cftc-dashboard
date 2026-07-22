@@ -327,7 +327,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
           onClick={() => setExpandedChart("change")}
         >
           <h3 className="text-xs font-semibold text-white mb-2">CHG WoW</h3>
-          <div className="h-[160px]">
+          <div className="h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={changeChartData} margin={{ top: 12, right: 5, left: -20, bottom: 30 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
@@ -381,7 +381,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
           onClick={() => setExpandedChart("pctMax")}
         >
           <h3 className="text-xs font-semibold text-white mb-2">% Max</h3>
-          <div className="h-[160px]">
+          <div className="h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={pctMaxChartData} margin={{ top: 12, right: 5, left: -20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
@@ -434,9 +434,9 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
             onClick={() => setExpandedChart("cswkw")}
           >
             <h3 className="text-xs font-semibold text-white mb-2">C+S+W+KW</h3>
-            <div className="h-[160px]">
+            <div className="h-[240px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={cswkwAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 20 }}>
+                <LineChart data={cswkwAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 12 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis
                     dataKey="date"
@@ -485,9 +485,9 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
             onClick={() => setExpandedChart("cswkw_sbo_sm")}
           >
             <h3 className="text-xs font-semibold text-white mb-2">C+S+W+KW+SBO+SM</h3>
-            <div className="h-[160px]">
+            <div className="h-[240px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={cswkwSboSmAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 20 }}>
+                <LineChart data={cswkwSboSmAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 12 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis
                     dataKey="date"
