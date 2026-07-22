@@ -13,6 +13,7 @@ const SECTOR_COMMODITIES: Record<AssetCategory, { id: ContractId; label: string 
     { id: "soybeans", label: "S" },
     { id: "soymeal", label: "SM" },
     { id: "soyoil", label: "BO" },
+    { id: "canola", label: "RS" },
     { id: "oats", label: "O" },
     { id: "sugar", label: "SB" },
     { id: "cotton", label: "CT" },

@@ -63,6 +63,9 @@ function formatNumber(num: number): string {
 // Aggregation groups
 const CSWKW_IDS = ["corn", "soybeans", "chicago-wheat", "kansas-wheat"];
 const CSWKW_SBO_SM_IDS = ["corn", "soybeans", "chicago-wheat", "kansas-wheat", "soyoil", "soymeal"];
+const LIVESTOCK_IDS = ["live-cattle", "lean-hogs", "feeder-cattle"];
+const SOFTS_IDS = ["sugar", "arabica-coffee", "ny-cocoa", "cotton"];
+const ALL_IDS = [...CSWKW_SBO_SM_IDS, ...LIVESTOCK_IDS, ...SOFTS_IDS];
 
 interface CITIndexTabProps {
   sector: string;
@@ -73,7 +76,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
   const [reportDate, setReportDate] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [expandedChart, setExpandedChart] = useState<"cswkw" | "cswkw_sbo_sm" | "change" | "pctMax" | null>(null);
+  const [expandedChart, setExpandedChart] = useState<"cswkw" | "cswkw_sbo_sm" | "change" | "pctMax" | "livestock" | "softs" | "total" | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -176,6 +179,15 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
 
   const cswkwAgg = calcAggregate(cswkwData);
   const cswkwSboSmAgg = calcAggregate(cswkwSboSmData);
+
+  // New aggregations for livestock, softs, and total
+  const livestockData = data.filter(d => LIVESTOCK_IDS.includes(d.id));
+  const softsData = data.filter(d => SOFTS_IDS.includes(d.id));
+  const allData = data.filter(d => ALL_IDS.includes(d.id));
+
+  const livestockAgg = calcAggregate(livestockData);
+  const softsAgg = calcAggregate(softsData);
+  const totalAgg = calcAggregate(allData);
 
   // Categorize contracts
   const grains = data.filter(d => ["corn", "soybeans", "chicago-wheat", "kansas-wheat", "soyoil", "soymeal"].includes(d.id));
@@ -533,6 +545,162 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
         </div>
       </div>
 
+      {/* Additional Historical Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Livestock Combined (LC+LH+FC) */}
+        {livestockAgg && (
+          <div
+            className="bg-zinc-900 border border-zinc-800 rounded-lg p-3 cursor-pointer hover:border-zinc-600 transition-colors"
+            onClick={() => setExpandedChart("livestock")}
+          >
+            <h3 className="text-sm font-semibold text-white mb-2">Livestock Index Net (LC+LH+FC)</h3>
+            <div className="h-[240px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={livestockAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 18 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fill: "#ffffff", fontSize: 9 }}
+                    angle={-90}
+                    textAnchor="end"
+                    height={28}
+                    tickFormatter={formatChartDate}
+                    interval={Math.floor(livestockAgg.historicalData.length / 5)}
+                    dy={12}
+                  />
+                  <YAxis
+                    tick={{ fill: "#ffffff", fontSize: 9 }}
+                    tickFormatter={(v) => formatNumber(v)}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#18181b",
+                      border: "1px solid #27272a",
+                      borderRadius: "0.5rem",
+                      fontSize: "12px",
+                      color: "#ffffff",
+                    }}
+                    labelStyle={{ color: "#ffffff" }}
+                    labelFormatter={(label) => formatDate(label)}
+                    formatter={(value: number) => [formatNumber(value), "Index Total"]}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="indexNet"
+                    name="LC+LH+FC Index Total"
+                    stroke="#3b82f6"
+                    strokeWidth={1.5}
+                    dot={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+
+        {/* Softs Combined (SB+KC+CC+CT) */}
+        {softsAgg && (
+          <div
+            className="bg-zinc-900 border border-zinc-800 rounded-lg p-3 cursor-pointer hover:border-zinc-600 transition-colors"
+            onClick={() => setExpandedChart("softs")}
+          >
+            <h3 className="text-sm font-semibold text-white mb-2">Softs Index Net (SB+KC+CC+CT)</h3>
+            <div className="h-[240px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={softsAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 18 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fill: "#ffffff", fontSize: 9 }}
+                    angle={-90}
+                    textAnchor="end"
+                    height={28}
+                    tickFormatter={formatChartDate}
+                    interval={Math.floor(softsAgg.historicalData.length / 5)}
+                    dy={12}
+                  />
+                  <YAxis
+                    tick={{ fill: "#ffffff", fontSize: 9 }}
+                    tickFormatter={(v) => formatNumber(v)}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#18181b",
+                      border: "1px solid #27272a",
+                      borderRadius: "0.5rem",
+                      fontSize: "12px",
+                      color: "#ffffff",
+                    }}
+                    labelStyle={{ color: "#ffffff" }}
+                    labelFormatter={(label) => formatDate(label)}
+                    formatter={(value: number) => [formatNumber(value), "Index Total"]}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="indexNet"
+                    name="SB+KC+CC+CT Index Total"
+                    stroke="#3b82f6"
+                    strokeWidth={1.5}
+                    dot={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+
+        {/* Total (G+O+LVS+SFTS) */}
+        {totalAgg && (
+          <div
+            className="bg-zinc-900 border border-zinc-800 rounded-lg p-3 cursor-pointer hover:border-zinc-600 transition-colors"
+            onClick={() => setExpandedChart("total")}
+          >
+            <h3 className="text-sm font-semibold text-white mb-2">Total Index Net (G+O+LVS+SFTS)</h3>
+            <div className="h-[240px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={totalAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 18 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fill: "#ffffff", fontSize: 9 }}
+                    angle={-90}
+                    textAnchor="end"
+                    height={28}
+                    tickFormatter={formatChartDate}
+                    interval={Math.floor(totalAgg.historicalData.length / 5)}
+                    dy={12}
+                  />
+                  <YAxis
+                    tick={{ fill: "#ffffff", fontSize: 9 }}
+                    tickFormatter={(v) => formatNumber(v)}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#18181b",
+                      border: "1px solid #27272a",
+                      borderRadius: "0.5rem",
+                      fontSize: "12px",
+                      color: "#ffffff",
+                    }}
+                    labelStyle={{ color: "#ffffff" }}
+                    labelFormatter={(label) => formatDate(label)}
+                    formatter={(value: number) => [formatNumber(value), "Index Total"]}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="indexNet"
+                    name="G+O+LVS+SFTS Index Total"
+                    stroke="#3b82f6"
+                    strokeWidth={1.5}
+                    dot={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* Expanded Chart Modal */}
       {expandedChart && (
         <div
@@ -549,6 +717,9 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                 {expandedChart === "pctMax" && "CIT Index Position % Max"}
                 {expandedChart === "cswkw" && "CIT Index Position (Combined C,S,W,KW)"}
                 {expandedChart === "cswkw_sbo_sm" && "CIT Index Position (Combined C,S,W,KW,SBO,SM)"}
+                {expandedChart === "livestock" && "CIT Index Position - Livestock (LC+LH+FC)"}
+                {expandedChart === "softs" && "CIT Index Position - Softs (SB+KC+CC+CT)"}
+                {expandedChart === "total" && "CIT Index Position - Total (G+O+LVS+SFTS)"}
               </h3>
               <button
                 onClick={() => setExpandedChart(null)}
@@ -616,7 +787,13 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                   </BarChart>
                 ) : (
                   <LineChart
-                    data={expandedChart === "cswkw" ? cswkwAgg?.historicalData : cswkwSboSmAgg?.historicalData}
+                    data={
+                      expandedChart === "cswkw" ? cswkwAgg?.historicalData :
+                      expandedChart === "cswkw_sbo_sm" ? cswkwSboSmAgg?.historicalData :
+                      expandedChart === "livestock" ? livestockAgg?.historicalData :
+                      expandedChart === "softs" ? softsAgg?.historicalData :
+                      totalAgg?.historicalData
+                    }
                     margin={{ top: 10, right: 20, left: -5, bottom: 50 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
@@ -627,7 +804,13 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                       textAnchor="end"
                       height={60}
                       tickFormatter={formatChartDate}
-                      interval={Math.floor((expandedChart === "cswkw" ? cswkwAgg?.historicalData.length || 100 : cswkwSboSmAgg?.historicalData.length || 100) / 20)}
+                      interval={Math.floor((
+                        expandedChart === "cswkw" ? cswkwAgg?.historicalData.length || 100 :
+                        expandedChart === "cswkw_sbo_sm" ? cswkwSboSmAgg?.historicalData.length || 100 :
+                        expandedChart === "livestock" ? livestockAgg?.historicalData.length || 100 :
+                        expandedChart === "softs" ? softsAgg?.historicalData.length || 100 :
+                        totalAgg?.historicalData.length || 100
+                      ) / 20)}
                       dy={35}
                     />
                     <YAxis
