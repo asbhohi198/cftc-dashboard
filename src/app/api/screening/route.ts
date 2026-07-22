@@ -230,6 +230,11 @@ export async function GET(request: Request) {
 
       // Screen net position series
       for (const series of NET_SERIES) {
+        // Skip non-reportables for Matif (emissions field is always 0 for grains)
+        if (commodity.category === "matif" && series.key === "nonReptNetAll") {
+          continue;
+        }
+
         const values = data.map((d) => d[series.key as keyof COTRecord] as number);
         const sortedValues = [...values].sort((a, b) => a - b);
         const latestValue = latest[series.key as keyof COTRecord] as number;
@@ -263,6 +268,11 @@ export async function GET(request: Request) {
 
       // Screen % OI series
       for (const series of PCT_OI_SERIES) {
+        // Skip non-reportables for Matif (emissions field is always 0 for grains)
+        if (commodity.category === "matif" && series.netKey === "nonReptNetAll") {
+          continue;
+        }
+
         const values = data.map((d) => {
           const oi = d.openInterestAll;
           const net = d[series.netKey as keyof COTRecord] as number;
