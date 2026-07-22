@@ -495,7 +495,7 @@ export function COTSpreadsTab() {
                 domain={["auto", "auto"]}
                 tickFormatter={(v) => xAxisMode === "pctOI" ? `${Math.round(v)}%` : formatNumber(v)}
               >
-                <Label value={xAxisMode === "pctOI" ? "Net MM as % of OI" : "Net MM Position (contracts)"} position="bottom" offset={10} fill="#9ca3af" fontSize={11} />
+                <Label value={xAxisMode === "pctOI" ? "Net MM as % of OI" : "Net MM Position (contracts)"} position="bottom" offset={25} fill="#9ca3af" fontSize={11} />
               </XAxis>
               <YAxis
                 type="number"
@@ -504,7 +504,7 @@ export function COTSpreadsTab() {
                 tick={{ fill: "#ffffff", fontSize: 11 }}
                 tickFormatter={(v) => `${Math.round(v)}%`}
               >
-                <Label value="1-3 Month Curve (%)" angle={-90} position="insideLeft" fill="#9ca3af" fontSize={11} />
+                <Label value="1-3 Month Curve (%)" angle={-90} position="insideLeft" dy={50} fill="#9ca3af" fontSize={11} />
               </YAxis>
               <Tooltip
                 contentStyle={{
@@ -670,7 +670,7 @@ export function COTSpreadsTab() {
                           dataKey="spread"
                           tick={{ fill: "#ffffff", fontSize: 12 }}
                         >
-                          <Label value="1-3 Month Spread" angle={-90} position="insideLeft" fill="#9ca3af" fontSize={12} />
+                          <Label value="1-3 Month Spread" angle={-90} position="insideLeft" dy={50} fill="#9ca3af" fontSize={12} />
                         </YAxis>
                         <Tooltip
                           contentStyle={{
@@ -796,7 +796,7 @@ export function COTSpreadsTab() {
                     tick={{ fill: "#ffffff", fontSize: 12 }}
                     tickFormatter={(v) => `${Math.round(v)}%`}
                   >
-                    <Label value="1-3 Month Curve (%)" angle={-90} position="insideLeft" fill="#9ca3af" fontSize={12} />
+                    <Label value="1-3 Month Curve (%)" angle={-90} position="insideLeft" dy={50} fill="#9ca3af" fontSize={12} />
                   </YAxis>
                   <Tooltip
                     contentStyle={{
