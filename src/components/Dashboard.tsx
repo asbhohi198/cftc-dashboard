@@ -29,13 +29,16 @@ import { BarChart3 } from "lucide-react";
 const SUB_TAB_TO_CONTRACT: Record<string, string> = {
   // Grains & Oilseeds (combined tabs handled separately)
   corn: "corn",
+  "matif-corn": "matif-corn",
   "chicago-wheat": "chicago-wheat",
   "kansas-wheat": "kansas-wheat",
   "minneapolis-wheat": "minneapolis-wheat",
+  "matif-wheat": "matif-wheat",
   soybeans: "soybeans",
   soymeal: "soymeal",
   soyoil: "soyoil",
   canola: "canola",
+  "matif-rapeseed": "matif-rapeseed",
   // Ags - Other
   oats: "oats",
   "rough-rice": "rough-rice",

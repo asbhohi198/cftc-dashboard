@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { CFTC_CONTRACTS, COTRecord, ContractId, ReportType } from "@/lib/cftc";
 
-type AssetCategory = "ags" | "energy" | "metals" | "equities" | "rates" | "fx" | "crypto";
+type AssetCategory = "ags" | "matif" | "energy" | "metals" | "equities" | "rates" | "fx" | "crypto";
 
 // Commodities organized by sector
 const SECTOR_COMMODITIES: Record<AssetCategory, { id: ContractId; label: string }[]> = {
@@ -26,6 +26,11 @@ const SECTOR_COMMODITIES: Record<AssetCategory, { id: ContractId; label: string 
     { id: "orange-juice", label: "OJ" },
     { id: "lumber", label: "LB" },
     { id: "milk", label: "DA" },
+  ],
+  matif: [
+    { id: "matif-wheat", label: "MW" },
+    { id: "matif-corn", label: "MC" },
+    { id: "matif-rapeseed", label: "RS" },
   ],
   energy: [
     { id: "wti-crude", label: "CL" },
@@ -80,6 +85,7 @@ const SECTOR_AGGREGATES: Record<AssetCategory, { id: string; label: string; cont
   ags: [
     { id: "all-wheat", label: "All W", contracts: ["chicago-wheat", "kansas-wheat", "minneapolis-wheat"], insertAfter: "MW" },
   ],
+  matif: [],
   energy: [],
   metals: [],
   equities: [],
@@ -90,6 +96,7 @@ const SECTOR_AGGREGATES: Record<AssetCategory, { id: string; label: string; cont
 
 const SECTOR_LABELS: Record<AssetCategory, string> = {
   ags: "Agricultural",
+  matif: "Matif (Euronext)",
   energy: "Energy",
   metals: "Metals",
   equities: "Equities",

@@ -24,13 +24,16 @@ export type MainCategory =
 // Sub-tabs for each category
 export type AgsGrainsSubTab =
   | "corn"
+  | "matif-corn"
   | "chicago-wheat"
   | "kansas-wheat"
   | "minneapolis-wheat"
+  | "matif-wheat"
   | "soybeans"
   | "soymeal"
   | "soyoil"
   | "canola"
+  | "matif-rapeseed"
   | "all-us-wheat"
   | "all-us-oilseeds"
   | "all-us-grains"
@@ -239,13 +242,16 @@ export const TAB_CONFIG: TabConfig[] = [
     label: "Ags - G&O",
     subTabs: [
       { id: "corn", label: "Corn" },
+      { id: "matif-corn", label: "Matif Corn" },
       { id: "chicago-wheat", label: "Chicago Wheat" },
       { id: "kansas-wheat", label: "Kansas Wheat" },
       { id: "minneapolis-wheat", label: "Minneapolis Wheat" },
+      { id: "matif-wheat", label: "Matif Wheat" },
       { id: "soybeans", label: "Soybeans" },
       { id: "soymeal", label: "Soymeal" },
       { id: "soyoil", label: "Soyoil" },
       { id: "canola", label: "Canola" },
+      { id: "matif-rapeseed", label: "Matif Rapeseed" },
       { id: "all-us-wheat", label: "All US Wheat" },
       { id: "all-us-oilseeds", label: "All US Oilseeds" },
       { id: "all-us-grains", label: "All US Grains" },
