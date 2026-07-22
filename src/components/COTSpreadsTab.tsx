@@ -295,12 +295,31 @@ export function COTSpreadsTab() {
         </div>
 
         {/* Main Scatter Plot */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
-          <h3 className="text-sm font-semibold text-orange-400 mb-1">
-            Net MM Position vs. 1-3 Month Curve (%)
-          </h3>
+        <div
+          className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 cursor-pointer hover:border-zinc-600 transition-colors"
+          onClick={() => setMainScatterExpanded(true)}
+        >
+          <div className="flex items-center justify-between mb-1">
+            <h3 className="text-sm font-semibold text-orange-400">
+              {xAxisMode === "pctOI" ? "Net MM as % OI" : "Net MM Position"} vs. 1-3 Month Curve (%)
+            </h3>
+            <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
+              <button
+                className={`px-2 py-1 text-xs rounded ${xAxisMode === "pctOI" ? "bg-orange-500 text-white" : "bg-zinc-700 text-zinc-300"}`}
+                onClick={() => setXAxisMode("pctOI")}
+              >
+                % OI
+              </button>
+              <button
+                className={`px-2 py-1 text-xs rounded ${xAxisMode === "absolute" ? "bg-orange-500 text-white" : "bg-zinc-700 text-zinc-300"}`}
+                onClick={() => setXAxisMode("absolute")}
+              >
+                Contracts
+              </button>
+            </div>
+          </div>
           <p className="text-xs text-zinc-500 mb-3">
-            R² = {mainScatter.regression.r2.toFixed(4)}
+            R² = {currentRegression.r2.toFixed(4)}
           </p>
           <ResponsiveContainer width="100%" height={350}>
             <ComposedChart margin={{ top: 20, right: 20, left: 10, bottom: 60 }}>
@@ -308,16 +327,16 @@ export function COTSpreadsTab() {
               <XAxis
                 type="number"
                 dataKey="x"
-                tick={<CustomXAxisTick />}
+                tick={{ fill: "#ffffff", fontSize: 10 }}
                 domain={["auto", "auto"]}
-                height={60}
+                tickFormatter={(v) => xAxisMode === "pctOI" ? `${v.toFixed(0)}%` : formatNumber(v)}
               >
-                <Label value="Net MM Position (contracts)" position="bottom" offset={40} fill="#9ca3af" fontSize={11} />
+                <Label value={xAxisMode === "pctOI" ? "Net MM as % of OI" : "Net MM Position (contracts)"} position="bottom" offset={10} fill="#9ca3af" fontSize={11} />
               </XAxis>
               <YAxis
                 type="number"
                 dataKey="y"
-                domain={[80, 115]}
+                domain={[85, 115]}
                 tick={{ fill: "#ffffff", fontSize: 11 }}
                 tickFormatter={(v) => `${v}%`}
               >
@@ -335,7 +354,7 @@ export function COTSpreadsTab() {
                 itemStyle={{ color: "#ffffff" }}
                 formatter={(value: number, name: string) => {
                   if (name === "y") return [`${value.toFixed(1)}%`, "1-3 %"];
-                  return [formatNumber(value), "Net MM"];
+                  return [xAxisMode === "pctOI" ? `${value.toFixed(1)}%` : formatNumber(value), xAxisMode === "pctOI" ? "% OI" : "Net MM"];
                 }}
               />
               <ReferenceLine y={100} stroke="#52525b" strokeDasharray="5 5" />
@@ -357,14 +376,14 @@ export function COTSpreadsTab() {
 
               {/* Data points with labels */}
               <Scatter
-                data={mainScatter.points}
+                data={scatterPoints}
                 fill="#3b82f6"
                 shape={<LabeledScatterDot />}
               />
             </ComposedChart>
           </ResponsiveContainer>
           <div className="mt-2 text-xs text-zinc-500 text-center">
-            Click commodity charts below for historical scatter
+            Click to expand | Click commodity charts below for historical scatter
           </div>
         </div>
       </div>
@@ -539,6 +558,116 @@ export function COTSpreadsTab() {
                 </>
               );
             })()}
+          </div>
+        </div>
+      )}
+
+      {/* Expanded Main Scatter Modal */}
+      {mainScatterExpanded && (
+        <div
+          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+          onClick={() => setMainScatterExpanded(false)}
+        >
+          <div
+            className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 max-w-[90vw] w-full max-h-[90vh] overflow-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-xl font-semibold text-white">
+                  {xAxisMode === "pctOI" ? "Net MM as % OI" : "Net MM Position"} vs. 1-3 Month Curve (%)
+                </h3>
+                <p className="text-sm text-zinc-400">
+                  R² = {currentRegression.r2.toFixed(4)}
+                </p>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex gap-1">
+                  <button
+                    className={`px-3 py-1.5 text-sm rounded ${xAxisMode === "pctOI" ? "bg-orange-500 text-white" : "bg-zinc-700 text-zinc-300"}`}
+                    onClick={() => setXAxisMode("pctOI")}
+                  >
+                    % OI
+                  </button>
+                  <button
+                    className={`px-3 py-1.5 text-sm rounded ${xAxisMode === "absolute" ? "bg-orange-500 text-white" : "bg-zinc-700 text-zinc-300"}`}
+                    onClick={() => setXAxisMode("absolute")}
+                  >
+                    Contracts
+                  </button>
+                </div>
+                <button
+                  onClick={() => setMainScatterExpanded(false)}
+                  className="text-zinc-400 hover:text-white transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            <div style={{ height: "65vh" }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <ComposedChart margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                  <XAxis
+                    type="number"
+                    dataKey="x"
+                    tick={{ fill: "#ffffff", fontSize: 12 }}
+                    domain={["auto", "auto"]}
+                    tickFormatter={(v) => xAxisMode === "pctOI" ? `${v.toFixed(0)}%` : formatNumber(v)}
+                  >
+                    <Label value={xAxisMode === "pctOI" ? "Net MM as % of OI" : "Net MM Position (contracts)"} position="bottom" offset={40} fill="#9ca3af" fontSize={12} />
+                  </XAxis>
+                  <YAxis
+                    type="number"
+                    dataKey="y"
+                    domain={[85, 115]}
+                    tick={{ fill: "#ffffff", fontSize: 12 }}
+                    tickFormatter={(v) => `${v}%`}
+                  >
+                    <Label value="1-3 Month Curve (%)" angle={-90} position="insideLeft" fill="#9ca3af" fontSize={12} />
+                  </YAxis>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#18181b",
+                      border: "1px solid #27272a",
+                      borderRadius: "0.5rem",
+                      fontSize: "12px",
+                      color: "#ffffff",
+                    }}
+                    labelStyle={{ color: "#ffffff" }}
+                    itemStyle={{ color: "#ffffff" }}
+                    formatter={(value: number, name: string) => {
+                      if (name === "y") return [`${value.toFixed(1)}%`, "1-3 %"];
+                      return [xAxisMode === "pctOI" ? `${value.toFixed(1)}%` : formatNumber(value), xAxisMode === "pctOI" ? "% OI" : "Net MM"];
+                    }}
+                  />
+                  <ReferenceLine y={100} stroke="#52525b" strokeDasharray="5 5" />
+                  <ReferenceLine x={0} stroke="#52525b" strokeDasharray="5 5" />
+
+                  {/* Quadrant labels */}
+                  <text x={60} y={50} fill="#22c55e" fontSize={16} fontWeight="bold">BUY</text>
+                  <text x={700} y={500} fill="#ef4444" fontSize={16} fontWeight="bold">SELL</text>
+
+                  {/* Regression line */}
+                  <Line
+                    data={regressionPoints}
+                    type="linear"
+                    dataKey="y"
+                    stroke="#6b7280"
+                    strokeDasharray="5 5"
+                    dot={false}
+                  />
+
+                  {/* Data points with labels */}
+                  <Scatter
+                    data={scatterPoints}
+                    fill="#3b82f6"
+                    shape={<LabeledScatterDot />}
+                  />
+                </ComposedChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       )}
