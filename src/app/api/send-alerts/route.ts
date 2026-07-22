@@ -576,10 +576,8 @@ export async function GET(request: NextRequest) {
   const testMode = searchParams.get("test") === "true";
   const subId = searchParams.get("subscription");
 
-  // Use production URL for fetching data
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "https://cftc-dashboard.vercel.app";
+  // Always use production URL for fetching data (VERCEL_URL is preview deployment URL which may not work)
+  const baseUrl = "https://cftc-dashboard.vercel.app";
 
   try {
     // Fetch subscriptions
