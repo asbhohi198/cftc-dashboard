@@ -23,10 +23,26 @@ function getDirectionBgColor(direction: string): string {
   return "#3f3f46";
 }
 
+// Get color based on trade action (BUY = green, SELL = red)
+function getTradeColor(tradeInstruction: string): string {
+  if (tradeInstruction.startsWith("BUY")) return "#22c55e";
+  if (tradeInstruction.startsWith("SELL")) return "#ef4444";
+  return "#a1a1aa";
+}
+
+function getTradeBgColor(tradeInstruction: string): string {
+  if (tradeInstruction.startsWith("BUY")) return "#22c55e20";
+  if (tradeInstruction.startsWith("SELL")) return "#ef444420";
+  return "#3f3f46";
+}
+
 function generateSignalRows(signals: COTSignalForEmail[]): string {
   return signals
     .map(
-      (signal) => `
+      (signal) => {
+        const tradeColor = signal.tradeInstruction ? getTradeColor(signal.tradeInstruction) : getDirectionColor(signal.direction);
+        const tradeBgColor = signal.tradeInstruction ? getTradeBgColor(signal.tradeInstruction) : getDirectionBgColor(signal.direction);
+        return `
       <tr>
         <td style="padding: 12px; border-bottom: 1px solid #333; color: #e4e4e7; font-weight: 500;">${signal.commodity}</td>
         <td style="padding: 12px; border-bottom: 1px solid #333; color: #a1a1aa; font-size: 12px;">${signal.signalLabel}</td>
@@ -35,13 +51,14 @@ function generateSignalRows(signals: COTSignalForEmail[]): string {
         </td>
         <td style="padding: 12px; border-bottom: 1px solid #333;">
           ${signal.tradeInstruction ? `
-            <span style="background-color: ${getDirectionBgColor(signal.direction)}; color: ${getDirectionColor(signal.direction)}; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
+            <span style="background-color: ${tradeBgColor}; color: ${tradeColor}; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
               ${signal.tradeInstruction}
             </span>
           ` : ""}
         </td>
       </tr>
-    `
+    `;
+      }
     )
     .join("");
 }
@@ -49,8 +66,11 @@ function generateSignalRows(signals: COTSignalForEmail[]): string {
 function generateSignalCards(signals: COTSignalForEmail[]): string {
   return signals
     .map(
-      (signal) => `
-      <div style="background-color: #1f1f23; border-radius: 8px; padding: 16px; margin-bottom: 12px; border-left: 3px solid ${getDirectionColor(signal.direction)};">
+      (signal) => {
+        const tradeColor = signal.tradeInstruction ? getTradeColor(signal.tradeInstruction) : getDirectionColor(signal.direction);
+        const tradeBgColor = signal.tradeInstruction ? getTradeBgColor(signal.tradeInstruction) : getDirectionBgColor(signal.direction);
+        return `
+      <div style="background-color: #1f1f23; border-radius: 8px; padding: 16px; margin-bottom: 12px; border-left: 3px solid ${tradeColor};">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <div>
             <span style="color: #e4e4e7; font-weight: 600; font-size: 14px;">${signal.commodity}</span>
@@ -65,13 +85,14 @@ function generateSignalCards(signals: COTSignalForEmail[]): string {
         <div style="margin-top: 8px; display: flex; justify-content: space-between; align-items: center;">
           <span style="color: #71717a; font-size: 12px;">${signal.signalLabel}</span>
           ${signal.tradeInstruction ? `
-            <span style="background-color: ${getDirectionBgColor(signal.direction)}; color: ${getDirectionColor(signal.direction)}; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600;">
+            <span style="background-color: ${tradeBgColor}; color: ${tradeColor}; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600;">
               ${signal.tradeInstruction}
             </span>
           ` : ""}
         </div>
       </div>
-    `
+    `;
+      }
     )
     .join("");
 }
