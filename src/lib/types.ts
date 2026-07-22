@@ -7,6 +7,7 @@ export type MainCategory =
   | "cot-ytd"
   | "cot-traders"
   | "cot-spreads"
+  | "cot-rvs"
   | "ags-grains"
   | "ags-softs"
   | "ags-livestock"
@@ -199,6 +200,10 @@ export const TAB_CONFIG: TabConfig[] = [
   {
     id: "cot-spreads",
     label: "COT vs Spreads",
+  },
+  {
+    id: "cot-rvs",
+    label: "COT - RVs",
   },
   {
     id: "ags-grains",
