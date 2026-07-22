@@ -574,7 +574,7 @@ export function COTSpreadsTab() {
               >
                 <h4 className="text-sm font-bold text-orange-400 mb-2">{item.name}</h4>
                 <ResponsiveContainer width="100%" height={180}>
-                  <ScatterChart margin={{ top: 10, right: 10, left: -25, bottom: 20 }}>
+                  <ScatterChart margin={{ top: 10, right: 5, left: -35, bottom: 15 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
                     <XAxis
                       type="number"
@@ -614,7 +614,7 @@ export function COTSpreadsTab() {
                   </ScatterChart>
                 </ResponsiveContainer>
                 {latestPoint && (
-                  <div className="text-xs text-zinc-400 mt-1 text-center">
+                  <div className="text-xs text-zinc-400 -mt-1 text-center">
                     Latest: ({formatNumber(latestPoint.mmNetAll)}, {latestPoint.spread.toFixed(1)})
                   </div>
                 )}
