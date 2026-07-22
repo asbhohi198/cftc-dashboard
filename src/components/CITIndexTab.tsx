@@ -234,7 +234,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
       key={row.id}
       className={`border-b border-zinc-800 ${highlight || ""}`}
     >
-      <td className="py-1.5 px-1 text-left text-white truncate" title={row.name}>{getShortName(row.name)}</td>
+      <td className="py-1.5 px-1 text-center text-white truncate" title={row.name}>{getShortName(row.name)}</td>
       <td className="py-1.5 px-1 text-center font-mono text-white">{formatNumber(row.indexNet)}</td>
       <td className="py-1.5 px-1 text-center font-mono text-zinc-400">{row.indexPctOI.toFixed(0)}%</td>
       <td className={`py-1.5 px-1 text-center font-mono ${row.change >= 0 ? "text-green-400" : "text-red-400"}`}>
@@ -250,7 +250,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
 
   const renderAggRow = (name: string, agg: NonNullable<typeof cswkwAgg>, bgColor: string) => (
     <tr key={name} className={`border-b border-zinc-800 ${bgColor}`}>
-      <td className="py-1.5 px-1 text-left text-white font-semibold truncate" title={name}>{name}</td>
+      <td className="py-1.5 px-1 text-center text-white font-semibold truncate" title={name}>{name}</td>
       <td className="py-1.5 px-1 text-center font-mono text-white font-semibold">{formatNumber(agg.indexNet)}</td>
       <td className="py-1.5 px-1 text-center font-mono text-zinc-400">{agg.indexPctOI.toFixed(0)}%</td>
       <td className={`py-1.5 px-1 text-center font-mono font-semibold ${agg.change >= 0 ? "text-green-400" : "text-red-400"}`}>
@@ -293,7 +293,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
           <table className="w-full text-xs table-fixed">
             <thead>
               <tr className="bg-zinc-800/50 border-b border-zinc-700">
-                <th className="text-left py-2 px-1 text-zinc-400 font-medium w-[70px]">Cmdty</th>
+                <th className="text-center py-2 px-1 text-zinc-400 font-medium w-[70px]">Cmdty</th>
                 <th className="text-center py-2 px-1 text-zinc-400 font-medium">Net</th>
                 <th className="text-center py-2 px-1 text-zinc-400 font-medium">%OI</th>
                 <th className="text-center py-2 px-1 text-zinc-400 font-medium">Chg</th>
@@ -326,7 +326,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
           className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 cursor-pointer hover:border-zinc-600 transition-colors"
           onClick={() => setExpandedChart("change")}
         >
-          <h3 className="text-xs font-semibold text-white mb-2">CHG WoW</h3>
+          <h3 className="text-xs font-semibold text-white mb-2">Index Net Chg WoW</h3>
           <div className="h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={changeChartData} margin={{ top: 12, right: 5, left: -25, bottom: 30 }}>
@@ -380,7 +380,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
           className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 cursor-pointer hover:border-zinc-600 transition-colors"
           onClick={() => setExpandedChart("pctMax")}
         >
-          <h3 className="text-xs font-semibold text-white mb-2">% Max</h3>
+          <h3 className="text-xs font-semibold text-white mb-2">Index Net % of Record Max</h3>
           <div className="h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={pctMaxChartData} margin={{ top: 12, right: 5, left: -20, bottom: 5 }}>
@@ -433,20 +433,20 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
             className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 cursor-pointer hover:border-zinc-600 transition-colors"
             onClick={() => setExpandedChart("cswkw")}
           >
-            <h3 className="text-xs font-semibold text-white mb-2">C+S+W+KW</h3>
+            <h3 className="text-xs font-semibold text-white mb-2">C+S+W+KW Index Net (Historical)</h3>
             <div className="h-[240px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={cswkwAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 12 }}>
+                <LineChart data={cswkwAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 18 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis
                     dataKey="date"
-                    tick={{ fill: "#ffffff", fontSize: 7 }}
+                    tick={{ fill: "#ffffff", fontSize: 9 }}
                     angle={-90}
                     textAnchor="end"
-                    height={25}
+                    height={28}
                     tickFormatter={formatChartDate}
                     interval={Math.floor(cswkwAgg.historicalData.length / 5)}
-                    dy={10}
+                    dy={12}
                   />
                   <YAxis
                     tick={{ fill: "#ffffff", fontSize: 9 }}
@@ -485,20 +485,20 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
             className="bg-zinc-900 border border-zinc-800 rounded-lg p-2 cursor-pointer hover:border-zinc-600 transition-colors"
             onClick={() => setExpandedChart("cswkw_sbo_sm")}
           >
-            <h3 className="text-xs font-semibold text-white mb-2">C+S+W+KW+SBO+SM</h3>
+            <h3 className="text-xs font-semibold text-white mb-2">All Grains Index Net (Historical)</h3>
             <div className="h-[240px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={cswkwSboSmAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 12 }}>
+                <LineChart data={cswkwSboSmAgg.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 18 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
                   <XAxis
                     dataKey="date"
-                    tick={{ fill: "#ffffff", fontSize: 7 }}
+                    tick={{ fill: "#ffffff", fontSize: 9 }}
                     angle={-90}
                     textAnchor="end"
-                    height={25}
+                    height={28}
                     tickFormatter={formatChartDate}
                     interval={Math.floor(cswkwSboSmAgg.historicalData.length / 5)}
-                    dy={10}
+                    dy={12}
                   />
                   <YAxis
                     tick={{ fill: "#ffffff", fontSize: 9 }}
