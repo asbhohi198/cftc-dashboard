@@ -188,6 +188,7 @@ function getSampleData(): SpreadData {
       { id: "cotton", name: "Cotton", spread: -2, spread_pct: 97, spread_unit: "c/lb", date: "2026-07-18", front_symbol: "CT-2026V", third_symbol: "CT-2026Z" },
       { id: "live-cattle", name: "Live Cattle", spread: 7, spread_pct: 103, spread_unit: "c/lb", date: "2026-07-18", front_symbol: "LE-2026Q", third_symbol: "LE-2026Z" },
       { id: "lean-hogs", name: "Lean Hogs", spread: -7, spread_pct: 93, spread_unit: "c/lb", date: "2026-07-18", front_symbol: "HE-2026Q", third_symbol: "HE-2026V" },
+      { id: "canola", name: "Canola", spread: 8, spread_pct: 101, spread_unit: "CAD/MT", date: "2026-07-18", front_symbol: "RS-2026X", third_symbol: "RS-2027H" },
     ],
     historical: {}
   };
