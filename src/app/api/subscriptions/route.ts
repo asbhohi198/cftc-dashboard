@@ -27,6 +27,7 @@ export interface EmailSubscription {
     tradersPctLongShort: SignalConfig; // COT traders % long/short (% threshold)
     cotRvs: SignalConfig;            // COT - RVs (z-score threshold)
     cotVsSpreads: SignalConfig;      // COT vs Spreads (z-score threshold)
+    citRollPosition: SignalConfig;   // CIT Roll Position alerts (z-score threshold)
   };
   recipients: string[];
   enabled: boolean;

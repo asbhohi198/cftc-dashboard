@@ -14,7 +14,7 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
   const [error, setError] = useState<string | null>(null);
   const [contractName, setContractName] = useState("Corn");
   const [isAgs, setIsAgs] = useState(true); // Only show old/new crop for ags
-  const [reportType, setReportType] = useState<"disagg" | "tff">("disagg");
+  const [reportType, setReportType] = useState<"disagg" | "tff" | "matif">("disagg");
 
   useEffect(() => {
     async function fetchData() {
@@ -344,9 +344,6 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
               alternateLabel="% OI"
               loading={loading}
             />
-            {reportType === "matif" && (
-              <p className="text-xs text-zinc-500 mt-1 italic">Matif: from &quot;Investment Funds&quot; field</p>
-            )}
           </div>
           <div>
             <COTChart
