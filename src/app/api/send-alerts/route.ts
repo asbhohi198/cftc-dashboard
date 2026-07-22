@@ -421,15 +421,56 @@ const MONTH_CODE_TO_NUM: Record<string, number> = {
   F: 1, G: 2, H: 3, J: 4, K: 5, M: 6, N: 7, Q: 8, U: 9, V: 10, X: 11, Z: 12
 };
 
-// Get current spread months for a commodity
-function getCurrentSpread(contractId: string): { front: string; back: string } {
+const MONTH_NAMES = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+// Calculate trading days between two dates (excludes weekends)
+function getTradingDaysBetween(start: Date, end: Date): number {
+  let count = 0;
+  const current = new Date(start);
+  while (current < end) {
+    const day = current.getDay();
+    if (day !== 0 && day !== 6) { // Not weekend
+      count++;
+    }
+    current.setDate(current.getDate() + 1);
+  }
+  return count;
+}
+
+// Get the 5th business day of a given month/year
+function getFifthBusinessDay(month: number, year: number): Date {
+  const date = new Date(year, month - 1, 1); // month is 0-indexed in Date
+  let businessDays = 0;
+  while (businessDays < 5) {
+    const day = date.getDay();
+    if (day !== 0 && day !== 6) {
+      businessDays++;
+      if (businessDays === 5) break;
+    }
+    date.setDate(date.getDate() + 1);
+  }
+  return date;
+}
+
+interface SpreadInfo {
+  front: string;
+  back: string;
+  rollMonth: string; // e.g., "Aug"
+  rollStartDate: string; // e.g., "Aug 7"
+  tradingDaysUntilRoll: number;
+  rollStatus: string; // e.g., "Roll in 12 sessions" or "Roll active" or "Roll complete"
+}
+
+// Get current spread months and roll info for a commodity
+function getCurrentSpreadWithRoll(contractId: string): SpreadInfo {
   const info = CIT_CONTRACT_INFO[contractId];
-  if (!info) return { front: "?", back: "?" };
+  if (!info) return { front: "?", back: "?", rollMonth: "?", rollStartDate: "?", tradingDaysUntilRoll: 0, rollStatus: "?" };
 
   const now = new Date();
   const currentMonth = now.getMonth() + 1; // 1-12
   const currentDay = now.getDate();
-  const currentYear = now.getFullYear() % 100; // Last 2 digits
+  const currentYear = now.getFullYear();
+  const yearShort = currentYear % 100; // Last 2 digits
 
   // Find the front month (first contract month that hasn't expired yet)
   // Contracts typically expire around the 5th of the delivery month
@@ -460,10 +501,40 @@ function getCurrentSpread(contractId: string): { front: string; back: string } {
 
   const frontMonth = info.months[frontIdx];
   const backMonth = info.months[backIdx];
+  const frontMonthNum = MONTH_CODE_TO_NUM[frontMonth];
+
+  // Roll period: Goldman Roll is typically business days 5-9 of the month PRIOR to the front month
+  let rollMonthNum = frontMonthNum - 1;
+  let rollYear = frontYear;
+  if (rollMonthNum < 1) {
+    rollMonthNum = 12;
+    rollYear = frontYear - 1;
+  }
+
+  const rollStartDate = getFifthBusinessDay(rollMonthNum, rollYear);
+  const rollEndDate = new Date(rollStartDate);
+  rollEndDate.setDate(rollEndDate.getDate() + 6); // ~5 trading days
+
+  // Calculate trading days until roll
+  const tradingDaysUntilRoll = getTradingDaysBetween(now, rollStartDate);
+
+  // Determine roll status
+  let rollStatus: string;
+  if (now < rollStartDate) {
+    rollStatus = `Roll starts in ${tradingDaysUntilRoll} sessions`;
+  } else if (now <= rollEndDate) {
+    rollStatus = "ROLL ACTIVE NOW";
+  } else {
+    rollStatus = "Roll complete for this contract";
+  }
 
   return {
-    front: `${frontMonth}${frontYear}`,
-    back: `${backMonth}${backYear}`,
+    front: `${frontMonth}${frontYear % 100}`,
+    back: `${backMonth}${backYear % 100}`,
+    rollMonth: MONTH_NAMES[rollMonthNum],
+    rollStartDate: `${MONTH_NAMES[rollMonthNum]} ${rollStartDate.getDate()}`,
+    tradingDaysUntilRoll,
+    rollStatus,
   };
 }
 
@@ -486,13 +557,12 @@ async function getCITRollSignals(
       if (Math.abs(zScore) >= threshold) {
         const info = CIT_CONTRACT_INFO[contract.id];
         const symbol = info?.symbol || contract.name.toUpperCase().substring(0, 2);
-        const spread = getCurrentSpread(contract.id);
+        const spread = getCurrentSpreadWithRoll(contract.id);
 
         // Positive z-score = MM more long than Index = roll pressure = sell calendar spread
         // Negative z-score = MM more short than Index = short covering = buy calendar spread
-        const spreadAction = zScore > 0
-          ? `SELL ${symbol} ${spread.front}/${spread.back}`
-          : `BUY ${symbol} ${spread.front}/${spread.back}`;
+        const action = zScore > 0 ? "SELL" : "BUY";
+        const spreadAction = `${action} ${symbol} ${spread.front}/${spread.back} | ${spread.rollStatus}`;
 
         signals.push({
           signalType: "citRollPosition",
