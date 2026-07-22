@@ -142,7 +142,7 @@ function DisaggregatedTable({ rows, citData }: { rows: SummaryRow[]; citData?: C
   const colWidth = "w-[30px]";
 
   return (
-    <table className="table-fixed text-[10px]" style={{ width: showCIT ? "950px" : "850px" }}>
+    <table className="table-fixed text-xs" style={{ width: showCIT ? "950px" : "850px" }}>
       <thead>
         <tr className="bg-zinc-800 border-b border-zinc-700">
           <th className="w-[70px] px-0.5 py-0.5 text-left font-semibold text-zinc-300 sticky left-0 bg-zinc-800 z-10" rowSpan={2}>
@@ -171,7 +171,7 @@ function DisaggregatedTable({ rows, citData }: { rows: SummaryRow[]; citData?: C
           </th>
           {showCIT && (
             <th className="px-px py-px text-center font-semibold text-cyan-400 border-l border-zinc-700" colSpan={3}>
-              CIT
+              Index
             </th>
           )}
         </tr>
@@ -249,7 +249,7 @@ function TFFTable({ rows }: { rows: SummaryRow[] }) {
   const colWidth = "w-[30px]";
 
   return (
-    <table className="table-fixed text-[10px]" style={{ width: "850px" }}>
+    <table className="table-fixed text-xs" style={{ width: "850px" }}>
       <thead>
         <tr className="bg-zinc-800 border-b border-zinc-700">
           <th className="w-[70px] px-0.5 py-0.5 text-left font-semibold text-zinc-300 sticky left-0 bg-zinc-800 z-10" rowSpan={2}>
