@@ -334,69 +334,99 @@ export function CornTab({ contractId = "corn" }: CornTabProps) {
           Aggregate Data
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <COTChart
-            title={`${contractName} - Managed Money Net Position`}
-            data={mmNetData}
-            lines={netLine}
-            alternateData={mmPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Spec Net Position`}
-            data={specNetData}
-            lines={netLine}
-            alternateData={specPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Producer Net Position`}
-            data={producerNetData}
-            lines={netLine}
-            alternateData={producerPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Swap Dealer Net Position`}
-            data={swapNetData}
-            lines={netLine}
-            alternateData={swapPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Other Reportables Net Position`}
-            data={otherNetData}
-            lines={netLine}
-            alternateData={otherPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Non-Reportables Net Position`}
-            data={nonReptNetData}
-            lines={netLine}
-            alternateData={nonReptPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
-          <COTChart
-            title={`${contractName} - Producer + Non-Reportables Net Position`}
-            data={prodNonReptNetData}
-            lines={netLine}
-            alternateData={prodNonReptPctOIData}
-            alternateLines={pctOILine}
-            alternateLabel="% OI"
-            loading={loading}
-          />
+          <div>
+            <COTChart
+              title={`${contractName} - Managed Money Net Position`}
+              data={mmNetData}
+              lines={netLine}
+              alternateData={mmPctOIData}
+              alternateLines={pctOILine}
+              alternateLabel="% OI"
+              loading={loading}
+            />
+            {reportType === "matif" && (
+              <p className="text-xs text-zinc-500 mt-1 italic">Matif: from &quot;Investment Funds&quot; field</p>
+            )}
+          </div>
+          <div>
+            <COTChart
+              title={`${contractName} - Spec Net Position`}
+              data={specNetData}
+              lines={netLine}
+              alternateData={specPctOIData}
+              alternateLines={pctOILine}
+              alternateLabel="% OI"
+              loading={loading}
+            />
+            {reportType === "matif" && (
+              <p className="text-xs text-zinc-500 mt-1 italic">Matif: Investment Funds + Investment Firms</p>
+            )}
+          </div>
+          <div>
+            <COTChart
+              title={`${contractName} - Producer Net Position`}
+              data={producerNetData}
+              lines={netLine}
+              alternateData={producerPctOIData}
+              alternateLines={pctOILine}
+              alternateLabel="% OI"
+              loading={loading}
+            />
+            {reportType === "matif" && (
+              <p className="text-xs text-zinc-500 mt-1 italic">Matif: from &quot;Commercial Undertakings&quot; field</p>
+            )}
+          </div>
+          <div>
+            <COTChart
+              title={`${contractName} - Swap Dealer Net Position`}
+              data={swapNetData}
+              lines={netLine}
+              alternateData={swapPctOIData}
+              alternateLines={pctOILine}
+              alternateLabel="% OI"
+              loading={loading}
+            />
+            {reportType === "matif" && (
+              <p className="text-xs text-zinc-500 mt-1 italic">Matif: from &quot;Other Financial Institutions&quot; field</p>
+            )}
+          </div>
+          <div>
+            <COTChart
+              title={`${contractName} - Other Reportables Net Position`}
+              data={otherNetData}
+              lines={netLine}
+              alternateData={otherPctOIData}
+              alternateLines={pctOILine}
+              alternateLabel="% OI"
+              loading={loading}
+            />
+            {reportType === "matif" && (
+              <p className="text-xs text-zinc-500 mt-1 italic">Matif: from &quot;Investment Firms&quot; field</p>
+            )}
+          </div>
+          {/* Hide non-reportables for Matif (emissions is always 0) */}
+          {reportType !== "matif" && (
+            <>
+              <COTChart
+                title={`${contractName} - Non-Reportables Net Position`}
+                data={nonReptNetData}
+                lines={netLine}
+                alternateData={nonReptPctOIData}
+                alternateLines={pctOILine}
+                alternateLabel="% OI"
+                loading={loading}
+              />
+              <COTChart
+                title={`${contractName} - Producer + Non-Reportables Net Position`}
+                data={prodNonReptNetData}
+                lines={netLine}
+                alternateData={prodNonReptPctOIData}
+                alternateLines={pctOILine}
+                alternateLabel="% OI"
+                loading={loading}
+              />
+            </>
+          )}
         </div>
       </div>
 
