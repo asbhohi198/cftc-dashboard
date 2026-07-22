@@ -531,6 +531,13 @@ export function SummaryTab() {
 
         // Get position date from first row with data
         const sectorPositionDate = sector.rows.length > 0 ? sector.rows[0].positionDate : "";
+        // Calculate release date: CFTC = +3 days (Fri release for Tue data), Matif = +5 days (Wed release for Fri data)
+        const releaseOffset = sector.reportType === "matif" ? 5 : 3;
+        const sectorReleaseDate = sectorPositionDate ? (() => {
+          const d = new Date(sectorPositionDate);
+          d.setDate(d.getDate() + releaseOffset);
+          return d.toISOString().split("T")[0];
+        })() : "";
 
         return (
           <div key={sector.sector} className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
@@ -544,8 +551,12 @@ export function SummaryTab() {
               </div>
               {sectorPositionDate && (
                 <div className="text-right">
-                  <p className="text-xs text-zinc-500">Position Date</p>
-                  <p className="text-sm font-medium text-zinc-300">{formatDate(sectorPositionDate)}</p>
+                  <p className="text-sm font-medium text-zinc-300">
+                    Position: {formatDate(sectorPositionDate)}
+                  </p>
+                  <p className="text-xs text-zinc-500">
+                    Released: {formatDate(sectorReleaseDate)}
+                  </p>
                 </div>
               )}
             </div>
