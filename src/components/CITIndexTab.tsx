@@ -160,9 +160,8 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
       if (h.indexNet < recordMin) recordMin = h.indexNet;
     }
 
-    // % of range (where current falls between min and max, 0% = at min, 100% = at max)
-    const range = recordMax - recordMin;
-    const pctMax = range > 0 ? ((indexNet - recordMin) / range) * 100 : 50;
+    // % of max (current position as % of record maximum)
+    const pctMax = recordMax > 0 ? (indexNet / recordMax) * 100 : 0;
 
     return {
       indexNet,
