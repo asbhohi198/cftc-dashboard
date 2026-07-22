@@ -558,3 +558,131 @@ export function parseCITRow(row: string): CITRecord | null {
     indexPctOI,
   };
 }
+
+// ============================================
+// Matif/Euronext COT Report (MiFID II Categories)
+// ============================================
+
+export const MATIF_CONTRACTS = {
+  "matif-wheat": { code: "EBM", name: "Matif Wheat", productId: "EBM-DPAR" },
+  "matif-corn": { code: "EMA", name: "Matif Corn", productId: "EMA-DPAR" },
+  "matif-rapeseed": { code: "ECO", name: "Matif Rapeseed", productId: "ECO-DPAR" },
+} as const;
+
+export type MatifContractId = keyof typeof MATIF_CONTRACTS;
+
+// Matif COT Record - MiFID II categories (different from CFTC)
+export interface MatifRecord {
+  date: string; // YYYY-MM-DD (position date, typically Friday)
+  reportDate: string; // Publication date (typically Wednesday)
+  openInterest: number;
+  // Investment Firms (banks, credit institutions)
+  invFirmsLong: number;
+  invFirmsShort: number;
+  invFirmsNet: number;
+  invFirmsTraders: number;
+  invFirmsPctOI: number;
+  // Investment Funds (UCITS, hedge funds, alt funds) - equivalent to Managed Money
+  invFundsLong: number;
+  invFundsShort: number;
+  invFundsNet: number;
+  invFundsTraders: number;
+  invFundsPctOI: number;
+  // Other Financial Institutions (insurers, pension funds)
+  otherFinLong: number;
+  otherFinShort: number;
+  otherFinNet: number;
+  otherFinTraders: number;
+  otherFinPctOI: number;
+  // Commercial Undertakings (producers, merchants) - equivalent to Producer/Merchant
+  commercialLong: number;
+  commercialShort: number;
+  commercialNet: number;
+  commercialTraders: number;
+  commercialPctOI: number;
+  // Emission Allowance Operators (only relevant for carbon markets)
+  emissionsLong: number;
+  emissionsShort: number;
+  emissionsNet: number;
+  emissionsTraders: number;
+  emissionsPctOI: number;
+  // For compatibility with COTRecord mapping:
+  // mmNetAll maps to invFundsNet (Investment Funds = Managed Money equivalent)
+  // producerNetAll maps to commercialNet
+  // swapNetAll maps to otherFinNet
+  // otherNetAll maps to invFirmsNet
+}
+
+// Convert MatifRecord to COTRecord for compatibility with existing tabs
+export function matifToCOTRecord(matif: MatifRecord): COTRecord {
+  return {
+    date: matif.date,
+    openInterestAll: matif.openInterest,
+    openInterestOld: matif.openInterest,
+    openInterestOther: 0,
+    // Map Commercial -> Producer
+    producerLongAll: matif.commercialLong,
+    producerShortAll: matif.commercialShort,
+    producerNetAll: matif.commercialNet,
+    producerLongOld: matif.commercialLong,
+    producerShortOld: matif.commercialShort,
+    producerNetOld: matif.commercialNet,
+    producerLongOther: 0, producerShortOther: 0, producerNetOther: 0,
+    // Map Other Financial -> Swap Dealer
+    swapLongAll: matif.otherFinLong,
+    swapShortAll: matif.otherFinShort,
+    swapSpreadAll: 0,
+    swapNetAll: matif.otherFinNet,
+    swapLongOld: matif.otherFinLong,
+    swapShortOld: matif.otherFinShort,
+    swapSpreadOld: 0,
+    swapNetOld: matif.otherFinNet,
+    swapLongOther: 0, swapShortOther: 0, swapSpreadOther: 0, swapNetOther: 0,
+    // Map Investment Funds -> Managed Money
+    mmLongAll: matif.invFundsLong,
+    mmShortAll: matif.invFundsShort,
+    mmSpreadAll: 0,
+    mmNetAll: matif.invFundsNet,
+    mmLongOld: matif.invFundsLong,
+    mmShortOld: matif.invFundsShort,
+    mmSpreadOld: 0,
+    mmNetOld: matif.invFundsNet,
+    mmLongOther: 0, mmShortOther: 0, mmSpreadOther: 0, mmNetOther: 0,
+    // Map Investment Firms -> Other Reportables
+    otherLongAll: matif.invFirmsLong,
+    otherShortAll: matif.invFirmsShort,
+    otherSpreadAll: 0,
+    otherNetAll: matif.invFirmsNet,
+    otherLongOld: matif.invFirmsLong,
+    otherShortOld: matif.invFirmsShort,
+    otherSpreadOld: 0,
+    otherNetOld: matif.invFirmsNet,
+    otherLongOther: 0, otherShortOther: 0, otherSpreadOther: 0, otherNetOther: 0,
+    // Emissions go to non-reportables (rarely used for ags)
+    nonReptLongAll: matif.emissionsLong,
+    nonReptShortAll: matif.emissionsShort,
+    nonReptNetAll: matif.emissionsNet,
+    nonReptLongOld: matif.emissionsLong,
+    nonReptShortOld: matif.emissionsShort,
+    nonReptNetOld: matif.emissionsNet,
+    nonReptLongOther: 0, nonReptShortOther: 0, nonReptNetOther: 0,
+    // Spec = Investment Funds + Investment Firms
+    specNetAll: matif.invFundsNet + matif.invFirmsNet,
+    specNetOld: matif.invFundsNet + matif.invFirmsNet,
+    specNetOther: 0,
+    // Number of traders
+    tradersProducerLong: matif.commercialTraders,
+    tradersProducerShort: matif.commercialTraders,
+    tradersSwapLong: matif.otherFinTraders,
+    tradersSwapShort: matif.otherFinTraders,
+    tradersSwapSpread: 0,
+    tradersMMLong: matif.invFundsTraders,
+    tradersMMShort: matif.invFundsTraders,
+    tradersMMSpread: 0,
+    tradersOtherLong: matif.invFirmsTraders,
+    tradersOtherShort: matif.invFirmsTraders,
+    tradersOtherSpread: 0,
+    tradersTotalLong: matif.commercialTraders + matif.otherFinTraders + matif.invFundsTraders + matif.invFirmsTraders,
+    tradersTotalShort: matif.commercialTraders + matif.otherFinTraders + matif.invFundsTraders + matif.invFirmsTraders,
+  };
+}

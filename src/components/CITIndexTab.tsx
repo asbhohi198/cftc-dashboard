@@ -76,7 +76,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
   const [reportDate, setReportDate] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [expandedChart, setExpandedChart] = useState<"cswkw" | "cswkw_sbo_sm" | "change" | "pctMax" | "livestock" | "softs" | "total" | null>(null);
+  const [expandedChart, setExpandedChart] = useState<"cswkw" | "cswkw_sbo_sm" | "change" | "pctMax" | "livestock" | "softs" | "total" | string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -704,6 +704,66 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
         )}
       </div>
 
+      {/* Separator */}
+      <div className="border-t border-zinc-700 my-6"></div>
+
+      {/* Individual Commodity Charts */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold text-white">Individual Commodity Index Positions</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {data.map((row) => (
+            <div
+              key={row.id}
+              className="bg-zinc-900 border border-zinc-800 rounded-lg p-3 cursor-pointer hover:border-zinc-600 transition-colors"
+              onClick={() => setExpandedChart(`individual-${row.id}`)}
+            >
+              <h4 className="text-sm font-semibold text-white mb-2">{row.name} Index Net</h4>
+              <div className="h-[180px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={row.historicalData} margin={{ top: 5, right: 5, left: -20, bottom: 18 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                    <XAxis
+                      dataKey="date"
+                      tick={{ fill: "#ffffff", fontSize: 8 }}
+                      angle={-90}
+                      textAnchor="end"
+                      height={25}
+                      tickFormatter={formatChartDate}
+                      interval={Math.floor(row.historicalData.length / 4)}
+                      dy={15}
+                    />
+                    <YAxis
+                      tick={{ fill: "#ffffff", fontSize: 8 }}
+                      tickFormatter={(v) => formatNumber(v)}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "#18181b",
+                        border: "1px solid #27272a",
+                        borderRadius: "0.5rem",
+                        fontSize: "12px",
+                        color: "#ffffff",
+                      }}
+                      labelStyle={{ color: "#ffffff" }}
+                      labelFormatter={(label) => formatDate(label)}
+                      formatter={(value: number) => [formatNumber(value), "Index Net"]}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="indexNet"
+                      name={`${row.name} Index Net`}
+                      stroke="#3b82f6"
+                      strokeWidth={1.5}
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Expanded Chart Modal */}
       {expandedChart && (
         <div
@@ -723,6 +783,7 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                 {expandedChart === "livestock" && "CIT Index Position - Livestock (LC+LH+FC)"}
                 {expandedChart === "softs" && "CIT Index Position - Softs (SB+KC+CC+CT)"}
                 {expandedChart === "total" && "CIT Index Position - Total (G+O+LVS+SFTS)"}
+                {expandedChart?.startsWith("individual-") && `CIT Index Position - ${data.find(d => d.id === expandedChart.replace("individual-", ""))?.name || ""}`}
               </h3>
               <button
                 onClick={() => setExpandedChart(null)}
@@ -795,6 +856,8 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                       expandedChart === "cswkw_sbo_sm" ? cswkwSboSmAgg?.historicalData :
                       expandedChart === "livestock" ? livestockAgg?.historicalData :
                       expandedChart === "softs" ? softsAgg?.historicalData :
+                      expandedChart === "total" ? totalAgg?.historicalData :
+                      expandedChart?.startsWith("individual-") ? data.find(d => d.id === expandedChart.replace("individual-", ""))?.historicalData :
                       totalAgg?.historicalData
                     }
                     margin={{ top: 10, right: 20, left: -5, bottom: 50 }}
@@ -812,7 +875,9 @@ export function CITIndexTab({ sector }: CITIndexTabProps) {
                         expandedChart === "cswkw_sbo_sm" ? cswkwSboSmAgg?.historicalData.length || 100 :
                         expandedChart === "livestock" ? livestockAgg?.historicalData.length || 100 :
                         expandedChart === "softs" ? softsAgg?.historicalData.length || 100 :
-                        totalAgg?.historicalData.length || 100
+                        expandedChart === "total" ? totalAgg?.historicalData.length || 100 :
+                        expandedChart?.startsWith("individual-") ? data.find(d => d.id === expandedChart.replace("individual-", ""))?.historicalData.length || 100 :
+                        100
                       ) / 20)}
                       dy={35}
                     />
