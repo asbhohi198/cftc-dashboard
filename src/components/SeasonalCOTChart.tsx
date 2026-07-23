@@ -253,9 +253,12 @@ export function SeasonalCOTChart({
         className="bg-zinc-900 border border-zinc-800 rounded-lg p-3 cursor-pointer hover:border-zinc-600 transition-colors"
         onClick={() => setIsExpanded(true)}
       >
-        <h4 className="text-sm font-medium text-white mb-2 truncate" title={title}>
-          {title}
-        </h4>
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-sm font-medium text-white truncate" title={title}>
+            {title}
+          </h4>
+          <span className="text-xs text-zinc-500">{chartData.length} pts | {years.length} yrs</span>
+        </div>
         {renderChart(false)}
       </div>
 
