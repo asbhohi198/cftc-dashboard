@@ -226,7 +226,7 @@ export function SeasonalCOTChart({
             ticks={monthStartDays}
             type="number"
             domain={["dataMin", "dataMax"]}
-            height={expanded ? 35 : 18}
+            height={expanded ? 35 : 30}
           />
           <YAxis
             tick={{ fill: "#ffffff", fontSize: expanded ? 12 : 10 }}
