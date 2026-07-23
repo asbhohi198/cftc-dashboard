@@ -28,6 +28,7 @@ export interface EmailSubscription {
     cotRvs: SignalConfig;            // COT - RVs (z-score threshold)
     cotVsSpreads: SignalConfig;      // COT vs Spreads (z-score threshold)
     citRollPosition: SignalConfig;   // CIT Roll Position alerts (z-score threshold)
+    seasonalOutliers: SignalConfig;  // Seasonal record alerts (toggle only)
   };
   recipients: string[];
   enabled: boolean;

@@ -24,6 +24,7 @@ export interface EmailSubscription {
     cotRvs: SignalConfig;            // COT - RVs (z-score threshold)
     cotVsSpreads: SignalConfig;      // COT vs Spreads (z-score threshold)
     citRollPosition: SignalConfig;   // CIT Roll Position alerts (z-score threshold)
+    seasonalOutliers: SignalConfig;  // Seasonal record alerts (toggle only)
   };
   recipients: string[];
   enabled: boolean;
@@ -93,6 +94,13 @@ const SIGNAL_DEFINITIONS = {
     options: [1.5, 2.0, 2.5, 3.0],
     defaultThreshold: 1.5,
   },
+  seasonalOutliers: {
+    label: "Seasonal Outliers",
+    description: "Alert when position is a seasonal record for this week across all CFTC history",
+    thresholdType: "toggle" as const,
+    options: [],
+    defaultThreshold: 0,
+  },
 };
 
 type SignalKey = keyof typeof SIGNAL_DEFINITIONS;
@@ -105,6 +113,7 @@ const DEFAULT_SIGNALS: EmailSubscription["signals"] = {
   cotRvs: { enabled: true, threshold: 2.0 },
   cotVsSpreads: { enabled: false, threshold: 2.0 },
   citRollPosition: { enabled: false, threshold: 1.5 },
+  seasonalOutliers: { enabled: false, threshold: 0 },
 };
 
 export function EmailSubsTab() {
@@ -289,6 +298,7 @@ export function EmailSubsTab() {
 
   const formatThreshold = (key: SignalKey, threshold: number) => {
     const def = SIGNAL_DEFINITIONS[key];
+    if (def.thresholdType === "toggle") return "";
     return def.thresholdType === "percent" ? `≥${threshold}%` : `≥${threshold}σ`;
   };
 
@@ -298,7 +308,8 @@ export function EmailSubsTab() {
       .map(key => {
         const def = SIGNAL_DEFINITIONS[key];
         const shortLabel = def.label.split(" ")[0];
-        return `${shortLabel} (${formatThreshold(key, signals[key].threshold)})`;
+        const threshold = formatThreshold(key, signals[key].threshold);
+        return threshold ? `${shortLabel} (${threshold})` : shortLabel;
       });
     return enabled.length > 0 ? enabled.join(", ") : "None";
   };
@@ -530,25 +541,27 @@ export function EmailSubsTab() {
                             </div>
                           </div>
 
-                          {/* Threshold selector */}
-                          <div className="flex gap-1">
-                            {def.options.map((opt) => (
-                              <button
-                                key={opt}
-                                onClick={() => setSignalThreshold(key, opt)}
-                                disabled={!signal.enabled}
-                                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
-                                  signal.threshold === opt && signal.enabled
-                                    ? "bg-orange-500 text-white"
-                                    : signal.enabled
-                                    ? "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
-                                    : "bg-zinc-800 text-zinc-600 cursor-not-allowed"
-                                }`}
-                              >
-                                {def.thresholdType === "percent" ? `${opt}%` : `${opt}σ`}
-                              </button>
-                            ))}
-                          </div>
+                          {/* Threshold selector - only show for non-toggle types */}
+                          {def.thresholdType !== "toggle" && (
+                            <div className="flex gap-1">
+                              {def.options.map((opt) => (
+                                <button
+                                  key={opt}
+                                  onClick={() => setSignalThreshold(key, opt)}
+                                  disabled={!signal.enabled}
+                                  className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                                    signal.threshold === opt && signal.enabled
+                                      ? "bg-orange-500 text-white"
+                                      : signal.enabled
+                                      ? "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
+                                      : "bg-zinc-800 text-zinc-600 cursor-not-allowed"
+                                  }`}
+                                >
+                                  {def.thresholdType === "percent" ? `${opt}%` : `${opt}σ`}
+                                </button>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
                     );
