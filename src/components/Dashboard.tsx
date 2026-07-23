@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { MainCategory, TAB_CONFIG } from "@/lib/types";
+import { MainCategory, TAB_CONFIG, SubSubTab } from "@/lib/types";
 import { TabNav } from "./TabNav";
 import { CornTab } from "./CornTab";
+import { SeasonalTab } from "./SeasonalTab";
 import { AllWheatTab } from "./AllWheatTab";
 import { AllOilseedsTab } from "./AllOilseedsTab";
 import { AllGrainsTab } from "./AllGrainsTab";
@@ -100,11 +101,26 @@ const SUB_TAB_TO_CONTRACT: Record<string, string> = {
   "ethereum": "ethereum",
 };
 
+// Tabs that support Outright/Seasonal sub-subtabs
+const SEASONAL_TABS: MainCategory[] = [
+  "ags-grains",
+  "ags-softs",
+  "ags-livestock",
+  "ags-other",
+  "energy",
+  "metals",
+  "equities",
+  "rates",
+  "fx",
+  "crypto",
+];
+
 export function Dashboard() {
   const [activeTab, setActiveTab] = useState<MainCategory>("home");
   const [activeSubTab, setActiveSubTab] = useState<string | null>(null);
+  const [activeSubSubTab, setActiveSubSubTab] = useState<SubSubTab>("outright");
 
-  const handleTabChange = (tab: MainCategory, subTab?: string | null) => {
+  const handleTabChange = (tab: MainCategory, subTab?: string | null, subSubTab?: SubSubTab) => {
     setActiveTab(tab);
     // If tab has sub-tabs, set the first one as default, otherwise null
     const tabConfig = TAB_CONFIG.find((t) => t.id === tab);
@@ -114,6 +130,16 @@ export function Dashboard() {
       setActiveSubTab(tabConfig.subTabs[0].id);
     } else {
       setActiveSubTab(null);
+    }
+    // Set sub-subtab (default to outright for new tab selections)
+    if (subSubTab !== undefined) {
+      setActiveSubSubTab(subSubTab);
+    } else if (SEASONAL_TABS.includes(tab)) {
+      // Keep current sub-subtab when switching within seasonal tabs
+      // Reset to outright when switching from non-seasonal tab
+      if (!SEASONAL_TABS.includes(activeTab)) {
+        setActiveSubSubTab("outright");
+      }
     }
   };
 
@@ -139,6 +165,7 @@ export function Dashboard() {
           <TabNav
             activeTab={activeTab}
             activeSubTab={activeSubTab}
+            activeSubSubTab={activeSubSubTab}
             onTabChange={handleTabChange}
           />
         </div>
@@ -153,6 +180,14 @@ export function Dashboard() {
             <>
               <span className="mx-2">/</span>
               <span className="text-orange-400">{currentSubTabLabel}</span>
+            </>
+          )}
+          {SEASONAL_TABS.includes(activeTab) && activeSubTab && (
+            <>
+              <span className="mx-2">/</span>
+              <span className={activeSubSubTab === "seasonal" ? "text-blue-400" : "text-zinc-400"}>
+                {activeSubSubTab === "seasonal" ? "Seasonal" : "Outright"}
+              </span>
             </>
           )}
         </div>
@@ -343,74 +378,125 @@ export function Dashboard() {
         )}
 
         {/* Ags - Grains & Oilseeds */}
-        {activeTab === "ags-grains" && activeSubTab === "all-us-wheat" && (
+        {activeTab === "ags-grains" && activeSubTab === "all-us-wheat" && activeSubSubTab === "outright" && (
           <AllWheatTab />
         )}
-        {activeTab === "ags-grains" && activeSubTab === "all-us-oilseeds" && (
+        {activeTab === "ags-grains" && activeSubTab === "all-us-wheat" && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId="all-us-wheat" />
+        )}
+        {activeTab === "ags-grains" && activeSubTab === "all-us-oilseeds" && activeSubSubTab === "outright" && (
           <AllOilseedsTab />
         )}
-        {activeTab === "ags-grains" && activeSubTab === "all-us-grains" && (
+        {activeTab === "ags-grains" && activeSubTab === "all-us-oilseeds" && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId="all-us-oilseeds" />
+        )}
+        {activeTab === "ags-grains" && activeSubTab === "all-us-grains" && activeSubSubTab === "outright" && (
           <AllGrainsTab />
         )}
-        {activeTab === "ags-grains" && activeSubTab === "all-us-go" && (
+        {activeTab === "ags-grains" && activeSubTab === "all-us-grains" && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId="all-us-grains" />
+        )}
+        {activeTab === "ags-grains" && activeSubTab === "all-us-go" && activeSubSubTab === "outright" && (
           <AllGOTab />
         )}
-        {activeTab === "ags-grains" && activeSubTab === "oc-nc-mm-splits" && (
+        {activeTab === "ags-grains" && activeSubTab === "all-us-go" && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId="all-us-go" />
+        )}
+        {activeTab === "ags-grains" && activeSubTab === "oc-nc-mm-splits" && activeSubSubTab === "outright" && (
           <OCNCMMSplitsTab />
         )}
-        {activeTab === "ags-grains" && activeSubTab !== "all-us-wheat" && activeSubTab !== "all-us-oilseeds" && activeSubTab !== "all-us-grains" && activeSubTab !== "all-us-go" && activeSubTab !== "oc-nc-mm-splits" && contractId && (
+        {activeTab === "ags-grains" && activeSubTab === "oc-nc-mm-splits" && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId="oc-nc-mm-splits" />
+        )}
+        {activeTab === "ags-grains" && activeSubTab !== "all-us-wheat" && activeSubTab !== "all-us-oilseeds" && activeSubTab !== "all-us-grains" && activeSubTab !== "all-us-go" && activeSubTab !== "oc-nc-mm-splits" && contractId && activeSubSubTab === "outright" && (
           <CornTab contractId={contractId} />
+        )}
+        {activeTab === "ags-grains" && activeSubTab !== "all-us-wheat" && activeSubTab !== "all-us-oilseeds" && activeSubTab !== "all-us-grains" && activeSubTab !== "all-us-go" && activeSubTab !== "oc-nc-mm-splits" && contractId && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId={contractId} />
         )}
 
         {/* Ags - Softs */}
-        {activeTab === "ags-softs" && activeSubTab === "all-us-softs" && (
+        {activeTab === "ags-softs" && activeSubTab === "all-us-softs" && activeSubSubTab === "outright" && (
           <AllSoftsTab />
         )}
-        {activeTab === "ags-softs" && activeSubTab !== "all-us-softs" && contractId && (
+        {activeTab === "ags-softs" && activeSubTab === "all-us-softs" && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId="all-us-softs" />
+        )}
+        {activeTab === "ags-softs" && activeSubTab !== "all-us-softs" && contractId && activeSubSubTab === "outright" && (
           <CornTab contractId={contractId} />
+        )}
+        {activeTab === "ags-softs" && activeSubTab !== "all-us-softs" && contractId && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId={contractId} />
         )}
 
         {/* Ags - Livestock */}
-        {activeTab === "ags-livestock" && activeSubTab === "all-livestock" && (
+        {activeTab === "ags-livestock" && activeSubTab === "all-livestock" && activeSubSubTab === "outright" && (
           <AllLivestockTab />
         )}
-        {activeTab === "ags-livestock" && activeSubTab !== "all-livestock" && contractId && (
+        {activeTab === "ags-livestock" && activeSubTab === "all-livestock" && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId="all-livestock" />
+        )}
+        {activeTab === "ags-livestock" && activeSubTab !== "all-livestock" && contractId && activeSubSubTab === "outright" && (
           <CornTab contractId={contractId} />
+        )}
+        {activeTab === "ags-livestock" && activeSubTab !== "all-livestock" && contractId && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId={contractId} />
         )}
 
         {/* Ags - Other */}
-        {activeTab === "ags-other" && contractId && (
+        {activeTab === "ags-other" && contractId && activeSubSubTab === "outright" && (
           <CornTab contractId={contractId} />
+        )}
+        {activeTab === "ags-other" && contractId && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId={contractId} />
         )}
 
         {/* Energy */}
-        {activeTab === "energy" && contractId && (
+        {activeTab === "energy" && contractId && activeSubSubTab === "outright" && (
           <CornTab contractId={contractId} />
+        )}
+        {activeTab === "energy" && contractId && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId={contractId} />
         )}
 
         {/* Metals */}
-        {activeTab === "metals" && contractId && (
+        {activeTab === "metals" && contractId && activeSubSubTab === "outright" && (
           <CornTab contractId={contractId} />
+        )}
+        {activeTab === "metals" && contractId && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId={contractId} />
         )}
 
         {/* Equities */}
-        {activeTab === "equities" && contractId && (
+        {activeTab === "equities" && contractId && activeSubSubTab === "outright" && (
           <CornTab contractId={contractId} />
+        )}
+        {activeTab === "equities" && contractId && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId={contractId} />
         )}
 
         {/* Rates */}
-        {activeTab === "rates" && contractId && (
+        {activeTab === "rates" && contractId && activeSubSubTab === "outright" && (
           <CornTab contractId={contractId} />
+        )}
+        {activeTab === "rates" && contractId && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId={contractId} />
         )}
 
         {/* FX */}
-        {activeTab === "fx" && contractId && (
+        {activeTab === "fx" && contractId && activeSubSubTab === "outright" && (
           <CornTab contractId={contractId} />
+        )}
+        {activeTab === "fx" && contractId && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId={contractId} />
         )}
 
         {/* Crypto */}
-        {activeTab === "crypto" && contractId && (
+        {activeTab === "crypto" && contractId && activeSubSubTab === "outright" && (
           <CornTab contractId={contractId} />
+        )}
+        {activeTab === "crypto" && contractId && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId={contractId} />
         )}
 
         {/* Email Subscriptions */}

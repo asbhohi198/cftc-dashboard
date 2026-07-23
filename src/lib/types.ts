@@ -24,6 +24,9 @@ export type MainCategory =
   | "crypto"
   | "email-subs";
 
+// Sub-subtab for Outright vs Seasonal view
+export type SubSubTab = "outright" | "seasonal";
+
 // Sub-tabs for each category
 export type AgsGrainsSubTab =
   | "corn"

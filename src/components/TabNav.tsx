@@ -1,17 +1,33 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { MainCategory, TAB_CONFIG } from "@/lib/types";
+import { MainCategory, TAB_CONFIG, SubSubTab } from "@/lib/types";
 import { ChevronDown } from "lucide-react";
+
+// Tabs that support Outright/Seasonal sub-subtabs
+const SEASONAL_TABS: MainCategory[] = [
+  "ags-grains",
+  "ags-softs",
+  "ags-livestock",
+  "ags-other",
+  "energy",
+  "metals",
+  "equities",
+  "rates",
+  "fx",
+  "crypto",
+];
 
 interface TabNavProps {
   activeTab: MainCategory;
   activeSubTab: string | null;
-  onTabChange: (tab: MainCategory, subTab?: string | null) => void;
+  activeSubSubTab: SubSubTab;
+  onTabChange: (tab: MainCategory, subTab?: string | null, subSubTab?: SubSubTab) => void;
 }
 
-export function TabNav({ activeTab, activeSubTab, onTabChange }: TabNavProps) {
+export function TabNav({ activeTab, activeSubTab, activeSubSubTab, onTabChange }: TabNavProps) {
   const [openDropdown, setOpenDropdown] = useState<MainCategory | null>(null);
+  const [hoveredSubTab, setHoveredSubTab] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
@@ -36,10 +52,19 @@ export function TabNav({ activeTab, activeSubTab, onTabChange }: TabNavProps) {
     }
   };
 
-  const handleSubTabClick = (tab: MainCategory, subTabId: string) => {
-    onTabChange(tab, subTabId);
+  const handleSubTabClick = (tab: MainCategory, subTabId: string, subSubTab?: SubSubTab) => {
+    onTabChange(tab, subTabId, subSubTab || "outright");
     setOpenDropdown(null);
+    setHoveredSubTab(null);
   };
+
+  const handleSubSubTabClick = (tab: MainCategory, subTabId: string, subSubTab: SubSubTab) => {
+    onTabChange(tab, subTabId, subSubTab);
+    setOpenDropdown(null);
+    setHoveredSubTab(null);
+  };
+
+  const hasSeasonalSupport = (tabId: MainCategory) => SEASONAL_TABS.includes(tabId);
 
   return (
     <nav className="flex flex-wrap gap-1" ref={dropdownRef}>
@@ -71,19 +96,60 @@ export function TabNav({ activeTab, activeSubTab, onTabChange }: TabNavProps) {
             {/* Dropdown menu */}
             {hasSubTabs && isDropdownOpen && (
               <div className="absolute top-full left-0 mt-1 bg-zinc-900 border border-zinc-700 rounded-md shadow-lg z-50 min-w-[160px]">
-                {tab.subTabs!.map((subTab) => (
-                  <button
-                    key={subTab.id}
-                    onClick={() => handleSubTabClick(tab.id, subTab.id)}
-                    className={`w-full text-left px-3 py-2 text-xs transition-colors ${
-                      activeTab === tab.id && activeSubTab === subTab.id
-                        ? "bg-orange-500/20 text-orange-400"
-                        : "text-zinc-300 hover:bg-zinc-800 hover:text-white"
-                    }`}
-                  >
-                    {subTab.label}
-                  </button>
-                ))}
+                {tab.subTabs!.map((subTab) => {
+                  const showSeasonalFlyout = hasSeasonalSupport(tab.id);
+                  const isSubTabHovered = hoveredSubTab === subTab.id;
+                  const isActiveSubTab = activeTab === tab.id && activeSubTab === subTab.id;
+
+                  return (
+                    <div
+                      key={subTab.id}
+                      className="relative"
+                      onMouseEnter={() => showSeasonalFlyout && setHoveredSubTab(subTab.id)}
+                      onMouseLeave={() => setHoveredSubTab(null)}
+                    >
+                      <button
+                        onClick={() => handleSubTabClick(tab.id, subTab.id)}
+                        className={`w-full text-left px-3 py-2 text-xs transition-colors flex items-center justify-between ${
+                          isActiveSubTab
+                            ? "bg-orange-500/20 text-orange-400"
+                            : "text-zinc-300 hover:bg-zinc-800 hover:text-white"
+                        }`}
+                      >
+                        <span>{subTab.label}</span>
+                        {showSeasonalFlyout && (
+                          <ChevronDown className="w-3 h-3 -rotate-90" />
+                        )}
+                      </button>
+
+                      {/* Sub-subtab flyout (Outright / Seasonal) */}
+                      {showSeasonalFlyout && isSubTabHovered && (
+                        <div className="absolute left-full top-0 ml-1 bg-zinc-900 border border-zinc-700 rounded-md shadow-lg z-50 min-w-[100px]">
+                          <button
+                            onClick={() => handleSubSubTabClick(tab.id, subTab.id, "outright")}
+                            className={`w-full text-left px-3 py-2 text-xs transition-colors ${
+                              isActiveSubTab && activeSubSubTab === "outright"
+                                ? "bg-orange-500/20 text-orange-400"
+                                : "text-zinc-300 hover:bg-zinc-800 hover:text-white"
+                            }`}
+                          >
+                            Outright
+                          </button>
+                          <button
+                            onClick={() => handleSubSubTabClick(tab.id, subTab.id, "seasonal")}
+                            className={`w-full text-left px-3 py-2 text-xs transition-colors ${
+                              isActiveSubTab && activeSubSubTab === "seasonal"
+                                ? "bg-orange-500/20 text-orange-400"
+                                : "text-zinc-300 hover:bg-zinc-800 hover:text-white"
+                            }`}
+                          >
+                            Seasonal
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
