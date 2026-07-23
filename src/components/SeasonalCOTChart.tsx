@@ -53,11 +53,18 @@ function dayToMonth(day: number): string {
   return "Dec";
 }
 
-// Get day of year from date
-function getDayOfYear(date: Date): number {
-  const start = new Date(date.getFullYear(), 0, 0);
+// Get day of year from date string (YYYY-MM-DD format)
+function getDayOfYear(dateStr: string): number {
+  const [year, month, day] = dateStr.split("-").map(Number);
+  const date = new Date(year, month - 1, day);
+  const start = new Date(year, 0, 0);
   const diff = date.getTime() - start.getTime();
   return Math.floor(diff / (1000 * 60 * 60 * 24));
+}
+
+// Get year from date string
+function getYear(dateStr: string): number {
+  return parseInt(dateStr.split("-")[0], 10);
 }
 
 function formatNumber(num: number): string {
@@ -70,18 +77,18 @@ function formatNumber(num: number): string {
 }
 
 // Custom X-axis tick with vertical rotation
-const CustomXAxisTick = (props: { x?: number; y?: number; payload?: { value: number } }) => {
-  const { x = 0, y = 0, payload } = props;
+const CustomXAxisTick = (props: { x?: number; y?: number; payload?: { value: number }; expanded?: boolean }) => {
+  const { x = 0, y = 0, payload, expanded = false } = props;
   const month = dayToMonth(payload?.value || 1);
   return (
     <g transform={`translate(${x},${y})`}>
       <text
         x={0}
         y={0}
-        dy={16}
+        dy={expanded ? 20 : 18}
         textAnchor="end"
         fill="#ffffff"
-        fontSize={11}
+        fontSize={expanded ? 11 : 9}
         transform="rotate(-90)"
       >
         {month}
@@ -120,13 +127,13 @@ export function SeasonalCOTChart({
     const yearsSet = new Set<number>();
 
     data.forEach((d) => {
-      const date = new Date(d.date);
-      const year = date.getFullYear();
+      if (!d.date || d.value === undefined || d.value === null) return;
+
+      const year = getYear(d.date);
       if (year < minYear) return;
-      if (d.value === undefined || d.value === null) return;
 
       yearsSet.add(year);
-      const dayOfYear = getDayOfYear(date);
+      const dayOfYear = getDayOfYear(d.date);
       if (!byDay[dayOfYear]) byDay[dayOfYear] = {};
       // Use string key for year to ensure Recharts can match dataKey
       byDay[dayOfYear][year.toString()] = d.value;
@@ -164,6 +171,20 @@ export function SeasonalCOTChart({
     );
   }
 
+  // Show message if no data
+  if (chartData.length === 0 || years.length === 0) {
+    return (
+      <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-3">
+        <h4 className="text-sm font-medium text-white mb-2 truncate" title={title}>
+          {title}
+        </h4>
+        <div className="h-[200px] flex items-center justify-center text-zinc-500 text-sm">
+          No data available
+        </div>
+      </div>
+    );
+  }
+
   // Month start days for x-axis ticks
   const monthStartDays = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
 
@@ -178,10 +199,10 @@ export function SeasonalCOTChart({
           <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
           <XAxis
             dataKey="day"
-            tick={<CustomXAxisTick />}
+            tick={<CustomXAxisTick expanded={expanded} />}
             ticks={monthStartDays}
             domain={[1, 365]}
-            height={expanded ? 40 : 30}
+            height={expanded ? 40 : 28}
           />
           <YAxis
             tick={{ fill: "#ffffff", fontSize: expanded ? 12 : 10 }}
