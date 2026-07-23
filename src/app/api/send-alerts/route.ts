@@ -870,7 +870,7 @@ async function getSeasonalOutliersSignals(
     if (data.length < 52) continue; // Need at least 1 year of data
 
     for (const { field, label } of fieldsToCheck) {
-      const result = checkSeasonalRecord(data, field, 14, rankOffset);
+      const result = checkSeasonalRecord(data, field, 10, rankOffset);
 
       if (result.isMax || result.isMin) {
         signals.push({
@@ -900,7 +900,7 @@ async function getSeasonalOutliersSignals(
             value: d.mmNetSpread,
           }));
           if (data.length < 52) continue;
-          const result = checkSeasonalRecordGeneric(data, 14, rankOffset);
+          const result = checkSeasonalRecordGeneric(data, 10, rankOffset);
           if (result.isMax || result.isMin) {
             signals.push({
               signalType: "seasonalOutliers",
@@ -932,7 +932,7 @@ async function getSeasonalOutliersSignals(
             value: d.indexNet,
           }));
           if (data.length < 52) continue;
-          const result = checkSeasonalRecordGeneric(data, 14, rankOffset);
+          const result = checkSeasonalRecordGeneric(data, 10, rankOffset);
           if (result.isMax || result.isMin) {
             signals.push({
               signalType: "seasonalOutliers",
@@ -964,7 +964,7 @@ async function getSeasonalOutliersSignals(
             value: d.notionalValue,
           }));
           if (data.length < 52) continue;
-          const result = checkSeasonalRecordGeneric(data, 14, rankOffset);
+          const result = checkSeasonalRecordGeneric(data, 10, rankOffset);
           if (result.isMax || result.isMin) {
             signals.push({
               signalType: "seasonalOutliers",
@@ -996,7 +996,7 @@ async function getSeasonalOutliersSignals(
             value: d.volAdjustedPosition,
           }));
           if (data.length < 52) continue;
-          const result = checkSeasonalRecordGeneric(data, 14, rankOffset);
+          const result = checkSeasonalRecordGeneric(data, 10, rankOffset);
           if (result.isMax || result.isMin) {
             signals.push({
               signalType: "seasonalOutliers",
