@@ -1,0 +1,40 @@
+name: Scrape Matif COT Data
+
+on:
+  schedule:
+    # Run every Wednesday at 6 PM UTC (after Euronext publishes reports)
+    # Euronext typically publishes around 4-5 PM CET (3-4 PM UTC)
+    - cron: '0 18 * * 3'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Matif COT scraper
+        run: python scripts/scrape_matif_cot.py
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --quiet public/data/matif_cot.json || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push if changed
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add public/data/matif_cot.json
+          git commit -m "Auto-update Matif COT data $(date +'%Y-%m-%d')"
+          git push

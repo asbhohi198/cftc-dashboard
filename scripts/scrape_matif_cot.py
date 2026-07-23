@@ -235,33 +235,73 @@ def get_wednesdays(start_date: datetime, end_date: datetime) -> List[datetime]:
     return wednesdays
 
 
-def scrape_all_data() -> Dict[str, List[Dict]]:
-    """Scrape all historical COT data for all products."""
-    end_date = datetime.now()
-    wednesdays = get_wednesdays(START_DATE, end_date)
+def load_existing_data() -> Optional[Dict[str, List[Dict]]]:
+    """Load existing data from JSON file."""
+    output_path = os.path.join(OUTPUT_DIR, "matif_cot.json")
+    try:
+        with open(output_path, "r") as f:
+            data = json.load(f)
+            return data.get("data", {})
+    except FileNotFoundError:
+        return None
+    except Exception as e:
+        print(f"Error loading existing data: {e}")
+        return None
 
-    print(f"Fetching data from {START_DATE.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}")
-    print(f"Total Wednesdays to check: {len(wednesdays)}")
+
+def scrape_all_data(incremental: bool = True) -> Dict[str, List[Dict]]:
+    """Scrape COT data for all products.
+
+    Args:
+        incremental: If True, only fetch data newer than existing records.
+    """
+    end_date = datetime.now()
+
+    # Load existing data for incremental updates
+    existing_data = load_existing_data() if incremental else None
 
     results = {product_id: [] for product_id in PRODUCTS.keys()}
 
     for product_id, product_code in PRODUCTS.items():
+        # Determine start date based on existing data
+        start_date = START_DATE
+        existing_records = []
+
+        if existing_data and product_id in existing_data:
+            existing_records = existing_data[product_id]
+            if existing_records:
+                # Get the last report date and start from the next week
+                last_date_str = existing_records[-1].get("reportDate", "")
+                if last_date_str:
+                    last_date = datetime.strptime(last_date_str, "%Y-%m-%d")
+                    start_date = last_date + timedelta(days=1)
+                    print(f"{product_id}: Found {len(existing_records)} existing records through {last_date_str}")
+
+        wednesdays = get_wednesdays(start_date, end_date)
+
+        if not wednesdays:
+            print(f"{product_id}: Already up to date")
+            results[product_id] = existing_records
+            continue
+
         print(f"\n{'='*60}")
         print(f"Fetching {product_id} ({product_code})...")
+        print(f"Checking {len(wednesdays)} Wednesdays from {start_date.strftime('%Y-%m-%d')}")
         print(f"{'='*60}")
 
         success_count = 0
         fail_count = 0
+        new_records = []
 
         for i, wed in enumerate(wednesdays):
-            if i % 20 == 0:
+            if i % 20 == 0 and len(wednesdays) > 20:
                 print(f"  Progress: {i}/{len(wednesdays)} ({wed.strftime('%Y-%m-%d')})")
 
             html = fetch_report(product_code, wed)
             if html:
                 record = parse_report(html, wed)
                 if record:
-                    results[product_id].append(record)
+                    new_records.append(record)
                     success_count += 1
                 else:
                     fail_count += 1
@@ -271,23 +311,33 @@ def scrape_all_data() -> Dict[str, List[Dict]]:
             # Be nice to the server
             time.sleep(0.1)
 
-        print(f"  Completed: {success_count} reports fetched, {fail_count} missing/failed")
-        results[product_id].sort(key=lambda x: x["date"])
+        print(f"  Completed: {success_count} new reports fetched, {fail_count} missing/failed")
+
+        # Combine existing and new records
+        all_records = existing_records + new_records
+        all_records.sort(key=lambda x: x["date"])
+        results[product_id] = all_records
 
     return results
 
 
 def main():
     """Main function to scrape and save Matif COT data."""
+    import sys
+
+    # Check for --full flag
+    full_refresh = "--full" in sys.argv
+
     print("=" * 60)
-    print("Matif COT Historical Data Scraper")
+    print("Matif COT Data Scraper")
+    print(f"Mode: {'FULL REFRESH' if full_refresh else 'INCREMENTAL UPDATE'}")
     print(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60)
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     try:
-        data = scrape_all_data()
+        data = scrape_all_data(incremental=not full_refresh)
         total = sum(len(records) for records in data.values())
 
         output = {
