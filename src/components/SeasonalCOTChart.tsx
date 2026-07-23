@@ -201,7 +201,8 @@ export function SeasonalCOTChart({
             dataKey="day"
             tick={<CustomXAxisTick expanded={expanded} />}
             ticks={monthStartDays}
-            domain={[1, 365]}
+            type="number"
+            domain={["dataMin", "dataMax"]}
             height={expanded ? 40 : 28}
           />
           <YAxis
@@ -233,13 +234,15 @@ export function SeasonalCOTChart({
           {years.map((year) => (
             <Line
               key={year}
-              type="monotone"
+              type="linear"
               dataKey={year.toString()}
               name={year.toString()}
               stroke={getYearColor(year)}
-              strokeWidth={year === CURRENT_YEAR ? 3 : 1}
-              dot={false}
-              connectNulls={false}
+              strokeWidth={year === CURRENT_YEAR ? 3 : 1.5}
+              dot={year === CURRENT_YEAR ? { r: 2, fill: getYearColor(year) } : false}
+              connectNulls
+              isAnimationActive={false}
+              strokeOpacity={1}
             />
           ))}
         </LineChart>
@@ -257,7 +260,9 @@ export function SeasonalCOTChart({
           <h4 className="text-sm font-medium text-white truncate" title={title}>
             {title}
           </h4>
-          <span className="text-xs text-zinc-500">{chartData.length} pts | {years.length} yrs</span>
+          <span className="text-xs text-zinc-500">
+            {chartData.length} pts | {years.length} yrs | sample: {chartData[0] ? JSON.stringify(Object.keys(chartData[0])) : 'none'}
+          </span>
         </div>
         {renderChart(false)}
       </div>
