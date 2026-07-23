@@ -120,8 +120,8 @@ function generateSignalCards(signals: COTSignalForEmail[]): string {
         <div style="margin-top: 8px; display: flex; justify-content: space-between; align-items: center;">
           <span style="color: #71717a; font-size: 12px;">${signal.signalLabel}</span>
           ${instructionText ? `
-            <span style="background-color: ${instructionBg}; color: ${instructionColor}; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">
-              ${instructionText}
+            <span style="background-color: ${instructionBg}; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">
+              <font color="${instructionColor}" style="color: ${instructionColor};">${instructionText}</font>
             </span>
           ` : ""}
         </div>
