@@ -176,6 +176,9 @@ export function COTvsPriceTab() {
       date: d.date,
     }));
 
+    // Latest data point (highlighted in red)
+    const latestPoint = scatterData.length > 0 ? [scatterData[scatterData.length - 1]] : [];
+
     // Calculate regression line endpoints
     const xValues = scatterData.map((d) => d.x);
     const xMin = Math.min(...xValues);
@@ -222,6 +225,8 @@ export function COTvsPriceTab() {
           <ReferenceLine x={0} stroke="#52525b" />
           <ReferenceLine y={0} stroke="#52525b" />
           <Scatter data={scatterData} fill="#3b82f6" opacity={0.6} />
+          {/* Latest data point in red */}
+          <Scatter data={latestPoint} fill="#ef4444" opacity={1} />
           {/* Regression line */}
           <Scatter data={regressionLine} fill="#f97316" line={{ stroke: "#f97316", strokeWidth: 2 }} shape={() => null} />
         </ScatterChart>
@@ -374,7 +379,7 @@ export function COTvsPriceTab() {
                     <td className="p-3 text-center">
                       <div className="flex items-center justify-center gap-1">
                         <TrendingUp className="w-3 h-3 text-green-400" />
-                        <span className="text-white">{formatPrice(commodity.priceToMaxLong)}</span>
+                        <span className="text-white">{Math.round(commodity.priceToMaxLong).toLocaleString()}</span>
                         <span className="text-green-400 text-xs">
                           ({priceChangeToMaxLong >= 0 ? "+" : ""}{priceChangeToMaxLong.toFixed(1)}%)
                         </span>
@@ -383,7 +388,7 @@ export function COTvsPriceTab() {
                     <td className="p-3 text-center">
                       <div className="flex items-center justify-center gap-1">
                         <TrendingDown className="w-3 h-3 text-red-400" />
-                        <span className="text-white">{formatPrice(commodity.priceToMaxShort)}</span>
+                        <span className="text-white">{Math.round(commodity.priceToMaxShort).toLocaleString()}</span>
                         <span className="text-red-400 text-xs">
                           ({priceChangeToMaxShort >= 0 ? "+" : ""}{priceChangeToMaxShort.toFixed(1)}%)
                         </span>
@@ -514,7 +519,7 @@ export function COTvsPriceTab() {
                       <span className="text-xs text-zinc-500">If MM goes to record long:</span>
                     </div>
                     <div className="text-lg font-bold text-green-400">
-                      {formatPrice(commodity.priceToMaxLong)}
+                      {Math.round(commodity.priceToMaxLong).toLocaleString()}
                     </div>
                     <div className="text-xs text-green-400/70">
                       {((commodity.priceToMaxLong - commodity.currentPrice) / commodity.currentPrice * 100).toFixed(1)}% from current
@@ -526,7 +531,7 @@ export function COTvsPriceTab() {
                       <span className="text-xs text-zinc-500">If MM goes to record short:</span>
                     </div>
                     <div className="text-lg font-bold text-red-400">
-                      {formatPrice(commodity.priceToMaxShort)}
+                      {Math.round(commodity.priceToMaxShort).toLocaleString()}
                     </div>
                     <div className="text-xs text-red-400/70">
                       {((commodity.priceToMaxShort - commodity.currentPrice) / commodity.currentPrice * 100).toFixed(1)}% from current
