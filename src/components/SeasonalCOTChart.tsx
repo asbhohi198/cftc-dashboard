@@ -239,7 +239,7 @@ export function SeasonalCOTChart({
               dataKey={year.toString()}
               name={year.toString()}
               stroke={getYearColor(year)}
-              strokeWidth={year === CURRENT_YEAR ? 3 : 1.5}
+              strokeWidth={year === CURRENT_YEAR ? (expanded ? 5 : 3) : 1.5}
               dot={year === CURRENT_YEAR ? { r: 2, fill: getYearColor(year) } : false}
               connectNulls
               isAnimationActive={false}
@@ -270,7 +270,7 @@ export function SeasonalCOTChart({
           onClick={() => setIsExpanded(false)}
         >
           <div
-            className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 max-w-5xl w-full max-h-[90vh] overflow-auto"
+            className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 max-w-[90vw] w-full max-h-[90vh] overflow-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
