@@ -41,83 +41,92 @@ except ImportError:
 # Output directory
 OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "public", "data")
 
-# Commodity configurations with Norgate symbols
+# Month code to number mapping
+MONTH_CODES = {
+    "F": 1, "G": 2, "H": 3, "J": 4, "K": 5, "M": 6,
+    "N": 7, "Q": 8, "U": 9, "V": 10, "X": 11, "Z": 12
+}
+
+# Commodity configurations
 COMMODITIES = {
     # Ags - Grains
     "corn": {
         "name": "Corn",
-        "norgate_symbol": "ZC&",  # Continuous contract
+        "norgate_prefix": "ZC",
+        "months": ["H", "K", "N", "U", "Z"],
         "cftc_code": "002602",
         "report_type": "disagg",
         "sector": "ags-grains"
     },
     "chicago-wheat": {
         "name": "Chicago Wheat",
-        "norgate_symbol": "ZW&",
+        "norgate_prefix": "ZW",
+        "months": ["H", "K", "N", "U", "Z"],
         "cftc_code": "001602",
         "report_type": "disagg",
         "sector": "ags-grains"
     },
     "kansas-wheat": {
         "name": "Kansas Wheat",
-        "norgate_symbol": "KE&",
+        "norgate_prefix": "KE",
+        "months": ["H", "K", "N", "U", "Z"],
         "cftc_code": "001612",
         "report_type": "disagg",
         "sector": "ags-grains"
     },
     "soybeans": {
         "name": "Soybeans",
-        "norgate_symbol": "ZS&",
+        "norgate_prefix": "ZS",
+        "months": ["F", "H", "K", "N", "Q", "U", "X"],
         "cftc_code": "005602",
         "report_type": "disagg",
         "sector": "ags-grains"
     },
     "soymeal": {
         "name": "Soybean Meal",
-        "norgate_symbol": "ZM&",
+        "norgate_prefix": "ZM",
+        "months": ["F", "H", "K", "N", "Q", "U", "V", "Z"],
         "cftc_code": "026603",
         "report_type": "disagg",
         "sector": "ags-grains"
     },
     "soyoil": {
         "name": "Soybean Oil",
-        "norgate_symbol": "ZL&",
+        "norgate_prefix": "ZL",
+        "months": ["F", "H", "K", "N", "Q", "U", "V", "Z"],
         "cftc_code": "007601",
-        "report_type": "disagg",
-        "sector": "ags-grains"
-    },
-    "canola": {
-        "name": "Canola",
-        "norgate_symbol": "RS&",
-        "cftc_code": "135731",
         "report_type": "disagg",
         "sector": "ags-grains"
     },
     # Ags - Softs
     "sugar": {
         "name": "Sugar #11",
-        "norgate_symbol": "SB&",
+        "norgate_prefix": "SB",
+        "months": ["H", "K", "N", "V"],
         "cftc_code": "080732",
         "report_type": "disagg",
         "sector": "ags-softs"
     },
     "cotton": {
         "name": "Cotton",
-        "norgate_symbol": "CT&",
+        "norgate_prefix": "CT",
+        "months": ["H", "K", "N", "V", "Z"],
         "cftc_code": "033661",
         "report_type": "disagg",
         "sector": "ags-softs"
     },
     "arabica-coffee": {
         "name": "Coffee C",
-        "norgate_symbol": "KC&",
+        "norgate_prefix": "KC",
+        "months": ["H", "K", "N", "U", "Z"],
         "cftc_code": "083731",
         "report_type": "disagg",
         "sector": "ags-softs"
     },
     "ny-cocoa": {
         "name": "Cocoa",
-        "norgate_symbol": "CC&",
+        "norgate_prefix": "CC",
+        "months": ["H", "K", "N", "U", "Z"],
         "cftc_code": "073732",
         "report_type": "disagg",
         "sector": "ags-softs"
@@ -125,21 +134,24 @@ COMMODITIES = {
     # Ags - Livestock
     "live-cattle": {
         "name": "Live Cattle",
-        "norgate_symbol": "LE&",
+        "norgate_prefix": "LE",
+        "months": ["G", "J", "M", "Q", "V", "Z"],
         "cftc_code": "057642",
         "report_type": "disagg",
         "sector": "ags-livestock"
     },
     "feeder-cattle": {
         "name": "Feeder Cattle",
-        "norgate_symbol": "GF&",
+        "norgate_prefix": "GF",
+        "months": ["F", "H", "J", "K", "Q", "U", "V", "X"],
         "cftc_code": "061641",
         "report_type": "disagg",
         "sector": "ags-livestock"
     },
     "lean-hogs": {
         "name": "Lean Hogs",
-        "norgate_symbol": "HE&",
+        "norgate_prefix": "HE",
+        "months": ["G", "J", "K", "M", "N", "Q", "V", "Z"],
         "cftc_code": "054642",
         "report_type": "disagg",
         "sector": "ags-livestock"
@@ -147,155 +159,123 @@ COMMODITIES = {
     # Energy
     "wti-crude": {
         "name": "WTI Crude Oil",
-        "norgate_symbol": "CL&",
+        "norgate_prefix": "CL",
+        "months": ["F", "G", "H", "J", "K", "M", "N", "Q", "U", "V", "X", "Z"],
         "cftc_code": "067651",
-        "report_type": "disagg",
-        "sector": "energy"
-    },
-    "brent-crude": {
-        "name": "Brent Crude",
-        "norgate_symbol": "BRN&",
-        "cftc_code": "06765T",
         "report_type": "disagg",
         "sector": "energy"
     },
     "natural-gas": {
         "name": "Natural Gas",
-        "norgate_symbol": "NG&",
+        "norgate_prefix": "NG",
+        "months": ["F", "G", "H", "J", "K", "M", "N", "Q", "U", "V", "X", "Z"],
         "cftc_code": "023651",
-        "report_type": "disagg",
-        "sector": "energy"
-    },
-    "rbob-gasoline": {
-        "name": "RBOB Gasoline",
-        "norgate_symbol": "RB&",
-        "cftc_code": "111659",
-        "report_type": "disagg",
-        "sector": "energy"
-    },
-    "heating-oil": {
-        "name": "Heating Oil",
-        "norgate_symbol": "HO&",
-        "cftc_code": "022651",
         "report_type": "disagg",
         "sector": "energy"
     },
     # Metals
     "gold": {
         "name": "Gold",
-        "norgate_symbol": "GC&",
+        "norgate_prefix": "GC",
+        "months": ["G", "J", "M", "Q", "V", "Z"],
         "cftc_code": "088691",
         "report_type": "disagg",
         "sector": "metals"
     },
     "silver": {
         "name": "Silver",
-        "norgate_symbol": "SI&",
+        "norgate_prefix": "SI",
+        "months": ["H", "K", "N", "U", "Z"],
         "cftc_code": "084691",
         "report_type": "disagg",
         "sector": "metals"
     },
     "copper": {
         "name": "Copper",
-        "norgate_symbol": "HG&",
+        "norgate_prefix": "HG",
+        "months": ["H", "K", "N", "U", "Z"],
         "cftc_code": "085692",
         "report_type": "disagg",
         "sector": "metals"
     },
-    "platinum": {
-        "name": "Platinum",
-        "norgate_symbol": "PL&",
-        "cftc_code": "076651",
-        "report_type": "disagg",
-        "sector": "metals"
-    },
-    "palladium": {
-        "name": "Palladium",
-        "norgate_symbol": "PA&",
-        "cftc_code": "075651",
-        "report_type": "disagg",
-        "sector": "metals"
-    },
-    # Equities (using CME E-mini futures)
-    "sp500": {
-        "name": "S&P 500 E-mini",
-        "norgate_symbol": "ES&",
-        "cftc_code": "13874A",
-        "report_type": "tff",
-        "sector": "equities"
-    },
-    "nasdaq100": {
-        "name": "Nasdaq 100 E-mini",
-        "norgate_symbol": "NQ&",
-        "cftc_code": "209742",
-        "report_type": "tff",
-        "sector": "equities"
-    },
-    # Rates
-    "10y-note": {
-        "name": "10-Year T-Note",
-        "norgate_symbol": "ZN&",
-        "cftc_code": "043602",
-        "report_type": "tff",
-        "sector": "rates"
-    },
-    "2y-note": {
-        "name": "2-Year T-Note",
-        "norgate_symbol": "ZT&",
-        "cftc_code": "042601",
-        "report_type": "tff",
-        "sector": "rates"
-    },
-    "5y-note": {
-        "name": "5-Year T-Note",
-        "norgate_symbol": "ZF&",
-        "cftc_code": "044601",
-        "report_type": "tff",
-        "sector": "rates"
-    },
-    "30y-bond": {
-        "name": "30-Year T-Bond",
-        "norgate_symbol": "ZB&",
-        "cftc_code": "020601",
-        "report_type": "tff",
-        "sector": "rates"
-    },
-    # FX
-    "eurusd": {
-        "name": "Euro FX",
-        "norgate_symbol": "6E&",
-        "cftc_code": "099741",
-        "report_type": "tff",
-        "sector": "fx"
-    },
-    "usdjpy": {
-        "name": "Japanese Yen",
-        "norgate_symbol": "6J&",
-        "cftc_code": "097741",
-        "report_type": "tff",
-        "sector": "fx"
-    },
-    "gbpusd": {
-        "name": "British Pound",
-        "norgate_symbol": "6B&",
-        "cftc_code": "096742",
-        "report_type": "tff",
-        "sector": "fx"
-    },
-    "audusd": {
-        "name": "Australian Dollar",
-        "norgate_symbol": "6A&",
-        "cftc_code": "232741",
-        "report_type": "tff",
-        "sector": "fx"
-    },
 }
 
 
+def get_front_contract(prefix: str, months: List[str], as_of_date: datetime) -> Optional[str]:
+    """Get the front month contract symbol for a given date."""
+    current_year = as_of_date.year
+    current_month = as_of_date.month
+    current_day = as_of_date.day
+    EXPIRY_DAY = 5
+
+    for year_offset in range(2):
+        year = current_year + year_offset
+        year_suffix = str(year)
+        for month_code in months:
+            month_num = MONTH_CODES[month_code]
+
+            if year == current_year:
+                if month_num < current_month:
+                    continue
+                if month_num == current_month and current_day > EXPIRY_DAY:
+                    continue
+
+            return f"{prefix}-{year_suffix}{month_code}"
+
+    return None
+
+
+def fetch_price_data(prefix: str, months: List[str]) -> pd.DataFrame:
+    """
+    Fetch historical price data by stitching together front month contracts.
+    """
+    current_year = datetime.now().year
+
+    # Fetch all contracts from 2015 to now (need 2015 to have data for 2016)
+    contracts_data = {}
+
+    for year in range(2015, current_year + 2):
+        year_suffix = str(year)
+        for month_code in months:
+            symbol = f"{prefix}-{year_suffix}{month_code}"
+            try:
+                prices = norgatedata.price_timeseries(symbol, format="pandas-dataframe")
+                if prices is not None and len(prices) > 0:
+                    contracts_data[symbol] = prices
+            except:
+                pass
+
+    if not contracts_data:
+        return pd.DataFrame()
+
+    # Build continuous price series using front month
+    start_date = datetime(2016, 1, 1)
+    end_date = datetime.now()
+
+    price_records = []
+    current_date = start_date
+
+    while current_date <= end_date:
+        front_symbol = get_front_contract(prefix, months, current_date)
+
+        if front_symbol and front_symbol in contracts_data:
+            df = contracts_data[front_symbol]
+            if current_date in df.index:
+                price_records.append({
+                    "date": current_date.strftime("%Y-%m-%d"),
+                    "price": float(df.loc[current_date, "Close"])
+                })
+
+        current_date += timedelta(days=1)
+
+    if not price_records:
+        return pd.DataFrame()
+
+    return pd.DataFrame(price_records)
+
+
 def fetch_cot_data(cftc_code: str, report_type: str) -> pd.DataFrame:
-    """
-    Fetch COT data from CFTC for a single contract from 2016 onwards.
-    """
+    """Fetch COT data from CFTC for a single contract from 2016 onwards."""
     all_records = []
     current_year = datetime.now().year
 
@@ -320,11 +300,10 @@ def fetch_cot_data(cftc_code: str, report_type: str) -> pd.DataFrame:
 
             lines = content.strip().split('\n')
 
-            for line in lines[1:]:  # Skip header
+            for line in lines[1:]:
                 if not line.strip():
                     continue
 
-                # Check if this line contains our contract code
                 if report_type == "tff":
                     if f",{cftc_code}," not in line and f",{cftc_code} ," not in line:
                         continue
@@ -332,7 +311,6 @@ def fetch_cot_data(cftc_code: str, report_type: str) -> pd.DataFrame:
                     if f'"{cftc_code}"' not in line:
                         continue
 
-                # Parse the line
                 fields = []
                 current = ""
                 in_quotes = False
@@ -353,16 +331,14 @@ def fetch_cot_data(cftc_code: str, report_type: str) -> pd.DataFrame:
                     cleaned = ''.join(c for c in s if c.isdigit() or c == '-' or c == '.')
                     return float(cleaned) if cleaned else 0
 
-                date = fields[2]  # Report_Date_as_YYYY-MM-DD
+                date = fields[2]
 
                 if report_type == "tff":
-                    # TFF report: Leveraged Funds = Managed Money
                     mm_long = parse_num(fields[14])
                     mm_short = parse_num(fields[15])
                     mm_net = mm_long - mm_short
                     open_interest = parse_num(fields[7])
                 else:
-                    # Disaggregated report
                     mm_long = parse_num(fields[13])
                     mm_short = parse_num(fields[14])
                     mm_net = mm_long - mm_short
@@ -389,41 +365,21 @@ def fetch_cot_data(cftc_code: str, report_type: str) -> pd.DataFrame:
     return df
 
 
-def fetch_price_data(norgate_symbol: str) -> pd.DataFrame:
-    """
-    Fetch price data from Norgate.
-    """
-    try:
-        prices = norgatedata.price_timeseries(
-            norgate_symbol,
-            start_date="2016-01-01",
-            format="pandas-dataframe"
-        )
-
-        if prices is None or len(prices) == 0:
-            return pd.DataFrame()
-
-        return prices[['Close']].rename(columns={'Close': 'price'})
-
-    except Exception as e:
-        print(f"    Error fetching Norgate data: {e}")
-        return pd.DataFrame()
-
-
 def align_data(cot_df: pd.DataFrame, price_df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Align COT data with price data.
-    COT is weekly (Tuesday as-of date), find nearest price.
-    """
+    """Align COT data with price data."""
     if cot_df.empty or price_df.empty:
         return pd.DataFrame()
+
+    # Convert price_df date to datetime index
+    price_df['date'] = pd.to_datetime(price_df['date'])
+    price_df = price_df.set_index('date')
 
     aligned_records = []
 
     for date, row in cot_df.iterrows():
-        # Find closest price within +/- 3 days
+        # Find closest price within +/- 5 days
         price = None
-        for offset in range(4):
+        for offset in range(6):
             check_date = date + timedelta(days=offset)
             if check_date in price_df.index:
                 price = price_df.loc[check_date, 'price']
@@ -457,16 +413,13 @@ def align_data(cot_df: pd.DataFrame, price_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def calculate_regression(data: pd.DataFrame) -> dict:
-    """
-    Calculate regression: price_change_pct = alpha + beta * mm_change
-    """
+    """Calculate regression: price_change_pct = alpha + beta * mm_change"""
     if len(data) < 10:
         return {"beta": 0, "alpha": 0, "r_squared": 0, "correlation": 0}
 
     x = data['mm_change'].values
     y = data['price_change_pct'].values
 
-    # Remove any NaN/inf
     mask = np.isfinite(x) & np.isfinite(y)
     x = x[mask]
     y = y[mask]
@@ -485,9 +438,7 @@ def calculate_regression(data: pd.DataFrame) -> dict:
 
 
 def process_commodity(commodity_id: str, config: dict) -> Optional[dict]:
-    """
-    Process a single commodity: fetch data, align, calculate regression.
-    """
+    """Process a single commodity: fetch data, align, calculate regression."""
     print(f"\nProcessing {config['name']}...")
 
     # Fetch COT data
@@ -500,7 +451,7 @@ def process_commodity(commodity_id: str, config: dict) -> Optional[dict]:
 
     # Fetch price data
     print(f"  Fetching price data from Norgate...")
-    price_df = fetch_price_data(config['norgate_symbol'])
+    price_df = fetch_price_data(config['norgate_prefix'], config['months'])
     if price_df.empty:
         print(f"  No price data found")
         return None
@@ -557,9 +508,7 @@ def process_commodity(commodity_id: str, config: dict) -> Optional[dict]:
 
 
 def export_data():
-    """
-    Main export function - processes all commodities and saves to JSON.
-    """
+    """Main export function - processes all commodities and saves to JSON."""
     print("=" * 60)
     print("COT vs Price Data Export")
     print(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
