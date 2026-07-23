@@ -116,18 +116,20 @@ export function SeasonalCOTChart({
     }
 
     const minYear = yearRange === "all" ? 0 : CURRENT_YEAR - parseInt(yearRange);
-    const byDay: Record<number, Record<number, number>> = {};
+    const byDay: Record<number, Record<string, number>> = {};
     const yearsSet = new Set<number>();
 
     data.forEach((d) => {
       const date = new Date(d.date);
       const year = date.getFullYear();
       if (year < minYear) return;
+      if (d.value === undefined || d.value === null) return;
 
       yearsSet.add(year);
       const dayOfYear = getDayOfYear(date);
       if (!byDay[dayOfYear]) byDay[dayOfYear] = {};
-      byDay[dayOfYear][year] = d.value;
+      // Use string key for year to ensure Recharts can match dataKey
+      byDay[dayOfYear][year.toString()] = d.value;
     });
 
     // Convert to chart format
@@ -167,8 +169,8 @@ export function SeasonalCOTChart({
 
   const renderChart = (expanded: boolean) => {
     const chartMargin = expanded
-      ? { top: 20, right: 20, left: -10, bottom: 40 }
-      : { top: 10, right: 5, left: -25, bottom: 25 };
+      ? { top: 20, right: 20, left: -15, bottom: 30 }
+      : { top: 5, right: 5, left: -30, bottom: 15 };
 
     return (
       <ResponsiveContainer width="100%" height={expanded ? 500 : 200}>
@@ -179,7 +181,7 @@ export function SeasonalCOTChart({
             tick={<CustomXAxisTick />}
             ticks={monthStartDays}
             domain={[1, 365]}
-            height={40}
+            height={expanded ? 40 : 30}
           />
           <YAxis
             tick={{ fill: "#ffffff", fontSize: expanded ? 12 : 10 }}
