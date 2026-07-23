@@ -122,8 +122,8 @@ function generateSignalCards(signals: COTSignalForEmail[]): string {
           ${instructionText ? `
             <table cellpadding="0" cellspacing="0" border="0" style="display: inline-table;">
               <tr>
-                <td bgcolor="${instructionBg}" style="background-color: ${instructionBg}; padding: 4px 10px; border-radius: 4px; mso-line-height-rule: exactly;">
-                  <font color="${instructionColor}" style="color: ${instructionColor}; font-size: 12px; font-weight: 600; text-decoration: none;">${instructionText}</font>
+                <td bgcolor="${instructionBg}" class="${isSeasonal ? 'seasonal-badge' : ''}" style="background-color: ${instructionBg}; padding: 4px 10px; border-radius: 4px; mso-line-height-rule: exactly;">
+                  <font color="${instructionColor}" class="${isSeasonal ? 'seasonal-badge' : ''}" style="color: ${instructionColor} !important; font-size: 12px; font-weight: 600; text-decoration: none;">${instructionText}</font>
                 </td>
               </tr>
             </table>
@@ -198,7 +198,15 @@ export function generateCOTAlertEmail(
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <meta name="supported-color-schemes" content="light dark">
   <title>CFTC Positioning Alert</title>
+  <style>
+    :root { color-scheme: light dark; }
+    @media (prefers-color-scheme: dark) {
+      .seasonal-badge { color: #FFFFFF !important; background-color: #3f3f46 !important; }
+    }
+  </style>
 </head>
 <body style="margin: 0; padding: 0; background-color: #09090b; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #09090b; padding: 20px;">
