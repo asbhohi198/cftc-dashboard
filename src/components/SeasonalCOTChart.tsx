@@ -85,7 +85,8 @@ const CustomXAxisTick = (props: { x?: number; y?: number; payload?: { value: num
       <text
         x={0}
         y={0}
-        dy={expanded ? 20 : 18}
+        dx={-4}
+        dy={expanded ? 16 : 12}
         textAnchor="end"
         fill="#ffffff"
         fontSize={expanded ? 11 : 9}
@@ -190,11 +191,11 @@ export function SeasonalCOTChart({
 
   const renderChart = (expanded: boolean) => {
     const chartMargin = expanded
-      ? { top: 20, right: 20, left: -15, bottom: 30 }
-      : { top: 5, right: 5, left: -30, bottom: 15 };
+      ? { top: 20, right: 20, left: -15, bottom: 20 }
+      : { top: 5, right: 5, left: -30, bottom: 5 };
 
     return (
-      <ResponsiveContainer width="100%" height={expanded ? 500 : 200}>
+      <ResponsiveContainer width="100%" height={expanded ? 800 : 200}>
         <LineChart data={chartData} margin={chartMargin}>
           <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
           <XAxis
@@ -203,7 +204,7 @@ export function SeasonalCOTChart({
             ticks={monthStartDays}
             type="number"
             domain={["dataMin", "dataMax"]}
-            height={expanded ? 40 : 28}
+            height={expanded ? 35 : 22}
           />
           <YAxis
             tick={{ fill: "#ffffff", fontSize: expanded ? 12 : 10 }}
@@ -256,14 +257,9 @@ export function SeasonalCOTChart({
         className="bg-zinc-900 border border-zinc-800 rounded-lg p-3 cursor-pointer hover:border-zinc-600 transition-colors"
         onClick={() => setIsExpanded(true)}
       >
-        <div className="flex items-center justify-between mb-2">
-          <h4 className="text-sm font-medium text-white truncate" title={title}>
-            {title}
-          </h4>
-          <span className="text-xs text-zinc-500">
-            {chartData.length} pts | {years.length} yrs | sample: {chartData[0] ? JSON.stringify(Object.keys(chartData[0])) : 'none'}
-          </span>
-        </div>
+        <h4 className="text-sm font-medium text-white mb-2 truncate" title={title}>
+          {title}
+        </h4>
         {renderChart(false)}
       </div>
 
