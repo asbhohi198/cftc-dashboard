@@ -28,6 +28,7 @@ interface EmailSubscription {
     cotRvs: SignalConfig;
     cotVsSpreads: SignalConfig;
     citRollPosition: SignalConfig;
+    seasonalOutliers?: SignalConfig;
   };
   recipients: string[];
   enabled: boolean;
@@ -720,6 +721,281 @@ async function getCotVsSpreadsSignals(
   return signals;
 }
 
+// Helper: Get current day of year
+function getCurrentDayOfYear(): number {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = now.getTime() - start.getTime();
+  return Math.floor(diff / (1000 * 60 * 60 * 24));
+}
+
+// Helper: Get day of year from date string
+function getDayOfYearFromDate(dateStr: string): number {
+  const [year, month, day] = dateStr.split("-").map(Number);
+  const date = new Date(year, month - 1, day);
+  const start = new Date(year, 0, 0);
+  const diff = date.getTime() - start.getTime();
+  return Math.floor(diff / (1000 * 60 * 60 * 24));
+}
+
+// Check if a value is a seasonal record (high or low)
+function checkSeasonalRecord(
+  data: COTRecord[],
+  field: keyof COTRecord,
+  tolerance: number = 7
+): { isMax: boolean; isMin: boolean; currentValue: number | null } {
+  const currentYear = new Date().getFullYear();
+  const currentDayOfYear = getCurrentDayOfYear();
+
+  let currentValue: number | null = null;
+  let currentDayFound = 0;
+  const historicalValues: number[] = [];
+
+  for (const d of data) {
+    const [year] = d.date.split("-").map(Number);
+    const dayOfYear = getDayOfYearFromDate(d.date);
+    const value = d[field];
+
+    if (typeof value !== "number") continue;
+
+    if (Math.abs(dayOfYear - currentDayOfYear) <= tolerance) {
+      if (year === currentYear) {
+        if (currentValue === null || Math.abs(dayOfYear - currentDayOfYear) < Math.abs(currentDayFound - currentDayOfYear)) {
+          currentValue = value;
+          currentDayFound = dayOfYear;
+        }
+      } else {
+        historicalValues.push(value);
+      }
+    }
+  }
+
+  if (currentValue === null || historicalValues.length === 0) {
+    return { isMax: false, isMin: false, currentValue: null };
+  }
+
+  const historicalMax = Math.max(...historicalValues);
+  const historicalMin = Math.min(...historicalValues);
+
+  return {
+    isMax: currentValue > historicalMax,
+    isMin: currentValue < historicalMin,
+    currentValue,
+  };
+}
+
+// Helper: Check seasonal record for generic data array
+function checkSeasonalRecordGeneric(
+  data: { date: string; value: number }[],
+  tolerance: number = 7
+): { isMax: boolean; isMin: boolean; currentValue: number | null } {
+  const currentYear = new Date().getFullYear();
+  const currentDayOfYear = getCurrentDayOfYear();
+
+  let currentValue: number | null = null;
+  let currentDayFound = 0;
+  const historicalValues: number[] = [];
+
+  for (const d of data) {
+    const [year] = d.date.split("-").map(Number);
+    const dayOfYear = getDayOfYearFromDate(d.date);
+
+    if (Math.abs(dayOfYear - currentDayOfYear) <= tolerance) {
+      if (year === currentYear) {
+        if (currentValue === null || Math.abs(dayOfYear - currentDayOfYear) < Math.abs(currentDayFound - currentDayOfYear)) {
+          currentValue = d.value;
+          currentDayFound = dayOfYear;
+        }
+      } else {
+        historicalValues.push(d.value);
+      }
+    }
+  }
+
+  if (currentValue === null || historicalValues.length === 0) {
+    return { isMax: false, isMin: false, currentValue: null };
+  }
+
+  const historicalMax = Math.max(...historicalValues);
+  const historicalMin = Math.min(...historicalValues);
+
+  return {
+    isMax: currentValue > historicalMax,
+    isMin: currentValue < historicalMin,
+    currentValue,
+  };
+}
+
+// Signal: Seasonal Outliers - record highs/lows for this time of year
+async function getSeasonalOutliersSignals(
+  baseUrl: string,
+  sectors: string[]
+): Promise<COTSignalForEmail[]> {
+  const signals: COTSignalForEmail[] = [];
+  const contracts = getContractsForSectors(sectors);
+
+  // 1. Scan basic COT data
+  const fieldsToCheck: { field: keyof COTRecord; label: string }[] = [
+    { field: "mmNetAll", label: "MM Net" },
+    { field: "specNetAll", label: "Spec Net" },
+    { field: "producerNetAll" as keyof COTRecord, label: "Producer Net" },
+    { field: "swapNetAll" as keyof COTRecord, label: "Swap Net" },
+  ];
+
+  for (const contract of contracts) {
+    const data = await fetchCOTData(baseUrl, contract.id);
+    if (data.length < 52) continue; // Need at least 1 year of data
+
+    for (const { field, label } of fieldsToCheck) {
+      const result = checkSeasonalRecord(data, field);
+
+      if (result.isMax || result.isMin) {
+        signals.push({
+          signalType: "seasonalOutliers",
+          signalLabel: "Seasonal Outliers",
+          commodity: contract.name,
+          sector: contract.sector,
+          value: result.currentValue || 0,
+          threshold: 0,
+          direction: result.isMax ? "long" : "short",
+          tradeInstruction: `${label}: Record ${result.isMax ? "HIGH" : "LOW"} for this week`,
+        });
+      }
+    }
+  }
+
+  // 2. Scan COT RVs data
+  const includeSectors = sectors.includes("ALL") ? Object.keys(SPREAD_PAIRS_BY_SECTOR) : sectors;
+  for (const sector of includeSectors) {
+    try {
+      const res = await fetch(`${baseUrl}/api/cot-rvs?sector=${sector}`, { cache: "no-store" });
+      const json = await res.json();
+      if (json.success && json.spreads) {
+        for (const spread of json.spreads) {
+          const data = spread.data.map((d: { date: string; mmNetSpread: number }) => ({
+            date: d.date,
+            value: d.mmNetSpread,
+          }));
+          if (data.length < 52) continue;
+          const result = checkSeasonalRecordGeneric(data);
+          if (result.isMax || result.isMin) {
+            signals.push({
+              signalType: "seasonalOutliers",
+              signalLabel: "Seasonal RV",
+              commodity: spread.name,
+              sector,
+              value: result.currentValue || 0,
+              threshold: 0,
+              direction: result.isMax ? "long" : "short",
+              tradeInstruction: `RV Spread: Record ${result.isMax ? "HIGH" : "LOW"} for this week`,
+            });
+          }
+        }
+      }
+    } catch {
+      // ignore errors for individual sectors
+    }
+  }
+
+  // 3. Scan CIT Index data
+  if (sectors.includes("ALL") || sectors.includes("ags")) {
+    try {
+      const res = await fetch(`${baseUrl}/api/cit-index?sector=ags`, { cache: "no-store" });
+      const json = await res.json();
+      if (json.success && json.contracts) {
+        for (const contract of json.contracts) {
+          const data = contract.historicalData.map((d: { date: string; indexNet: number }) => ({
+            date: d.date,
+            value: d.indexNet,
+          }));
+          if (data.length < 52) continue;
+          const result = checkSeasonalRecordGeneric(data);
+          if (result.isMax || result.isMin) {
+            signals.push({
+              signalType: "seasonalOutliers",
+              signalLabel: "Seasonal CIT",
+              commodity: contract.name,
+              sector: "ags",
+              value: result.currentValue || 0,
+              threshold: 0,
+              direction: result.isMax ? "long" : "short",
+              tradeInstruction: `Index Net: Record ${result.isMax ? "HIGH" : "LOW"} for this week`,
+            });
+          }
+        }
+      }
+    } catch {
+      // ignore errors
+    }
+  }
+
+  // 4. Scan Px Weighted data
+  for (const sector of includeSectors) {
+    try {
+      const res = await fetch(`${baseUrl}/api/cot-px-weighted?sector=${sector}`, { cache: "no-store" });
+      const json = await res.json();
+      if (json.success && json.contracts) {
+        for (const contract of json.contracts) {
+          const data = contract.historicalData.map((d: { date: string; notionalValue: number }) => ({
+            date: d.date,
+            value: d.notionalValue,
+          }));
+          if (data.length < 52) continue;
+          const result = checkSeasonalRecordGeneric(data);
+          if (result.isMax || result.isMin) {
+            signals.push({
+              signalType: "seasonalOutliers",
+              signalLabel: "Seasonal Px",
+              commodity: contract.name,
+              sector,
+              value: result.currentValue || 0,
+              threshold: 0,
+              direction: result.isMax ? "long" : "short",
+              tradeInstruction: `Notional: Record ${result.isMax ? "HIGH" : "LOW"} for this week`,
+            });
+          }
+        }
+      }
+    } catch {
+      // ignore errors
+    }
+  }
+
+  // 5. Scan Vol Weighted data
+  for (const sector of includeSectors) {
+    try {
+      const res = await fetch(`${baseUrl}/api/cot-vol-weighted?sector=${sector}`, { cache: "no-store" });
+      const json = await res.json();
+      if (json.success && json.contracts) {
+        for (const contract of json.contracts) {
+          const data = contract.historicalData.map((d: { date: string; volAdjustedPosition: number }) => ({
+            date: d.date,
+            value: d.volAdjustedPosition,
+          }));
+          if (data.length < 52) continue;
+          const result = checkSeasonalRecordGeneric(data);
+          if (result.isMax || result.isMin) {
+            signals.push({
+              signalType: "seasonalOutliers",
+              signalLabel: "Seasonal Vol",
+              commodity: contract.name,
+              sector,
+              value: result.currentValue || 0,
+              threshold: 0,
+              direction: result.isMax ? "long" : "short",
+              tradeInstruction: `Vol-Adj: Record ${result.isMax ? "HIGH" : "LOW"} for this week`,
+            });
+          }
+        }
+      }
+    } catch {
+      // ignore errors
+    }
+  }
+
+  return signals;
+}
+
 // Get latest COT report date
 async function getLatestReportDate(baseUrl: string): Promise<string> {
   try {
@@ -844,6 +1120,14 @@ export async function GET(request: NextRequest) {
           allSignals.push(...spreadSignals);
           debug.cotVsSpreads = spreadSignals.length;
           console.log(`Found ${spreadSignals.length} COT vs Spreads signals`);
+        }
+
+        // Seasonal Outliers signals (record highs/lows for this time of year)
+        if (sub.signals.seasonalOutliers?.enabled) {
+          const seasonalSignals = await getSeasonalOutliersSignals(baseUrl, sub.sectors);
+          allSignals.push(...seasonalSignals);
+          debug.seasonalOutliers = seasonalSignals.length;
+          console.log(`Found ${seasonalSignals.length} Seasonal Outliers signals`);
         }
 
         // Generate email

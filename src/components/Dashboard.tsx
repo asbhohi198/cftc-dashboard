@@ -5,6 +5,10 @@ import { MainCategory, TAB_CONFIG, SubSubTab } from "@/lib/types";
 import { TabNav } from "./TabNav";
 import { CornTab } from "./CornTab";
 import { SeasonalTab } from "./SeasonalTab";
+import { SeasonalRVsTab } from "./SeasonalRVsTab";
+import { SeasonalCITTab } from "./SeasonalCITTab";
+import { SeasonalPxWeightedTab } from "./SeasonalPxWeightedTab";
+import { SeasonalVolWeightedTab } from "./SeasonalVolWeightedTab";
 import { AllWheatTab } from "./AllWheatTab";
 import { AllOilseedsTab } from "./AllOilseedsTab";
 import { AllGrainsTab } from "./AllGrainsTab";
@@ -113,6 +117,10 @@ const SEASONAL_TABS: MainCategory[] = [
   "rates",
   "fx",
   "crypto",
+  "cot-rvs",
+  "cit-index",
+  "cot-px-weighted",
+  "cot-vol-weighted",
 ];
 
 export function Dashboard() {
@@ -292,89 +300,164 @@ export function Dashboard() {
         {activeTab === "cot-spreads" && <COTSpreadsTab />}
 
         {/* COT RVs */}
-        {activeTab === "cot-rvs" && activeSubTab === "rvs-ags" && (
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-ags" && activeSubSubTab === "outright" && (
           <COTRVsTab sector="ags" />
         )}
-        {activeTab === "cot-rvs" && activeSubTab === "rvs-energy" && (
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-ags" && activeSubSubTab === "seasonal" && (
+          <SeasonalRVsTab sector="ags" />
+        )}
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-energy" && activeSubSubTab === "outright" && (
           <COTRVsTab sector="energy" />
         )}
-        {activeTab === "cot-rvs" && activeSubTab === "rvs-metals" && (
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-energy" && activeSubSubTab === "seasonal" && (
+          <SeasonalRVsTab sector="energy" />
+        )}
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-metals" && activeSubSubTab === "outright" && (
           <COTRVsTab sector="metals" />
         )}
-        {activeTab === "cot-rvs" && activeSubTab === "rvs-equities" && (
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-metals" && activeSubSubTab === "seasonal" && (
+          <SeasonalRVsTab sector="metals" />
+        )}
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-equities" && activeSubSubTab === "outright" && (
           <COTRVsTab sector="equities" />
         )}
-        {activeTab === "cot-rvs" && activeSubTab === "rvs-rates" && (
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-equities" && activeSubSubTab === "seasonal" && (
+          <SeasonalRVsTab sector="equities" />
+        )}
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-rates" && activeSubSubTab === "outright" && (
           <COTRVsTab sector="rates" />
         )}
-        {activeTab === "cot-rvs" && activeSubTab === "rvs-fx" && (
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-rates" && activeSubSubTab === "seasonal" && (
+          <SeasonalRVsTab sector="rates" />
+        )}
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-fx" && activeSubSubTab === "outright" && (
           <COTRVsTab sector="fx" />
+        )}
+        {activeTab === "cot-rvs" && activeSubTab === "rvs-fx" && activeSubSubTab === "seasonal" && (
+          <SeasonalRVsTab sector="fx" />
         )}
 
         {/* CIT - Index */}
-        {activeTab === "cit-index" && activeSubTab === "cit-ags" && (
+        {activeTab === "cit-index" && activeSubTab === "cit-ags" && activeSubSubTab === "outright" && (
           <CITIndexTab sector="ags" />
+        )}
+        {activeTab === "cit-index" && activeSubTab === "cit-ags" && activeSubSubTab === "seasonal" && (
+          <SeasonalCITTab sector="ags" />
         )}
         {activeTab === "cit-index" && activeSubTab === "cit-roll" && (
           <CITRollTab />
         )}
 
         {/* COT - Px Weighted */}
-        {activeTab === "cot-px-weighted" && activeSubTab === "px-ags" && (
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-ags" && activeSubSubTab === "outright" && (
           <COTPxWeightedTab sector="ags" />
         )}
-        {activeTab === "cot-px-weighted" && activeSubTab === "px-softs" && (
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-ags" && activeSubSubTab === "seasonal" && (
+          <SeasonalPxWeightedTab sector="ags" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-softs" && activeSubSubTab === "outright" && (
           <COTPxWeightedTab sector="softs" />
         )}
-        {activeTab === "cot-px-weighted" && activeSubTab === "px-livestock" && (
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-softs" && activeSubSubTab === "seasonal" && (
+          <SeasonalPxWeightedTab sector="softs" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-livestock" && activeSubSubTab === "outright" && (
           <COTPxWeightedTab sector="livestock" />
         )}
-        {activeTab === "cot-px-weighted" && activeSubTab === "px-energy" && (
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-livestock" && activeSubSubTab === "seasonal" && (
+          <SeasonalPxWeightedTab sector="livestock" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-energy" && activeSubSubTab === "outright" && (
           <COTPxWeightedTab sector="energy" />
         )}
-        {activeTab === "cot-px-weighted" && activeSubTab === "px-metals" && (
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-energy" && activeSubSubTab === "seasonal" && (
+          <SeasonalPxWeightedTab sector="energy" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-metals" && activeSubSubTab === "outright" && (
           <COTPxWeightedTab sector="metals" />
         )}
-        {activeTab === "cot-px-weighted" && activeSubTab === "px-equities" && (
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-metals" && activeSubSubTab === "seasonal" && (
+          <SeasonalPxWeightedTab sector="metals" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-equities" && activeSubSubTab === "outright" && (
           <COTPxWeightedTab sector="equities" />
         )}
-        {activeTab === "cot-px-weighted" && activeSubTab === "px-rates" && (
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-equities" && activeSubSubTab === "seasonal" && (
+          <SeasonalPxWeightedTab sector="equities" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-rates" && activeSubSubTab === "outright" && (
           <COTPxWeightedTab sector="rates" />
         )}
-        {activeTab === "cot-px-weighted" && activeSubTab === "px-fx" && (
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-rates" && activeSubSubTab === "seasonal" && (
+          <SeasonalPxWeightedTab sector="rates" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-fx" && activeSubSubTab === "outright" && (
           <COTPxWeightedTab sector="fx" />
         )}
-        {activeTab === "cot-px-weighted" && activeSubTab === "px-crypto" && (
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-fx" && activeSubSubTab === "seasonal" && (
+          <SeasonalPxWeightedTab sector="fx" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-crypto" && activeSubSubTab === "outright" && (
           <COTPxWeightedTab sector="crypto" />
+        )}
+        {activeTab === "cot-px-weighted" && activeSubTab === "px-crypto" && activeSubSubTab === "seasonal" && (
+          <SeasonalPxWeightedTab sector="crypto" />
         )}
 
         {/* COT - Vol Weighted */}
-        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-ags" && (
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-ags" && activeSubSubTab === "outright" && (
           <COTVolWeightedTab sector="ags" />
         )}
-        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-softs" && (
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-ags" && activeSubSubTab === "seasonal" && (
+          <SeasonalVolWeightedTab sector="ags" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-softs" && activeSubSubTab === "outright" && (
           <COTVolWeightedTab sector="softs" />
         )}
-        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-livestock" && (
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-softs" && activeSubSubTab === "seasonal" && (
+          <SeasonalVolWeightedTab sector="softs" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-livestock" && activeSubSubTab === "outright" && (
           <COTVolWeightedTab sector="livestock" />
         )}
-        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-energy" && (
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-livestock" && activeSubSubTab === "seasonal" && (
+          <SeasonalVolWeightedTab sector="livestock" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-energy" && activeSubSubTab === "outright" && (
           <COTVolWeightedTab sector="energy" />
         )}
-        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-metals" && (
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-energy" && activeSubSubTab === "seasonal" && (
+          <SeasonalVolWeightedTab sector="energy" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-metals" && activeSubSubTab === "outright" && (
           <COTVolWeightedTab sector="metals" />
         )}
-        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-equities" && (
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-metals" && activeSubSubTab === "seasonal" && (
+          <SeasonalVolWeightedTab sector="metals" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-equities" && activeSubSubTab === "outright" && (
           <COTVolWeightedTab sector="equities" />
         )}
-        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-rates" && (
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-equities" && activeSubSubTab === "seasonal" && (
+          <SeasonalVolWeightedTab sector="equities" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-rates" && activeSubSubTab === "outright" && (
           <COTVolWeightedTab sector="rates" />
         )}
-        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-fx" && (
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-rates" && activeSubSubTab === "seasonal" && (
+          <SeasonalVolWeightedTab sector="rates" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-fx" && activeSubSubTab === "outright" && (
           <COTVolWeightedTab sector="fx" />
         )}
-        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-crypto" && (
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-fx" && activeSubSubTab === "seasonal" && (
+          <SeasonalVolWeightedTab sector="fx" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-crypto" && activeSubSubTab === "outright" && (
           <COTVolWeightedTab sector="crypto" />
+        )}
+        {activeTab === "cot-vol-weighted" && activeSubTab === "vol-crypto" && activeSubSubTab === "seasonal" && (
+          <SeasonalVolWeightedTab sector="crypto" />
         )}
 
         {/* Ags - Grains & Oilseeds */}
