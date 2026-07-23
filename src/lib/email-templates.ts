@@ -64,8 +64,8 @@ function generateSignalRows(signals: COTSignalForEmail[]): string {
 }
 
 function formatSignalValue(signal: COTSignalForEmail): string {
-  // Seasonal outliers don't need value display - the instruction says it all
-  if (signal.signalType === "seasonalOutliers") {
+  // Seasonal signals don't need value display - the instruction says it all
+  if (signal.signalType === "seasonalOutliers" || signal.signalLabel.startsWith("Seasonal")) {
     return "";
   }
   const prefix = signal.value >= 0 ? "+" : "";
@@ -94,11 +94,11 @@ function generateSignalCards(signals: COTSignalForEmail[]): string {
         const tradeColor = signal.tradeInstruction ? getTradeColor(signal.tradeInstruction) : getDirectionColor(signal.direction);
         const tradeBgColor = signal.tradeInstruction ? getTradeBgColor(signal.tradeInstruction) : getDirectionBgColor(signal.direction);
         const valueDisplay = formatSignalValue(signal);
+        const isSeasonal = signal.signalType === "seasonalOutliers" || signal.signalLabel.startsWith("Seasonal");
         const instructionText = signal.tradeInstruction
-          ? (signal.signalType === "seasonalOutliers" ? formatSeasonalInstruction(signal.tradeInstruction) : signal.tradeInstruction)
+          ? (isSeasonal ? formatSeasonalInstruction(signal.tradeInstruction) : signal.tradeInstruction)
           : "";
-        const isSeasonal = signal.signalType === "seasonalOutliers";
-        // For seasonal outliers: white text on colored background for better readability
+        // For seasonal signals: white text on solid colored background for better readability
         const instructionColor = isSeasonal ? "#ffffff" : tradeColor;
         const instructionBg = isSeasonal ? (signal.direction === "long" ? "#22c55e" : "#ef4444") : tradeBgColor;
         return `
