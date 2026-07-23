@@ -85,7 +85,7 @@ const CustomXAxisTick = (props: { x?: number; y?: number; payload?: { value: num
       <text
         x={0}
         y={0}
-        dx={expanded ? -8 : -8}
+        dx={expanded ? -8 : 4}
         dy={expanded ? 16 : -16}
         textAnchor="end"
         fill="#ffffff"
