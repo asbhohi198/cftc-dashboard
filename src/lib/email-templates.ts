@@ -63,12 +63,40 @@ function generateSignalRows(signals: COTSignalForEmail[]): string {
     .join("");
 }
 
+function formatSignalValue(signal: COTSignalForEmail): string {
+  // Seasonal outliers don't need value display - the instruction says it all
+  if (signal.signalType === "seasonalOutliers") {
+    return "";
+  }
+  const prefix = signal.value >= 0 ? "+" : "";
+  const suffix = signal.signalType.includes("Pct") ? "%" : "σ";
+  return `${prefix}${signal.value.toFixed(2)}${suffix}`;
+}
+
+function formatSeasonalInstruction(instruction: string): string {
+  // Make seasonal outlier instructions more readable
+  // e.g. "MM Net: Record HIGH for this week" -> "MM Net at seasonal HIGH"
+  if (instruction.includes("Record HIGH")) {
+    const field = instruction.split(":")[0];
+    return `${field} at SEASONAL HIGH`;
+  }
+  if (instruction.includes("Record LOW")) {
+    const field = instruction.split(":")[0];
+    return `${field} at SEASONAL LOW`;
+  }
+  return instruction;
+}
+
 function generateSignalCards(signals: COTSignalForEmail[]): string {
   return signals
     .map(
       (signal) => {
         const tradeColor = signal.tradeInstruction ? getTradeColor(signal.tradeInstruction) : getDirectionColor(signal.direction);
         const tradeBgColor = signal.tradeInstruction ? getTradeBgColor(signal.tradeInstruction) : getDirectionBgColor(signal.direction);
+        const valueDisplay = formatSignalValue(signal);
+        const instructionText = signal.tradeInstruction
+          ? (signal.signalType === "seasonalOutliers" ? formatSeasonalInstruction(signal.tradeInstruction) : signal.tradeInstruction)
+          : "";
         return `
       <div style="background-color: #1f1f23; border-radius: 8px; padding: 16px; margin-bottom: 12px; border-left: 3px solid ${tradeColor};">
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -78,15 +106,17 @@ function generateSignalCards(signals: COTSignalForEmail[]): string {
               ${signal.sector.toUpperCase()}
             </span>
           </div>
-          <span style="color: ${getDirectionColor(signal.direction)}; font-weight: 700; font-size: 16px;">
-            ${signal.value >= 0 ? "+" : ""}${signal.value.toFixed(2)}${signal.signalType.includes("Pct") ? "%" : "σ"}
-          </span>
+          ${valueDisplay ? `
+            <span style="color: ${getDirectionColor(signal.direction)}; font-weight: 700; font-size: 16px;">
+              ${valueDisplay}
+            </span>
+          ` : ""}
         </div>
         <div style="margin-top: 8px; display: flex; justify-content: space-between; align-items: center;">
           <span style="color: #71717a; font-size: 12px;">${signal.signalLabel}</span>
-          ${signal.tradeInstruction ? `
-            <span style="background-color: ${tradeBgColor}; color: ${tradeColor}; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600;">
-              ${signal.tradeInstruction}
+          ${instructionText ? `
+            <span style="background-color: ${tradeBgColor}; color: ${tradeColor}; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">
+              ${instructionText}
             </span>
           ` : ""}
         </div>
