@@ -3,6 +3,73 @@
 import { useEffect, useState, useMemo } from "react";
 import { SeasonalCOTChart, YearRange } from "./SeasonalCOTChart";
 import { COTRecord } from "@/lib/cftc";
+import { ArrowUp, ArrowDown } from "lucide-react";
+
+// Get current day of year
+function getCurrentDayOfYear(): number {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = now.getTime() - start.getTime();
+  return Math.floor(diff / (1000 * 60 * 60 * 24));
+}
+
+// Get day of year from date string
+function getDayOfYear(dateStr: string): number {
+  const [year, month, day] = dateStr.split("-").map(Number);
+  const date = new Date(year, month - 1, day);
+  const start = new Date(year, 0, 0);
+  const diff = date.getTime() - start.getTime();
+  return Math.floor(diff / (1000 * 60 * 60 * 24));
+}
+
+// Check if current year value is record max/min for this day of year
+function checkRecordStatus(
+  data: { date: string; value: number }[],
+  tolerance: number = 7 // days tolerance for matching
+): { isMax: boolean; isMin: boolean; currentValue: number | null; historicalMax: number; historicalMin: number } {
+  const currentYear = new Date().getFullYear();
+  const currentDayOfYear = getCurrentDayOfYear();
+
+  // Find current year's latest value near this day
+  let currentValue: number | null = null;
+  let currentDayFound = 0;
+
+  // Find historical values at similar day of year (within tolerance)
+  const historicalValues: number[] = [];
+
+  data.forEach((d) => {
+    const [year] = d.date.split("-").map(Number);
+    const dayOfYear = getDayOfYear(d.date);
+
+    // Check if this is within tolerance of current day
+    if (Math.abs(dayOfYear - currentDayOfYear) <= tolerance) {
+      if (year === currentYear) {
+        // Keep the closest to current day
+        if (currentValue === null || Math.abs(dayOfYear - currentDayOfYear) < Math.abs(currentDayFound - currentDayOfYear)) {
+          currentValue = d.value;
+          currentDayFound = dayOfYear;
+        }
+      } else {
+        historicalValues.push(d.value);
+      }
+    }
+  });
+
+  if (currentValue === null || historicalValues.length === 0) {
+    return { isMax: false, isMin: false, currentValue: null, historicalMax: 0, historicalMin: 0 };
+  }
+
+  const historicalMax = Math.max(...historicalValues);
+  const historicalMin = Math.min(...historicalValues);
+
+  return {
+    isMax: currentValue > historicalMax,
+    isMin: currentValue < historicalMin,
+    currentValue,
+    historicalMax,
+    historicalMin,
+  };
+}
 
 interface SeasonalTabProps {
   contractId?: string;
@@ -195,6 +262,33 @@ export function SeasonalTab({ contractId = "corn" }: SeasonalTabProps) {
     value: d.producerNetOther + d.nonReptNetOther,
   })), [data]);
 
+  // Calculate record status for each field
+  const recordStatuses = useMemo(() => {
+    if (data.length === 0) return [];
+
+    const fields = [
+      { name: "MM Net", data: mmNetData },
+      { name: "Spec Net", data: specNetData },
+      { name: "Producer Net", data: producerNetData },
+      { name: "Swap Net", data: swapNetData },
+      { name: "Other Net", data: otherNetData },
+      { name: "NonRept Net", data: nonReptNetData },
+      { name: "MM % OI", data: mmPctOIData },
+      { name: "Producer % OI", data: producerPctOIData },
+    ];
+
+    const records: { name: string; isMax: boolean; isMin: boolean }[] = [];
+
+    fields.forEach(({ name, data: fieldData }) => {
+      const status = checkRecordStatus(fieldData);
+      if (status.isMax || status.isMin) {
+        records.push({ name, isMax: status.isMax, isMin: status.isMin });
+      }
+    });
+
+    return records;
+  }, [data, mmNetData, specNetData, producerNetData, swapNetData, otherNetData, nonReptNetData, mmPctOIData, producerPctOIData]);
+
   if (error) {
     return (
       <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
@@ -214,6 +308,24 @@ export function SeasonalTab({ contractId = "corn" }: SeasonalTabProps) {
               <p className="text-xs text-zinc-500">
                 Day-of-year overlay comparing multiple years
               </p>
+              {/* Record Highs/Lows */}
+              {recordStatuses.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {recordStatuses.map((record, idx) => (
+                    <span
+                      key={idx}
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${
+                        record.isMax
+                          ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                          : "bg-red-500/20 text-red-400 border border-red-500/30"
+                      }`}
+                    >
+                      {record.isMax ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
+                      {record.name}: Record {record.isMax ? "High" : "Low"}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="flex items-center gap-4">
               {/* Year Range Toggle */}

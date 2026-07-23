@@ -167,7 +167,8 @@ export function EmailSubsTab() {
     setFormName(sub.name);
     setFormFrequency(sub.frequency);
     setFormSectors(sub.sectors);
-    setFormSignals(sub.signals || DEFAULT_SIGNALS);
+    // Merge with defaults to handle missing fields from older subscriptions
+    setFormSignals({ ...DEFAULT_SIGNALS, ...(sub.signals || {}) });
     setFormRecipients(sub.recipients.join(", "));
     setFormEnabled(sub.enabled);
     setShowModal(true);
@@ -303,8 +304,9 @@ export function EmailSubsTab() {
   };
 
   const getEnabledSignalsSummary = (signals: EmailSubscription["signals"]) => {
+    if (!signals) return "None";
     const enabled = (Object.keys(signals) as SignalKey[])
-      .filter(key => signals[key].enabled)
+      .filter(key => signals[key]?.enabled && SIGNAL_DEFINITIONS[key])
       .map(key => {
         const def = SIGNAL_DEFINITIONS[key];
         const shortLabel = def.label.split(" ")[0];
