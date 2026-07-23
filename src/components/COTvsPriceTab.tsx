@@ -213,6 +213,7 @@ export function COTvsPriceTab() {
               color: "#ffffff",
             }}
             labelStyle={{ color: "#ffffff" }}
+            itemStyle={{ color: "#ffffff" }}
             formatter={(value: number, name: string) => {
               if (name === "x") return [formatNumber(value), "MM Change"];
               return [`${value.toFixed(2)}%`, "Price Change"];
@@ -275,6 +276,7 @@ export function COTvsPriceTab() {
               color: "#ffffff",
             }}
             labelStyle={{ color: "#ffffff" }}
+            itemStyle={{ color: "#ffffff" }}
             formatter={(value: number, name: string) => {
               if (name === "MM Net") return [formatNumber(value), name];
               return [formatPrice(value), name];
@@ -341,12 +343,12 @@ export function COTvsPriceTab() {
             <thead>
               <tr className="bg-zinc-800/50 text-zinc-400 text-xs uppercase">
                 <th className="text-left p-3">Commodity</th>
-                <th className="text-right p-3">Current MM Net</th>
-                <th className="text-right p-3">Current Price</th>
-                <th className="text-right p-3">Beta</th>
-                <th className="text-right p-3">R²</th>
-                <th className="text-right p-3">Price to Max Long</th>
-                <th className="text-right p-3">Price to Max Short</th>
+                <th className="text-center p-3">Current MM Net</th>
+                <th className="text-center p-3">Current Price</th>
+                <th className="text-center p-3">Beta</th>
+                <th className="text-center p-3">R²</th>
+                <th className="text-center p-3">Price to Max Long</th>
+                <th className="text-center p-3">Price to Max Short</th>
               </tr>
             </thead>
             <tbody>
@@ -357,20 +359,20 @@ export function COTvsPriceTab() {
                 return (
                   <tr key={commodity.id} className="border-t border-zinc-800 hover:bg-zinc-800/30">
                     <td className="p-3 font-medium text-white">{commodity.name}</td>
-                    <td className={`p-3 text-right ${commodity.currentMMNet >= 0 ? "text-green-400" : "text-red-400"}`}>
+                    <td className={`p-3 text-center ${commodity.currentMMNet >= 0 ? "text-green-400" : "text-red-400"}`}>
                       {formatNumber(commodity.currentMMNet)}
                     </td>
-                    <td className="p-3 text-right text-white">
+                    <td className="p-3 text-center text-white">
                       {formatPrice(commodity.currentPrice)}
                     </td>
-                    <td className={`p-3 text-right ${commodity.beta >= 0 ? "text-green-400" : "text-red-400"}`}>
+                    <td className={`p-3 text-center ${commodity.beta >= 0 ? "text-green-400" : "text-red-400"}`}>
                       {(commodity.beta * 10000).toFixed(4)}
                     </td>
-                    <td className={`p-3 text-right ${commodity.rSquared >= 0.1 ? "text-green-400" : "text-zinc-500"}`}>
+                    <td className={`p-3 text-center ${commodity.rSquared >= 0.1 ? "text-green-400" : "text-zinc-500"}`}>
                       {(commodity.rSquared * 100).toFixed(1)}%
                     </td>
-                    <td className="p-3 text-right">
-                      <div className="flex items-center justify-end gap-1">
+                    <td className="p-3 text-center">
+                      <div className="flex items-center justify-center gap-1">
                         <TrendingUp className="w-3 h-3 text-green-400" />
                         <span className="text-white">{formatPrice(commodity.priceToMaxLong)}</span>
                         <span className="text-green-400 text-xs">
@@ -378,8 +380,8 @@ export function COTvsPriceTab() {
                         </span>
                       </div>
                     </td>
-                    <td className="p-3 text-right">
-                      <div className="flex items-center justify-end gap-1">
+                    <td className="p-3 text-center">
+                      <div className="flex items-center justify-center gap-1">
                         <TrendingDown className="w-3 h-3 text-red-400" />
                         <span className="text-white">{formatPrice(commodity.priceToMaxShort)}</span>
                         <span className="text-red-400 text-xs">
