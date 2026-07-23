@@ -116,6 +116,20 @@ export function SeasonalCOTChart({
   color = "#3b82f6",
 }: SeasonalCOTChartProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [hiddenYears, setHiddenYears] = useState<Set<number>>(new Set());
+
+  // Toggle year visibility
+  const toggleYear = (year: number) => {
+    setHiddenYears((prev) => {
+      const next = new Set(prev);
+      if (next.has(year)) {
+        next.delete(year);
+      } else {
+        next.add(year);
+      }
+      return next;
+    });
+  };
 
   // Transform data to seasonal format
   const { chartData, years } = useMemo(() => {
@@ -194,6 +208,14 @@ export function SeasonalCOTChart({
       ? { top: 20, right: 20, left: -15, bottom: 20 }
       : { top: 5, right: 5, left: -30, bottom: 5 };
 
+    // Custom legend click handler
+    const handleLegendClick = (e: { value: string }) => {
+      const year = parseInt(e.value, 10);
+      if (!isNaN(year)) {
+        toggleYear(year);
+      }
+    };
+
     return (
       <ResponsiveContainer width="100%" height={expanded ? 800 : 200}>
         <LineChart data={chartData} margin={chartMargin}>
@@ -227,9 +249,23 @@ export function SeasonalCOTChart({
           {expanded && (
             <Legend
               wrapperStyle={{ paddingTop: 10 }}
-              formatter={(value) => (
-                <span style={{ color: "#ffffff", fontSize: 11 }}>{value}</span>
-              )}
+              onClick={handleLegendClick}
+              formatter={(value) => {
+                const year = parseInt(value, 10);
+                const isHidden = hiddenYears.has(year);
+                return (
+                  <span
+                    style={{
+                      color: isHidden ? "#52525b" : "#ffffff",
+                      fontSize: 11,
+                      textDecoration: isHidden ? "line-through" : "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {value}
+                  </span>
+                );
+              }}
             />
           )}
           {years.map((year) => (
@@ -244,6 +280,7 @@ export function SeasonalCOTChart({
               connectNulls
               isAnimationActive={false}
               strokeOpacity={1}
+              hide={hiddenYears.has(year)}
             />
           ))}
         </LineChart>
