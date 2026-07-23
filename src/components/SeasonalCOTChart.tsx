@@ -248,7 +248,7 @@ export function SeasonalCOTChart({
           <ReferenceLine y={0} stroke="#52525b" />
           {expanded && (
             <Legend
-              wrapperStyle={{ paddingTop: 10 }}
+              wrapperStyle={{ paddingTop: 20 }}
               onClick={handleLegendClick}
               formatter={(value) => {
                 const year = parseInt(value, 10);
