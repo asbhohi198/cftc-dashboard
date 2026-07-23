@@ -270,7 +270,7 @@ export function SeasonalCOTChart({
           onClick={() => setIsExpanded(false)}
         >
           <div
-            className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 max-w-[90vw] w-full max-h-[90vh] overflow-auto"
+            className="bg-zinc-900 border border-zinc-700 rounded-lg p-6 max-w-6xl w-full max-h-[90vh] overflow-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
