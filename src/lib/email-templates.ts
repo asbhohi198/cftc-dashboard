@@ -98,8 +98,8 @@ function generateSignalCards(signals: COTSignalForEmail[]): string {
         const instructionText = signal.tradeInstruction
           ? (isSeasonal ? formatSeasonalInstruction(signal.tradeInstruction) : signal.tradeInstruction)
           : "";
-        // For seasonal signals: grey border, white text on grey background
-        const instructionColor = isSeasonal ? "#ffffff" : tradeColor;
+        // For seasonal signals: grey border, WHITE text on grey background
+        const instructionColor = isSeasonal ? "#FFFFFF" : tradeColor;
         const instructionBg = isSeasonal ? "#3f3f46" : tradeBgColor;
         const cardBorderColor = isSeasonal ? "#71717a" : tradeColor;
         return `
