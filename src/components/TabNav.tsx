@@ -16,6 +16,10 @@ const SEASONAL_TABS: MainCategory[] = [
   "rates",
   "fx",
   "crypto",
+  "cot-rvs",
+  "cit-index",
+  "cot-px-weighted",
+  "cot-vol-weighted",
 ];
 
 interface TabNavProps {

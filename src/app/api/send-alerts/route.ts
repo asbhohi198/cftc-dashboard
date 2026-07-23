@@ -739,11 +739,13 @@ function getDayOfYearFromDate(dateStr: string): number {
 }
 
 // Check if a value is a seasonal record (high or low)
+// rankOffset: 0 = must be THE record, -1 = can be 2nd best, -2 = can be 3rd best, etc.
 function checkSeasonalRecord(
   data: COTRecord[],
   field: keyof COTRecord,
-  tolerance: number = 7
-): { isMax: boolean; isMin: boolean; currentValue: number | null } {
+  tolerance: number = 7,
+  rankOffset: number = 0
+): { isMax: boolean; isMin: boolean; currentValue: number | null; rank?: number } {
   const currentYear = new Date().getFullYear();
   const currentDayOfYear = getCurrentDayOfYear();
 
@@ -774,20 +776,32 @@ function checkSeasonalRecord(
     return { isMax: false, isMin: false, currentValue: null };
   }
 
-  const historicalMax = Math.max(...historicalValues);
-  const historicalMin = Math.min(...historicalValues);
+  // Sort historical values to find Nth highest/lowest
+  const sortedDesc = [...historicalValues].sort((a, b) => b - a); // highest first
+  const sortedAsc = [...historicalValues].sort((a, b) => a - b);  // lowest first
+
+  // rankOffset = 0 means must beat ALL (index 0 = the max/min)
+  // rankOffset = -1 means can be 2nd best (compare to index 1)
+  // etc.
+  const compareIndexMax = Math.min(Math.abs(rankOffset), sortedDesc.length - 1);
+  const compareIndexMin = Math.min(Math.abs(rankOffset), sortedAsc.length - 1);
+
+  const thresholdMax = sortedDesc[compareIndexMax];
+  const thresholdMin = sortedAsc[compareIndexMin];
 
   return {
-    isMax: currentValue > historicalMax,
-    isMin: currentValue < historicalMin,
+    isMax: currentValue > thresholdMax,
+    isMin: currentValue < thresholdMin,
     currentValue,
   };
 }
 
 // Helper: Check seasonal record for generic data array
+// rankOffset: 0 = must be THE record, -1 = can be 2nd best, -2 = can be 3rd best, etc.
 function checkSeasonalRecordGeneric(
   data: { date: string; value: number }[],
-  tolerance: number = 7
+  tolerance: number = 7,
+  rankOffset: number = 0
 ): { isMax: boolean; isMin: boolean; currentValue: number | null } {
   const currentYear = new Date().getFullYear();
   const currentDayOfYear = getCurrentDayOfYear();
@@ -816,20 +830,29 @@ function checkSeasonalRecordGeneric(
     return { isMax: false, isMin: false, currentValue: null };
   }
 
-  const historicalMax = Math.max(...historicalValues);
-  const historicalMin = Math.min(...historicalValues);
+  // Sort historical values to find Nth highest/lowest
+  const sortedDesc = [...historicalValues].sort((a, b) => b - a); // highest first
+  const sortedAsc = [...historicalValues].sort((a, b) => a - b);  // lowest first
+
+  const compareIndexMax = Math.min(Math.abs(rankOffset), sortedDesc.length - 1);
+  const compareIndexMin = Math.min(Math.abs(rankOffset), sortedAsc.length - 1);
+
+  const thresholdMax = sortedDesc[compareIndexMax];
+  const thresholdMin = sortedAsc[compareIndexMin];
 
   return {
-    isMax: currentValue > historicalMax,
-    isMin: currentValue < historicalMin,
+    isMax: currentValue > thresholdMax,
+    isMin: currentValue < thresholdMin,
     currentValue,
   };
 }
 
 // Signal: Seasonal Outliers - record highs/lows for this time of year
+// rankOffset: 0 = must be THE record, -1 = can be 2nd best, etc.
 async function getSeasonalOutliersSignals(
   baseUrl: string,
-  sectors: string[]
+  sectors: string[],
+  rankOffset: number = 0
 ): Promise<COTSignalForEmail[]> {
   const signals: COTSignalForEmail[] = [];
   const contracts = getContractsForSectors(sectors);
@@ -847,7 +870,7 @@ async function getSeasonalOutliersSignals(
     if (data.length < 52) continue; // Need at least 1 year of data
 
     for (const { field, label } of fieldsToCheck) {
-      const result = checkSeasonalRecord(data, field);
+      const result = checkSeasonalRecord(data, field, 7, rankOffset);
 
       if (result.isMax || result.isMin) {
         signals.push({
@@ -877,7 +900,7 @@ async function getSeasonalOutliersSignals(
             value: d.mmNetSpread,
           }));
           if (data.length < 52) continue;
-          const result = checkSeasonalRecordGeneric(data);
+          const result = checkSeasonalRecordGeneric(data, 7, rankOffset);
           if (result.isMax || result.isMin) {
             signals.push({
               signalType: "seasonalOutliers",
@@ -909,7 +932,7 @@ async function getSeasonalOutliersSignals(
             value: d.indexNet,
           }));
           if (data.length < 52) continue;
-          const result = checkSeasonalRecordGeneric(data);
+          const result = checkSeasonalRecordGeneric(data, 7, rankOffset);
           if (result.isMax || result.isMin) {
             signals.push({
               signalType: "seasonalOutliers",
@@ -941,7 +964,7 @@ async function getSeasonalOutliersSignals(
             value: d.notionalValue,
           }));
           if (data.length < 52) continue;
-          const result = checkSeasonalRecordGeneric(data);
+          const result = checkSeasonalRecordGeneric(data, 7, rankOffset);
           if (result.isMax || result.isMin) {
             signals.push({
               signalType: "seasonalOutliers",
@@ -973,7 +996,7 @@ async function getSeasonalOutliersSignals(
             value: d.volAdjustedPosition,
           }));
           if (data.length < 52) continue;
-          const result = checkSeasonalRecordGeneric(data);
+          const result = checkSeasonalRecordGeneric(data, 7, rankOffset);
           if (result.isMax || result.isMin) {
             signals.push({
               signalType: "seasonalOutliers",
@@ -1124,10 +1147,11 @@ export async function GET(request: NextRequest) {
 
         // Seasonal Outliers signals (record highs/lows for this time of year)
         if (sub.signals.seasonalOutliers?.enabled) {
-          const seasonalSignals = await getSeasonalOutliersSignals(baseUrl, sub.sectors);
+          const rankOffset = sub.signals.seasonalOutliers.threshold || 0;
+          const seasonalSignals = await getSeasonalOutliersSignals(baseUrl, sub.sectors, rankOffset);
           allSignals.push(...seasonalSignals);
           debug.seasonalOutliers = seasonalSignals.length;
-          console.log(`Found ${seasonalSignals.length} Seasonal Outliers signals`);
+          console.log(`Found ${seasonalSignals.length} Seasonal Outliers signals (rankOffset: ${rankOffset})`);
         }
 
         // Generate email
