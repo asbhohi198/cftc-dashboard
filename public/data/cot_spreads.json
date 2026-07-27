@@ -1,143 +1,143 @@
 {
-  "updated": "2026-07-23T15:46:29.804428",
+  "updated": "2026-07-24T18:01:12.692784",
   "summary": [
     {
       "id": "corn",
       "name": "Corn",
-      "spread": -38.25,
-      "spread_pct": 92.35382308845578,
+      "spread": -39.0,
+      "spread_pct": 92.2465208747515,
       "spread_unit": "c/bu",
-      "date": "2026-07-22",
+      "date": "2026-07-23",
       "front_symbol": "ZC-2026U",
       "third_symbol": "ZC-2027H"
     },
     {
       "id": "soybeans",
       "name": "Soybeans",
-      "spread": -6.0,
-      "spread_pct": 99.51573849878935,
+      "spread": -6.25,
+      "spread_pct": 99.49748743718592,
       "spread_unit": "c/bu",
-      "date": "2026-07-22",
+      "date": "2026-07-23",
       "front_symbol": "ZS-2026Q",
       "third_symbol": "ZS-2026X"
     },
     {
       "id": "chicago-wheat",
       "name": "Chicago Wheat",
-      "spread": -32.0,
-      "spread_pct": 95.66248729244325,
+      "spread": -33.0,
+      "spread_pct": 95.47480287967089,
       "spread_unit": "c/bu",
-      "date": "2026-07-22",
+      "date": "2026-07-23",
       "front_symbol": "ZW-2026U",
       "third_symbol": "ZW-2027H"
     },
     {
       "id": "kansas-wheat",
       "name": "Kansas Wheat",
-      "spread": -27.5,
-      "spread_pct": 96.52338811630847,
+      "spread": -27.75,
+      "spread_pct": 96.47619047619047,
       "spread_unit": "c/bu",
-      "date": "2026-07-22",
+      "date": "2026-07-23",
       "front_symbol": "KE-2026U",
       "third_symbol": "KE-2027H"
     },
     {
       "id": "soyoil",
       "name": "Soyoil",
-      "spread": 1.910003662109375,
-      "spread_pct": 102.59617190435269,
+      "spread": 1.839996337890625,
+      "spread_pct": 102.49491028866527,
       "spread_unit": "c/lb",
-      "date": "2026-07-22",
+      "date": "2026-07-23",
       "front_symbol": "ZL-2026Q",
       "third_symbol": "ZL-2026V"
     },
     {
       "id": "soymeal",
       "name": "Soymeal",
-      "spread": 3.20001220703125,
-      "spread_pct": 100.9744251725047,
+      "spread": 2.29998779296875,
+      "spread_pct": 100.70207196279539,
       "spread_unit": "$/ton",
-      "date": "2026-07-22",
+      "date": "2026-07-23",
       "front_symbol": "ZM-2026Q",
       "third_symbol": "ZM-2026V"
     },
     {
       "id": "sugar",
       "name": "NY Sugar",
-      "spread": -0.7399997711181641,
-      "spread_pct": 95.21963958009744,
+      "spread": -0.7100000381469727,
+      "spread_pct": 95.3896100276999,
       "spread_unit": "c/lb",
-      "date": "2026-07-22",
+      "date": "2026-07-23",
       "front_symbol": "SB-2026V",
       "third_symbol": "SB-2027K"
     },
     {
       "id": "arabica-coffee",
       "name": "NY Coffee",
-      "spread": 19.100006103515625,
-      "spread_pct": 106.41909154330236,
+      "spread": 18.850006103515625,
+      "spread_pct": 106.48769812268834,
       "spread_unit": "c/lb",
-      "date": "2026-07-22",
+      "date": "2026-07-23",
       "front_symbol": "KC-2026U",
       "third_symbol": "KC-2027H"
     },
     {
       "id": "ny-cocoa",
       "name": "NY Cocoa",
-      "spread": -244.0,
-      "spread_pct": 95.62096195262025,
+      "spread": -237.0,
+      "spread_pct": 95.7204767063922,
       "spread_unit": "$/ton",
-      "date": "2026-07-22",
+      "date": "2026-07-23",
       "front_symbol": "CC-2026U",
       "third_symbol": "CC-2027H"
     },
     {
       "id": "cotton",
       "name": "Cotton",
-      "spread": -2.5799942016601562,
-      "spread_pct": 96.87083772328124,
+      "spread": -2.9900054931640625,
+      "spread_pct": 96.39019023654899,
       "spread_unit": "c/lb",
-      "date": "2026-07-22",
+      "date": "2026-07-23",
       "front_symbol": "CT-2026V",
       "third_symbol": "CT-2027H"
     },
     {
       "id": "live-cattle",
       "name": "Live Cattle",
-      "spread": 4.399993896484375,
-      "spread_pct": 102.01096610380007,
+      "spread": 4.7249908447265625,
+      "spread_pct": 102.14115363289169,
       "spread_unit": "c/lb",
-      "date": "2026-07-22",
+      "date": "2026-07-23",
       "front_symbol": "LE-2026Q",
       "third_symbol": "LE-2026Z"
     },
     {
       "id": "lean-hogs",
       "name": "Lean Hogs",
-      "spread": 21.625,
-      "spread_pct": 127.09051152738715,
+      "spread": 22.025001525878906,
+      "spread_pct": 127.48830143635432,
       "spread_unit": "c/lb",
-      "date": "2026-07-22",
+      "date": "2026-07-23",
       "front_symbol": "HE-2026Q",
       "third_symbol": "HE-2026Z"
     },
     {
       "id": "feeder-cattle",
       "name": "Feeder Cattle",
-      "spread": 11.324981689453125,
-      "spread_pct": 103.43337319384467,
+      "spread": 10.324981689453125,
+      "spread_pct": 103.0964106497146,
       "spread_unit": "c/lb",
-      "date": "2026-07-22",
+      "date": "2026-07-23",
       "front_symbol": "GF-2026Q",
       "third_symbol": "GF-2026V"
     },
     {
       "id": "canola",
       "name": "Canola",
-      "spread": -16.5,
-      "spread_pct": 98.0336073793259,
+      "spread": -15.79998779296875,
+      "spread_pct": 98.14488815703714,
       "spread_unit": "CAD/MT",
-      "date": "2026-07-22",
+      "date": "2026-07-23",
       "front_symbol": "RS-2026X",
       "third_symbol": "RS-2027H"
     }
@@ -29305,6 +29305,13 @@
         "third_price": 500.25,
         "spread": -38.25,
         "spread_pct": 92.35382080078125
+      },
+      {
+        "date": "2026-07-23",
+        "front_price": 464.0,
+        "third_price": 503.0,
+        "spread": -39.0,
+        "spread_pct": 92.24652099609375
       }
     ],
     "soybeans": [
@@ -58469,6 +58476,13 @@
         "third_price": 1239.0,
         "spread": -6.0,
         "spread_pct": 99.51573944091797
+      },
+      {
+        "date": "2026-07-23",
+        "front_price": 1237.5,
+        "third_price": 1243.75,
+        "spread": -6.25,
+        "spread_pct": 99.49748229980469
       }
     ],
     "chicago-wheat": [
@@ -87633,6 +87647,13 @@
         "third_price": 737.75,
         "spread": -32.0,
         "spread_pct": 95.66248321533203
+      },
+      {
+        "date": "2026-07-23",
+        "front_price": 696.25,
+        "third_price": 729.25,
+        "spread": -33.0,
+        "spread_pct": 95.47480010986328
       }
     ],
     "kansas-wheat": [
@@ -116797,6 +116818,13 @@
         "third_price": 791.0,
         "spread": -27.5,
         "spread_pct": 96.52338409423828
+      },
+      {
+        "date": "2026-07-23",
+        "front_price": 759.75,
+        "third_price": 787.5,
+        "spread": -27.75,
+        "spread_pct": 96.47618865966797
       }
     ],
     "soyoil": [
@@ -145961,6 +145989,13 @@
         "third_price": 73.56999969482422,
         "spread": 1.910003662109375,
         "spread_pct": 102.59617614746094
+      },
+      {
+        "date": "2026-07-23",
+        "front_price": 75.58999633789062,
+        "third_price": 73.75,
+        "spread": 1.839996337890625,
+        "spread_pct": 102.49490356445312
       }
     ],
     "soymeal": [
@@ -175125,6 +175160,13 @@
         "third_price": 328.3999938964844,
         "spread": 3.20001220703125,
         "spread_pct": 100.97442626953125
+      },
+      {
+        "date": "2026-07-23",
+        "front_price": 329.8999938964844,
+        "third_price": 327.6000061035156,
+        "spread": 2.29998779296875,
+        "spread_pct": 100.70207214355469
       }
     ],
     "sugar": [
@@ -202728,6 +202770,13 @@
         "third_price": 15.479999542236328,
         "spread": -0.7399997711181641,
         "spread_pct": 95.21964263916016
+      },
+      {
+        "date": "2026-07-23",
+        "front_price": 14.6899995803833,
+        "third_price": 15.399999618530273,
+        "spread": -0.7100000381469727,
+        "spread_pct": 95.38961029052734
       }
     ],
     "arabica-coffee": [
@@ -231885,6 +231934,13 @@
         "third_price": 297.54998779296875,
         "spread": 19.100006103515625,
         "spread_pct": 106.41908264160156
+      },
+      {
+        "date": "2026-07-23",
+        "front_price": 309.3999938964844,
+        "third_price": 290.54998779296875,
+        "spread": 18.850006103515625,
+        "spread_pct": 106.48770141601562
       }
     ],
     "ny-cocoa": [
@@ -261042,6 +261098,13 @@
         "third_price": 5572.0,
         "spread": -244.0,
         "spread_pct": 95.62095642089844
+      },
+      {
+        "date": "2026-07-23",
+        "front_price": 5301.0,
+        "third_price": 5538.0,
+        "spread": -237.0,
+        "spread_pct": 95.72047424316406
       }
     ],
     "cotton": [
@@ -290206,6 +290269,13 @@
         "third_price": 82.44999694824219,
         "spread": -2.5799942016601562,
         "spread_pct": 96.87084197998047
+      },
+      {
+        "date": "2026-07-23",
+        "front_price": 79.83999633789062,
+        "third_price": 82.83000183105469,
+        "spread": -2.9900054931640625,
+        "spread_pct": 96.39019012451172
       }
     ],
     "live-cattle": [
@@ -319370,6 +319440,13 @@
         "third_price": 218.8000030517578,
         "spread": 4.399993896484375,
         "spread_pct": 102.0109634399414
+      },
+      {
+        "date": "2026-07-23",
+        "front_price": 225.39999389648438,
+        "third_price": 220.6750030517578,
+        "spread": 4.7249908447265625,
+        "spread_pct": 102.14115142822266
       }
     ],
     "lean-hogs": [
@@ -348534,6 +348611,13 @@
         "third_price": 79.82499694824219,
         "spread": 21.625,
         "spread_pct": 127.09051513671875
+      },
+      {
+        "date": "2026-07-23",
+        "front_price": 102.1500015258789,
+        "third_price": 80.125,
+        "spread": 22.025001525878906,
+        "spread_pct": 127.4883041381836
       }
     ],
     "feeder-cattle": [
@@ -377698,6 +377782,13 @@
         "third_price": 329.8500061035156,
         "spread": 11.324981689453125,
         "spread_pct": 103.4333724975586
+      },
+      {
+        "date": "2026-07-23",
+        "front_price": 343.7749938964844,
+        "third_price": 333.45001220703125,
+        "spread": 10.324981689453125,
+        "spread_pct": 103.0964126586914
       }
     ],
     "canola": [
@@ -406645,6 +406736,13 @@
         "third_price": 839.0999755859375,
         "spread": -16.5,
         "spread_pct": 98.03360748291016
+      },
+      {
+        "date": "2026-07-23",
+        "front_price": 835.9000244140625,
+        "third_price": 851.7000122070312,
+        "spread": -15.79998779296875,
+        "spread_pct": 98.14488983154297
       }
     ]
   }

@@ -297,11 +297,13 @@ export function AgsSummaryTab() {
         const res = await fetch("/api/cot-changes-ags-summary");
         const json: APIResponse = await res.json();
         if (json.success) {
-          setData(json.rows);
+          // Sort by Z-Score descending (highest at top)
+          const sortedRows = [...json.rows].sort((a, b) => b.zScore - a.zScore);
+          setData(sortedRows);
           setReportDate(json.reportDate);
-          // Select first row by default
-          if (json.rows.length > 0) {
-            setSelectedRow(json.rows[0]);
+          // Select first row by default (now the highest Z-Score)
+          if (sortedRows.length > 0) {
+            setSelectedRow(sortedRows[0]);
           }
         } else {
           setError("Failed to load data");
