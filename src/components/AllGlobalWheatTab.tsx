@@ -140,12 +140,20 @@ function formatK(value: number): string {
   return value.toFixed(0);
 }
 
-// Get value for a field at a specific date from a data array
+// Get value for a field at the closest date on or before the target date
 function getValueAtDate(data: COTRecord[], field: keyof COTRecord, targetDate: string): number {
-  if (!data || data.length === 0) return 0;
-  const record = data.find(d => d.date === targetDate);
-  if (!record) return 0;
-  const val = record[field];
+  if (!data || data.length === 0 || !targetDate) return 0;
+  // Find the closest date on or before targetDate
+  let closestRecord: COTRecord | null = null;
+  for (const rec of data) {
+    if (rec.date <= targetDate) {
+      if (!closestRecord || rec.date > closestRecord.date) {
+        closestRecord = rec;
+      }
+    }
+  }
+  if (!closestRecord) return 0;
+  const val = closestRecord[field];
   return typeof val === 'number' ? val : 0;
 }
 
