@@ -142,8 +142,42 @@ function mergeGlobalOilseedsData(
   return Array.from(byDate.values()).sort((a, b) => a.date.localeCompare(b.date));
 }
 
+// Format number in thousands with K suffix
+function formatK(value: number): string {
+  const absVal = Math.abs(value);
+  if (absVal >= 1000) {
+    return `${(value / 1000).toFixed(0)}K`;
+  }
+  return value.toFixed(0);
+}
+
+// Get latest value for a field from a data array
+function getLatestValue(data: COTRecord[], field: keyof COTRecord): number {
+  if (!data || data.length === 0) return 0;
+  const val = data[data.length - 1][field];
+  return typeof val === 'number' ? val : 0;
+}
+
+// Breakdown component to show individual commodity contributions
+function Breakdown({ items }: { items: { label: string; value: number }[] }) {
+  return (
+    <div className="text-[10px] text-zinc-500 mt-1 flex flex-wrap gap-x-3">
+      {items.map((item, i) => (
+        <span key={i}>
+          {item.label}: <span className={item.value >= 0 ? "text-zinc-400" : "text-red-400"}>{formatK(item.value)}</span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export function AllGlobalOilseedsTab() {
   const [data, setData] = useState<COTRecord[]>([]);
+  const [soybeansData, setSoybeansData] = useState<COTRecord[]>([]);
+  const [soymealData, setSoymealData] = useState<COTRecord[]>([]);
+  const [soyoilData, setSoyoilData] = useState<COTRecord[]>([]);
+  const [canolaData, setCanolaData] = useState<COTRecord[]>([]);
+  const [matifData, setMatifData] = useState<COTRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const contractName = "All Oilseeds";
@@ -176,25 +210,32 @@ export function AllGlobalOilseedsTab() {
           return;
         }
 
+        // Store individual commodity data
+        setSoybeansData(soybeansJson.data);
+        setSoymealData(soymealJson.data);
+        setSoyoilData(soyoilJson.data);
+
         // Canola data (may not exist for all dates)
-        let canolaData: COTRecord[] = [];
+        let canola: COTRecord[] = [];
         if (canolaJson.success && canolaJson.data) {
-          canolaData = canolaJson.data;
+          canola = canolaJson.data;
         }
+        setCanolaData(canola);
 
         // Matif Rapeseed data - convert if not already in COT format
-        let matifData: COTRecord[] = [];
+        let matif: COTRecord[] = [];
         if (matifJson.success && matifJson.data) {
-          matifData = matifJson.data;
+          matif = matifJson.data;
         }
+        setMatifData(matif);
 
         // Merge all the data
         const merged = mergeGlobalOilseedsData(
           soybeansJson.data,
           soymealJson.data,
           soyoilJson.data,
-          canolaData,
-          matifData
+          canola,
+          matif
         );
 
         setData(merged);
@@ -208,6 +249,15 @@ export function AllGlobalOilseedsTab() {
 
     fetchData();
   }, []);
+
+  // Helper to create breakdown items for a given field
+  const getBreakdown = (field: keyof COTRecord) => [
+    { label: "Beans", value: getLatestValue(soybeansData, field) },
+    { label: "Meal", value: getLatestValue(soymealData, field) },
+    { label: "Oil", value: getLatestValue(soyoilData, field) },
+    { label: "Canola", value: getLatestValue(canolaData, field) },
+    { label: "Rapeseed", value: getLatestValue(matifData, field) },
+  ];
 
   // ============================================
   // AGGREGATE DATA - Outright
@@ -495,13 +545,40 @@ export function AllGlobalOilseedsTab() {
           Aggregate Data
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <COTChart title={`${contractName} - Managed Money Net Position`} data={mmNetData} lines={netLine} alternateData={mmPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
-          <COTChart title={`${contractName} - Spec Net Position`} data={specNetData} lines={netLine} alternateData={specPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
-          <COTChart title={`${contractName} - Producer Net Position`} data={producerNetData} lines={netLine} alternateData={producerPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
-          <COTChart title={`${contractName} - Swap Dealer Net Position`} data={swapNetData} lines={netLine} alternateData={swapPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
-          <COTChart title={`${contractName} - Other Reportables Net Position`} data={otherNetData} lines={netLine} alternateData={otherPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
-          <COTChart title={`${contractName} - Non-Reportables Net Position`} data={nonReptNetData} lines={netLine} alternateData={nonReptPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
-          <COTChart title={`${contractName} - Producer + Non-Reportables Net Position`} data={prodNonReptNetData} lines={netLine} alternateData={prodNonReptPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+          <div>
+            <COTChart title={`${contractName} - Managed Money Net Position`} data={mmNetData} lines={netLine} alternateData={mmPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={getBreakdown("mmNetAll")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Spec Net Position`} data={specNetData} lines={netLine} alternateData={specPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={getBreakdown("specNetAll")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Producer Net Position`} data={producerNetData} lines={netLine} alternateData={producerPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={getBreakdown("producerNetAll")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Swap Dealer Net Position`} data={swapNetData} lines={netLine} alternateData={swapPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={getBreakdown("swapNetAll")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Other Reportables Net Position`} data={otherNetData} lines={netLine} alternateData={otherPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={getBreakdown("otherNetAll")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Non-Reportables Net Position`} data={nonReptNetData} lines={netLine} alternateData={nonReptPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={getBreakdown("nonReptNetAll")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Producer + Non-Reportables Net Position`} data={prodNonReptNetData} lines={netLine} alternateData={prodNonReptPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={[
+              { label: "Beans", value: getLatestValue(soybeansData, "producerNetAll") + getLatestValue(soybeansData, "nonReptNetAll") },
+              { label: "Meal", value: getLatestValue(soymealData, "producerNetAll") + getLatestValue(soymealData, "nonReptNetAll") },
+              { label: "Oil", value: getLatestValue(soyoilData, "producerNetAll") + getLatestValue(soyoilData, "nonReptNetAll") },
+              { label: "Canola", value: getLatestValue(canolaData, "producerNetAll") + getLatestValue(canolaData, "nonReptNetAll") },
+              { label: "Rapeseed", value: getLatestValue(matifData, "producerNetAll") + getLatestValue(matifData, "nonReptNetAll") },
+            ]} />
+          </div>
         </div>
       </div>
 
@@ -511,13 +588,40 @@ export function AllGlobalOilseedsTab() {
           Old Crop Data
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <COTChart title={`${contractName} - Managed Money Net Position, Old Crop`} data={mmOldData} lines={netLine} alternateData={mmOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
-          <COTChart title={`${contractName} - Spec Net Position, Old Crop`} data={specOldData} lines={netLine} alternateData={specOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
-          <COTChart title={`${contractName} - Producer Net Position, Old Crop`} data={producerOldData} lines={netLine} alternateData={producerOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
-          <COTChart title={`${contractName} - Swap Dealer Net Position, Old Crop`} data={swapOldData} lines={netLine} alternateData={swapOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
-          <COTChart title={`${contractName} - Other Reportables Net Position, Old Crop`} data={otherOldData} lines={netLine} alternateData={otherOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
-          <COTChart title={`${contractName} - Non-Reportables Net Position, Old Crop`} data={nonReptOldData} lines={netLine} alternateData={nonReptOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
-          <COTChart title={`${contractName} - Producer + Non-Reportables Net Position, Old Crop`} data={prodNonReptOldData} lines={netLine} alternateData={prodNonReptOldPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+          <div>
+            <COTChart title={`${contractName} - Managed Money Net Position, Old Crop`} data={mmOldData} lines={netLine} alternateData={mmOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
+            <Breakdown items={getBreakdown("mmNetOld")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Spec Net Position, Old Crop`} data={specOldData} lines={netLine} alternateData={specOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
+            <Breakdown items={getBreakdown("specNetOld")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Producer Net Position, Old Crop`} data={producerOldData} lines={netLine} alternateData={producerOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
+            <Breakdown items={getBreakdown("producerNetOld")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Swap Dealer Net Position, Old Crop`} data={swapOldData} lines={netLine} alternateData={swapOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
+            <Breakdown items={getBreakdown("swapNetOld")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Other Reportables Net Position, Old Crop`} data={otherOldData} lines={netLine} alternateData={otherOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
+            <Breakdown items={getBreakdown("otherNetOld")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Non-Reportables Net Position, Old Crop`} data={nonReptOldData} lines={netLine} alternateData={nonReptOldPctTotalData} alternateLines={pctTotalLine} alternateLabel="% Total" loading={loading} />
+            <Breakdown items={getBreakdown("nonReptNetOld")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Producer + Non-Reportables Net Position, Old Crop`} data={prodNonReptOldData} lines={netLine} alternateData={prodNonReptOldPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={[
+              { label: "Beans", value: getLatestValue(soybeansData, "producerNetOld") + getLatestValue(soybeansData, "nonReptNetOld") },
+              { label: "Meal", value: getLatestValue(soymealData, "producerNetOld") + getLatestValue(soymealData, "nonReptNetOld") },
+              { label: "Oil", value: getLatestValue(soyoilData, "producerNetOld") + getLatestValue(soyoilData, "nonReptNetOld") },
+              { label: "Canola", value: getLatestValue(canolaData, "producerNetOld") + getLatestValue(canolaData, "nonReptNetOld") },
+              { label: "Rapeseed", value: getLatestValue(matifData, "producerNetOld") + getLatestValue(matifData, "nonReptNetOld") },
+            ]} />
+          </div>
         </div>
       </div>
 
@@ -527,13 +631,40 @@ export function AllGlobalOilseedsTab() {
           New Crop Data
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <COTChart title={`${contractName} - Managed Money Net Position, New Crop`} data={mmNewData} lines={netLine} alternateData={mmNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
-          <COTChart title={`${contractName} - Spec Net Position, New Crop`} data={specNewData} lines={netLine} alternateData={specNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
-          <COTChart title={`${contractName} - Producer Net Position, New Crop`} data={producerNewData} lines={netLine} alternateData={producerNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
-          <COTChart title={`${contractName} - Swap Dealer Net Position, New Crop`} data={swapNewData} lines={netLine} alternateData={swapNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
-          <COTChart title={`${contractName} - Other Reportables Net Position, New Crop`} data={otherNewData} lines={netLine} alternateData={otherNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
-          <COTChart title={`${contractName} - Non-Reportables Net Position, New Crop`} data={nonReptNewData} lines={netLine} alternateData={nonReptNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
-          <COTChart title={`${contractName} - Producer + Non-Reportables Net Position, New Crop`} data={prodNonReptNewData} lines={netLine} alternateData={prodNonReptNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+          <div>
+            <COTChart title={`${contractName} - Managed Money Net Position, New Crop`} data={mmNewData} lines={netLine} alternateData={mmNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={getBreakdown("mmNetOther")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Spec Net Position, New Crop`} data={specNewData} lines={netLine} alternateData={specNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={getBreakdown("specNetOther")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Producer Net Position, New Crop`} data={producerNewData} lines={netLine} alternateData={producerNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={getBreakdown("producerNetOther")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Swap Dealer Net Position, New Crop`} data={swapNewData} lines={netLine} alternateData={swapNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={getBreakdown("swapNetOther")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Other Reportables Net Position, New Crop`} data={otherNewData} lines={netLine} alternateData={otherNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={getBreakdown("otherNetOther")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Non-Reportables Net Position, New Crop`} data={nonReptNewData} lines={netLine} alternateData={nonReptNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={getBreakdown("nonReptNetOther")} />
+          </div>
+          <div>
+            <COTChart title={`${contractName} - Producer + Non-Reportables Net Position, New Crop`} data={prodNonReptNewData} lines={netLine} alternateData={prodNonReptNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
+            <Breakdown items={[
+              { label: "Beans", value: getLatestValue(soybeansData, "producerNetOther") + getLatestValue(soybeansData, "nonReptNetOther") },
+              { label: "Meal", value: getLatestValue(soymealData, "producerNetOther") + getLatestValue(soymealData, "nonReptNetOther") },
+              { label: "Oil", value: getLatestValue(soyoilData, "producerNetOther") + getLatestValue(soyoilData, "nonReptNetOther") },
+              { label: "Canola", value: getLatestValue(canolaData, "producerNetOther") + getLatestValue(canolaData, "nonReptNetOther") },
+              { label: "Rapeseed", value: getLatestValue(matifData, "producerNetOther") + getLatestValue(matifData, "nonReptNetOther") },
+            ]} />
+          </div>
         </div>
       </div>
     </div>
