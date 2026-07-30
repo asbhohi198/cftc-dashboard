@@ -140,10 +140,12 @@ function formatK(value: number): string {
   return value.toFixed(0);
 }
 
-// Get latest value for a field from a data array
-function getLatestValue(data: COTRecord[], field: keyof COTRecord): number {
+// Get value for a field at a specific date from a data array
+function getValueAtDate(data: COTRecord[], field: keyof COTRecord, targetDate: string): number {
   if (!data || data.length === 0) return 0;
-  const val = data[data.length - 1][field];
+  const record = data.find(d => d.date === targetDate);
+  if (!record) return 0;
+  const val = record[field];
   return typeof val === 'number' ? val : 0;
 }
 
@@ -228,12 +230,15 @@ export function AllGlobalWheatTab() {
     fetchData();
   }, []);
 
-  // Helper to create breakdown items for a given field
+  // Get the date of the last merged data point
+  const lastDate = data.length > 0 ? data[data.length - 1].date : "";
+
+  // Helper to create breakdown items for a given field (uses the merged data's last date)
   const getBreakdown = (field: keyof COTRecord) => [
-    { label: "CBOT", value: getLatestValue(chicagoData, field) },
-    { label: "KCBT", value: getLatestValue(kansasData, field) },
-    { label: "MGEX", value: getLatestValue(minneapolisData, field) },
-    { label: "Matif", value: getLatestValue(matifData, field) },
+    { label: "CBOT", value: getValueAtDate(chicagoData, field, lastDate) },
+    { label: "KCBT", value: getValueAtDate(kansasData, field, lastDate) },
+    { label: "MGEX", value: getValueAtDate(minneapolisData, field, lastDate) },
+    { label: "Matif", value: getValueAtDate(matifData, field, lastDate) },
   ];
 
   // ============================================
@@ -549,10 +554,10 @@ export function AllGlobalWheatTab() {
           <div>
             <COTChart title={`${contractName} - Producer + Non-Reportables Net Position`} data={prodNonReptNetData} lines={netLine} alternateData={prodNonReptPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
             <Breakdown items={[
-              { label: "CBOT", value: getLatestValue(chicagoData, "producerNetAll") + getLatestValue(chicagoData, "nonReptNetAll") },
-              { label: "KCBT", value: getLatestValue(kansasData, "producerNetAll") + getLatestValue(kansasData, "nonReptNetAll") },
-              { label: "MGEX", value: getLatestValue(minneapolisData, "producerNetAll") + getLatestValue(minneapolisData, "nonReptNetAll") },
-              { label: "Matif", value: getLatestValue(matifData, "producerNetAll") + getLatestValue(matifData, "nonReptNetAll") },
+              { label: "CBOT", value: getValueAtDate(chicagoData, "producerNetAll", lastDate) + getValueAtDate(chicagoData, "nonReptNetAll", lastDate) },
+              { label: "KCBT", value: getValueAtDate(kansasData, "producerNetAll", lastDate) + getValueAtDate(kansasData, "nonReptNetAll", lastDate) },
+              { label: "MGEX", value: getValueAtDate(minneapolisData, "producerNetAll", lastDate) + getValueAtDate(minneapolisData, "nonReptNetAll", lastDate) },
+              { label: "Matif", value: getValueAtDate(matifData, "producerNetAll", lastDate) + getValueAtDate(matifData, "nonReptNetAll", lastDate) },
             ]} />
           </div>
         </div>
@@ -591,10 +596,10 @@ export function AllGlobalWheatTab() {
           <div>
             <COTChart title={`${contractName} - Producer + Non-Reportables Net Position, Old Crop`} data={prodNonReptOldData} lines={netLine} alternateData={prodNonReptOldPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
             <Breakdown items={[
-              { label: "CBOT", value: getLatestValue(chicagoData, "producerNetOld") + getLatestValue(chicagoData, "nonReptNetOld") },
-              { label: "KCBT", value: getLatestValue(kansasData, "producerNetOld") + getLatestValue(kansasData, "nonReptNetOld") },
-              { label: "MGEX", value: getLatestValue(minneapolisData, "producerNetOld") + getLatestValue(minneapolisData, "nonReptNetOld") },
-              { label: "Matif", value: getLatestValue(matifData, "producerNetOld") + getLatestValue(matifData, "nonReptNetOld") },
+              { label: "CBOT", value: getValueAtDate(chicagoData, "producerNetOld", lastDate) + getValueAtDate(chicagoData, "nonReptNetOld", lastDate) },
+              { label: "KCBT", value: getValueAtDate(kansasData, "producerNetOld", lastDate) + getValueAtDate(kansasData, "nonReptNetOld", lastDate) },
+              { label: "MGEX", value: getValueAtDate(minneapolisData, "producerNetOld", lastDate) + getValueAtDate(minneapolisData, "nonReptNetOld", lastDate) },
+              { label: "Matif", value: getValueAtDate(matifData, "producerNetOld", lastDate) + getValueAtDate(matifData, "nonReptNetOld", lastDate) },
             ]} />
           </div>
         </div>
@@ -633,10 +638,10 @@ export function AllGlobalWheatTab() {
           <div>
             <COTChart title={`${contractName} - Producer + Non-Reportables Net Position, New Crop`} data={prodNonReptNewData} lines={netLine} alternateData={prodNonReptNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
             <Breakdown items={[
-              { label: "CBOT", value: getLatestValue(chicagoData, "producerNetOther") + getLatestValue(chicagoData, "nonReptNetOther") },
-              { label: "KCBT", value: getLatestValue(kansasData, "producerNetOther") + getLatestValue(kansasData, "nonReptNetOther") },
-              { label: "MGEX", value: getLatestValue(minneapolisData, "producerNetOther") + getLatestValue(minneapolisData, "nonReptNetOther") },
-              { label: "Matif", value: getLatestValue(matifData, "producerNetOther") + getLatestValue(matifData, "nonReptNetOther") },
+              { label: "CBOT", value: getValueAtDate(chicagoData, "producerNetOther", lastDate) + getValueAtDate(chicagoData, "nonReptNetOther", lastDate) },
+              { label: "KCBT", value: getValueAtDate(kansasData, "producerNetOther", lastDate) + getValueAtDate(kansasData, "nonReptNetOther", lastDate) },
+              { label: "MGEX", value: getValueAtDate(minneapolisData, "producerNetOther", lastDate) + getValueAtDate(minneapolisData, "nonReptNetOther", lastDate) },
+              { label: "Matif", value: getValueAtDate(matifData, "producerNetOther", lastDate) + getValueAtDate(matifData, "nonReptNetOther", lastDate) },
             ]} />
           </div>
         </div>

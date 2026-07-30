@@ -151,10 +151,12 @@ function formatK(value: number): string {
   return value.toFixed(0);
 }
 
-// Get latest value for a field from a data array
-function getLatestValue(data: COTRecord[], field: keyof COTRecord): number {
-  if (!data || data.length === 0) return 0;
-  const val = data[data.length - 1][field];
+// Get value for a field at a specific date from a data array
+function getValueAtDate(data: COTRecord[], field: keyof COTRecord, targetDate: string): number {
+  if (!data || data.length === 0 || !targetDate) return 0;
+  const record = data.find(d => d.date === targetDate);
+  if (!record) return 0;
+  const val = record[field];
   return typeof val === 'number' ? val : 0;
 }
 
@@ -250,13 +252,16 @@ export function AllGlobalOilseedsTab() {
     fetchData();
   }, []);
 
-  // Helper to create breakdown items for a given field
+  // Get the date of the last merged data point
+  const lastDate = data.length > 0 ? data[data.length - 1].date : "";
+
+  // Helper to create breakdown items for a given field (uses the merged data's last date)
   const getBreakdown = (field: keyof COTRecord) => [
-    { label: "Beans", value: getLatestValue(soybeansData, field) },
-    { label: "Meal", value: getLatestValue(soymealData, field) },
-    { label: "Oil", value: getLatestValue(soyoilData, field) },
-    { label: "Canola", value: getLatestValue(canolaData, field) },
-    { label: "Rapeseed", value: getLatestValue(matifData, field) },
+    { label: "Beans", value: getValueAtDate(soybeansData, field, lastDate) },
+    { label: "Meal", value: getValueAtDate(soymealData, field, lastDate) },
+    { label: "Oil", value: getValueAtDate(soyoilData, field, lastDate) },
+    { label: "Canola", value: getValueAtDate(canolaData, field, lastDate) },
+    { label: "Rapeseed", value: getValueAtDate(matifData, field, lastDate) },
   ];
 
   // ============================================
@@ -572,11 +577,11 @@ export function AllGlobalOilseedsTab() {
           <div>
             <COTChart title={`${contractName} - Producer + Non-Reportables Net Position`} data={prodNonReptNetData} lines={netLine} alternateData={prodNonReptPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
             <Breakdown items={[
-              { label: "Beans", value: getLatestValue(soybeansData, "producerNetAll") + getLatestValue(soybeansData, "nonReptNetAll") },
-              { label: "Meal", value: getLatestValue(soymealData, "producerNetAll") + getLatestValue(soymealData, "nonReptNetAll") },
-              { label: "Oil", value: getLatestValue(soyoilData, "producerNetAll") + getLatestValue(soyoilData, "nonReptNetAll") },
-              { label: "Canola", value: getLatestValue(canolaData, "producerNetAll") + getLatestValue(canolaData, "nonReptNetAll") },
-              { label: "Rapeseed", value: getLatestValue(matifData, "producerNetAll") + getLatestValue(matifData, "nonReptNetAll") },
+              { label: "Beans", value: getValueAtDate(soybeansData, "producerNetAll", lastDate) + getValueAtDate(soybeansData, "nonReptNetAll", lastDate) },
+              { label: "Meal", value: getValueAtDate(soymealData, "producerNetAll", lastDate) + getValueAtDate(soymealData, "nonReptNetAll", lastDate) },
+              { label: "Oil", value: getValueAtDate(soyoilData, "producerNetAll", lastDate) + getValueAtDate(soyoilData, "nonReptNetAll", lastDate) },
+              { label: "Canola", value: getValueAtDate(canolaData, "producerNetAll", lastDate) + getValueAtDate(canolaData, "nonReptNetAll", lastDate) },
+              { label: "Rapeseed", value: getValueAtDate(matifData, "producerNetAll", lastDate) + getValueAtDate(matifData, "nonReptNetAll", lastDate) },
             ]} />
           </div>
         </div>
@@ -615,11 +620,11 @@ export function AllGlobalOilseedsTab() {
           <div>
             <COTChart title={`${contractName} - Producer + Non-Reportables Net Position, Old Crop`} data={prodNonReptOldData} lines={netLine} alternateData={prodNonReptOldPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
             <Breakdown items={[
-              { label: "Beans", value: getLatestValue(soybeansData, "producerNetOld") + getLatestValue(soybeansData, "nonReptNetOld") },
-              { label: "Meal", value: getLatestValue(soymealData, "producerNetOld") + getLatestValue(soymealData, "nonReptNetOld") },
-              { label: "Oil", value: getLatestValue(soyoilData, "producerNetOld") + getLatestValue(soyoilData, "nonReptNetOld") },
-              { label: "Canola", value: getLatestValue(canolaData, "producerNetOld") + getLatestValue(canolaData, "nonReptNetOld") },
-              { label: "Rapeseed", value: getLatestValue(matifData, "producerNetOld") + getLatestValue(matifData, "nonReptNetOld") },
+              { label: "Beans", value: getValueAtDate(soybeansData, "producerNetOld", lastDate) + getValueAtDate(soybeansData, "nonReptNetOld", lastDate) },
+              { label: "Meal", value: getValueAtDate(soymealData, "producerNetOld", lastDate) + getValueAtDate(soymealData, "nonReptNetOld", lastDate) },
+              { label: "Oil", value: getValueAtDate(soyoilData, "producerNetOld", lastDate) + getValueAtDate(soyoilData, "nonReptNetOld", lastDate) },
+              { label: "Canola", value: getValueAtDate(canolaData, "producerNetOld", lastDate) + getValueAtDate(canolaData, "nonReptNetOld", lastDate) },
+              { label: "Rapeseed", value: getValueAtDate(matifData, "producerNetOld", lastDate) + getValueAtDate(matifData, "nonReptNetOld", lastDate) },
             ]} />
           </div>
         </div>
@@ -658,11 +663,11 @@ export function AllGlobalOilseedsTab() {
           <div>
             <COTChart title={`${contractName} - Producer + Non-Reportables Net Position, New Crop`} data={prodNonReptNewData} lines={netLine} alternateData={prodNonReptNewPctOIData} alternateLines={pctOILine} alternateLabel="% OI" loading={loading} />
             <Breakdown items={[
-              { label: "Beans", value: getLatestValue(soybeansData, "producerNetOther") + getLatestValue(soybeansData, "nonReptNetOther") },
-              { label: "Meal", value: getLatestValue(soymealData, "producerNetOther") + getLatestValue(soymealData, "nonReptNetOther") },
-              { label: "Oil", value: getLatestValue(soyoilData, "producerNetOther") + getLatestValue(soyoilData, "nonReptNetOther") },
-              { label: "Canola", value: getLatestValue(canolaData, "producerNetOther") + getLatestValue(canolaData, "nonReptNetOther") },
-              { label: "Rapeseed", value: getLatestValue(matifData, "producerNetOther") + getLatestValue(matifData, "nonReptNetOther") },
+              { label: "Beans", value: getValueAtDate(soybeansData, "producerNetOther", lastDate) + getValueAtDate(soybeansData, "nonReptNetOther", lastDate) },
+              { label: "Meal", value: getValueAtDate(soymealData, "producerNetOther", lastDate) + getValueAtDate(soymealData, "nonReptNetOther", lastDate) },
+              { label: "Oil", value: getValueAtDate(soyoilData, "producerNetOther", lastDate) + getValueAtDate(soyoilData, "nonReptNetOther", lastDate) },
+              { label: "Canola", value: getValueAtDate(canolaData, "producerNetOther", lastDate) + getValueAtDate(canolaData, "nonReptNetOther", lastDate) },
+              { label: "Rapeseed", value: getValueAtDate(matifData, "producerNetOther", lastDate) + getValueAtDate(matifData, "nonReptNetOther", lastDate) },
             ]} />
           </div>
         </div>
