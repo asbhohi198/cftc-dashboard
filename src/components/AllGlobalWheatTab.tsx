@@ -84,51 +84,84 @@ function sumRecords(a: COTRecord, b: COTRecord): COTRecord {
   };
 }
 
-// Merge multiple data arrays by date (summing values)
+// Get the most recent record on or before a target date
+function getRecordAtDate(data: COTRecord[], targetDate: string): COTRecord | null {
+  if (!data || data.length === 0) return null;
+  let closest: COTRecord | null = null;
+  for (const rec of data) {
+    if (rec.date <= targetDate) {
+      if (!closest || rec.date > closest.date) {
+        closest = rec;
+      }
+    }
+  }
+  return closest;
+}
+
+// Create a zero-filled COTRecord for a given date
+function zeroRecord(date: string): COTRecord {
+  return {
+    date,
+    openInterestAll: 0, openInterestOld: 0, openInterestOther: 0,
+    producerLongAll: 0, producerShortAll: 0, producerNetAll: 0,
+    producerLongOld: 0, producerShortOld: 0, producerNetOld: 0,
+    producerLongOther: 0, producerShortOther: 0, producerNetOther: 0,
+    swapLongAll: 0, swapShortAll: 0, swapSpreadAll: 0, swapNetAll: 0,
+    swapLongOld: 0, swapShortOld: 0, swapSpreadOld: 0, swapNetOld: 0,
+    swapLongOther: 0, swapShortOther: 0, swapSpreadOther: 0, swapNetOther: 0,
+    mmLongAll: 0, mmShortAll: 0, mmSpreadAll: 0, mmNetAll: 0,
+    mmLongOld: 0, mmShortOld: 0, mmSpreadOld: 0, mmNetOld: 0,
+    mmLongOther: 0, mmShortOther: 0, mmSpreadOther: 0, mmNetOther: 0,
+    otherLongAll: 0, otherShortAll: 0, otherSpreadAll: 0, otherNetAll: 0,
+    otherLongOld: 0, otherShortOld: 0, otherSpreadOld: 0, otherNetOld: 0,
+    otherLongOther: 0, otherShortOther: 0, otherSpreadOther: 0, otherNetOther: 0,
+    nonReptLongAll: 0, nonReptShortAll: 0, nonReptNetAll: 0,
+    nonReptLongOld: 0, nonReptShortOld: 0, nonReptNetOld: 0,
+    nonReptLongOther: 0, nonReptShortOther: 0, nonReptNetOther: 0,
+    specNetAll: 0, specNetOld: 0, specNetOther: 0,
+    tradersProducerLong: 0, tradersProducerShort: 0,
+    tradersSwapLong: 0, tradersSwapShort: 0, tradersSwapSpread: 0,
+    tradersMMLong: 0, tradersMMShort: 0, tradersMMSpread: 0,
+    tradersOtherLong: 0, tradersOtherShort: 0, tradersOtherSpread: 0,
+    tradersTotalLong: 0, tradersTotalShort: 0,
+  };
+}
+
+// Merge multiple data arrays with forward-fill (uses most recent value from each source)
 function mergeGlobalWheatData(
   chicago: COTRecord[],
   kansas: COTRecord[],
   minneapolis: COTRecord[],
   matif: COTRecord[]
 ): COTRecord[] {
-  const byDate = new Map<string, COTRecord>();
+  // Collect all unique dates from all sources
+  const allDates = new Set<string>();
+  for (const rec of chicago) allDates.add(rec.date);
+  for (const rec of kansas) allDates.add(rec.date);
+  for (const rec of minneapolis) allDates.add(rec.date);
+  for (const rec of matif) allDates.add(rec.date);
 
-  // Add Chicago data
-  for (const rec of chicago) {
-    byDate.set(rec.date, rec);
+  // Sort dates
+  const sortedDates = Array.from(allDates).sort();
+
+  // For each date, get the most recent value from each source and sum
+  const result: COTRecord[] = [];
+  for (const date of sortedDates) {
+    const chicagoRec = getRecordAtDate(chicago, date) || zeroRecord(date);
+    const kansasRec = getRecordAtDate(kansas, date) || zeroRecord(date);
+    const minneapolisRec = getRecordAtDate(minneapolis, date) || zeroRecord(date);
+    const matifRec = getRecordAtDate(matif, date) || zeroRecord(date);
+
+    // Sum all four with the correct date
+    let merged = { ...chicagoRec, date };
+    merged = sumRecords(merged, { ...kansasRec, date });
+    merged = sumRecords(merged, { ...minneapolisRec, date });
+    merged = sumRecords(merged, { ...matifRec, date });
+
+    result.push(merged);
   }
 
-  // Add Kansas data
-  for (const rec of kansas) {
-    const existing = byDate.get(rec.date);
-    if (existing) {
-      byDate.set(rec.date, sumRecords(existing, rec));
-    } else {
-      byDate.set(rec.date, rec);
-    }
-  }
-
-  // Add Minneapolis data
-  for (const rec of minneapolis) {
-    const existing = byDate.get(rec.date);
-    if (existing) {
-      byDate.set(rec.date, sumRecords(existing, rec));
-    } else {
-      byDate.set(rec.date, rec);
-    }
-  }
-
-  // Add Matif data
-  for (const rec of matif) {
-    const existing = byDate.get(rec.date);
-    if (existing) {
-      byDate.set(rec.date, sumRecords(existing, rec));
-    } else {
-      byDate.set(rec.date, rec);
-    }
-  }
-
-  return Array.from(byDate.values()).sort((a, b) => a.date.localeCompare(b.date));
+  return result;
 }
 
 // Format number in thousands with K suffix
