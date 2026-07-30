@@ -10,7 +10,9 @@ import { SeasonalCITTab } from "./SeasonalCITTab";
 import { SeasonalPxWeightedTab } from "./SeasonalPxWeightedTab";
 import { SeasonalVolWeightedTab } from "./SeasonalVolWeightedTab";
 import { AllWheatTab } from "./AllWheatTab";
+import { AllGlobalWheatTab } from "./AllGlobalWheatTab";
 import { AllOilseedsTab } from "./AllOilseedsTab";
+import { AllGlobalOilseedsTab } from "./AllGlobalOilseedsTab";
 import { AllGrainsTab } from "./AllGrainsTab";
 import { AllGOTab } from "./AllGOTab";
 import { OCNCMMSplitsTab } from "./OCNCMMSplitsTab";
@@ -467,11 +469,23 @@ export function Dashboard() {
         {activeTab === "ags-grains" && activeSubTab === "all-us-wheat" && activeSubSubTab === "seasonal" && (
           <SeasonalTab contractId="all-us-wheat" />
         )}
+        {activeTab === "ags-grains" && activeSubTab === "all-wheat" && activeSubSubTab === "outright" && (
+          <AllGlobalWheatTab />
+        )}
+        {activeTab === "ags-grains" && activeSubTab === "all-wheat" && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId="all-wheat" />
+        )}
         {activeTab === "ags-grains" && activeSubTab === "all-us-oilseeds" && activeSubSubTab === "outright" && (
           <AllOilseedsTab />
         )}
         {activeTab === "ags-grains" && activeSubTab === "all-us-oilseeds" && activeSubSubTab === "seasonal" && (
           <SeasonalTab contractId="all-us-oilseeds" />
+        )}
+        {activeTab === "ags-grains" && activeSubTab === "all-oilseeds" && activeSubSubTab === "outright" && (
+          <AllGlobalOilseedsTab />
+        )}
+        {activeTab === "ags-grains" && activeSubTab === "all-oilseeds" && activeSubSubTab === "seasonal" && (
+          <SeasonalTab contractId="all-oilseeds" />
         )}
         {activeTab === "ags-grains" && activeSubTab === "all-us-grains" && activeSubSubTab === "outright" && (
           <AllGrainsTab />
@@ -491,10 +505,10 @@ export function Dashboard() {
         {activeTab === "ags-grains" && activeSubTab === "oc-nc-mm-splits" && activeSubSubTab === "seasonal" && (
           <SeasonalTab contractId="oc-nc-mm-splits" />
         )}
-        {activeTab === "ags-grains" && activeSubTab !== "all-us-wheat" && activeSubTab !== "all-us-oilseeds" && activeSubTab !== "all-us-grains" && activeSubTab !== "all-us-go" && activeSubTab !== "oc-nc-mm-splits" && contractId && activeSubSubTab === "outright" && (
+        {activeTab === "ags-grains" && activeSubTab !== "all-us-wheat" && activeSubTab !== "all-wheat" && activeSubTab !== "all-us-oilseeds" && activeSubTab !== "all-oilseeds" && activeSubTab !== "all-us-grains" && activeSubTab !== "all-us-go" && activeSubTab !== "oc-nc-mm-splits" && contractId && activeSubSubTab === "outright" && (
           <CornTab contractId={contractId} />
         )}
-        {activeTab === "ags-grains" && activeSubTab !== "all-us-wheat" && activeSubTab !== "all-us-oilseeds" && activeSubTab !== "all-us-grains" && activeSubTab !== "all-us-go" && activeSubTab !== "oc-nc-mm-splits" && contractId && activeSubSubTab === "seasonal" && (
+        {activeTab === "ags-grains" && activeSubTab !== "all-us-wheat" && activeSubTab !== "all-wheat" && activeSubTab !== "all-us-oilseeds" && activeSubTab !== "all-oilseeds" && activeSubTab !== "all-us-grains" && activeSubTab !== "all-us-go" && activeSubTab !== "oc-nc-mm-splits" && contractId && activeSubSubTab === "seasonal" && (
           <SeasonalTab contractId={contractId} />
         )}
 

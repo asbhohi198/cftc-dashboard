@@ -41,7 +41,9 @@ export type AgsGrainsSubTab =
   | "canola"
   | "matif-rapeseed"
   | "all-us-wheat"
+  | "all-wheat"
   | "all-us-oilseeds"
+  | "all-oilseeds"
   | "all-us-grains"
   | "all-us-go"
   | "oc-nc-mm-splits";
@@ -316,7 +318,9 @@ export const TAB_CONFIG: TabConfig[] = [
       { id: "canola", label: "Canola" },
       { id: "matif-rapeseed", label: "Matif Rapeseed" },
       { id: "all-us-wheat", label: "All US Wheat" },
+      { id: "all-wheat", label: "All Wheat" },
       { id: "all-us-oilseeds", label: "All US Oilseeds" },
+      { id: "all-oilseeds", label: "All Oilseeds" },
       { id: "all-us-grains", label: "All US Grains" },
       { id: "all-us-go", label: "All US G&O" },
       { id: "oc-nc-mm-splits", label: "OC/NC MM Splits" },
