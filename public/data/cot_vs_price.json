@@ -1,22 +1,22 @@
 {
-  "updated": "2026-07-24T18:03:56.505283",
+  "updated": "2026-08-01T01:58:34.498571",
   "data": [
     {
       "id": "corn",
       "name": "Corn",
       "sector": "ags-grains",
-      "currentMMNet": 43391.0,
-      "currentPrice": 438.5,
-      "latestDate": "2026-07-14",
+      "currentMMNet": 168399.0,
+      "currentPrice": 458.5,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 401993.0,
       "recordMinPosition": -353983.0,
-      "beta": 4.462481373589407e-05,
-      "rSquared": 0.28331505385111994,
-      "correlation": 0.5322734765617388,
-      "priceToMaxLong": 508.6711705915742,
-      "priceToMaxShort": 360.74193188365876,
-      "contractsToMaxLong": 358602.0,
-      "contractsToMaxShort": -397374.0,
+      "beta": 4.449388374493306e-05,
+      "rSquared": 0.2837078442297993,
+      "correlation": 0.5326423229802522,
+      "priceToMaxLong": 506.15421712157115,
+      "priceToMaxShort": 351.9317437588268,
+      "contractsToMaxLong": 233594.0,
+      "contractsToMaxShort": -522382.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -4409,6 +4409,22 @@
           "mm_change": 30732.0,
           "price_change": -5.25,
           "price_change_pct": -1.183098591549292
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": 92909.0,
+          "price": 452.75,
+          "mm_change": 49518.0,
+          "price_change": 14.25,
+          "price_change_pct": 3.2497149372862077
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": 168399.0,
+          "price": 458.5,
+          "mm_change": 75490.0,
+          "price_change": 5.75,
+          "price_change_pct": 1.2700165654334628
         }
       ]
     },
@@ -4416,18 +4432,18 @@
       "id": "chicago-wheat",
       "name": "Chicago Wheat",
       "sector": "ags-grains",
-      "currentMMNet": -36798.0,
-      "currentPrice": 645.0,
-      "latestDate": "2026-07-14",
+      "currentMMNet": -6880.0,
+      "currentPrice": 662.5,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 66948.0,
       "recordMinPosition": -162327.0,
-      "beta": 0.00019275460320511875,
-      "rSquared": 0.3458370411300833,
-      "correlation": 0.5880791112852788,
-      "priceToMaxLong": 773.9839979635628,
-      "priceToMaxShort": 488.93391282200696,
-      "contractsToMaxLong": 103746.0,
-      "contractsToMaxShort": -125529.0,
+      "beta": 0.00019243782638315594,
+      "rSquared": 0.3452845713640403,
+      "correlation": 0.5876091995229825,
+      "priceToMaxLong": 756.6233614811786,
+      "priceToMaxShort": 464.32052646469134,
+      "contractsToMaxLong": 73828.0,
+      "contractsToMaxShort": -155447.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -8820,6 +8836,22 @@
           "mm_change": 25527.0,
           "price_change": 26.5,
           "price_change_pct": 4.284559417946654
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": -19349.0,
+          "price": 678.0,
+          "mm_change": 17449.0,
+          "price_change": 33.0,
+          "price_change_pct": 5.116279069767438
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": -6880.0,
+          "price": 662.5,
+          "mm_change": 12469.0,
+          "price_change": -15.5,
+          "price_change_pct": -2.286135693215341
         }
       ]
     },
@@ -8827,18 +8859,18 @@
       "id": "kansas-wheat",
       "name": "Kansas Wheat",
       "sector": "ags-grains",
-      "currentMMNet": 17494.0,
-      "currentPrice": 678.0,
-      "latestDate": "2026-07-14",
+      "currentMMNet": 33233.0,
+      "currentPrice": 726.25,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 73111.0,
       "recordMinPosition": -80799.0,
-      "beta": 0.00034822045476903867,
-      "rSquared": 0.2699189888885837,
-      "correlation": 0.5195372834442045,
-      "priceToMaxLong": 809.3081042829915,
-      "priceToMaxShort": 445.93664717104303,
-      "contractsToMaxLong": 55617.0,
-      "contractsToMaxShort": -98293.0,
+      "beta": 0.0003498095467414029,
+      "rSquared": 0.27262126617748916,
+      "correlation": 0.5221314644584151,
+      "priceToMaxLong": 827.5597333247259,
+      "priceToMaxShort": 436.55263527546134,
+      "contractsToMaxLong": 39878.0,
+      "contractsToMaxShort": -114032.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -13231,6 +13263,22 @@
           "mm_change": 5730.0,
           "price_change": 25.25,
           "price_change_pct": 3.868249712753724
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": 29944.0,
+          "price": 733.0,
+          "mm_change": 12450.0,
+          "price_change": 55.0,
+          "price_change_pct": 8.112094395280245
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": 33233.0,
+          "price": 726.25,
+          "mm_change": 3289.0,
+          "price_change": -6.75,
+          "price_change_pct": -0.9208731241473367
         }
       ]
     },
@@ -13238,18 +13286,18 @@
       "id": "soybeans",
       "name": "Soybeans",
       "sector": "ags-grains",
-      "currentMMNet": 72688.0,
-      "currentPrice": 1192.75,
-      "latestDate": "2026-07-14",
+      "currentMMNet": 155001.0,
+      "currentPrice": 1212.0,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 238394.0,
       "recordMinPosition": -185750.0,
-      "beta": 7.472772790247119e-05,
-      "rSquared": 0.4232214713447423,
-      "correlation": 0.6505547412360795,
-      "priceToMaxLong": 1340.4462391738966,
-      "priceToMaxShort": 962.4003406055091,
-      "contractsToMaxLong": 165706.0,
-      "contractsToMaxShort": -258438.0,
+      "beta": 7.414984906997123e-05,
+      "rSquared": 0.4210848291218415,
+      "correlation": 0.6489104939218054,
+      "priceToMaxLong": 1286.9449697655243,
+      "priceToMaxShort": 905.7683811282458,
+      "contractsToMaxLong": 83393.0,
+      "contractsToMaxShort": -340751.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -17642,6 +17690,22 @@
           "mm_change": 4009.0,
           "price_change": -1.0,
           "price_change_pct": -0.08376963350785749
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": 124900.0,
+          "price": 1219.5,
+          "mm_change": 52212.0,
+          "price_change": 26.75,
+          "price_change_pct": 2.2427164116537446
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": 155001.0,
+          "price": 1212.0,
+          "mm_change": 30101.0,
+          "price_change": -7.5,
+          "price_change_pct": -0.6150061500615034
         }
       ]
     },
@@ -17649,18 +17713,18 @@
       "id": "soymeal",
       "name": "Soybean Meal",
       "sector": "ags-grains",
-      "currentMMNet": 47852.0,
-      "currentPrice": 317.3999938964844,
-      "latestDate": "2026-07-14",
+      "currentMMNet": 88655.0,
+      "currentPrice": 320.29998779296875,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 155063.0,
       "recordMinPosition": -133592.0,
-      "beta": 0.00015034207423050434,
-      "rSquared": 0.40428607019270213,
-      "correlation": 0.6358349394242991,
-      "priceToMaxLong": 368.5595536706166,
-      "priceToMaxShort": 230.81750549830096,
-      "contractsToMaxLong": 107211.0,
-      "contractsToMaxShort": -181444.0,
+      "beta": 0.00014953641141466064,
+      "rSquared": 0.4025380910376132,
+      "correlation": 0.6344588962553943,
+      "priceToMaxLong": 352.107102652307,
+      "priceToMaxShort": 213.85142954481572,
+      "contractsToMaxLong": 66408.0,
+      "contractsToMaxShort": -222247.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -22053,6 +22117,22 @@
           "mm_change": 28827.0,
           "price_change": 1.199981689453125,
           "price_change_pct": 0.3795008359036567
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": 75152.0,
+          "price": 326.70001220703125,
+          "mm_change": 27300.0,
+          "price_change": 9.300018310546875,
+          "price_change_pct": 2.930062536037714
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": 88655.0,
+          "price": 320.29998779296875,
+          "mm_change": 13503.0,
+          "price_change": -6.4000244140625,
+          "price_change_pct": -1.958991176898628
         }
       ]
     },
@@ -22060,18 +22140,18 @@
       "id": "soyoil",
       "name": "Soybean Oil",
       "sector": "ags-grains",
-      "currentMMNet": 113029.0,
-      "currentPrice": 72.4000015258789,
-      "latestDate": "2026-07-14",
+      "currentMMNet": 109855.0,
+      "currentPrice": 70.76000213623047,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 169142.0,
       "recordMinPosition": -109950.0,
-      "beta": 0.00017645184610202538,
-      "rSquared": 0.38346216882995676,
-      "correlation": 0.6192432226758374,
-      "priceToMaxLong": 79.5685012037537,
-      "priceToMaxShort": 43.91418024252493,
-      "contractsToMaxLong": 56113.0,
-      "contractsToMaxShort": -222979.0,
+      "beta": 0.00017682311432285042,
+      "rSquared": 0.3851316310287482,
+      "correlation": 0.6205897445404236,
+      "priceToMaxLong": 78.17799391641869,
+      "priceToMaxShort": 43.257991860043944,
+      "contractsToMaxLong": 59287.0,
+      "contractsToMaxShort": -219805.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -26464,6 +26544,22 @@
           "mm_change": 23801.0,
           "price_change": 3.8100051879882812,
           "price_change_pct": 5.554753450079364
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": 125348.0,
+          "price": 74.30000305175781,
+          "mm_change": 12319.0,
+          "price_change": 1.9000015258789062,
+          "price_change_pct": 2.624311444523597
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": 109855.0,
+          "price": 70.76000213623047,
+          "mm_change": -15493.0,
+          "price_change": -3.5400009155273438,
+          "price_change_pct": -4.76446940797749
         }
       ]
     },
@@ -26471,18 +26567,18 @@
       "id": "sugar",
       "name": "Sugar #11",
       "sector": "ags-softs",
-      "currentMMNet": -94593.0,
-      "currentPrice": 14.880000114440918,
-      "latestDate": "2026-07-14",
+      "currentMMNet": -112413.0,
+      "currentPrice": 14.550000190734863,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 286248.0,
       "recordMinPosition": -248296.0,
-      "beta": 9.479172609708916e-05,
-      "rSquared": 0.34909946704332295,
-      "correlation": 0.5908463988578783,
-      "priceToMaxLong": 20.25176582862573,
-      "priceToMaxShort": 12.712017923533564,
-      "contractsToMaxLong": 380841.0,
-      "contractsToMaxShort": -153703.0,
+      "beta": 9.48283382530087e-05,
+      "rSquared": 0.3494006570737028,
+      "correlation": 0.5911012240502491,
+      "priceToMaxLong": 20.05053466558009,
+      "priceToMaxShort": 12.675151319023325,
+      "contractsToMaxLong": 398661.0,
+      "contractsToMaxShort": -135883.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -30875,6 +30971,22 @@
           "mm_change": 3120.0,
           "price_change": -0.26000022888183594,
           "price_change_pct": -1.7173066247419544
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": -96596.0,
+          "price": 14.880000114440918,
+          "mm_change": -2003.0,
+          "price_change": 0.0,
+          "price_change_pct": 0.0
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": -112413.0,
+          "price": 14.550000190734863,
+          "mm_change": -15817.0,
+          "price_change": -0.3299999237060547,
+          "price_change_pct": -2.2177414056992695
         }
       ]
     },
@@ -30882,18 +30994,18 @@
       "id": "cotton",
       "name": "Cotton",
       "sector": "ags-softs",
-      "currentMMNet": 49684.0,
-      "currentPrice": 79.5999984741211,
-      "latestDate": "2026-07-14",
+      "currentMMNet": 52410.0,
+      "currentPrice": 79.20999908447266,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 108778.0,
       "recordMinPosition": -81343.0,
-      "beta": 0.0002671670261076724,
-      "rSquared": 0.29230651746916614,
-      "correlation": 0.5406537870663315,
-      "priceToMaxLong": 92.16722095289802,
-      "priceToMaxShort": 51.735148240142934,
-      "contractsToMaxLong": 59094.0,
-      "contractsToMaxShort": -131027.0,
+      "beta": 0.00026694973721104616,
+      "rSquared": 0.2919177896308526,
+      "correlation": 0.5402941695325358,
+      "priceToMaxLong": 91.129062536381,
+      "priceToMaxShort": 50.92780894320285,
+      "contractsToMaxLong": 56368.0,
+      "contractsToMaxShort": -133753.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -35286,6 +35398,22 @@
           "mm_change": 10578.0,
           "price_change": -0.1100006103515625,
           "price_change_pct": -0.13800101820975463
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": 53209.0,
+          "price": 78.95999908447266,
+          "mm_change": 3525.0,
+          "price_change": -0.6399993896484375,
+          "price_change_pct": -0.8040193491417047
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": 52410.0,
+          "price": 79.20999908447266,
+          "mm_change": -799.0,
+          "price_change": 0.25,
+          "price_change_pct": 0.3166160117764827
         }
       ]
     },
@@ -35293,18 +35421,18 @@
       "id": "arabica-coffee",
       "name": "Coffee C",
       "sector": "ags-softs",
-      "currentMMNet": 24967.0,
-      "currentPrice": 326.1000061035156,
-      "latestDate": "2026-07-14",
+      "currentMMNet": 25136.0,
+      "currentPrice": 339.3999938964844,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 71811.0,
       "recordMinPosition": -109159.0,
-      "beta": 0.00041909304871281714,
-      "rSquared": 0.3493716761546842,
-      "correlation": 0.5910767091966018,
-      "priceToMaxLong": 390.11994225945585,
-      "priceToMaxShort": 142.79503733800377,
-      "contractsToMaxLong": 46844.0,
-      "contractsToMaxShort": -134126.0,
+      "beta": 0.00041914212991819866,
+      "rSquared": 0.3487085466506235,
+      "correlation": 0.5905154923036512,
+      "priceToMaxLong": 405.79837225631053,
+      "priceToMaxShort": 148.35617553905843,
+      "contractsToMaxLong": 46675.0,
+      "contractsToMaxShort": -134295.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -39697,6 +39825,22 @@
           "mm_change": -544.0,
           "price_change": 8.5,
           "price_change_pct": 2.6763223667034763
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": 24866.0,
+          "price": 322.1000061035156,
+          "mm_change": -101.0,
+          "price_change": -4.0,
+          "price_change_pct": -1.226617579004352
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": 25136.0,
+          "price": 339.3999938964844,
+          "mm_change": 270.0,
+          "price_change": 17.29998779296875,
+          "price_change_pct": 5.370998902561008
         }
       ]
     },
@@ -39704,18 +39848,18 @@
       "id": "ny-cocoa",
       "name": "Cocoa",
       "sector": "ags-softs",
-      "currentMMNet": -11200.0,
-      "currentPrice": 5806.0,
-      "latestDate": "2026-07-14",
+      "currentMMNet": -14127.0,
+      "currentPrice": 5201.0,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 79541.0,
       "recordMinPosition": -52334.0,
-      "beta": 0.00025936290945194866,
-      "rSquared": 0.14752367610251874,
-      "correlation": 0.38408810981663927,
-      "priceToMaxLong": 7172.433377447593,
-      "priceToMaxShort": 5186.579114755962,
-      "contractsToMaxLong": 90741.0,
-      "contractsToMaxShort": -41134.0,
+      "beta": 0.00025989407582859394,
+      "rSquared": 0.14748195085897992,
+      "correlation": 0.3840337886944063,
+      "priceToMaxLong": 6467.118868908009,
+      "priceToMaxShort": 4684.5525086009275,
+      "contractsToMaxLong": 93668.0,
+      "contractsToMaxShort": -38207.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -44108,6 +44252,22 @@
           "mm_change": 2550.0,
           "price_change": 47.0,
           "price_change_pct": 0.8161139086646951
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": -11604.0,
+          "price": 5607.0,
+          "mm_change": -404.0,
+          "price_change": -199.0,
+          "price_change_pct": -3.4274888046848084
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": -14127.0,
+          "price": 5201.0,
+          "mm_change": -2523.0,
+          "price_change": -406.0,
+          "price_change_pct": -7.240948813982517
         }
       ]
     },
@@ -44115,18 +44275,18 @@
       "id": "live-cattle",
       "name": "Live Cattle",
       "sector": "ags-livestock",
-      "currentMMNet": 96324.0,
-      "currentPrice": 231.4250030517578,
-      "latestDate": "2026-07-14",
+      "currentMMNet": 66523.0,
+      "currentPrice": 227.47500610351562,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 156909.0,
       "recordMinPosition": -6885.0,
-      "beta": 0.00013819193962146486,
-      "rSquared": 0.19063132673671943,
-      "correlation": 0.43661347521202254,
-      "priceToMaxLong": 250.80073434071775,
-      "priceToMaxShort": 198.41766046527158,
-      "contractsToMaxLong": 60585.0,
-      "contractsToMaxShort": -103209.0,
+      "beta": 0.00013740988979146453,
+      "rSquared": 0.19097131851712248,
+      "correlation": 0.43700265275753475,
+      "priceToMaxLong": 255.72724330851605,
+      "priceToMaxShort": 204.52963592733045,
+      "contractsToMaxLong": 90386.0,
+      "contractsToMaxShort": -73408.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -48519,6 +48679,22 @@
           "mm_change": -16997.0,
           "price_change": -7.0,
           "price_change_pct": -2.9359336942025416
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": 75363.0,
+          "price": 226.6750030517578,
+          "mm_change": -20961.0,
+          "price_change": -4.75,
+          "price_change_pct": -2.05250078313175
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": 66523.0,
+          "price": 227.47500610351562,
+          "mm_change": -8840.0,
+          "price_change": 0.8000030517578125,
+          "price_change_pct": 0.35292954273178356
         }
       ]
     },
@@ -48526,18 +48702,18 @@
       "id": "feeder-cattle",
       "name": "Feeder Cattle",
       "sector": "ags-livestock",
-      "currentMMNet": 9880.0,
-      "currentPrice": 348.79998779296875,
-      "latestDate": "2026-07-14",
+      "currentMMNet": 7423.0,
+      "currentPrice": 343.07501220703125,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 37806.0,
       "recordMinPosition": -9796.0,
-      "beta": 0.0006263858860632611,
-      "rSquared": 0.16994389703520948,
-      "correlation": 0.41224252210950957,
-      "priceToMaxLong": 409.81365912031845,
-      "priceToMaxShort": 305.8111960921547,
-      "contractsToMaxLong": 27926.0,
-      "contractsToMaxShort": -19676.0,
+      "beta": 0.000625490935662285,
+      "rSquared": 0.1696732887286241,
+      "correlation": 0.41191417641132977,
+      "priceToMaxLong": 408.273986212134,
+      "priceToMaxShort": 306.12470666136875,
+      "contractsToMaxLong": 30383.0,
+      "contractsToMaxShort": -17219.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -52930,6 +53106,22 @@
           "mm_change": -3810.0,
           "price_change": -11.850006103515625,
           "price_change_pct": -3.28573583919618
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": 7905.0,
+          "price": 349.54998779296875,
+          "mm_change": -1975.0,
+          "price_change": 0.75,
+          "price_change_pct": 0.21502294330502103
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": 7423.0,
+          "price": 343.07501220703125,
+          "mm_change": -482.0,
+          "price_change": -6.4749755859375,
+          "price_change_pct": -1.8523747137912938
         }
       ]
     },
@@ -52937,18 +53129,18 @@
       "id": "lean-hogs",
       "name": "Lean Hogs",
       "sector": "ags-livestock",
-      "currentMMNet": -30438.0,
-      "currentPrice": 98.44999694824219,
-      "latestDate": "2026-07-14",
+      "currentMMNet": -10884.0,
+      "currentPrice": 103.0999984741211,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 146288.0,
       "recordMinPosition": -31110.0,
-      "beta": 0.00025406781763906547,
-      "rSquared": 0.1093380225799107,
-      "correlation": 0.3306630045528388,
-      "priceToMaxLong": 142.65442868640127,
-      "priceToMaxShort": 98.28190975038764,
-      "contractsToMaxLong": 176726.0,
-      "contractsToMaxShort": -672.0,
+      "beta": 0.0002538285688706654,
+      "rSquared": 0.1097600521430247,
+      "correlation": 0.331300546548032,
+      "priceToMaxLong": 144.23147875053857,
+      "priceToMaxShort": 97.80690988282736,
+      "contractsToMaxLong": 157172.0,
+      "contractsToMaxShort": -20226.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -57341,6 +57533,22 @@
           "mm_change": -1436.0,
           "price_change": 1.524993896484375,
           "price_change_pct": 1.5733751338341762
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": -18157.0,
+          "price": 101.5,
+          "mm_change": 12281.0,
+          "price_change": 3.0500030517578125,
+          "price_change_pct": 3.098022494974062
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": -10884.0,
+          "price": 103.0999984741211,
+          "mm_change": 7273.0,
+          "price_change": 1.5999984741210938,
+          "price_change_pct": 1.5763531764739769
         }
       ]
     },
@@ -57348,18 +57556,18 @@
       "id": "wti-crude",
       "name": "WTI Crude Oil",
       "sector": "energy",
-      "currentMMNet": 86383.0,
-      "currentPrice": 79.33999633789062,
-      "latestDate": "2026-07-14",
+      "currentMMNet": 86905.0,
+      "currentPrice": 84.91000366210938,
+      "latestDate": "2026-07-21",
       "recordMaxPosition": 496111.0,
       "recordMinPosition": -29995.0,
-      "beta": 0.00012220543659737838,
-      "rSquared": 0.1602116529783458,
-      "correlation": 0.4002644787866465,
-      "priceToMaxLong": 119.06631727694003,
-      "priceToMaxShort": 68.05624277883513,
-      "contractsToMaxLong": 409728.0,
-      "contractsToMaxShort": -116378.0,
+      "beta": 0.00012221276499682697,
+      "rSquared": 0.16006751848308182,
+      "correlation": 0.4000843892019305,
+      "priceToMaxLong": 127.37366352279336,
+      "priceToMaxShort": 72.77918975001141,
+      "contractsToMaxLong": 409206.0,
+      "contractsToMaxShort": -116900.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -60664,6 +60872,14 @@
           "mm_change": 11704.0,
           "price_change": 8.899993896484375,
           "price_change_pct": 12.634857450335279
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": 86905.0,
+          "price": 84.91000366210938,
+          "mm_change": 522.0,
+          "price_change": 5.57000732421875,
+          "price_change_pct": 7.020428007706703
         }
       ]
     },
@@ -60671,18 +60887,18 @@
       "id": "natural-gas",
       "name": "Natural Gas",
       "sector": "energy",
-      "currentMMNet": -105501.0,
-      "currentPrice": 2.9040000438690186,
-      "latestDate": "2026-07-14",
+      "currentMMNet": -105605.0,
+      "currentPrice": 2.6619999408721924,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 271683.0,
       "recordMinPosition": -330163.0,
-      "beta": 0.00015854624791463386,
-      "rSquared": 0.17946205115340724,
-      "correlation": 0.42362961552918754,
-      "priceToMaxLong": 4.640624245651679,
-      "priceToMaxShort": 1.869615058236287,
-      "contractsToMaxLong": 377184.0,
-      "contractsToMaxShort": -224662.0,
+      "beta": 0.0001585853719130258,
+      "rSquared": 0.17934931928868308,
+      "correlation": 0.4234965398780527,
+      "priceToMaxLong": 4.254737270085954,
+      "priceToMaxShort": 1.7140187986848348,
+      "contractsToMaxLong": 377288.0,
+      "contractsToMaxShort": -224558.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -64907,6 +65123,22 @@
           "mm_change": -45124.0,
           "price_change": -0.36100006103515625,
           "price_change_pct": -11.056663076148698
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": -102694.0,
+          "price": 2.865000009536743,
+          "mm_change": 2807.0,
+          "price_change": -0.03900003433227539,
+          "price_change_pct": -1.3429763685649077
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": -105605.0,
+          "price": 2.6619999408721924,
+          "mm_change": -2911.0,
+          "price_change": -0.20300006866455078,
+          "price_change_pct": -7.085517207288772
         }
       ]
     },
@@ -64914,18 +65146,18 @@
       "id": "gold",
       "name": "Gold",
       "sector": "metals",
-      "currentMMNet": 119147.0,
-      "currentPrice": 4069.699951171875,
-      "latestDate": "2026-07-14",
+      "currentMMNet": 120328.0,
+      "currentPrice": 4038.699951171875,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 292066.0,
       "recordMinPosition": -103009.0,
-      "beta": 6.448900389811047e-05,
-      "rSquared": 0.4167921249355308,
-      "correlation": 0.6455943966110075,
-      "priceToMaxLong": 4523.527416052508,
-      "priceToMaxShort": 3486.6495386202073,
-      "contractsToMaxLong": 172919.0,
-      "contractsToMaxShort": -222156.0,
+      "beta": 6.449573188309272e-05,
+      "rSquared": 0.4167044918707246,
+      "correlation": 0.645526522980059,
+      "priceToMaxLong": 4486.041220265863,
+      "priceToMaxShort": 3456.9541697161458,
+      "contractsToMaxLong": 171738.0,
+      "contractsToMaxShort": -223337.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -69318,6 +69550,22 @@
           "mm_change": 4293.0,
           "price_change": -87.699951171875,
           "price_change_pct": -2.109490384180601
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": 123586.0,
+          "price": 4076.39990234375,
+          "mm_change": 4439.0,
+          "price_change": 6.699951171875,
+          "price_change_pct": 0.16463010178295878
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": 120328.0,
+          "price": 4038.699951171875,
+          "mm_change": -3258.0,
+          "price_change": -37.699951171875,
+          "price_change_pct": -0.9248344636206829
         }
       ]
     },
@@ -69325,18 +69573,18 @@
       "id": "silver",
       "name": "Silver",
       "sector": "metals",
-      "currentMMNet": 10377.0,
-      "currentPrice": 5910.39990234375,
-      "latestDate": "2026-07-14",
+      "currentMMNet": 8387.0,
+      "currentPrice": 5752.89990234375,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 98845.0,
       "recordMinPosition": -47480.0,
-      "beta": 0.00025977996922592735,
-      "rSquared": 0.2302713531938808,
-      "correlation": 0.47986597419892235,
-      "priceToMaxLong": 7268.74067492048,
-      "priceToMaxShort": 5022.061496604139,
-      "contractsToMaxLong": 88468.0,
-      "contractsToMaxShort": -57857.0,
+      "beta": 0.0002598930861931772,
+      "rSquared": 0.2302970649393473,
+      "correlation": 0.4798927639997787,
+      "priceToMaxLong": 7105.372657714867,
+      "priceToMaxShort": 4917.610647393185,
+      "contractsToMaxLong": 90458.0,
+      "contractsToMaxShort": -55867.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -73729,6 +73977,22 @@
           "mm_change": -1754.0,
           "price_change": -222.60009765625,
           "price_change_pct": -3.62954667627996
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": 10003.0,
+          "price": 5910.7998046875,
+          "mm_change": -374.0,
+          "price_change": 0.39990234375,
+          "price_change_pct": 0.006766079290021487
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": 8387.0,
+          "price": 5752.89990234375,
+          "mm_change": -1616.0,
+          "price_change": -157.89990234375,
+          "price_change_pct": -2.671379636619209
         }
       ]
     },
@@ -73736,18 +74000,18 @@
       "id": "copper",
       "name": "Copper",
       "sector": "metals",
-      "currentMMNet": 61932.0,
-      "currentPrice": 637.7999877929688,
-      "latestDate": "2026-07-14",
+      "currentMMNet": 66490.0,
+      "currentPrice": 635.9500122070312,
+      "latestDate": "2026-07-28",
       "recordMaxPosition": 125376.0,
       "recordMinPosition": -74597.0,
-      "beta": 0.00017865022791807022,
-      "rSquared": 0.34300350573332833,
-      "correlation": 0.5856650115324701,
-      "priceToMaxLong": 710.0900565222862,
-      "priceToMaxShort": 482.23459479213363,
-      "contractsToMaxLong": 63444.0,
-      "contractsToMaxShort": -136529.0,
+      "beta": 0.000178954711093246,
+      "rSquared": 0.3442421994111278,
+      "correlation": 0.5867215688988499,
+      "priceToMaxLong": 702.9659609967392,
+      "priceToMaxShort": 475.38418727591824,
+      "contractsToMaxLong": 58886.0,
+      "contractsToMaxShort": -141087.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -78140,6 +78404,22 @@
           "mm_change": 1535.0,
           "price_change": 15.20001220703125,
           "price_change_pct": 2.4413769359252324
+        },
+        {
+          "date": "2026-07-21",
+          "mm_net": 73685.0,
+          "price": 655.25,
+          "mm_change": 11753.0,
+          "price_change": 17.45001220703125,
+          "price_change_pct": 2.735969354188139
+        },
+        {
+          "date": "2026-07-28",
+          "mm_net": 66490.0,
+          "price": 635.9500122070312,
+          "mm_change": -7195.0,
+          "price_change": -19.29998779296875,
+          "price_change_pct": -2.9454388085415895
         }
       ]
     }
