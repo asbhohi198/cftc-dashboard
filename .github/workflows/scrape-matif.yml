@@ -2,9 +2,9 @@ name: Scrape Matif COT Data
 
 on:
   schedule:
-    # Run every Wednesday at 8 PM UTC (9 PM UK / 10 PM CET)
-    # Euronext typically publishes around 4-5 PM CET - this gives 5+ hour buffer
-    - cron: '0 20 * * 3'
+    # Run every Wednesday at 11 PM UTC (midnight UK / 1 AM CET)
+    # Euronext typically publishes around 4-5 PM CET - this gives 7+ hour buffer
+    - cron: '0 23 * * 3'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
