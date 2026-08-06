@@ -22,8 +22,16 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Run Matif COT scraper
-        run: python scripts/scrape_matif_cot.py
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Matif COT scraper (with retry)
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          retry_wait_seconds: 60
+          command: python scripts/scrape_matif_cot.py
 
       - name: Check for changes
         id: git-check
