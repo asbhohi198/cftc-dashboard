@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import JSZip from "jszip";
 import { CFTC_CONTRACTS, ContractId, COTRecord, parseRow, parseTFFRow, getYearsToFetch, getCFTCUrl, ReportType } from "@/lib/cftc";
 
-// In-memory cache
-const cache: Map<string, { data: COTRecord[]; timestamp: number }> = new Map();
+// In-memory cache - exported for cache clearing
+export const cotCache: Map<string, { data: COTRecord[]; timestamp: number }> = new Map();
 const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours
 
 async function fetchYearData(year: number, contractCode: string, reportType: ReportType): Promise<COTRecord[]> {
@@ -86,6 +86,7 @@ async function fetchAllData(contractCode: string, reportType: ReportType): Promi
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const contractId = searchParams.get("contract") as ContractId;
+  const forceRefresh = searchParams.get("refresh") === "true";
 
   if (!contractId || !CFTC_CONTRACTS[contractId]) {
     return NextResponse.json(
@@ -135,12 +136,13 @@ export async function GET(request: NextRequest) {
 
   const cacheKey = `cot_${contractId}`;
 
-  // Check cache
-  const cached = cache.get(cacheKey);
-  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-    return NextResponse.json({
-      success: true,
-      contract: {
+  // Check cache (skip if force refresh requested)
+  if (!forceRefresh) {
+    const cached = cotCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+      return NextResponse.json({
+        success: true,
+        contract: {
         id: contractId,
         name: contract.name,
         exchange: contract.exchange,
@@ -151,13 +153,14 @@ export async function GET(request: NextRequest) {
       data: cached.data,
       cached: true,
     });
+    }
   }
 
   try {
     const data = await fetchAllData(contract.code, contract.reportType);
 
     // Update cache
-    cache.set(cacheKey, { data, timestamp: Date.now() });
+    cotCache.set(cacheKey, { data, timestamp: Date.now() });
 
     return NextResponse.json({
       success: true,

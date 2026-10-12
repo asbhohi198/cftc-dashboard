@@ -1,143 +1,143 @@
 {
-  "updated": "2026-08-01T01:55:06.492722",
+  "updated": "2026-10-12T08:36:30.086907",
   "summary": [
     {
       "id": "corn",
       "name": "Corn",
-      "spread": -38.75,
-      "spread_pct": 92.00206398348814,
+      "spread": -22.25,
+      "spread_pct": 95.56772908366534,
       "spread_unit": "c/bu",
-      "date": "2026-07-30",
-      "front_symbol": "ZC-2026U",
-      "third_symbol": "ZC-2027H"
+      "date": "2026-10-09",
+      "front_symbol": "ZC-2026Z",
+      "third_symbol": "ZC-2027K"
     },
     {
       "id": "soybeans",
       "name": "Soybeans",
-      "spread": -11.5,
-      "spread_pct": 99.03259726603575,
+      "spread": -26.75,
+      "spread_pct": 97.97156398104265,
       "spread_unit": "c/bu",
-      "date": "2026-07-30",
-      "front_symbol": "ZS-2026Q",
-      "third_symbol": "ZS-2026X"
+      "date": "2026-10-09",
+      "front_symbol": "ZS-2026X",
+      "third_symbol": "ZS-2027H"
     },
     {
       "id": "chicago-wheat",
       "name": "Chicago Wheat",
-      "spread": -34.0,
-      "spread_pct": 95.12544802867383,
+      "spread": -21.0,
+      "spread_pct": 96.96531791907515,
       "spread_unit": "c/bu",
-      "date": "2026-07-30",
-      "front_symbol": "ZW-2026U",
-      "third_symbol": "ZW-2027H"
+      "date": "2026-10-09",
+      "front_symbol": "ZW-2026Z",
+      "third_symbol": "ZW-2027K"
     },
     {
       "id": "kansas-wheat",
       "name": "Kansas Wheat",
-      "spread": -27.5,
-      "spread_pct": 96.37322782723376,
+      "spread": -17.5,
+      "spread_pct": 97.62470308788599,
       "spread_unit": "c/bu",
-      "date": "2026-07-30",
-      "front_symbol": "KE-2026U",
-      "third_symbol": "KE-2027H"
+      "date": "2026-10-09",
+      "front_symbol": "KE-2026Z",
+      "third_symbol": "KE-2027K"
     },
     {
       "id": "soyoil",
       "name": "Soyoil",
-      "spread": 0.6500015258789062,
-      "spread_pct": 100.96012046555312,
+      "spread": -0.4600067138671875,
+      "spread_pct": 99.32826125683796,
       "spread_unit": "c/lb",
-      "date": "2026-07-30",
-      "front_symbol": "ZL-2026Q",
-      "third_symbol": "ZL-2026V"
+      "date": "2026-10-09",
+      "front_symbol": "ZL-2026Z",
+      "third_symbol": "ZL-2027H"
     },
     {
       "id": "soymeal",
       "name": "Soymeal",
-      "spread": -4.199981689453125,
-      "spread_pct": 98.68049580567848,
+      "spread": 3.70001220703125,
+      "spread_pct": 101.02238526372828,
       "spread_unit": "$/ton",
-      "date": "2026-07-30",
-      "front_symbol": "ZM-2026Q",
-      "third_symbol": "ZM-2026V"
+      "date": "2026-10-09",
+      "front_symbol": "ZM-2026Z",
+      "third_symbol": "ZM-2027H"
     },
     {
       "id": "sugar",
       "name": "NY Sugar",
-      "spread": -0.7399997711181641,
-      "spread_pct": 95.12195275282458,
+      "spread": 1.2299995422363281,
+      "spread_pct": 106.46687440921833,
       "spread_unit": "c/lb",
-      "date": "2026-07-30",
-      "front_symbol": "SB-2026V",
-      "third_symbol": "SB-2027K"
+      "date": "2026-10-09",
+      "front_symbol": "SB-2027H",
+      "third_symbol": "SB-2027N"
     },
     {
       "id": "arabica-coffee",
       "name": "NY Coffee",
-      "spread": 23.449981689453125,
-      "spread_pct": 107.8270965326185,
+      "spread": 10.4000244140625,
+      "spread_pct": 103.76063094309306,
       "spread_unit": "c/lb",
-      "date": "2026-07-30",
-      "front_symbol": "KC-2026U",
-      "third_symbol": "KC-2027H"
+      "date": "2026-10-09",
+      "front_symbol": "KC-2026Z",
+      "third_symbol": "KC-2027K"
     },
     {
       "id": "ny-cocoa",
       "name": "NY Cocoa",
-      "spread": -223.0,
-      "spread_pct": 95.82005623242736,
+      "spread": -177.0,
+      "spread_pct": 96.97021567956179,
       "spread_unit": "$/ton",
-      "date": "2026-07-30",
-      "front_symbol": "CC-2026U",
-      "third_symbol": "CC-2027H"
+      "date": "2026-10-09",
+      "front_symbol": "CC-2026Z",
+      "third_symbol": "CC-2027K"
     },
     {
       "id": "cotton",
       "name": "Cotton",
-      "spread": -2.839996337890625,
-      "spread_pct": 96.5471169144187,
+      "spread": -4.760002136230469,
+      "spread_pct": 94.4196928887069,
       "spread_unit": "c/lb",
-      "date": "2026-07-30",
-      "front_symbol": "CT-2026V",
-      "third_symbol": "CT-2027H"
+      "date": "2026-10-09",
+      "front_symbol": "CT-2026Z",
+      "third_symbol": "CT-2027K"
     },
     {
       "id": "live-cattle",
       "name": "Live Cattle",
-      "spread": 4.5,
-      "spread_pct": 101.984783274389,
+      "spread": -3.524993896484375,
+      "spread_pct": 98.47121589802053,
       "spread_unit": "c/lb",
-      "date": "2026-07-30",
-      "front_symbol": "LE-2026Q",
-      "third_symbol": "LE-2026Z"
+      "date": "2026-10-09",
+      "front_symbol": "LE-2026Z",
+      "third_symbol": "LE-2027J"
     },
     {
       "id": "lean-hogs",
       "name": "Lean Hogs",
-      "spread": 23.900001525878906,
-      "spread_pct": 132.06977663405962,
+      "spread": -6.350006103515625,
+      "spread_pct": 91.43915626254208,
       "spread_unit": "c/lb",
-      "date": "2026-07-30",
-      "front_symbol": "HE-2026Q",
-      "third_symbol": "HE-2026Z"
+      "date": "2026-10-09",
+      "front_symbol": "HE-2026Z",
+      "third_symbol": "HE-2027J"
     },
     {
       "id": "feeder-cattle",
       "name": "Feeder Cattle",
-      "spread": 12.45001220703125,
-      "spread_pct": 103.7272696458426,
+      "spread": 9.7750244140625,
+      "spread_pct": 102.9427334306564,
       "spread_unit": "c/lb",
-      "date": "2026-07-30",
-      "front_symbol": "GF-2026Q",
-      "third_symbol": "GF-2026V"
+      "date": "2026-10-09",
+      "front_symbol": "GF-2026X",
+      "third_symbol": "GF-2027H"
     },
     {
       "id": "canola",
       "name": "Canola",
-      "spread": -15.9000244140625,
-      "spread_pct": 97.97322824549872,
+      "spread": -22.39996337890625,
+      "spread_pct": 97.3304774126272,
       "spread_unit": "CAD/MT",
-      "date": "2026-07-30",
+      "date": "2026-10-09",
       "front_symbol": "RS-2026X",
       "third_symbol": "RS-2027H"
     }
@@ -29347,6 +29347,356 @@
         "third_price": 484.5,
         "spread": -38.75,
         "spread_pct": 92.00206756591797
+      },
+      {
+        "date": "2026-07-31",
+        "front_price": 440.75,
+        "third_price": 479.75,
+        "spread": -39.0,
+        "spread_pct": 91.87076568603516
+      },
+      {
+        "date": "2026-08-03",
+        "front_price": 449.25,
+        "third_price": 488.25,
+        "spread": -39.0,
+        "spread_pct": 92.01228332519531
+      },
+      {
+        "date": "2026-08-04",
+        "front_price": 442.25,
+        "third_price": 481.5,
+        "spread": -39.25,
+        "spread_pct": 91.848388671875
+      },
+      {
+        "date": "2026-08-05",
+        "front_price": 436.75,
+        "third_price": 475.75,
+        "spread": -39.0,
+        "spread_pct": 91.80242156982422
+      },
+      {
+        "date": "2026-08-06",
+        "front_price": 439.0,
+        "third_price": 477.5,
+        "spread": -38.5,
+        "spread_pct": 91.93717193603516
+      },
+      {
+        "date": "2026-08-07",
+        "front_price": 439.0,
+        "third_price": 477.75,
+        "spread": -38.75,
+        "spread_pct": 91.88906860351562
+      },
+      {
+        "date": "2026-08-10",
+        "front_price": 438.25,
+        "third_price": 477.25,
+        "spread": -39.0,
+        "spread_pct": 91.82817840576172
+      },
+      {
+        "date": "2026-08-11",
+        "front_price": 436.75,
+        "third_price": 476.0,
+        "spread": -39.25,
+        "spread_pct": 91.75420379638672
+      },
+      {
+        "date": "2026-08-12",
+        "front_price": 457.0,
+        "third_price": 496.5,
+        "spread": -39.5,
+        "spread_pct": 92.0443115234375
+      },
+      {
+        "date": "2026-08-13",
+        "front_price": 448.0,
+        "third_price": 487.75,
+        "spread": -39.75,
+        "spread_pct": 91.85033416748047
+      },
+      {
+        "date": "2026-08-14",
+        "front_price": 459.0,
+        "third_price": 499.0,
+        "spread": -40.0,
+        "spread_pct": 91.98397064208984
+      },
+      {
+        "date": "2026-08-17",
+        "front_price": 465.0,
+        "third_price": 505.25,
+        "spread": -40.25,
+        "spread_pct": 92.03364562988281
+      },
+      {
+        "date": "2026-08-18",
+        "front_price": 463.25,
+        "third_price": 504.0,
+        "spread": -40.75,
+        "spread_pct": 91.91468048095703
+      },
+      {
+        "date": "2026-08-19",
+        "front_price": 473.0,
+        "third_price": 513.75,
+        "spread": -40.75,
+        "spread_pct": 92.06812286376953
+      },
+      {
+        "date": "2026-08-20",
+        "front_price": 478.75,
+        "third_price": 518.25,
+        "spread": -39.5,
+        "spread_pct": 92.3781967163086
+      },
+      {
+        "date": "2026-08-21",
+        "front_price": 483.75,
+        "third_price": 523.5,
+        "spread": -39.75,
+        "spread_pct": 92.40687561035156
+      },
+      {
+        "date": "2026-08-24",
+        "front_price": 491.5,
+        "third_price": 530.25,
+        "spread": -38.75,
+        "spread_pct": 92.69212341308594
+      },
+      {
+        "date": "2026-08-25",
+        "front_price": 500.5,
+        "third_price": 538.5,
+        "spread": -38.0,
+        "spread_pct": 92.943359375
+      },
+      {
+        "date": "2026-08-26",
+        "front_price": 514.0,
+        "third_price": 550.75,
+        "spread": -36.75,
+        "spread_pct": 93.32728576660156
+      },
+      {
+        "date": "2026-08-27",
+        "front_price": 510.25,
+        "third_price": 547.25,
+        "spread": -37.0,
+        "spread_pct": 93.23892211914062
+      },
+      {
+        "date": "2026-08-28",
+        "front_price": 512.0,
+        "third_price": 551.25,
+        "spread": -39.25,
+        "spread_pct": 92.87982177734375
+      },
+      {
+        "date": "2026-08-31",
+        "front_price": 515.0,
+        "third_price": 552.25,
+        "spread": -37.25,
+        "spread_pct": 93.25486755371094
+      },
+      {
+        "date": "2026-09-01",
+        "front_price": 521.5,
+        "third_price": 560.25,
+        "spread": -38.75,
+        "spread_pct": 93.08345031738281
+      },
+      {
+        "date": "2026-09-02",
+        "front_price": 518.75,
+        "third_price": 558.25,
+        "spread": -39.5,
+        "spread_pct": 92.92431640625
+      },
+      {
+        "date": "2026-09-03",
+        "front_price": 515.25,
+        "third_price": 556.0,
+        "spread": -40.75,
+        "spread_pct": 92.67086029052734
+      },
+      {
+        "date": "2026-09-04",
+        "front_price": 512.0,
+        "third_price": 552.25,
+        "spread": -40.25,
+        "spread_pct": 92.71163177490234
+      },
+      {
+        "date": "2026-09-08",
+        "front_price": 533.5,
+        "third_price": 556.5,
+        "spread": -23.0,
+        "spread_pct": 95.86702728271484
+      },
+      {
+        "date": "2026-09-09",
+        "front_price": 527.75,
+        "third_price": 551.0,
+        "spread": -23.25,
+        "spread_pct": 95.7803955078125
+      },
+      {
+        "date": "2026-09-10",
+        "front_price": 533.75,
+        "third_price": 557.0,
+        "spread": -23.25,
+        "spread_pct": 95.82585144042969
+      },
+      {
+        "date": "2026-09-11",
+        "front_price": 530.25,
+        "third_price": 553.0,
+        "spread": -22.75,
+        "spread_pct": 95.88607788085938
+      },
+      {
+        "date": "2026-09-14",
+        "front_price": 533.25,
+        "third_price": 555.25,
+        "spread": -22.0,
+        "spread_pct": 96.03782653808594
+      },
+      {
+        "date": "2026-09-15",
+        "front_price": 535.75,
+        "third_price": 556.75,
+        "spread": -21.0,
+        "spread_pct": 96.22811126708984
+      },
+      {
+        "date": "2026-09-16",
+        "front_price": 534.25,
+        "third_price": 555.25,
+        "spread": -21.0,
+        "spread_pct": 96.2179183959961
+      },
+      {
+        "date": "2026-09-17",
+        "front_price": 530.5,
+        "third_price": 550.75,
+        "spread": -20.25,
+        "spread_pct": 96.32319641113281
+      },
+      {
+        "date": "2026-09-18",
+        "front_price": 527.5,
+        "third_price": 548.25,
+        "spread": -20.75,
+        "spread_pct": 96.2152328491211
+      },
+      {
+        "date": "2026-09-21",
+        "front_price": 543.0,
+        "third_price": 563.0,
+        "spread": -20.0,
+        "spread_pct": 96.44760131835938
+      },
+      {
+        "date": "2026-09-22",
+        "front_price": 536.75,
+        "third_price": 557.75,
+        "spread": -21.0,
+        "spread_pct": 96.23487091064453
+      },
+      {
+        "date": "2026-09-23",
+        "front_price": 529.0,
+        "third_price": 550.75,
+        "spread": -21.75,
+        "spread_pct": 96.05084228515625
+      },
+      {
+        "date": "2026-09-24",
+        "front_price": 527.5,
+        "third_price": 548.25,
+        "spread": -20.75,
+        "spread_pct": 96.2152328491211
+      },
+      {
+        "date": "2026-09-25",
+        "front_price": 528.25,
+        "third_price": 548.75,
+        "spread": -20.5,
+        "spread_pct": 96.26423645019531
+      },
+      {
+        "date": "2026-09-28",
+        "front_price": 523.0,
+        "third_price": 543.5,
+        "spread": -20.5,
+        "spread_pct": 96.2281494140625
+      },
+      {
+        "date": "2026-09-29",
+        "front_price": 522.0,
+        "third_price": 543.0,
+        "spread": -21.0,
+        "spread_pct": 96.1325912475586
+      },
+      {
+        "date": "2026-09-30",
+        "front_price": 500.75,
+        "third_price": 523.25,
+        "spread": -22.5,
+        "spread_pct": 95.699951171875
+      },
+      {
+        "date": "2026-10-01",
+        "front_price": 502.25,
+        "third_price": 523.75,
+        "spread": -21.5,
+        "spread_pct": 95.89498901367188
+      },
+      {
+        "date": "2026-10-02",
+        "front_price": 497.75,
+        "third_price": 518.5,
+        "spread": -20.75,
+        "spread_pct": 95.9980697631836
+      },
+      {
+        "date": "2026-10-05",
+        "front_price": 497.25,
+        "third_price": 518.5,
+        "spread": -21.25,
+        "spread_pct": 95.90164184570312
+      },
+      {
+        "date": "2026-10-06",
+        "front_price": 508.0,
+        "third_price": 529.0,
+        "spread": -21.0,
+        "spread_pct": 96.0302505493164
+      },
+      {
+        "date": "2026-10-07",
+        "front_price": 502.0,
+        "third_price": 524.25,
+        "spread": -22.25,
+        "spread_pct": 95.7558364868164
+      },
+      {
+        "date": "2026-10-08",
+        "front_price": 500.25,
+        "third_price": 522.25,
+        "spread": -22.0,
+        "spread_pct": 95.78746032714844
+      },
+      {
+        "date": "2026-10-09",
+        "front_price": 479.75,
+        "third_price": 502.0,
+        "spread": -22.25,
+        "spread_pct": 95.5677261352539
       }
     ],
     "soybeans": [
@@ -58553,6 +58903,356 @@
         "third_price": 1188.75,
         "spread": -11.5,
         "spread_pct": 99.03260040283203
+      },
+      {
+        "date": "2026-07-31",
+        "front_price": 1172.0,
+        "third_price": 1187.5,
+        "spread": -15.5,
+        "spread_pct": 98.69473266601562
+      },
+      {
+        "date": "2026-08-03",
+        "front_price": 1168.75,
+        "third_price": 1192.25,
+        "spread": -23.5,
+        "spread_pct": 98.0289306640625
+      },
+      {
+        "date": "2026-08-04",
+        "front_price": 1155.0,
+        "third_price": 1177.75,
+        "spread": -22.75,
+        "spread_pct": 98.06835174560547
+      },
+      {
+        "date": "2026-08-05",
+        "front_price": 1151.5,
+        "third_price": 1174.75,
+        "spread": -23.25,
+        "spread_pct": 98.02085876464844
+      },
+      {
+        "date": "2026-08-06",
+        "front_price": 1160.0,
+        "third_price": 1192.75,
+        "spread": -32.75,
+        "spread_pct": 97.2542495727539
+      },
+      {
+        "date": "2026-08-07",
+        "front_price": 1159.0,
+        "third_price": 1191.25,
+        "spread": -32.25,
+        "spread_pct": 97.29275512695312
+      },
+      {
+        "date": "2026-08-10",
+        "front_price": 1161.75,
+        "third_price": 1194.75,
+        "spread": -33.0,
+        "spread_pct": 97.2379150390625
+      },
+      {
+        "date": "2026-08-11",
+        "front_price": 1151.5,
+        "third_price": 1184.25,
+        "spread": -32.75,
+        "spread_pct": 97.23453521728516
+      },
+      {
+        "date": "2026-08-12",
+        "front_price": 1165.25,
+        "third_price": 1199.0,
+        "spread": -33.75,
+        "spread_pct": 97.18515014648438
+      },
+      {
+        "date": "2026-08-13",
+        "front_price": 1166.0,
+        "third_price": 1197.75,
+        "spread": -31.75,
+        "spread_pct": 97.34919738769531
+      },
+      {
+        "date": "2026-08-14",
+        "front_price": 1177.75,
+        "third_price": 1207.75,
+        "spread": -30.0,
+        "spread_pct": 97.51604461669922
+      },
+      {
+        "date": "2026-08-17",
+        "front_price": 1201.0,
+        "third_price": 1231.0,
+        "spread": -30.0,
+        "spread_pct": 97.56295776367188
+      },
+      {
+        "date": "2026-08-18",
+        "front_price": 1200.75,
+        "third_price": 1231.5,
+        "spread": -30.75,
+        "spread_pct": 97.50304412841797
+      },
+      {
+        "date": "2026-08-19",
+        "front_price": 1222.25,
+        "third_price": 1251.25,
+        "spread": -29.0,
+        "spread_pct": 97.68231201171875
+      },
+      {
+        "date": "2026-08-20",
+        "front_price": 1220.75,
+        "third_price": 1251.5,
+        "spread": -30.75,
+        "spread_pct": 97.5429458618164
+      },
+      {
+        "date": "2026-08-21",
+        "front_price": 1225.0,
+        "third_price": 1253.75,
+        "spread": -28.75,
+        "spread_pct": 97.70687866210938
+      },
+      {
+        "date": "2026-08-24",
+        "front_price": 1216.0,
+        "third_price": 1238.25,
+        "spread": -22.25,
+        "spread_pct": 98.20310974121094
+      },
+      {
+        "date": "2026-08-25",
+        "front_price": 1228.0,
+        "third_price": 1252.25,
+        "spread": -24.25,
+        "spread_pct": 98.06348419189453
+      },
+      {
+        "date": "2026-08-26",
+        "front_price": 1254.25,
+        "third_price": 1280.75,
+        "spread": -26.5,
+        "spread_pct": 97.93090057373047
+      },
+      {
+        "date": "2026-08-27",
+        "front_price": 1256.5,
+        "third_price": 1283.0,
+        "spread": -26.5,
+        "spread_pct": 97.93452453613281
+      },
+      {
+        "date": "2026-08-28",
+        "front_price": 1276.25,
+        "third_price": 1302.75,
+        "spread": -26.5,
+        "spread_pct": 97.9658432006836
+      },
+      {
+        "date": "2026-08-31",
+        "front_price": 1275.25,
+        "third_price": 1303.25,
+        "spread": -28.0,
+        "spread_pct": 97.85152435302734
+      },
+      {
+        "date": "2026-09-01",
+        "front_price": 1306.75,
+        "third_price": 1332.75,
+        "spread": -26.0,
+        "spread_pct": 98.04914855957031
+      },
+      {
+        "date": "2026-09-02",
+        "front_price": 1301.75,
+        "third_price": 1325.0,
+        "spread": -23.25,
+        "spread_pct": 98.24527740478516
+      },
+      {
+        "date": "2026-09-03",
+        "front_price": 1306.25,
+        "third_price": 1331.5,
+        "spread": -25.25,
+        "spread_pct": 98.10364532470703
+      },
+      {
+        "date": "2026-09-04",
+        "front_price": 1293.75,
+        "third_price": 1325.0,
+        "spread": -31.25,
+        "spread_pct": 97.64151000976562
+      },
+      {
+        "date": "2026-09-08",
+        "front_price": 1316.25,
+        "third_price": 1338.5,
+        "spread": -22.25,
+        "spread_pct": 98.33769226074219
+      },
+      {
+        "date": "2026-09-09",
+        "front_price": 1309.5,
+        "third_price": 1331.75,
+        "spread": -22.25,
+        "spread_pct": 98.32926177978516
+      },
+      {
+        "date": "2026-09-10",
+        "front_price": 1332.25,
+        "third_price": 1352.75,
+        "spread": -20.5,
+        "spread_pct": 98.48457336425781
+      },
+      {
+        "date": "2026-09-11",
+        "front_price": 1296.5,
+        "third_price": 1318.75,
+        "spread": -22.25,
+        "spread_pct": 98.31279754638672
+      },
+      {
+        "date": "2026-09-14",
+        "front_price": 1304.25,
+        "third_price": 1328.0,
+        "spread": -23.75,
+        "spread_pct": 98.21160125732422
+      },
+      {
+        "date": "2026-09-15",
+        "front_price": 1318.75,
+        "third_price": 1343.0,
+        "spread": -24.25,
+        "spread_pct": 98.19434356689453
+      },
+      {
+        "date": "2026-09-16",
+        "front_price": 1320.5,
+        "third_price": 1345.25,
+        "spread": -24.75,
+        "spread_pct": 98.16019439697266
+      },
+      {
+        "date": "2026-09-17",
+        "front_price": 1319.75,
+        "third_price": 1345.75,
+        "spread": -26.0,
+        "spread_pct": 98.0679931640625
+      },
+      {
+        "date": "2026-09-18",
+        "front_price": 1303.5,
+        "third_price": 1329.5,
+        "spread": -26.0,
+        "spread_pct": 98.04438018798828
+      },
+      {
+        "date": "2026-09-21",
+        "front_price": 1328.0,
+        "third_price": 1351.75,
+        "spread": -23.75,
+        "spread_pct": 98.2430191040039
+      },
+      {
+        "date": "2026-09-22",
+        "front_price": 1325.5,
+        "third_price": 1348.75,
+        "spread": -23.25,
+        "spread_pct": 98.27617645263672
+      },
+      {
+        "date": "2026-09-23",
+        "front_price": 1318.0,
+        "third_price": 1342.5,
+        "spread": -24.5,
+        "spread_pct": 98.175048828125
+      },
+      {
+        "date": "2026-09-24",
+        "front_price": 1317.5,
+        "third_price": 1339.75,
+        "spread": -22.25,
+        "spread_pct": 98.33924102783203
+      },
+      {
+        "date": "2026-09-25",
+        "front_price": 1319.0,
+        "third_price": 1339.5,
+        "spread": -20.5,
+        "spread_pct": 98.4695816040039
+      },
+      {
+        "date": "2026-09-28",
+        "front_price": 1288.25,
+        "third_price": 1312.0,
+        "spread": -23.75,
+        "spread_pct": 98.18978881835938
+      },
+      {
+        "date": "2026-09-29",
+        "front_price": 1297.75,
+        "third_price": 1321.5,
+        "spread": -23.75,
+        "spread_pct": 98.20280456542969
+      },
+      {
+        "date": "2026-09-30",
+        "front_price": 1293.0,
+        "third_price": 1318.5,
+        "spread": -25.5,
+        "spread_pct": 98.06598663330078
+      },
+      {
+        "date": "2026-10-01",
+        "front_price": 1284.0,
+        "third_price": 1310.75,
+        "spread": -26.75,
+        "spread_pct": 97.95918273925781
+      },
+      {
+        "date": "2026-10-02",
+        "front_price": 1278.25,
+        "third_price": 1304.75,
+        "spread": -26.5,
+        "spread_pct": 97.96896362304688
+      },
+      {
+        "date": "2026-10-05",
+        "front_price": 1280.75,
+        "third_price": 1308.0,
+        "spread": -27.25,
+        "spread_pct": 97.91667175292969
+      },
+      {
+        "date": "2026-10-06",
+        "front_price": 1303.0,
+        "third_price": 1328.75,
+        "spread": -25.75,
+        "spread_pct": 98.06208801269531
+      },
+      {
+        "date": "2026-10-07",
+        "front_price": 1297.5,
+        "third_price": 1324.0,
+        "spread": -26.5,
+        "spread_pct": 97.99848937988281
+      },
+      {
+        "date": "2026-10-08",
+        "front_price": 1287.5,
+        "third_price": 1314.0,
+        "spread": -26.5,
+        "spread_pct": 97.98326110839844
+      },
+      {
+        "date": "2026-10-09",
+        "front_price": 1292.0,
+        "third_price": 1318.75,
+        "spread": -26.75,
+        "spread_pct": 97.97156524658203
       }
     ],
     "chicago-wheat": [
@@ -87759,6 +88459,356 @@
         "third_price": 697.5,
         "spread": -34.0,
         "spread_pct": 95.12545013427734
+      },
+      {
+        "date": "2026-07-31",
+        "front_price": 639.25,
+        "third_price": 674.25,
+        "spread": -35.0,
+        "spread_pct": 94.80905151367188
+      },
+      {
+        "date": "2026-08-03",
+        "front_price": 651.0,
+        "third_price": 685.25,
+        "spread": -34.25,
+        "spread_pct": 95.00182342529297
+      },
+      {
+        "date": "2026-08-04",
+        "front_price": 638.5,
+        "third_price": 673.5,
+        "spread": -35.0,
+        "spread_pct": 94.80326843261719
+      },
+      {
+        "date": "2026-08-05",
+        "front_price": 642.25,
+        "third_price": 677.75,
+        "spread": -35.5,
+        "spread_pct": 94.76207733154297
+      },
+      {
+        "date": "2026-08-06",
+        "front_price": 631.25,
+        "third_price": 667.25,
+        "spread": -36.0,
+        "spread_pct": 94.60472106933594
+      },
+      {
+        "date": "2026-08-07",
+        "front_price": 639.75,
+        "third_price": 674.75,
+        "spread": -35.0,
+        "spread_pct": 94.81289672851562
+      },
+      {
+        "date": "2026-08-10",
+        "front_price": 640.5,
+        "third_price": 676.25,
+        "spread": -35.75,
+        "spread_pct": 94.71349334716797
+      },
+      {
+        "date": "2026-08-11",
+        "front_price": 630.25,
+        "third_price": 665.5,
+        "spread": -35.25,
+        "spread_pct": 94.70323181152344
+      },
+      {
+        "date": "2026-08-12",
+        "front_price": 652.75,
+        "third_price": 686.0,
+        "spread": -33.25,
+        "spread_pct": 95.15306091308594
+      },
+      {
+        "date": "2026-08-13",
+        "front_price": 652.75,
+        "third_price": 685.25,
+        "spread": -32.5,
+        "spread_pct": 95.2572021484375
+      },
+      {
+        "date": "2026-08-14",
+        "front_price": 674.75,
+        "third_price": 705.25,
+        "spread": -30.5,
+        "spread_pct": 95.67529296875
+      },
+      {
+        "date": "2026-08-17",
+        "front_price": 674.75,
+        "third_price": 705.25,
+        "spread": -30.5,
+        "spread_pct": 95.67529296875
+      },
+      {
+        "date": "2026-08-18",
+        "front_price": 664.5,
+        "third_price": 699.0,
+        "spread": -34.5,
+        "spread_pct": 95.06437683105469
+      },
+      {
+        "date": "2026-08-19",
+        "front_price": 680.25,
+        "third_price": 714.75,
+        "spread": -34.5,
+        "spread_pct": 95.17314147949219
+      },
+      {
+        "date": "2026-08-20",
+        "front_price": 682.75,
+        "third_price": 717.25,
+        "spread": -34.5,
+        "spread_pct": 95.18995666503906
+      },
+      {
+        "date": "2026-08-21",
+        "front_price": 681.5,
+        "third_price": 716.5,
+        "spread": -35.0,
+        "spread_pct": 95.11514282226562
+      },
+      {
+        "date": "2026-08-24",
+        "front_price": 681.75,
+        "third_price": 717.5,
+        "spread": -35.75,
+        "spread_pct": 95.01741790771484
+      },
+      {
+        "date": "2026-08-25",
+        "front_price": 685.5,
+        "third_price": 721.25,
+        "spread": -35.75,
+        "spread_pct": 95.04332733154297
+      },
+      {
+        "date": "2026-08-26",
+        "front_price": 730.5,
+        "third_price": 765.25,
+        "spread": -34.75,
+        "spread_pct": 95.45899963378906
+      },
+      {
+        "date": "2026-08-27",
+        "front_price": 742.75,
+        "third_price": 776.0,
+        "spread": -33.25,
+        "spread_pct": 95.7152099609375
+      },
+      {
+        "date": "2026-08-28",
+        "front_price": 767.0,
+        "third_price": 797.75,
+        "spread": -30.75,
+        "spread_pct": 96.1454086303711
+      },
+      {
+        "date": "2026-08-31",
+        "front_price": 756.5,
+        "third_price": 788.25,
+        "spread": -31.75,
+        "spread_pct": 95.97209167480469
+      },
+      {
+        "date": "2026-09-01",
+        "front_price": 764.0,
+        "third_price": 797.5,
+        "spread": -33.5,
+        "spread_pct": 95.79937744140625
+      },
+      {
+        "date": "2026-09-02",
+        "front_price": 754.75,
+        "third_price": 790.75,
+        "spread": -36.0,
+        "spread_pct": 95.4473648071289
+      },
+      {
+        "date": "2026-09-03",
+        "front_price": 736.0,
+        "third_price": 770.0,
+        "spread": -34.0,
+        "spread_pct": 95.58441925048828
+      },
+      {
+        "date": "2026-09-04",
+        "front_price": 716.0,
+        "third_price": 749.25,
+        "spread": -33.25,
+        "spread_pct": 95.5622329711914
+      },
+      {
+        "date": "2026-09-08",
+        "front_price": 747.0,
+        "third_price": 768.75,
+        "spread": -21.75,
+        "spread_pct": 97.17073059082031
+      },
+      {
+        "date": "2026-09-09",
+        "front_price": 728.75,
+        "third_price": 751.75,
+        "spread": -23.0,
+        "spread_pct": 96.94046783447266
+      },
+      {
+        "date": "2026-09-10",
+        "front_price": 741.25,
+        "third_price": 763.25,
+        "spread": -22.0,
+        "spread_pct": 97.11759185791016
+      },
+      {
+        "date": "2026-09-11",
+        "front_price": 725.25,
+        "third_price": 749.25,
+        "spread": -24.0,
+        "spread_pct": 96.79679870605469
+      },
+      {
+        "date": "2026-09-14",
+        "front_price": 722.0,
+        "third_price": 747.75,
+        "spread": -25.75,
+        "spread_pct": 96.55633544921875
+      },
+      {
+        "date": "2026-09-15",
+        "front_price": 728.5,
+        "third_price": 752.5,
+        "spread": -24.0,
+        "spread_pct": 96.81063079833984
+      },
+      {
+        "date": "2026-09-16",
+        "front_price": 730.75,
+        "third_price": 754.0,
+        "spread": -23.25,
+        "spread_pct": 96.91644287109375
+      },
+      {
+        "date": "2026-09-17",
+        "front_price": 727.0,
+        "third_price": 750.0,
+        "spread": -23.0,
+        "spread_pct": 96.93333435058594
+      },
+      {
+        "date": "2026-09-18",
+        "front_price": 714.25,
+        "third_price": 738.0,
+        "spread": -23.75,
+        "spread_pct": 96.78184509277344
+      },
+      {
+        "date": "2026-09-21",
+        "front_price": 726.75,
+        "third_price": 750.5,
+        "spread": -23.75,
+        "spread_pct": 96.83544158935547
+      },
+      {
+        "date": "2026-09-22",
+        "front_price": 717.25,
+        "third_price": 741.25,
+        "spread": -24.0,
+        "spread_pct": 96.7622299194336
+      },
+      {
+        "date": "2026-09-23",
+        "front_price": 708.5,
+        "third_price": 732.0,
+        "spread": -23.5,
+        "spread_pct": 96.78961944580078
+      },
+      {
+        "date": "2026-09-24",
+        "front_price": 707.0,
+        "third_price": 728.25,
+        "spread": -21.25,
+        "spread_pct": 97.08204650878906
+      },
+      {
+        "date": "2026-09-25",
+        "front_price": 703.25,
+        "third_price": 725.0,
+        "spread": -21.75,
+        "spread_pct": 97.0
+      },
+      {
+        "date": "2026-09-28",
+        "front_price": 688.75,
+        "third_price": 710.75,
+        "spread": -22.0,
+        "spread_pct": 96.90467834472656
+      },
+      {
+        "date": "2026-09-29",
+        "front_price": 692.75,
+        "third_price": 713.5,
+        "spread": -20.75,
+        "spread_pct": 97.091796875
+      },
+      {
+        "date": "2026-09-30",
+        "front_price": 675.75,
+        "third_price": 698.75,
+        "spread": -23.0,
+        "spread_pct": 96.70840454101562
+      },
+      {
+        "date": "2026-10-01",
+        "front_price": 682.75,
+        "third_price": 703.5,
+        "spread": -20.75,
+        "spread_pct": 97.05046081542969
+      },
+      {
+        "date": "2026-10-02",
+        "front_price": 683.0,
+        "third_price": 703.5,
+        "spread": -20.5,
+        "spread_pct": 97.08599853515625
+      },
+      {
+        "date": "2026-10-05",
+        "front_price": 692.25,
+        "third_price": 712.25,
+        "spread": -20.0,
+        "spread_pct": 97.1919937133789
+      },
+      {
+        "date": "2026-10-06",
+        "front_price": 704.25,
+        "third_price": 723.5,
+        "spread": -19.25,
+        "spread_pct": 97.33931732177734
+      },
+      {
+        "date": "2026-10-07",
+        "front_price": 686.5,
+        "third_price": 707.75,
+        "spread": -21.25,
+        "spread_pct": 96.99752807617188
+      },
+      {
+        "date": "2026-10-08",
+        "front_price": 683.25,
+        "third_price": 704.0,
+        "spread": -20.75,
+        "spread_pct": 97.05255889892578
+      },
+      {
+        "date": "2026-10-09",
+        "front_price": 671.0,
+        "third_price": 692.0,
+        "spread": -21.0,
+        "spread_pct": 96.96531677246094
       }
     ],
     "kansas-wheat": [
@@ -116965,6 +118015,356 @@
         "third_price": 758.25,
         "spread": -27.5,
         "spread_pct": 96.37322998046875
+      },
+      {
+        "date": "2026-07-31",
+        "front_price": 707.5,
+        "third_price": 736.0,
+        "spread": -28.5,
+        "spread_pct": 96.12771606445312
+      },
+      {
+        "date": "2026-08-03",
+        "front_price": 717.25,
+        "third_price": 746.25,
+        "spread": -29.0,
+        "spread_pct": 96.11389923095703
+      },
+      {
+        "date": "2026-08-04",
+        "front_price": 707.0,
+        "third_price": 736.5,
+        "spread": -29.5,
+        "spread_pct": 95.99456787109375
+      },
+      {
+        "date": "2026-08-05",
+        "front_price": 713.5,
+        "third_price": 743.5,
+        "spread": -30.0,
+        "spread_pct": 95.96502685546875
+      },
+      {
+        "date": "2026-08-06",
+        "front_price": 699.75,
+        "third_price": 730.5,
+        "spread": -30.75,
+        "spread_pct": 95.7905502319336
+      },
+      {
+        "date": "2026-08-07",
+        "front_price": 714.0,
+        "third_price": 743.0,
+        "spread": -29.0,
+        "spread_pct": 96.0969009399414
+      },
+      {
+        "date": "2026-08-10",
+        "front_price": 713.5,
+        "third_price": 744.5,
+        "spread": -31.0,
+        "spread_pct": 95.83613586425781
+      },
+      {
+        "date": "2026-08-11",
+        "front_price": 699.25,
+        "third_price": 729.75,
+        "spread": -30.5,
+        "spread_pct": 95.82048797607422
+      },
+      {
+        "date": "2026-08-12",
+        "front_price": 720.75,
+        "third_price": 750.75,
+        "spread": -30.0,
+        "spread_pct": 96.00399780273438
+      },
+      {
+        "date": "2026-08-13",
+        "front_price": 720.5,
+        "third_price": 748.75,
+        "spread": -28.25,
+        "spread_pct": 96.22704315185547
+      },
+      {
+        "date": "2026-08-14",
+        "front_price": 754.25,
+        "third_price": 778.75,
+        "spread": -24.5,
+        "spread_pct": 96.85392761230469
+      },
+      {
+        "date": "2026-08-17",
+        "front_price": 758.75,
+        "third_price": 783.0,
+        "spread": -24.25,
+        "spread_pct": 96.90293884277344
+      },
+      {
+        "date": "2026-08-18",
+        "front_price": 743.75,
+        "third_price": 771.5,
+        "spread": -27.75,
+        "spread_pct": 96.40310668945312
+      },
+      {
+        "date": "2026-08-19",
+        "front_price": 762.0,
+        "third_price": 790.0,
+        "spread": -28.0,
+        "spread_pct": 96.45569610595703
+      },
+      {
+        "date": "2026-08-20",
+        "front_price": 762.25,
+        "third_price": 790.0,
+        "spread": -27.75,
+        "spread_pct": 96.48734283447266
+      },
+      {
+        "date": "2026-08-21",
+        "front_price": 756.25,
+        "third_price": 785.75,
+        "spread": -29.5,
+        "spread_pct": 96.24562072753906
+      },
+      {
+        "date": "2026-08-24",
+        "front_price": 750.5,
+        "third_price": 780.75,
+        "spread": -30.25,
+        "spread_pct": 96.12551879882812
+      },
+      {
+        "date": "2026-08-25",
+        "front_price": 754.5,
+        "third_price": 784.75,
+        "spread": -30.25,
+        "spread_pct": 96.145263671875
+      },
+      {
+        "date": "2026-08-26",
+        "front_price": 792.0,
+        "third_price": 822.0,
+        "spread": -30.0,
+        "spread_pct": 96.3503646850586
+      },
+      {
+        "date": "2026-08-27",
+        "front_price": 803.5,
+        "third_price": 834.75,
+        "spread": -31.25,
+        "spread_pct": 96.25636291503906
+      },
+      {
+        "date": "2026-08-28",
+        "front_price": 827.75,
+        "third_price": 856.75,
+        "spread": -29.0,
+        "spread_pct": 96.61511993408203
+      },
+      {
+        "date": "2026-08-31",
+        "front_price": 820.25,
+        "third_price": 851.25,
+        "spread": -31.0,
+        "spread_pct": 96.3582992553711
+      },
+      {
+        "date": "2026-09-01",
+        "front_price": 825.75,
+        "third_price": 858.5,
+        "spread": -32.75,
+        "spread_pct": 96.18521118164062
+      },
+      {
+        "date": "2026-09-02",
+        "front_price": 814.75,
+        "third_price": 847.75,
+        "spread": -33.0,
+        "spread_pct": 96.10734558105469
+      },
+      {
+        "date": "2026-09-03",
+        "front_price": 798.5,
+        "third_price": 828.25,
+        "spread": -29.75,
+        "spread_pct": 96.40808868408203
+      },
+      {
+        "date": "2026-09-04",
+        "front_price": 786.75,
+        "third_price": 815.25,
+        "spread": -28.5,
+        "spread_pct": 96.50414276123047
+      },
+      {
+        "date": "2026-09-08",
+        "front_price": 819.0,
+        "third_price": 834.5,
+        "spread": -15.5,
+        "spread_pct": 98.1426010131836
+      },
+      {
+        "date": "2026-09-09",
+        "front_price": 806.25,
+        "third_price": 822.5,
+        "spread": -16.25,
+        "spread_pct": 98.0243148803711
+      },
+      {
+        "date": "2026-09-10",
+        "front_price": 818.75,
+        "third_price": 834.5,
+        "spread": -15.75,
+        "spread_pct": 98.11264038085938
+      },
+      {
+        "date": "2026-09-11",
+        "front_price": 798.5,
+        "third_price": 816.5,
+        "spread": -18.0,
+        "spread_pct": 97.79547119140625
+      },
+      {
+        "date": "2026-09-14",
+        "front_price": 792.5,
+        "third_price": 811.75,
+        "spread": -19.25,
+        "spread_pct": 97.62857818603516
+      },
+      {
+        "date": "2026-09-15",
+        "front_price": 796.25,
+        "third_price": 814.5,
+        "spread": -18.25,
+        "spread_pct": 97.75936126708984
+      },
+      {
+        "date": "2026-09-16",
+        "front_price": 799.5,
+        "third_price": 815.5,
+        "spread": -16.0,
+        "spread_pct": 98.03800964355469
+      },
+      {
+        "date": "2026-09-17",
+        "front_price": 794.5,
+        "third_price": 810.75,
+        "spread": -16.25,
+        "spread_pct": 97.99568176269531
+      },
+      {
+        "date": "2026-09-18",
+        "front_price": 783.75,
+        "third_price": 802.0,
+        "spread": -18.25,
+        "spread_pct": 97.72444152832031
+      },
+      {
+        "date": "2026-09-21",
+        "front_price": 794.5,
+        "third_price": 812.0,
+        "spread": -17.5,
+        "spread_pct": 97.8448257446289
+      },
+      {
+        "date": "2026-09-22",
+        "front_price": 781.25,
+        "third_price": 800.25,
+        "spread": -19.0,
+        "spread_pct": 97.62574768066406
+      },
+      {
+        "date": "2026-09-23",
+        "front_price": 771.75,
+        "third_price": 790.5,
+        "spread": -18.75,
+        "spread_pct": 97.62808227539062
+      },
+      {
+        "date": "2026-09-24",
+        "front_price": 767.0,
+        "third_price": 784.0,
+        "spread": -17.0,
+        "spread_pct": 97.83163452148438
+      },
+      {
+        "date": "2026-09-25",
+        "front_price": 762.0,
+        "third_price": 778.25,
+        "spread": -16.25,
+        "spread_pct": 97.9119873046875
+      },
+      {
+        "date": "2026-09-28",
+        "front_price": 745.75,
+        "third_price": 762.25,
+        "spread": -16.5,
+        "spread_pct": 97.83535766601562
+      },
+      {
+        "date": "2026-09-29",
+        "front_price": 743.0,
+        "third_price": 761.0,
+        "spread": -18.0,
+        "spread_pct": 97.63468933105469
+      },
+      {
+        "date": "2026-09-30",
+        "front_price": 733.0,
+        "third_price": 752.0,
+        "spread": -19.0,
+        "spread_pct": 97.47340393066406
+      },
+      {
+        "date": "2026-10-01",
+        "front_price": 737.5,
+        "third_price": 756.0,
+        "spread": -18.5,
+        "spread_pct": 97.55290985107422
+      },
+      {
+        "date": "2026-10-02",
+        "front_price": 735.25,
+        "third_price": 752.75,
+        "spread": -17.5,
+        "spread_pct": 97.6751937866211
+      },
+      {
+        "date": "2026-10-05",
+        "front_price": 742.25,
+        "third_price": 759.25,
+        "spread": -17.0,
+        "spread_pct": 97.76094818115234
+      },
+      {
+        "date": "2026-10-06",
+        "front_price": 756.25,
+        "third_price": 773.5,
+        "spread": -17.25,
+        "spread_pct": 97.7698745727539
+      },
+      {
+        "date": "2026-10-07",
+        "front_price": 738.5,
+        "third_price": 757.0,
+        "spread": -18.5,
+        "spread_pct": 97.55614471435547
+      },
+      {
+        "date": "2026-10-08",
+        "front_price": 736.25,
+        "third_price": 753.25,
+        "spread": -17.0,
+        "spread_pct": 97.74311065673828
+      },
+      {
+        "date": "2026-10-09",
+        "front_price": 719.25,
+        "third_price": 736.75,
+        "spread": -17.5,
+        "spread_pct": 97.62470245361328
       }
     ],
     "soyoil": [
@@ -146171,6 +147571,356 @@
         "third_price": 67.69999694824219,
         "spread": 0.6500015258789062,
         "spread_pct": 100.96012115478516
+      },
+      {
+        "date": "2026-07-31",
+        "front_price": 67.12000274658203,
+        "third_price": 67.04000091552734,
+        "spread": 0.0800018310546875,
+        "spread_pct": 100.11933898925781
+      },
+      {
+        "date": "2026-08-03",
+        "front_price": 68.69000244140625,
+        "third_price": 68.41000366210938,
+        "spread": 0.279998779296875,
+        "spread_pct": 100.40929412841797
+      },
+      {
+        "date": "2026-08-04",
+        "front_price": 68.18000030517578,
+        "third_price": 67.81999969482422,
+        "spread": 0.3600006103515625,
+        "spread_pct": 100.53081512451172
+      },
+      {
+        "date": "2026-08-05",
+        "front_price": 67.75,
+        "third_price": 67.41999816894531,
+        "spread": 0.3300018310546875,
+        "spread_pct": 100.48947143554688
+      },
+      {
+        "date": "2026-08-06",
+        "front_price": 67.73999786376953,
+        "third_price": 67.37000274658203,
+        "spread": 0.3699951171875,
+        "spread_pct": 100.5491943359375
+      },
+      {
+        "date": "2026-08-07",
+        "front_price": 68.23999786376953,
+        "third_price": 67.87999725341797,
+        "spread": 0.3600006103515625,
+        "spread_pct": 100.53034973144531
+      },
+      {
+        "date": "2026-08-10",
+        "front_price": 69.52999877929688,
+        "third_price": 69.13999938964844,
+        "spread": 0.3899993896484375,
+        "spread_pct": 100.56407165527344
+      },
+      {
+        "date": "2026-08-11",
+        "front_price": 68.56999969482422,
+        "third_price": 68.12000274658203,
+        "spread": 0.4499969482421875,
+        "spread_pct": 100.66059875488281
+      },
+      {
+        "date": "2026-08-12",
+        "front_price": 69.16000366210938,
+        "third_price": 68.76000213623047,
+        "spread": 0.40000152587890625,
+        "spread_pct": 100.58174133300781
+      },
+      {
+        "date": "2026-08-13",
+        "front_price": 68.79000091552734,
+        "third_price": 68.37999725341797,
+        "spread": 0.410003662109375,
+        "spread_pct": 100.59960174560547
+      },
+      {
+        "date": "2026-08-14",
+        "front_price": 69.44000244140625,
+        "third_price": 68.97000122070312,
+        "spread": 0.470001220703125,
+        "spread_pct": 100.68145751953125
+      },
+      {
+        "date": "2026-08-17",
+        "front_price": 71.44000244140625,
+        "third_price": 70.81999969482422,
+        "spread": 0.6200027465820312,
+        "spread_pct": 100.87545776367188
+      },
+      {
+        "date": "2026-08-18",
+        "front_price": 69.69000244140625,
+        "third_price": 69.62999725341797,
+        "spread": 0.06000518798828125,
+        "spread_pct": 100.08617401123047
+      },
+      {
+        "date": "2026-08-19",
+        "front_price": 69.86000061035156,
+        "third_price": 69.95999908447266,
+        "spread": -0.09999847412109375,
+        "spread_pct": 99.85706329345703
+      },
+      {
+        "date": "2026-08-20",
+        "front_price": 71.18000030517578,
+        "third_price": 71.31999969482422,
+        "spread": -0.1399993896484375,
+        "spread_pct": 99.80370330810547
+      },
+      {
+        "date": "2026-08-21",
+        "front_price": 69.3499984741211,
+        "third_price": 69.58000183105469,
+        "spread": -0.23000335693359375,
+        "spread_pct": 99.66944122314453
+      },
+      {
+        "date": "2026-08-24",
+        "front_price": 67.12999725341797,
+        "third_price": 67.30999755859375,
+        "spread": -0.18000030517578125,
+        "spread_pct": 99.73257446289062
+      },
+      {
+        "date": "2026-08-25",
+        "front_price": 67.5199966430664,
+        "third_price": 67.77999877929688,
+        "spread": -0.26000213623046875,
+        "spread_pct": 99.61640167236328
+      },
+      {
+        "date": "2026-08-26",
+        "front_price": 67.22000122070312,
+        "third_price": 67.73999786376953,
+        "spread": -0.5199966430664062,
+        "spread_pct": 99.23236083984375
+      },
+      {
+        "date": "2026-08-27",
+        "front_price": 68.0,
+        "third_price": 68.51000213623047,
+        "spread": -0.5100021362304688,
+        "spread_pct": 99.25557708740234
+      },
+      {
+        "date": "2026-08-28",
+        "front_price": 70.58999633789062,
+        "third_price": 71.05999755859375,
+        "spread": -0.470001220703125,
+        "spread_pct": 99.33858489990234
+      },
+      {
+        "date": "2026-08-31",
+        "front_price": 70.5,
+        "third_price": 71.12000274658203,
+        "spread": -0.6200027465820312,
+        "spread_pct": 99.12822723388672
+      },
+      {
+        "date": "2026-09-01",
+        "front_price": 72.37000274658203,
+        "third_price": 72.62999725341797,
+        "spread": -0.2599945068359375,
+        "spread_pct": 99.64202880859375
+      },
+      {
+        "date": "2026-09-02",
+        "front_price": 70.5,
+        "third_price": 70.95999908447266,
+        "spread": -0.45999908447265625,
+        "spread_pct": 99.35174560546875
+      },
+      {
+        "date": "2026-09-03",
+        "front_price": 69.5,
+        "third_price": 70.04000091552734,
+        "spread": -0.5400009155273438,
+        "spread_pct": 99.22901153564453
+      },
+      {
+        "date": "2026-09-04",
+        "front_price": 68.77999877929688,
+        "third_price": 69.2699966430664,
+        "spread": -0.48999786376953125,
+        "spread_pct": 99.2926254272461
+      },
+      {
+        "date": "2026-09-08",
+        "front_price": 70.22000122070312,
+        "third_price": 70.93000030517578,
+        "spread": -0.7099990844726562,
+        "spread_pct": 98.99900817871094
+      },
+      {
+        "date": "2026-09-09",
+        "front_price": 70.08000183105469,
+        "third_price": 70.87999725341797,
+        "spread": -0.7999954223632812,
+        "spread_pct": 98.871337890625
+      },
+      {
+        "date": "2026-09-10",
+        "front_price": 71.41000366210938,
+        "third_price": 72.19000244140625,
+        "spread": -0.779998779296875,
+        "spread_pct": 98.91951751708984
+      },
+      {
+        "date": "2026-09-11",
+        "front_price": 69.19000244140625,
+        "third_price": 69.98999786376953,
+        "spread": -0.7999954223632812,
+        "spread_pct": 98.85698699951172
+      },
+      {
+        "date": "2026-09-14",
+        "front_price": 69.6500015258789,
+        "third_price": 70.47000122070312,
+        "spread": -0.8199996948242188,
+        "spread_pct": 98.83638763427734
+      },
+      {
+        "date": "2026-09-15",
+        "front_price": 69.87999725341797,
+        "third_price": 70.55999755859375,
+        "spread": -0.6800003051757812,
+        "spread_pct": 99.03628540039062
+      },
+      {
+        "date": "2026-09-16",
+        "front_price": 69.19000244140625,
+        "third_price": 69.9000015258789,
+        "spread": -0.7099990844726562,
+        "spread_pct": 98.98426818847656
+      },
+      {
+        "date": "2026-09-17",
+        "front_price": 68.68000030517578,
+        "third_price": 69.41999816894531,
+        "spread": -0.7399978637695312,
+        "spread_pct": 98.93402862548828
+      },
+      {
+        "date": "2026-09-18",
+        "front_price": 67.69999694824219,
+        "third_price": 68.5199966430664,
+        "spread": -0.8199996948242188,
+        "spread_pct": 98.80326843261719
+      },
+      {
+        "date": "2026-09-21",
+        "front_price": 68.31999969482422,
+        "third_price": 69.08999633789062,
+        "spread": -0.7699966430664062,
+        "spread_pct": 98.8855209350586
+      },
+      {
+        "date": "2026-09-22",
+        "front_price": 67.37000274658203,
+        "third_price": 68.19000244140625,
+        "spread": -0.8199996948242188,
+        "spread_pct": 98.79747772216797
+      },
+      {
+        "date": "2026-09-23",
+        "front_price": 67.25,
+        "third_price": 68.05999755859375,
+        "spread": -0.80999755859375,
+        "spread_pct": 98.80988311767578
+      },
+      {
+        "date": "2026-09-24",
+        "front_price": 66.93000030517578,
+        "third_price": 67.81999969482422,
+        "spread": -0.8899993896484375,
+        "spread_pct": 98.68770599365234
+      },
+      {
+        "date": "2026-09-25",
+        "front_price": 67.26000213623047,
+        "third_price": 68.05000305175781,
+        "spread": -0.7900009155273438,
+        "spread_pct": 98.8390884399414
+      },
+      {
+        "date": "2026-09-28",
+        "front_price": 67.11000061035156,
+        "third_price": 67.83999633789062,
+        "spread": -0.7299957275390625,
+        "spread_pct": 98.92394256591797
+      },
+      {
+        "date": "2026-09-29",
+        "front_price": 67.8499984741211,
+        "third_price": 68.58000183105469,
+        "spread": -0.7300033569335938,
+        "spread_pct": 98.935546875
+      },
+      {
+        "date": "2026-09-30",
+        "front_price": 67.8499984741211,
+        "third_price": 68.47000122070312,
+        "spread": -0.6200027465820312,
+        "spread_pct": 99.09449005126953
+      },
+      {
+        "date": "2026-10-01",
+        "front_price": 66.97000122070312,
+        "third_price": 67.62000274658203,
+        "spread": -0.6500015258789062,
+        "spread_pct": 99.03874206542969
+      },
+      {
+        "date": "2026-10-02",
+        "front_price": 68.20999908447266,
+        "third_price": 68.87000274658203,
+        "spread": -0.660003662109375,
+        "spread_pct": 99.04166412353516
+      },
+      {
+        "date": "2026-10-05",
+        "front_price": 68.94999694824219,
+        "third_price": 69.62999725341797,
+        "spread": -0.6800003051757812,
+        "spread_pct": 99.02340698242188
+      },
+      {
+        "date": "2026-10-06",
+        "front_price": 69.91000366210938,
+        "third_price": 70.33999633789062,
+        "spread": -0.42999267578125,
+        "spread_pct": 99.3886947631836
+      },
+      {
+        "date": "2026-10-07",
+        "front_price": 67.68000030517578,
+        "third_price": 68.2300033569336,
+        "spread": -0.5500030517578125,
+        "spread_pct": 99.19390106201172
+      },
+      {
+        "date": "2026-10-08",
+        "front_price": 67.91999816894531,
+        "third_price": 68.37999725341797,
+        "spread": -0.45999908447265625,
+        "spread_pct": 99.3272933959961
+      },
+      {
+        "date": "2026-10-09",
+        "front_price": 68.0199966430664,
+        "third_price": 68.4800033569336,
+        "spread": -0.4600067138671875,
+        "spread_pct": 99.32826232910156
       }
     ],
     "soymeal": [
@@ -175377,6 +177127,356 @@
         "third_price": 318.29998779296875,
         "spread": -4.199981689453125,
         "spread_pct": 98.68049621582031
+      },
+      {
+        "date": "2026-07-31",
+        "front_price": 312.20001220703125,
+        "third_price": 316.6000061035156,
+        "spread": -4.399993896484375,
+        "spread_pct": 98.61023712158203
+      },
+      {
+        "date": "2026-08-03",
+        "front_price": 313.3999938964844,
+        "third_price": 316.79998779296875,
+        "spread": -3.399993896484375,
+        "spread_pct": 98.92677307128906
+      },
+      {
+        "date": "2026-08-04",
+        "front_price": 310.6000061035156,
+        "third_price": 313.79998779296875,
+        "spread": -3.199981689453125,
+        "spread_pct": 98.9802474975586
+      },
+      {
+        "date": "2026-08-05",
+        "front_price": 309.29998779296875,
+        "third_price": 311.20001220703125,
+        "spread": -1.9000244140625,
+        "spread_pct": 99.38945007324219
+      },
+      {
+        "date": "2026-08-06",
+        "front_price": 311.6000061035156,
+        "third_price": 316.6000061035156,
+        "spread": -5.0,
+        "spread_pct": 98.42072296142578
+      },
+      {
+        "date": "2026-08-07",
+        "front_price": 308.8999938964844,
+        "third_price": 313.3999938964844,
+        "spread": -4.5,
+        "spread_pct": 98.56413269042969
+      },
+      {
+        "date": "2026-08-10",
+        "front_price": 305.5,
+        "third_price": 311.6000061035156,
+        "spread": -6.100006103515625,
+        "spread_pct": 98.04236602783203
+      },
+      {
+        "date": "2026-08-11",
+        "front_price": 305.0,
+        "third_price": 310.8999938964844,
+        "spread": -5.899993896484375,
+        "spread_pct": 98.10227966308594
+      },
+      {
+        "date": "2026-08-12",
+        "front_price": 308.5,
+        "third_price": 315.1000061035156,
+        "spread": -6.600006103515625,
+        "spread_pct": 97.90542602539062
+      },
+      {
+        "date": "2026-08-13",
+        "front_price": 307.3999938964844,
+        "third_price": 314.0,
+        "spread": -6.600006103515625,
+        "spread_pct": 97.89808654785156
+      },
+      {
+        "date": "2026-08-14",
+        "front_price": 310.20001220703125,
+        "third_price": 316.29998779296875,
+        "spread": -6.0999755859375,
+        "spread_pct": 98.07145690917969
+      },
+      {
+        "date": "2026-08-17",
+        "front_price": 312.1000061035156,
+        "third_price": 318.70001220703125,
+        "spread": -6.600006103515625,
+        "spread_pct": 97.92908477783203
+      },
+      {
+        "date": "2026-08-18",
+        "front_price": 313.0,
+        "third_price": 318.79998779296875,
+        "spread": -5.79998779296875,
+        "spread_pct": 98.18067932128906
+      },
+      {
+        "date": "2026-08-19",
+        "front_price": 318.8999938964844,
+        "third_price": 325.6000061035156,
+        "spread": -6.70001220703125,
+        "spread_pct": 97.9422607421875
+      },
+      {
+        "date": "2026-08-20",
+        "front_price": 315.70001220703125,
+        "third_price": 323.79998779296875,
+        "spread": -8.0999755859375,
+        "spread_pct": 97.49846649169922
+      },
+      {
+        "date": "2026-08-21",
+        "front_price": 317.70001220703125,
+        "third_price": 325.79998779296875,
+        "spread": -8.0999755859375,
+        "spread_pct": 97.5138168334961
+      },
+      {
+        "date": "2026-08-24",
+        "front_price": 320.29998779296875,
+        "third_price": 328.6000061035156,
+        "spread": -8.300018310546875,
+        "spread_pct": 97.47412872314453
+      },
+      {
+        "date": "2026-08-25",
+        "front_price": 320.29998779296875,
+        "third_price": 329.20001220703125,
+        "spread": -8.9000244140625,
+        "spread_pct": 97.29647064208984
+      },
+      {
+        "date": "2026-08-26",
+        "front_price": 328.70001220703125,
+        "third_price": 339.29998779296875,
+        "spread": -10.5999755859375,
+        "spread_pct": 96.87593078613281
+      },
+      {
+        "date": "2026-08-27",
+        "front_price": 330.20001220703125,
+        "third_price": 340.8999938964844,
+        "spread": -10.699981689453125,
+        "spread_pct": 96.86125183105469
+      },
+      {
+        "date": "2026-08-28",
+        "front_price": 338.20001220703125,
+        "third_price": 348.8999938964844,
+        "spread": -10.699981689453125,
+        "spread_pct": 96.93321990966797
+      },
+      {
+        "date": "2026-08-31",
+        "front_price": 334.6000061035156,
+        "third_price": 345.29998779296875,
+        "spread": -10.699981689453125,
+        "spread_pct": 96.90125274658203
+      },
+      {
+        "date": "2026-09-01",
+        "front_price": 342.0,
+        "third_price": 352.6000061035156,
+        "spread": -10.600006103515625,
+        "spread_pct": 96.99375915527344
+      },
+      {
+        "date": "2026-09-02",
+        "front_price": 339.20001220703125,
+        "third_price": 349.6000061035156,
+        "spread": -10.399993896484375,
+        "spread_pct": 97.02517700195312
+      },
+      {
+        "date": "2026-09-03",
+        "front_price": 345.20001220703125,
+        "third_price": 355.5,
+        "spread": -10.29998779296875,
+        "spread_pct": 97.10267639160156
+      },
+      {
+        "date": "2026-09-04",
+        "front_price": 345.29998779296875,
+        "third_price": 355.1000061035156,
+        "spread": -9.800018310546875,
+        "spread_pct": 97.2402114868164
+      },
+      {
+        "date": "2026-09-08",
+        "front_price": 343.29998779296875,
+        "third_price": 352.79998779296875,
+        "spread": -9.5,
+        "spread_pct": 97.30725860595703
+      },
+      {
+        "date": "2026-09-09",
+        "front_price": 345.1000061035156,
+        "third_price": 353.70001220703125,
+        "spread": -8.600006103515625,
+        "spread_pct": 97.56855773925781
+      },
+      {
+        "date": "2026-09-10",
+        "front_price": 350.6000061035156,
+        "third_price": 358.8999938964844,
+        "spread": -8.29998779296875,
+        "spread_pct": 97.6873779296875
+      },
+      {
+        "date": "2026-09-11",
+        "front_price": 346.79998779296875,
+        "third_price": 354.70001220703125,
+        "spread": -7.9000244140625,
+        "spread_pct": 97.77275848388672
+      },
+      {
+        "date": "2026-09-14",
+        "front_price": 350.20001220703125,
+        "third_price": 357.79998779296875,
+        "spread": -7.5999755859375,
+        "spread_pct": 97.87591552734375
+      },
+      {
+        "date": "2026-09-15",
+        "front_price": 360.1000061035156,
+        "third_price": 366.5,
+        "spread": -6.399993896484375,
+        "spread_pct": 98.25375366210938
+      },
+      {
+        "date": "2026-09-16",
+        "front_price": 360.8999938964844,
+        "third_price": 366.29998779296875,
+        "spread": -5.399993896484375,
+        "spread_pct": 98.52579498291016
+      },
+      {
+        "date": "2026-09-17",
+        "front_price": 368.70001220703125,
+        "third_price": 372.1000061035156,
+        "spread": -3.399993896484375,
+        "spread_pct": 99.08626556396484
+      },
+      {
+        "date": "2026-09-18",
+        "front_price": 354.6000061035156,
+        "third_price": 360.3999938964844,
+        "spread": -5.79998779296875,
+        "spread_pct": 98.39067840576172
+      },
+      {
+        "date": "2026-09-21",
+        "front_price": 366.6000061035156,
+        "third_price": 368.70001220703125,
+        "spread": -2.100006103515625,
+        "spread_pct": 99.43042755126953
+      },
+      {
+        "date": "2026-09-22",
+        "front_price": 368.8999938964844,
+        "third_price": 371.1000061035156,
+        "spread": -2.20001220703125,
+        "spread_pct": 99.40716552734375
+      },
+      {
+        "date": "2026-09-23",
+        "front_price": 370.29998779296875,
+        "third_price": 370.29998779296875,
+        "spread": 0.0,
+        "spread_pct": 100.0
+      },
+      {
+        "date": "2026-09-24",
+        "front_price": 376.1000061035156,
+        "third_price": 370.6000061035156,
+        "spread": 5.5,
+        "spread_pct": 101.48408508300781
+      },
+      {
+        "date": "2026-09-25",
+        "front_price": 373.8999938964844,
+        "third_price": 369.79998779296875,
+        "spread": 4.100006103515625,
+        "spread_pct": 101.10870361328125
+      },
+      {
+        "date": "2026-09-28",
+        "front_price": 361.70001220703125,
+        "third_price": 359.8999938964844,
+        "spread": 1.800018310546875,
+        "spread_pct": 100.5001449584961
+      },
+      {
+        "date": "2026-09-29",
+        "front_price": 360.1000061035156,
+        "third_price": 359.1000061035156,
+        "spread": 1.0,
+        "spread_pct": 100.27847290039062
+      },
+      {
+        "date": "2026-09-30",
+        "front_price": 357.1000061035156,
+        "third_price": 357.0,
+        "spread": 0.100006103515625,
+        "spread_pct": 100.02801513671875
+      },
+      {
+        "date": "2026-10-01",
+        "front_price": 352.1000061035156,
+        "third_price": 353.29998779296875,
+        "spread": -1.199981689453125,
+        "spread_pct": 99.66034698486328
+      },
+      {
+        "date": "2026-10-02",
+        "front_price": 344.70001220703125,
+        "third_price": 347.79998779296875,
+        "spread": -3.0999755859375,
+        "spread_pct": 99.10868835449219
+      },
+      {
+        "date": "2026-10-05",
+        "front_price": 345.8999938964844,
+        "third_price": 347.5,
+        "spread": -1.600006103515625,
+        "spread_pct": 99.53956604003906
+      },
+      {
+        "date": "2026-10-06",
+        "front_price": 354.79998779296875,
+        "third_price": 355.5,
+        "spread": -0.70001220703125,
+        "spread_pct": 99.80309295654297
+      },
+      {
+        "date": "2026-10-07",
+        "front_price": 365.79998779296875,
+        "third_price": 363.70001220703125,
+        "spread": 2.0999755859375,
+        "spread_pct": 100.577392578125
+      },
+      {
+        "date": "2026-10-08",
+        "front_price": 357.6000061035156,
+        "third_price": 357.20001220703125,
+        "spread": 0.399993896484375,
+        "spread_pct": 100.11198425292969
+      },
+      {
+        "date": "2026-10-09",
+        "front_price": 365.6000061035156,
+        "third_price": 361.8999938964844,
+        "spread": 3.70001220703125,
+        "spread_pct": 101.02238464355469
       }
     ],
     "sugar": [
@@ -203022,6 +205122,335 @@
         "third_price": 15.170000076293945,
         "spread": -0.7399997711181641,
         "spread_pct": 95.1219482421875
+      },
+      {
+        "date": "2026-07-31",
+        "front_price": 14.65999984741211,
+        "third_price": 15.350000381469727,
+        "spread": -0.6900005340576172,
+        "spread_pct": 95.5048828125
+      },
+      {
+        "date": "2026-08-03",
+        "front_price": 15.010000228881836,
+        "third_price": 15.710000038146973,
+        "spread": -0.6999998092651367,
+        "spread_pct": 95.54424285888672
+      },
+      {
+        "date": "2026-08-04",
+        "front_price": 15.039999961853027,
+        "third_price": 15.800000190734863,
+        "spread": -0.7600002288818359,
+        "spread_pct": 95.18987274169922
+      },
+      {
+        "date": "2026-08-05",
+        "front_price": 15.149999618530273,
+        "third_price": 15.90999984741211,
+        "spread": -0.7600002288818359,
+        "spread_pct": 95.22312927246094
+      },
+      {
+        "date": "2026-08-06",
+        "front_price": 15.569999694824219,
+        "third_price": 16.280000686645508,
+        "spread": -0.7100009918212891,
+        "spread_pct": 95.6388168334961
+      },
+      {
+        "date": "2026-08-07",
+        "front_price": 16.450000762939453,
+        "third_price": 17.030000686645508,
+        "spread": -0.5799999237060547,
+        "spread_pct": 96.59424591064453
+      },
+      {
+        "date": "2026-08-10",
+        "front_price": 16.469999313354492,
+        "third_price": 17.170000076293945,
+        "spread": -0.7000007629394531,
+        "spread_pct": 95.9231185913086
+      },
+      {
+        "date": "2026-08-11",
+        "front_price": 16.729999542236328,
+        "third_price": 17.389999389648438,
+        "spread": -0.6599998474121094,
+        "spread_pct": 96.20471954345703
+      },
+      {
+        "date": "2026-08-12",
+        "front_price": 16.420000076293945,
+        "third_price": 17.170000076293945,
+        "spread": -0.75,
+        "spread_pct": 95.63191223144531
+      },
+      {
+        "date": "2026-08-13",
+        "front_price": 16.81999969482422,
+        "third_price": 17.489999771118164,
+        "spread": -0.6700000762939453,
+        "spread_pct": 96.16924285888672
+      },
+      {
+        "date": "2026-08-14",
+        "front_price": 16.600000381469727,
+        "third_price": 17.309999465942383,
+        "spread": -0.7099990844726562,
+        "spread_pct": 95.89833068847656
+      },
+      {
+        "date": "2026-08-17",
+        "front_price": 16.8700008392334,
+        "third_price": 17.56999969482422,
+        "spread": -0.6999988555908203,
+        "spread_pct": 96.01594543457031
+      },
+      {
+        "date": "2026-08-18",
+        "front_price": 17.469999313354492,
+        "third_price": 18.030000686645508,
+        "spread": -0.5600013732910156,
+        "spread_pct": 96.89405822753906
+      },
+      {
+        "date": "2026-08-19",
+        "front_price": 17.549999237060547,
+        "third_price": 18.1299991607666,
+        "spread": -0.5799999237060547,
+        "spread_pct": 96.8008804321289
+      },
+      {
+        "date": "2026-08-20",
+        "front_price": 17.520000457763672,
+        "third_price": 18.06999969482422,
+        "spread": -0.5499992370605469,
+        "spread_pct": 96.95628356933594
+      },
+      {
+        "date": "2026-08-21",
+        "front_price": 17.610000610351562,
+        "third_price": 18.100000381469727,
+        "spread": -0.48999977111816406,
+        "spread_pct": 97.29281616210938
+      },
+      {
+        "date": "2026-08-24",
+        "front_price": 17.649999618530273,
+        "third_price": 18.170000076293945,
+        "spread": -0.5200004577636719,
+        "spread_pct": 97.13813781738281
+      },
+      {
+        "date": "2026-08-25",
+        "front_price": 17.270000457763672,
+        "third_price": 17.90999984741211,
+        "spread": -0.6399993896484375,
+        "spread_pct": 96.42658233642578
+      },
+      {
+        "date": "2026-08-26",
+        "front_price": 17.59000015258789,
+        "third_price": 18.059999465942383,
+        "spread": -0.4699993133544922,
+        "spread_pct": 97.39756774902344
+      },
+      {
+        "date": "2026-08-27",
+        "front_price": 18.190000534057617,
+        "third_price": 18.540000915527344,
+        "spread": -0.35000038146972656,
+        "spread_pct": 98.11219024658203
+      },
+      {
+        "date": "2026-08-28",
+        "front_price": 17.559999465942383,
+        "third_price": 18.110000610351562,
+        "spread": -0.5500011444091797,
+        "spread_pct": 96.96299743652344
+      },
+      {
+        "date": "2026-08-31",
+        "front_price": 17.809999465942383,
+        "third_price": 18.329999923706055,
+        "spread": -0.5200004577636719,
+        "spread_pct": 97.16311645507812
+      },
+      {
+        "date": "2026-09-01",
+        "front_price": 18.360000610351562,
+        "third_price": 18.729999542236328,
+        "spread": -0.3699989318847656,
+        "spread_pct": 98.02456665039062
+      },
+      {
+        "date": "2026-09-02",
+        "front_price": 18.700000762939453,
+        "third_price": 18.920000076293945,
+        "spread": -0.2199993133544922,
+        "spread_pct": 98.83721160888672
+      },
+      {
+        "date": "2026-09-03",
+        "front_price": 18.06999969482422,
+        "third_price": 18.440000534057617,
+        "spread": -0.37000083923339844,
+        "spread_pct": 97.99348449707031
+      },
+      {
+        "date": "2026-09-04",
+        "front_price": 18.06999969482422,
+        "third_price": 18.440000534057617,
+        "spread": -0.37000083923339844,
+        "spread_pct": 97.99348449707031
+      },
+      {
+        "date": "2026-09-08",
+        "front_price": 18.100000381469727,
+        "third_price": 18.510000228881836,
+        "spread": -0.4099998474121094,
+        "spread_pct": 97.78498077392578
+      },
+      {
+        "date": "2026-09-09",
+        "front_price": 18.399999618530273,
+        "third_price": 18.760000228881836,
+        "spread": -0.3600006103515625,
+        "spread_pct": 98.08102416992188
+      },
+      {
+        "date": "2026-09-10",
+        "front_price": 18.729999542236328,
+        "third_price": 19.049999237060547,
+        "spread": -0.31999969482421875,
+        "spread_pct": 98.3202133178711
+      },
+      {
+        "date": "2026-09-11",
+        "front_price": 18.149999618530273,
+        "third_price": 18.540000915527344,
+        "spread": -0.3900012969970703,
+        "spread_pct": 97.89643096923828
+      },
+      {
+        "date": "2026-09-14",
+        "front_price": 18.15999984741211,
+        "third_price": 18.450000762939453,
+        "spread": -0.29000091552734375,
+        "spread_pct": 98.42817687988281
+      },
+      {
+        "date": "2026-09-15",
+        "front_price": 17.940000534057617,
+        "third_price": 18.270000457763672,
+        "spread": -0.3299999237060547,
+        "spread_pct": 98.19375610351562
+      },
+      {
+        "date": "2026-09-16",
+        "front_price": 17.969999313354492,
+        "third_price": 18.219999313354492,
+        "spread": -0.25,
+        "spread_pct": 98.62788391113281
+      },
+      {
+        "date": "2026-09-17",
+        "front_price": 17.420000076293945,
+        "third_price": 17.760000228881836,
+        "spread": -0.3400001525878906,
+        "spread_pct": 98.08557891845703
+      },
+      {
+        "date": "2026-09-18",
+        "front_price": 17.360000610351562,
+        "third_price": 17.670000076293945,
+        "spread": -0.3099994659423828,
+        "spread_pct": 98.24561309814453
+      },
+      {
+        "date": "2026-09-21",
+        "front_price": 17.479999542236328,
+        "third_price": 17.860000610351562,
+        "spread": -0.3800010681152344,
+        "spread_pct": 97.8723373413086
+      },
+      {
+        "date": "2026-09-22",
+        "front_price": 17.59000015258789,
+        "third_price": 17.989999771118164,
+        "spread": -0.39999961853027344,
+        "spread_pct": 97.77654266357422
+      },
+      {
+        "date": "2026-09-23",
+        "front_price": 17.75,
+        "third_price": 18.229999542236328,
+        "spread": -0.4799995422363281,
+        "spread_pct": 97.36698150634766
+      },
+      {
+        "date": "2026-09-24",
+        "front_price": 17.579999923706055,
+        "third_price": 18.059999465942383,
+        "spread": -0.4799995422363281,
+        "spread_pct": 97.34219360351562
+      },
+      {
+        "date": "2026-09-25",
+        "front_price": 17.5,
+        "third_price": 17.969999313354492,
+        "spread": -0.4699993133544922,
+        "spread_pct": 97.38453674316406
+      },
+      {
+        "date": "2026-09-28",
+        "front_price": 17.459999084472656,
+        "third_price": 18.0,
+        "spread": -0.5400009155273438,
+        "spread_pct": 97.0
+      },
+      {
+        "date": "2026-09-29",
+        "front_price": 17.81999969482422,
+        "third_price": 18.260000228881836,
+        "spread": -0.4400005340576172,
+        "spread_pct": 97.5903549194336
+      },
+      {
+        "date": "2026-09-30",
+        "front_price": 17.6299991607666,
+        "third_price": 18.040000915527344,
+        "spread": -0.4100017547607422,
+        "spread_pct": 97.72726440429688
+      },
+      {
+        "date": "2026-10-06",
+        "front_price": 20.81999969482422,
+        "third_price": 19.440000534057617,
+        "spread": 1.3799991607666016,
+        "spread_pct": 107.0987548828125
+      },
+      {
+        "date": "2026-10-07",
+        "front_price": 20.829999923706055,
+        "third_price": 19.420000076293945,
+        "spread": 1.4099998474121094,
+        "spread_pct": 107.26055908203125
+      },
+      {
+        "date": "2026-10-08",
+        "front_price": 20.149999618530273,
+        "third_price": 18.920000076293945,
+        "spread": 1.2299995422363281,
+        "spread_pct": 106.50105285644531
+      },
+      {
+        "date": "2026-10-09",
+        "front_price": 20.25,
+        "third_price": 19.020000457763672,
+        "spread": 1.2299995422363281,
+        "spread_pct": 106.46688079833984
       }
     ],
     "arabica-coffee": [
@@ -232221,6 +234650,356 @@
         "third_price": 299.6000061035156,
         "spread": 23.449981689453125,
         "spread_pct": 107.82708740234375
+      },
+      {
+        "date": "2026-07-31",
+        "front_price": 332.1000061035156,
+        "third_price": 305.29998779296875,
+        "spread": 26.800018310546875,
+        "spread_pct": 108.77825927734375
+      },
+      {
+        "date": "2026-08-03",
+        "front_price": 319.5,
+        "third_price": 295.95001220703125,
+        "spread": 23.54998779296875,
+        "spread_pct": 107.9574203491211
+      },
+      {
+        "date": "2026-08-04",
+        "front_price": 324.1000061035156,
+        "third_price": 299.70001220703125,
+        "spread": 24.399993896484375,
+        "spread_pct": 108.14147186279297
+      },
+      {
+        "date": "2026-08-05",
+        "front_price": 326.8999938964844,
+        "third_price": 302.3500061035156,
+        "spread": 24.54998779296875,
+        "spread_pct": 108.1197280883789
+      },
+      {
+        "date": "2026-08-06",
+        "front_price": 321.6499938964844,
+        "third_price": 297.29998779296875,
+        "spread": 24.350006103515625,
+        "spread_pct": 108.19038391113281
+      },
+      {
+        "date": "2026-08-07",
+        "front_price": 335.54998779296875,
+        "third_price": 305.8500061035156,
+        "spread": 29.699981689453125,
+        "spread_pct": 109.71063232421875
+      },
+      {
+        "date": "2026-08-10",
+        "front_price": 332.29998779296875,
+        "third_price": 304.54998779296875,
+        "spread": 27.75,
+        "spread_pct": 109.11180877685547
+      },
+      {
+        "date": "2026-08-11",
+        "front_price": 335.75,
+        "third_price": 306.29998779296875,
+        "spread": 29.45001220703125,
+        "spread_pct": 109.6147689819336
+      },
+      {
+        "date": "2026-08-12",
+        "front_price": 340.1000061035156,
+        "third_price": 310.04998779296875,
+        "spread": 30.050018310546875,
+        "spread_pct": 109.69198608398438
+      },
+      {
+        "date": "2026-08-13",
+        "front_price": 333.1000061035156,
+        "third_price": 303.25,
+        "spread": 29.850006103515625,
+        "spread_pct": 109.8433609008789
+      },
+      {
+        "date": "2026-08-14",
+        "front_price": 338.1000061035156,
+        "third_price": 303.20001220703125,
+        "spread": 34.899993896484375,
+        "spread_pct": 111.51055145263672
+      },
+      {
+        "date": "2026-08-17",
+        "front_price": 345.1000061035156,
+        "third_price": 306.20001220703125,
+        "spread": 38.899993896484375,
+        "spread_pct": 112.70410919189453
+      },
+      {
+        "date": "2026-08-18",
+        "front_price": 363.3999938964844,
+        "third_price": 317.79998779296875,
+        "spread": 45.600006103515625,
+        "spread_pct": 114.34864807128906
+      },
+      {
+        "date": "2026-08-19",
+        "front_price": 359.5,
+        "third_price": 314.70001220703125,
+        "spread": 44.79998779296875,
+        "spread_pct": 114.23577117919922
+      },
+      {
+        "date": "2026-08-20",
+        "front_price": 363.6000061035156,
+        "third_price": 315.5,
+        "spread": 48.100006103515625,
+        "spread_pct": 115.24564361572266
+      },
+      {
+        "date": "2026-08-21",
+        "front_price": 358.75,
+        "third_price": 309.75,
+        "spread": 49.0,
+        "spread_pct": 115.81920623779297
+      },
+      {
+        "date": "2026-08-24",
+        "front_price": 377.75,
+        "third_price": 326.8500061035156,
+        "spread": 50.899993896484375,
+        "spread_pct": 115.57289123535156
+      },
+      {
+        "date": "2026-08-25",
+        "front_price": 371.3999938964844,
+        "third_price": 321.25,
+        "spread": 50.149993896484375,
+        "spread_pct": 115.61090087890625
+      },
+      {
+        "date": "2026-08-26",
+        "front_price": 357.6000061035156,
+        "third_price": 308.1000061035156,
+        "spread": 49.5,
+        "spread_pct": 116.06621551513672
+      },
+      {
+        "date": "2026-08-27",
+        "front_price": 341.8999938964844,
+        "third_price": 298.29998779296875,
+        "spread": 43.600006103515625,
+        "spread_pct": 114.61615753173828
+      },
+      {
+        "date": "2026-08-28",
+        "front_price": 345.8500061035156,
+        "third_price": 300.6000061035156,
+        "spread": 45.25,
+        "spread_pct": 115.05322265625
+      },
+      {
+        "date": "2026-08-31",
+        "front_price": 343.8999938964844,
+        "third_price": 299.29998779296875,
+        "spread": 44.600006103515625,
+        "spread_pct": 114.90143585205078
+      },
+      {
+        "date": "2026-09-01",
+        "front_price": 342.25,
+        "third_price": 297.6499938964844,
+        "spread": 44.600006103515625,
+        "spread_pct": 114.98404693603516
+      },
+      {
+        "date": "2026-09-02",
+        "front_price": 328.3999938964844,
+        "third_price": 287.75,
+        "spread": 40.649993896484375,
+        "spread_pct": 114.12684631347656
+      },
+      {
+        "date": "2026-09-03",
+        "front_price": 324.3500061035156,
+        "third_price": 285.04998779296875,
+        "spread": 39.300018310546875,
+        "spread_pct": 113.78706359863281
+      },
+      {
+        "date": "2026-09-04",
+        "front_price": 324.25,
+        "third_price": 287.3999938964844,
+        "spread": 36.850006103515625,
+        "spread_pct": 112.82185363769531
+      },
+      {
+        "date": "2026-09-08",
+        "front_price": 291.29998779296875,
+        "third_price": 279.75,
+        "spread": 11.54998779296875,
+        "spread_pct": 104.1286849975586
+      },
+      {
+        "date": "2026-09-09",
+        "front_price": 292.04998779296875,
+        "third_price": 281.0,
+        "spread": 11.04998779296875,
+        "spread_pct": 103.93238067626953
+      },
+      {
+        "date": "2026-09-10",
+        "front_price": 288.1499938964844,
+        "third_price": 276.3999938964844,
+        "spread": 11.75,
+        "spread_pct": 104.25108337402344
+      },
+      {
+        "date": "2026-09-11",
+        "front_price": 285.70001220703125,
+        "third_price": 274.1000061035156,
+        "spread": 11.600006103515625,
+        "spread_pct": 104.23204040527344
+      },
+      {
+        "date": "2026-09-14",
+        "front_price": 290.5,
+        "third_price": 277.8999938964844,
+        "spread": 12.600006103515625,
+        "spread_pct": 104.53400421142578
+      },
+      {
+        "date": "2026-09-15",
+        "front_price": 283.6499938964844,
+        "third_price": 272.04998779296875,
+        "spread": 11.600006103515625,
+        "spread_pct": 104.26392364501953
+      },
+      {
+        "date": "2026-09-16",
+        "front_price": 281.54998779296875,
+        "third_price": 270.29998779296875,
+        "spread": 11.25,
+        "spread_pct": 104.16204071044922
+      },
+      {
+        "date": "2026-09-17",
+        "front_price": 276.5,
+        "third_price": 265.79998779296875,
+        "spread": 10.70001220703125,
+        "spread_pct": 104.02558898925781
+      },
+      {
+        "date": "2026-09-18",
+        "front_price": 280.5,
+        "third_price": 269.5,
+        "spread": 11.0,
+        "spread_pct": 104.08163452148438
+      },
+      {
+        "date": "2026-09-21",
+        "front_price": 276.3999938964844,
+        "third_price": 265.95001220703125,
+        "spread": 10.449981689453125,
+        "spread_pct": 103.92930603027344
+      },
+      {
+        "date": "2026-09-22",
+        "front_price": 272.29998779296875,
+        "third_price": 262.04998779296875,
+        "spread": 10.25,
+        "spread_pct": 103.91146850585938
+      },
+      {
+        "date": "2026-09-23",
+        "front_price": 275.8999938964844,
+        "third_price": 265.8500061035156,
+        "spread": 10.04998779296875,
+        "spread_pct": 103.78031921386719
+      },
+      {
+        "date": "2026-09-24",
+        "front_price": 275.3500061035156,
+        "third_price": 265.1499938964844,
+        "spread": 10.20001220703125,
+        "spread_pct": 103.84688568115234
+      },
+      {
+        "date": "2026-09-25",
+        "front_price": 278.6000061035156,
+        "third_price": 268.8999938964844,
+        "spread": 9.70001220703125,
+        "spread_pct": 103.6072998046875
+      },
+      {
+        "date": "2026-09-28",
+        "front_price": 288.75,
+        "third_price": 278.29998779296875,
+        "spread": 10.45001220703125,
+        "spread_pct": 103.75495147705078
+      },
+      {
+        "date": "2026-09-29",
+        "front_price": 289.45001220703125,
+        "third_price": 278.3500061035156,
+        "spread": 11.100006103515625,
+        "spread_pct": 103.98779296875
+      },
+      {
+        "date": "2026-09-30",
+        "front_price": 290.70001220703125,
+        "third_price": 279.8500061035156,
+        "spread": 10.850006103515625,
+        "spread_pct": 103.87708282470703
+      },
+      {
+        "date": "2026-10-01",
+        "front_price": 288.25,
+        "third_price": 276.3999938964844,
+        "spread": 11.850006103515625,
+        "spread_pct": 104.28726959228516
+      },
+      {
+        "date": "2026-10-02",
+        "front_price": 288.75,
+        "third_price": 277.79998779296875,
+        "spread": 10.95001220703125,
+        "spread_pct": 103.94168853759766
+      },
+      {
+        "date": "2026-10-05",
+        "front_price": 292.54998779296875,
+        "third_price": 280.8999938964844,
+        "spread": 11.649993896484375,
+        "spread_pct": 104.14738464355469
+      },
+      {
+        "date": "2026-10-06",
+        "front_price": 304.45001220703125,
+        "third_price": 292.5,
+        "spread": 11.95001220703125,
+        "spread_pct": 104.0854721069336
+      },
+      {
+        "date": "2026-10-07",
+        "front_price": 292.70001220703125,
+        "third_price": 281.70001220703125,
+        "spread": 11.0,
+        "spread_pct": 103.90486907958984
+      },
+      {
+        "date": "2026-10-08",
+        "front_price": 289.04998779296875,
+        "third_price": 277.8999938964844,
+        "spread": 11.149993896484375,
+        "spread_pct": 104.0122299194336
+      },
+      {
+        "date": "2026-10-09",
+        "front_price": 286.95001220703125,
+        "third_price": 276.54998779296875,
+        "spread": 10.4000244140625,
+        "spread_pct": 103.76063537597656
       }
     ],
     "ny-cocoa": [
@@ -261420,6 +264199,356 @@
         "third_price": 5335.0,
         "spread": -223.0,
         "spread_pct": 95.82006072998047
+      },
+      {
+        "date": "2026-07-31",
+        "front_price": 5397.0,
+        "third_price": 5628.0,
+        "spread": -231.0,
+        "spread_pct": 95.89552307128906
+      },
+      {
+        "date": "2026-08-03",
+        "front_price": 5939.0,
+        "third_price": 6164.0,
+        "spread": -225.0,
+        "spread_pct": 96.34977722167969
+      },
+      {
+        "date": "2026-08-04",
+        "front_price": 5924.0,
+        "third_price": 6137.0,
+        "spread": -213.0,
+        "spread_pct": 96.52925109863281
+      },
+      {
+        "date": "2026-08-05",
+        "front_price": 5882.0,
+        "third_price": 6088.0,
+        "spread": -206.0,
+        "spread_pct": 96.61629486083984
+      },
+      {
+        "date": "2026-08-06",
+        "front_price": 5776.0,
+        "third_price": 5962.0,
+        "spread": -186.0,
+        "spread_pct": 96.88024139404297
+      },
+      {
+        "date": "2026-08-07",
+        "front_price": 5782.0,
+        "third_price": 5985.0,
+        "spread": -203.0,
+        "spread_pct": 96.60818481445312
+      },
+      {
+        "date": "2026-08-10",
+        "front_price": 5821.0,
+        "third_price": 6022.0,
+        "spread": -201.0,
+        "spread_pct": 96.66223907470703
+      },
+      {
+        "date": "2026-08-11",
+        "front_price": 5543.0,
+        "third_price": 5743.0,
+        "spread": -200.0,
+        "spread_pct": 96.51749420166016
+      },
+      {
+        "date": "2026-08-12",
+        "front_price": 5619.0,
+        "third_price": 5802.0,
+        "spread": -183.0,
+        "spread_pct": 96.84591674804688
+      },
+      {
+        "date": "2026-08-13",
+        "front_price": 5648.0,
+        "third_price": 5794.0,
+        "spread": -146.0,
+        "spread_pct": 97.48015594482422
+      },
+      {
+        "date": "2026-08-14",
+        "front_price": 5734.0,
+        "third_price": 5842.0,
+        "spread": -108.0,
+        "spread_pct": 98.15132141113281
+      },
+      {
+        "date": "2026-08-17",
+        "front_price": 6044.0,
+        "third_price": 6144.0,
+        "spread": -100.0,
+        "spread_pct": 98.37239074707031
+      },
+      {
+        "date": "2026-08-18",
+        "front_price": 5905.0,
+        "third_price": 5993.0,
+        "spread": -88.0,
+        "spread_pct": 98.53162384033203
+      },
+      {
+        "date": "2026-08-19",
+        "front_price": 6046.0,
+        "third_price": 6102.0,
+        "spread": -56.0,
+        "spread_pct": 99.08226776123047
+      },
+      {
+        "date": "2026-08-20",
+        "front_price": 6088.0,
+        "third_price": 6138.0,
+        "spread": -50.0,
+        "spread_pct": 99.1854019165039
+      },
+      {
+        "date": "2026-08-21",
+        "front_price": 5990.0,
+        "third_price": 6119.0,
+        "spread": -129.0,
+        "spread_pct": 97.89181518554688
+      },
+      {
+        "date": "2026-08-24",
+        "front_price": 5820.0,
+        "third_price": 6036.0,
+        "spread": -216.0,
+        "spread_pct": 96.42147064208984
+      },
+      {
+        "date": "2026-08-25",
+        "front_price": 5759.0,
+        "third_price": 5935.0,
+        "spread": -176.0,
+        "spread_pct": 97.0345458984375
+      },
+      {
+        "date": "2026-08-26",
+        "front_price": 5817.0,
+        "third_price": 5939.0,
+        "spread": -122.0,
+        "spread_pct": 97.9457778930664
+      },
+      {
+        "date": "2026-08-27",
+        "front_price": 6155.0,
+        "third_price": 6294.0,
+        "spread": -139.0,
+        "spread_pct": 97.79154968261719
+      },
+      {
+        "date": "2026-08-28",
+        "front_price": 6527.0,
+        "third_price": 6782.0,
+        "spread": -255.0,
+        "spread_pct": 96.24005126953125
+      },
+      {
+        "date": "2026-08-31",
+        "front_price": 6650.0,
+        "third_price": 6905.0,
+        "spread": -255.0,
+        "spread_pct": 96.30702209472656
+      },
+      {
+        "date": "2026-09-01",
+        "front_price": 6552.0,
+        "third_price": 6701.0,
+        "spread": -149.0,
+        "spread_pct": 97.77645111083984
+      },
+      {
+        "date": "2026-09-02",
+        "front_price": 6254.0,
+        "third_price": 6382.0,
+        "spread": -128.0,
+        "spread_pct": 97.99435424804688
+      },
+      {
+        "date": "2026-09-03",
+        "front_price": 6057.0,
+        "third_price": 6294.0,
+        "spread": -237.0,
+        "spread_pct": 96.23450469970703
+      },
+      {
+        "date": "2026-09-04",
+        "front_price": 6082.0,
+        "third_price": 6310.0,
+        "spread": -228.0,
+        "spread_pct": 96.38668823242188
+      },
+      {
+        "date": "2026-09-08",
+        "front_price": 5913.0,
+        "third_price": 6073.0,
+        "spread": -160.0,
+        "spread_pct": 97.36538696289062
+      },
+      {
+        "date": "2026-09-09",
+        "front_price": 5951.0,
+        "third_price": 6104.0,
+        "spread": -153.0,
+        "spread_pct": 97.49344635009766
+      },
+      {
+        "date": "2026-09-10",
+        "front_price": 5962.0,
+        "third_price": 6141.0,
+        "spread": -179.0,
+        "spread_pct": 97.08516693115234
+      },
+      {
+        "date": "2026-09-11",
+        "front_price": 5961.0,
+        "third_price": 6137.0,
+        "spread": -176.0,
+        "spread_pct": 97.13214874267578
+      },
+      {
+        "date": "2026-09-14",
+        "front_price": 6023.0,
+        "third_price": 6194.0,
+        "spread": -171.0,
+        "spread_pct": 97.23926544189453
+      },
+      {
+        "date": "2026-09-15",
+        "front_price": 5923.0,
+        "third_price": 6102.0,
+        "spread": -179.0,
+        "spread_pct": 97.06653594970703
+      },
+      {
+        "date": "2026-09-16",
+        "front_price": 5979.0,
+        "third_price": 6156.0,
+        "spread": -177.0,
+        "spread_pct": 97.124755859375
+      },
+      {
+        "date": "2026-09-17",
+        "front_price": 5772.0,
+        "third_price": 5956.0,
+        "spread": -184.0,
+        "spread_pct": 96.91068267822266
+      },
+      {
+        "date": "2026-09-18",
+        "front_price": 5327.0,
+        "third_price": 5507.0,
+        "spread": -180.0,
+        "spread_pct": 96.73143005371094
+      },
+      {
+        "date": "2026-09-21",
+        "front_price": 5351.0,
+        "third_price": 5546.0,
+        "spread": -195.0,
+        "spread_pct": 96.48395538330078
+      },
+      {
+        "date": "2026-09-22",
+        "front_price": 5402.0,
+        "third_price": 5600.0,
+        "spread": -198.0,
+        "spread_pct": 96.46428680419922
+      },
+      {
+        "date": "2026-09-23",
+        "front_price": 5528.0,
+        "third_price": 5729.0,
+        "spread": -201.0,
+        "spread_pct": 96.49153137207031
+      },
+      {
+        "date": "2026-09-24",
+        "front_price": 5590.0,
+        "third_price": 5799.0,
+        "spread": -209.0,
+        "spread_pct": 96.39592742919922
+      },
+      {
+        "date": "2026-09-25",
+        "front_price": 5619.0,
+        "third_price": 5818.0,
+        "spread": -199.0,
+        "spread_pct": 96.57958221435547
+      },
+      {
+        "date": "2026-09-28",
+        "front_price": 5589.0,
+        "third_price": 5798.0,
+        "spread": -209.0,
+        "spread_pct": 96.39530944824219
+      },
+      {
+        "date": "2026-09-29",
+        "front_price": 5408.0,
+        "third_price": 5590.0,
+        "spread": -182.0,
+        "spread_pct": 96.74418640136719
+      },
+      {
+        "date": "2026-09-30",
+        "front_price": 5367.0,
+        "third_price": 5537.0,
+        "spread": -170.0,
+        "spread_pct": 96.92974853515625
+      },
+      {
+        "date": "2026-10-01",
+        "front_price": 5381.0,
+        "third_price": 5492.0,
+        "spread": -111.0,
+        "spread_pct": 97.9788818359375
+      },
+      {
+        "date": "2026-10-02",
+        "front_price": 5670.0,
+        "third_price": 5843.0,
+        "spread": -173.0,
+        "spread_pct": 97.03919219970703
+      },
+      {
+        "date": "2026-10-05",
+        "front_price": 5867.0,
+        "third_price": 6041.0,
+        "spread": -174.0,
+        "spread_pct": 97.11968231201172
+      },
+      {
+        "date": "2026-10-06",
+        "front_price": 5700.0,
+        "third_price": 5879.0,
+        "spread": -179.0,
+        "spread_pct": 96.95526123046875
+      },
+      {
+        "date": "2026-10-07",
+        "front_price": 5582.0,
+        "third_price": 5760.0,
+        "spread": -178.0,
+        "spread_pct": 96.90972137451172
+      },
+      {
+        "date": "2026-10-08",
+        "front_price": 5665.0,
+        "third_price": 5832.0,
+        "spread": -167.0,
+        "spread_pct": 97.13648223876953
+      },
+      {
+        "date": "2026-10-09",
+        "front_price": 5665.0,
+        "third_price": 5842.0,
+        "spread": -177.0,
+        "spread_pct": 96.97021484375
       }
     ],
     "cotton": [
@@ -290626,6 +293755,356 @@
         "third_price": 82.25,
         "spread": -2.839996337890625,
         "spread_pct": 96.54711151123047
+      },
+      {
+        "date": "2026-07-31",
+        "front_price": 80.5,
+        "third_price": 83.36000061035156,
+        "spread": -2.8600006103515625,
+        "spread_pct": 96.56909942626953
+      },
+      {
+        "date": "2026-08-03",
+        "front_price": 81.3499984741211,
+        "third_price": 84.12999725341797,
+        "spread": -2.779998779296875,
+        "spread_pct": 96.69558715820312
+      },
+      {
+        "date": "2026-08-04",
+        "front_price": 81.12999725341797,
+        "third_price": 84.05000305175781,
+        "spread": -2.9200057983398438,
+        "spread_pct": 96.52587127685547
+      },
+      {
+        "date": "2026-08-05",
+        "front_price": 81.83999633789062,
+        "third_price": 84.70999908447266,
+        "spread": -2.8700027465820312,
+        "spread_pct": 96.6119613647461
+      },
+      {
+        "date": "2026-08-06",
+        "front_price": 81.95999908447266,
+        "third_price": 84.88999938964844,
+        "spread": -2.9300003051757812,
+        "spread_pct": 96.54847717285156
+      },
+      {
+        "date": "2026-08-07",
+        "front_price": 83.22000122070312,
+        "third_price": 86.18000030517578,
+        "spread": -2.9599990844726562,
+        "spread_pct": 96.5653305053711
+      },
+      {
+        "date": "2026-08-10",
+        "front_price": 82.72000122070312,
+        "third_price": 85.72000122070312,
+        "spread": -3.0,
+        "spread_pct": 96.50023651123047
+      },
+      {
+        "date": "2026-08-11",
+        "front_price": 83.08999633789062,
+        "third_price": 86.23999786376953,
+        "spread": -3.1500015258789062,
+        "spread_pct": 96.34740447998047
+      },
+      {
+        "date": "2026-08-12",
+        "front_price": 83.20999908447266,
+        "third_price": 86.31999969482422,
+        "spread": -3.1100006103515625,
+        "spread_pct": 96.39712524414062
+      },
+      {
+        "date": "2026-08-13",
+        "front_price": 82.36000061035156,
+        "third_price": 85.41999816894531,
+        "spread": -3.05999755859375,
+        "spread_pct": 96.4177017211914
+      },
+      {
+        "date": "2026-08-14",
+        "front_price": 83.5999984741211,
+        "third_price": 86.68000030517578,
+        "spread": -3.0800018310546875,
+        "spread_pct": 96.44670104980469
+      },
+      {
+        "date": "2026-08-17",
+        "front_price": 84.06999969482422,
+        "third_price": 87.27999877929688,
+        "spread": -3.2099990844726562,
+        "spread_pct": 96.32218170166016
+      },
+      {
+        "date": "2026-08-18",
+        "front_price": 84.12000274658203,
+        "third_price": 87.20999908447266,
+        "spread": -3.089996337890625,
+        "spread_pct": 96.45683288574219
+      },
+      {
+        "date": "2026-08-19",
+        "front_price": 87.0,
+        "third_price": 90.13999938964844,
+        "spread": -3.1399993896484375,
+        "spread_pct": 96.51653289794922
+      },
+      {
+        "date": "2026-08-20",
+        "front_price": 87.0199966430664,
+        "third_price": 90.08000183105469,
+        "spread": -3.0600051879882812,
+        "spread_pct": 96.60301208496094
+      },
+      {
+        "date": "2026-08-21",
+        "front_price": 87.06999969482422,
+        "third_price": 90.1500015258789,
+        "spread": -3.0800018310546875,
+        "spread_pct": 96.58346557617188
+      },
+      {
+        "date": "2026-08-24",
+        "front_price": 87.4800033569336,
+        "third_price": 90.69000244140625,
+        "spread": -3.2099990844726562,
+        "spread_pct": 96.4604721069336
+      },
+      {
+        "date": "2026-08-25",
+        "front_price": 87.08000183105469,
+        "third_price": 90.2300033569336,
+        "spread": -3.1500015258789062,
+        "spread_pct": 96.50891876220703
+      },
+      {
+        "date": "2026-08-26",
+        "front_price": 87.7699966430664,
+        "third_price": 91.06999969482422,
+        "spread": -3.3000030517578125,
+        "spread_pct": 96.37641143798828
+      },
+      {
+        "date": "2026-08-27",
+        "front_price": 91.05999755859375,
+        "third_price": 94.4000015258789,
+        "spread": -3.3400039672851562,
+        "spread_pct": 96.46186065673828
+      },
+      {
+        "date": "2026-08-28",
+        "front_price": 89.91999816894531,
+        "third_price": 93.33999633789062,
+        "spread": -3.4199981689453125,
+        "spread_pct": 96.33597564697266
+      },
+      {
+        "date": "2026-08-31",
+        "front_price": 91.69999694824219,
+        "third_price": 95.13999938964844,
+        "spread": -3.44000244140625,
+        "spread_pct": 96.38427734375
+      },
+      {
+        "date": "2026-09-01",
+        "front_price": 90.01000213623047,
+        "third_price": 93.68000030517578,
+        "spread": -3.6699981689453125,
+        "spread_pct": 96.08240509033203
+      },
+      {
+        "date": "2026-09-02",
+        "front_price": 86.37999725341797,
+        "third_price": 91.30000305175781,
+        "spread": -4.920005798339844,
+        "spread_pct": 94.61116790771484
+      },
+      {
+        "date": "2026-09-03",
+        "front_price": 83.36000061035156,
+        "third_price": 88.80000305175781,
+        "spread": -5.44000244140625,
+        "spread_pct": 93.87387084960938
+      },
+      {
+        "date": "2026-09-04",
+        "front_price": 82.41999816894531,
+        "third_price": 88.62000274658203,
+        "spread": -6.200004577636719,
+        "spread_pct": 93.00382995605469
+      },
+      {
+        "date": "2026-09-08",
+        "front_price": 82.63999938964844,
+        "third_price": 88.70999908447266,
+        "spread": -6.069999694824219,
+        "spread_pct": 93.15748596191406
+      },
+      {
+        "date": "2026-09-09",
+        "front_price": 83.7300033569336,
+        "third_price": 89.6500015258789,
+        "spread": -5.9199981689453125,
+        "spread_pct": 93.39654541015625
+      },
+      {
+        "date": "2026-09-10",
+        "front_price": 84.63999938964844,
+        "third_price": 90.66000366210938,
+        "spread": -6.0200042724609375,
+        "spread_pct": 93.35980224609375
+      },
+      {
+        "date": "2026-09-11",
+        "front_price": 82.37999725341797,
+        "third_price": 88.55999755859375,
+        "spread": -6.180000305175781,
+        "spread_pct": 93.02168273925781
+      },
+      {
+        "date": "2026-09-14",
+        "front_price": 80.63999938964844,
+        "third_price": 87.12000274658203,
+        "spread": -6.480003356933594,
+        "spread_pct": 92.56198120117188
+      },
+      {
+        "date": "2026-09-15",
+        "front_price": 81.0999984741211,
+        "third_price": 86.98999786376953,
+        "spread": -5.8899993896484375,
+        "spread_pct": 93.22911071777344
+      },
+      {
+        "date": "2026-09-16",
+        "front_price": 80.44000244140625,
+        "third_price": 86.88999938964844,
+        "spread": -6.4499969482421875,
+        "spread_pct": 92.57682800292969
+      },
+      {
+        "date": "2026-09-17",
+        "front_price": 78.41000366210938,
+        "third_price": 84.80999755859375,
+        "spread": -6.399993896484375,
+        "spread_pct": 92.45372772216797
+      },
+      {
+        "date": "2026-09-18",
+        "front_price": 77.37999725341797,
+        "third_price": 83.79000091552734,
+        "spread": -6.410003662109375,
+        "spread_pct": 92.34991455078125
+      },
+      {
+        "date": "2026-09-21",
+        "front_price": 79.8499984741211,
+        "third_price": 86.08000183105469,
+        "spread": -6.230003356933594,
+        "spread_pct": 92.76254272460938
+      },
+      {
+        "date": "2026-09-22",
+        "front_price": 79.69000244140625,
+        "third_price": 85.56999969482422,
+        "spread": -5.879997253417969,
+        "spread_pct": 93.12843322753906
+      },
+      {
+        "date": "2026-09-23",
+        "front_price": 78.91000366210938,
+        "third_price": 85.6500015258789,
+        "spread": -6.739997863769531,
+        "spread_pct": 92.13076782226562
+      },
+      {
+        "date": "2026-09-24",
+        "front_price": 79.51000213623047,
+        "third_price": 86.05999755859375,
+        "spread": -6.549995422363281,
+        "spread_pct": 92.3890380859375
+      },
+      {
+        "date": "2026-09-25",
+        "front_price": 78.91000366210938,
+        "third_price": 85.48999786376953,
+        "spread": -6.579994201660156,
+        "spread_pct": 92.3031997680664
+      },
+      {
+        "date": "2026-09-28",
+        "front_price": 79.05999755859375,
+        "third_price": 85.75,
+        "spread": -6.69000244140625,
+        "spread_pct": 92.19824981689453
+      },
+      {
+        "date": "2026-09-29",
+        "front_price": 75.12999725341797,
+        "third_price": 81.75,
+        "spread": -6.620002746582031,
+        "spread_pct": 91.90213775634766
+      },
+      {
+        "date": "2026-09-30",
+        "front_price": 74.79000091552734,
+        "third_price": 81.37999725341797,
+        "spread": -6.589996337890625,
+        "spread_pct": 91.90219116210938
+      },
+      {
+        "date": "2026-10-01",
+        "front_price": 74.02999877929688,
+        "third_price": 80.61000061035156,
+        "spread": -6.5800018310546875,
+        "spread_pct": 91.83724212646484
+      },
+      {
+        "date": "2026-10-02",
+        "front_price": 75.1500015258789,
+        "third_price": 81.54000091552734,
+        "spread": -6.3899993896484375,
+        "spread_pct": 92.1633529663086
+      },
+      {
+        "date": "2026-10-05",
+        "front_price": 77.12999725341797,
+        "third_price": 83.70999908447266,
+        "spread": -6.5800018310546875,
+        "spread_pct": 92.1395263671875
+      },
+      {
+        "date": "2026-10-06",
+        "front_price": 81.20999908447266,
+        "third_price": 85.83999633789062,
+        "spread": -4.629997253417969,
+        "spread_pct": 94.60624694824219
+      },
+      {
+        "date": "2026-10-07",
+        "front_price": 80.02999877929688,
+        "third_price": 84.83000183105469,
+        "spread": -4.8000030517578125,
+        "spread_pct": 94.34162139892578
+      },
+      {
+        "date": "2026-10-08",
+        "front_price": 79.94000244140625,
+        "third_price": 84.73999786376953,
+        "spread": -4.799995422363281,
+        "spread_pct": 94.33562469482422
+      },
+      {
+        "date": "2026-10-09",
+        "front_price": 80.54000091552734,
+        "third_price": 85.30000305175781,
+        "spread": -4.760002136230469,
+        "spread_pct": 94.41969299316406
       }
     ],
     "live-cattle": [
@@ -319832,6 +323311,356 @@
         "third_price": 226.72500610351562,
         "spread": 4.5,
         "spread_pct": 101.98478698730469
+      },
+      {
+        "date": "2026-07-31",
+        "front_price": 231.75,
+        "third_price": 226.9499969482422,
+        "spread": 4.8000030517578125,
+        "spread_pct": 102.11499786376953
+      },
+      {
+        "date": "2026-08-03",
+        "front_price": 231.10000610351562,
+        "third_price": 226.22500610351562,
+        "spread": 4.875,
+        "spread_pct": 102.15493774414062
+      },
+      {
+        "date": "2026-08-04",
+        "front_price": 231.9499969482422,
+        "third_price": 227.27499389648438,
+        "spread": 4.6750030517578125,
+        "spread_pct": 102.05697631835938
+      },
+      {
+        "date": "2026-08-05",
+        "front_price": 234.1750030517578,
+        "third_price": 228.6750030517578,
+        "spread": 5.5,
+        "spread_pct": 102.4051513671875
+      },
+      {
+        "date": "2026-08-06",
+        "front_price": 224.9250030517578,
+        "third_price": 224.5749969482422,
+        "spread": 0.350006103515625,
+        "spread_pct": 100.15585327148438
+      },
+      {
+        "date": "2026-08-07",
+        "front_price": 225.27499389648438,
+        "third_price": 224.5,
+        "spread": 0.774993896484375,
+        "spread_pct": 100.34520721435547
+      },
+      {
+        "date": "2026-08-10",
+        "front_price": 226.89999389648438,
+        "third_price": 226.02499389648438,
+        "spread": 0.875,
+        "spread_pct": 100.38712310791016
+      },
+      {
+        "date": "2026-08-11",
+        "front_price": 226.3249969482422,
+        "third_price": 226.125,
+        "spread": 0.1999969482421875,
+        "spread_pct": 100.08843994140625
+      },
+      {
+        "date": "2026-08-12",
+        "front_price": 223.8000030517578,
+        "third_price": 223.14999389648438,
+        "spread": 0.6500091552734375,
+        "spread_pct": 100.29129028320312
+      },
+      {
+        "date": "2026-08-13",
+        "front_price": 220.0500030517578,
+        "third_price": 220.1999969482422,
+        "spread": -0.149993896484375,
+        "spread_pct": 99.931884765625
+      },
+      {
+        "date": "2026-08-14",
+        "front_price": 218.875,
+        "third_price": 219.0500030517578,
+        "spread": -0.1750030517578125,
+        "spread_pct": 99.92010498046875
+      },
+      {
+        "date": "2026-08-17",
+        "front_price": 218.77499389648438,
+        "third_price": 218.89999389648438,
+        "spread": -0.125,
+        "spread_pct": 99.94290161132812
+      },
+      {
+        "date": "2026-08-18",
+        "front_price": 218.9250030517578,
+        "third_price": 219.8000030517578,
+        "spread": -0.875,
+        "spread_pct": 99.60191345214844
+      },
+      {
+        "date": "2026-08-19",
+        "front_price": 217.22500610351562,
+        "third_price": 217.8000030517578,
+        "spread": -0.5749969482421875,
+        "spread_pct": 99.73600006103516
+      },
+      {
+        "date": "2026-08-20",
+        "front_price": 218.0,
+        "third_price": 218.89999389648438,
+        "spread": -0.899993896484375,
+        "spread_pct": 99.58885955810547
+      },
+      {
+        "date": "2026-08-21",
+        "front_price": 217.9250030517578,
+        "third_price": 219.3249969482422,
+        "spread": -1.399993896484375,
+        "spread_pct": 99.36167907714844
+      },
+      {
+        "date": "2026-08-24",
+        "front_price": 213.60000610351562,
+        "third_price": 215.60000610351562,
+        "spread": -2.0,
+        "spread_pct": 99.07235717773438
+      },
+      {
+        "date": "2026-08-25",
+        "front_price": 210.9499969482422,
+        "third_price": 213.5,
+        "spread": -2.5500030517578125,
+        "spread_pct": 98.80561828613281
+      },
+      {
+        "date": "2026-08-26",
+        "front_price": 210.77499389648438,
+        "third_price": 214.0749969482422,
+        "spread": -3.3000030517578125,
+        "spread_pct": 98.45848083496094
+      },
+      {
+        "date": "2026-08-27",
+        "front_price": 212.9250030517578,
+        "third_price": 216.8249969482422,
+        "spread": -3.899993896484375,
+        "spread_pct": 98.2013168334961
+      },
+      {
+        "date": "2026-08-28",
+        "front_price": 211.72500610351562,
+        "third_price": 215.52499389648438,
+        "spread": -3.79998779296875,
+        "spread_pct": 98.23686981201172
+      },
+      {
+        "date": "2026-08-31",
+        "front_price": 212.6750030517578,
+        "third_price": 216.47500610351562,
+        "spread": -3.8000030517578125,
+        "spread_pct": 98.24459838867188
+      },
+      {
+        "date": "2026-09-01",
+        "front_price": 212.0749969482422,
+        "third_price": 214.9250030517578,
+        "spread": -2.850006103515625,
+        "spread_pct": 98.6739501953125
+      },
+      {
+        "date": "2026-09-02",
+        "front_price": 210.1750030517578,
+        "third_price": 214.0,
+        "spread": -3.8249969482421875,
+        "spread_pct": 98.21261596679688
+      },
+      {
+        "date": "2026-09-03",
+        "front_price": 214.3000030517578,
+        "third_price": 217.72500610351562,
+        "spread": -3.4250030517578125,
+        "spread_pct": 98.42691040039062
+      },
+      {
+        "date": "2026-09-04",
+        "front_price": 212.9499969482422,
+        "third_price": 216.5749969482422,
+        "spread": -3.625,
+        "spread_pct": 98.32621002197266
+      },
+      {
+        "date": "2026-09-08",
+        "front_price": 217.02499389648438,
+        "third_price": 220.4499969482422,
+        "spread": -3.4250030517578125,
+        "spread_pct": 98.44635772705078
+      },
+      {
+        "date": "2026-09-09",
+        "front_price": 215.85000610351562,
+        "third_price": 220.3249969482422,
+        "spread": -4.4749908447265625,
+        "spread_pct": 97.96891021728516
+      },
+      {
+        "date": "2026-09-10",
+        "front_price": 217.8249969482422,
+        "third_price": 221.14999389648438,
+        "spread": -3.3249969482421875,
+        "spread_pct": 98.49649810791016
+      },
+      {
+        "date": "2026-09-11",
+        "front_price": 219.6750030517578,
+        "third_price": 224.0,
+        "spread": -4.3249969482421875,
+        "spread_pct": 98.06919860839844
+      },
+      {
+        "date": "2026-09-14",
+        "front_price": 222.25,
+        "third_price": 226.3000030517578,
+        "spread": -4.0500030517578125,
+        "spread_pct": 98.21034240722656
+      },
+      {
+        "date": "2026-09-15",
+        "front_price": 220.6999969482422,
+        "third_price": 224.6750030517578,
+        "spread": -3.975006103515625,
+        "spread_pct": 98.23077392578125
+      },
+      {
+        "date": "2026-09-16",
+        "front_price": 218.4499969482422,
+        "third_price": 220.89999389648438,
+        "spread": -2.4499969482421875,
+        "spread_pct": 98.89089965820312
+      },
+      {
+        "date": "2026-09-17",
+        "front_price": 215.64999389648438,
+        "third_price": 217.27499389648438,
+        "spread": -1.625,
+        "spread_pct": 99.2520980834961
+      },
+      {
+        "date": "2026-09-18",
+        "front_price": 215.9250030517578,
+        "third_price": 217.35000610351562,
+        "spread": -1.4250030517578125,
+        "spread_pct": 99.34437561035156
+      },
+      {
+        "date": "2026-09-21",
+        "front_price": 220.9499969482422,
+        "third_price": 223.10000610351562,
+        "spread": -2.1500091552734375,
+        "spread_pct": 99.03630065917969
+      },
+      {
+        "date": "2026-09-22",
+        "front_price": 218.77499389648438,
+        "third_price": 220.5500030517578,
+        "spread": -1.7750091552734375,
+        "spread_pct": 99.1951904296875
+      },
+      {
+        "date": "2026-09-23",
+        "front_price": 220.9250030517578,
+        "third_price": 223.64999389648438,
+        "spread": -2.7249908447265625,
+        "spread_pct": 98.78157806396484
+      },
+      {
+        "date": "2026-09-24",
+        "front_price": 219.0749969482422,
+        "third_price": 222.875,
+        "spread": -3.8000030517578125,
+        "spread_pct": 98.29500579833984
+      },
+      {
+        "date": "2026-09-25",
+        "front_price": 218.875,
+        "third_price": 224.3000030517578,
+        "spread": -5.4250030517578125,
+        "spread_pct": 97.58135986328125
+      },
+      {
+        "date": "2026-09-28",
+        "front_price": 217.4499969482422,
+        "third_price": 222.9499969482422,
+        "spread": -5.5,
+        "spread_pct": 97.53307342529297
+      },
+      {
+        "date": "2026-09-29",
+        "front_price": 217.22500610351562,
+        "third_price": 222.9250030517578,
+        "spread": -5.6999969482421875,
+        "spread_pct": 97.44308471679688
+      },
+      {
+        "date": "2026-09-30",
+        "front_price": 218.6750030517578,
+        "third_price": 225.0749969482422,
+        "spread": -6.399993896484375,
+        "spread_pct": 97.15650939941406
+      },
+      {
+        "date": "2026-10-01",
+        "front_price": 219.3000030517578,
+        "third_price": 225.4499969482422,
+        "spread": -6.149993896484375,
+        "spread_pct": 97.27212524414062
+      },
+      {
+        "date": "2026-10-02",
+        "front_price": 218.85000610351562,
+        "third_price": 223.14999389648438,
+        "spread": -4.29998779296875,
+        "spread_pct": 98.07305145263672
+      },
+      {
+        "date": "2026-10-05",
+        "front_price": 217.25,
+        "third_price": 222.0500030517578,
+        "spread": -4.8000030517578125,
+        "spread_pct": 97.83832550048828
+      },
+      {
+        "date": "2026-10-06",
+        "front_price": 224.10000610351562,
+        "third_price": 228.6999969482422,
+        "spread": -4.5999908447265625,
+        "spread_pct": 97.98863220214844
+      },
+      {
+        "date": "2026-10-07",
+        "front_price": 223.77499389648438,
+        "third_price": 228.35000610351562,
+        "spread": -4.57501220703125,
+        "spread_pct": 97.99649047851562
+      },
+      {
+        "date": "2026-10-08",
+        "front_price": 223.5500030517578,
+        "third_price": 227.27499389648438,
+        "spread": -3.7249908447265625,
+        "spread_pct": 98.36102294921875
+      },
+      {
+        "date": "2026-10-09",
+        "front_price": 227.0500030517578,
+        "third_price": 230.5749969482422,
+        "spread": -3.524993896484375,
+        "spread_pct": 98.47122192382812
       }
     ],
     "lean-hogs": [
@@ -349038,6 +352867,356 @@
         "third_price": 74.5250015258789,
         "spread": 23.900001525878906,
         "spread_pct": 132.0697784423828
+      },
+      {
+        "date": "2026-07-31",
+        "front_price": 98.8499984741211,
+        "third_price": 75.67500305175781,
+        "spread": 23.17499542236328,
+        "spread_pct": 130.62437438964844
+      },
+      {
+        "date": "2026-08-03",
+        "front_price": 97.5250015258789,
+        "third_price": 75.3499984741211,
+        "spread": 22.175003051757812,
+        "spread_pct": 129.42933654785156
+      },
+      {
+        "date": "2026-08-04",
+        "front_price": 97.8499984741211,
+        "third_price": 75.7750015258789,
+        "spread": 22.074996948242188,
+        "spread_pct": 129.13229370117188
+      },
+      {
+        "date": "2026-08-05",
+        "front_price": 96.5999984741211,
+        "third_price": 74.6500015258789,
+        "spread": 21.949996948242188,
+        "spread_pct": 129.40386962890625
+      },
+      {
+        "date": "2026-08-06",
+        "front_price": 81.7249984741211,
+        "third_price": 76.9749984741211,
+        "spread": 4.75,
+        "spread_pct": 106.17082977294922
+      },
+      {
+        "date": "2026-08-07",
+        "front_price": 82.2249984741211,
+        "third_price": 77.125,
+        "spread": 5.099998474121094,
+        "spread_pct": 106.61263275146484
+      },
+      {
+        "date": "2026-08-10",
+        "front_price": 83.67500305175781,
+        "third_price": 78.4749984741211,
+        "spread": 5.200004577636719,
+        "spread_pct": 106.6263198852539
+      },
+      {
+        "date": "2026-08-11",
+        "front_price": 83.32499694824219,
+        "third_price": 77.2750015258789,
+        "spread": 6.049995422363281,
+        "spread_pct": 107.82917785644531
+      },
+      {
+        "date": "2026-08-12",
+        "front_price": 83.55000305175781,
+        "third_price": 77.94999694824219,
+        "spread": 5.600006103515625,
+        "spread_pct": 107.18409729003906
+      },
+      {
+        "date": "2026-08-13",
+        "front_price": 82.125,
+        "third_price": 76.25,
+        "spread": 5.875,
+        "spread_pct": 107.70491027832031
+      },
+      {
+        "date": "2026-08-14",
+        "front_price": 81.75,
+        "third_price": 75.7750015258789,
+        "spread": 5.974998474121094,
+        "spread_pct": 107.88518524169922
+      },
+      {
+        "date": "2026-08-17",
+        "front_price": 81.7249984741211,
+        "third_price": 75.7750015258789,
+        "spread": 5.9499969482421875,
+        "spread_pct": 107.85218811035156
+      },
+      {
+        "date": "2026-08-18",
+        "front_price": 80.7249984741211,
+        "third_price": 74.0,
+        "spread": 6.724998474121094,
+        "spread_pct": 109.08783721923828
+      },
+      {
+        "date": "2026-08-19",
+        "front_price": 81.5,
+        "third_price": 74.25,
+        "spread": 7.25,
+        "spread_pct": 109.76431274414062
+      },
+      {
+        "date": "2026-08-20",
+        "front_price": 80.2249984741211,
+        "third_price": 73.82499694824219,
+        "spread": 6.400001525878906,
+        "spread_pct": 108.66915130615234
+      },
+      {
+        "date": "2026-08-21",
+        "front_price": 80.875,
+        "third_price": 74.42500305175781,
+        "spread": 6.4499969482421875,
+        "spread_pct": 108.66644287109375
+      },
+      {
+        "date": "2026-08-24",
+        "front_price": 81.125,
+        "third_price": 74.42500305175781,
+        "spread": 6.6999969482421875,
+        "spread_pct": 109.00234985351562
+      },
+      {
+        "date": "2026-08-25",
+        "front_price": 80.44999694824219,
+        "third_price": 73.17500305175781,
+        "spread": 7.274993896484375,
+        "spread_pct": 109.94190979003906
+      },
+      {
+        "date": "2026-08-26",
+        "front_price": 80.9000015258789,
+        "third_price": 73.7249984741211,
+        "spread": 7.1750030517578125,
+        "spread_pct": 109.73211669921875
+      },
+      {
+        "date": "2026-08-27",
+        "front_price": 80.625,
+        "third_price": 73.8499984741211,
+        "spread": 6.775001525878906,
+        "spread_pct": 109.17400360107422
+      },
+      {
+        "date": "2026-08-28",
+        "front_price": 81.9000015258789,
+        "third_price": 74.9749984741211,
+        "spread": 6.9250030517578125,
+        "spread_pct": 109.23641967773438
+      },
+      {
+        "date": "2026-08-31",
+        "front_price": 83.67500305175781,
+        "third_price": 76.5250015258789,
+        "spread": 7.150001525878906,
+        "spread_pct": 109.34335327148438
+      },
+      {
+        "date": "2026-09-01",
+        "front_price": 83.6500015258789,
+        "third_price": 76.2750015258789,
+        "spread": 7.375,
+        "spread_pct": 109.66896057128906
+      },
+      {
+        "date": "2026-09-02",
+        "front_price": 83.7750015258789,
+        "third_price": 76.875,
+        "spread": 6.900001525878906,
+        "spread_pct": 108.97561645507812
+      },
+      {
+        "date": "2026-09-03",
+        "front_price": 83.44999694824219,
+        "third_price": 76.5999984741211,
+        "spread": 6.849998474121094,
+        "spread_pct": 108.94255828857422
+      },
+      {
+        "date": "2026-09-04",
+        "front_price": 82.30000305175781,
+        "third_price": 75.2249984741211,
+        "spread": 7.075004577636719,
+        "spread_pct": 109.40512084960938
+      },
+      {
+        "date": "2026-09-08",
+        "front_price": 84.25,
+        "third_price": 77.6500015258789,
+        "spread": 6.599998474121094,
+        "spread_pct": 108.49967193603516
+      },
+      {
+        "date": "2026-09-09",
+        "front_price": 83.07499694824219,
+        "third_price": 76.9749984741211,
+        "spread": 6.099998474121094,
+        "spread_pct": 107.92465209960938
+      },
+      {
+        "date": "2026-09-10",
+        "front_price": 83.1500015258789,
+        "third_price": 76.82499694824219,
+        "spread": 6.325004577636719,
+        "spread_pct": 108.23300170898438
+      },
+      {
+        "date": "2026-09-11",
+        "front_price": 81.5250015258789,
+        "third_price": 75.19999694824219,
+        "spread": 6.325004577636719,
+        "spread_pct": 108.41090393066406
+      },
+      {
+        "date": "2026-09-14",
+        "front_price": 79.5999984741211,
+        "third_price": 73.5999984741211,
+        "spread": 6.0,
+        "spread_pct": 108.15217590332031
+      },
+      {
+        "date": "2026-09-15",
+        "front_price": 79.07499694824219,
+        "third_price": 71.9000015258789,
+        "spread": 7.174995422363281,
+        "spread_pct": 109.9791259765625
+      },
+      {
+        "date": "2026-09-16",
+        "front_price": 78.67500305175781,
+        "third_price": 71.75,
+        "spread": 6.9250030517578125,
+        "spread_pct": 109.65158081054688
+      },
+      {
+        "date": "2026-09-17",
+        "front_price": 78.9000015258789,
+        "third_price": 71.125,
+        "spread": 7.775001525878906,
+        "spread_pct": 110.93145751953125
+      },
+      {
+        "date": "2026-09-18",
+        "front_price": 78.0999984741211,
+        "third_price": 70.1500015258789,
+        "spread": 7.9499969482421875,
+        "spread_pct": 111.33285522460938
+      },
+      {
+        "date": "2026-09-21",
+        "front_price": 78.1500015258789,
+        "third_price": 71.3499984741211,
+        "spread": 6.8000030517578125,
+        "spread_pct": 109.53048706054688
+      },
+      {
+        "date": "2026-09-22",
+        "front_price": 79.2750015258789,
+        "third_price": 72.55000305175781,
+        "spread": 6.724998474121094,
+        "spread_pct": 109.26946258544922
+      },
+      {
+        "date": "2026-09-23",
+        "front_price": 79.875,
+        "third_price": 72.0250015258789,
+        "spread": 7.849998474121094,
+        "spread_pct": 110.89899444580078
+      },
+      {
+        "date": "2026-09-24",
+        "front_price": 79.19999694824219,
+        "third_price": 70.8499984741211,
+        "spread": 8.349998474121094,
+        "spread_pct": 111.78546142578125
+      },
+      {
+        "date": "2026-09-25",
+        "front_price": 78.2249984741211,
+        "third_price": 70.32499694824219,
+        "spread": 7.900001525878906,
+        "spread_pct": 111.23355865478516
+      },
+      {
+        "date": "2026-09-28",
+        "front_price": 78.25,
+        "third_price": 69.375,
+        "spread": 8.875,
+        "spread_pct": 112.79279327392578
+      },
+      {
+        "date": "2026-09-29",
+        "front_price": 79.375,
+        "third_price": 70.625,
+        "spread": 8.75,
+        "spread_pct": 112.38938903808594
+      },
+      {
+        "date": "2026-09-30",
+        "front_price": 78.7249984741211,
+        "third_price": 70.17500305175781,
+        "spread": 8.549995422363281,
+        "spread_pct": 112.18382263183594
+      },
+      {
+        "date": "2026-10-01",
+        "front_price": 77.5,
+        "third_price": 69.75,
+        "spread": 7.75,
+        "spread_pct": 111.11111450195312
+      },
+      {
+        "date": "2026-10-02",
+        "front_price": 77.875,
+        "third_price": 71.32499694824219,
+        "spread": 6.5500030517578125,
+        "spread_pct": 109.1833267211914
+      },
+      {
+        "date": "2026-10-05",
+        "front_price": 77.8499984741211,
+        "third_price": 72.69999694824219,
+        "spread": 5.150001525878906,
+        "spread_pct": 107.08390808105469
+      },
+      {
+        "date": "2026-10-06",
+        "front_price": 70.375,
+        "third_price": 77.1500015258789,
+        "spread": -6.775001525878906,
+        "spread_pct": 91.2184066772461
+      },
+      {
+        "date": "2026-10-07",
+        "front_price": 69.0999984741211,
+        "third_price": 74.875,
+        "spread": -5.775001525878906,
+        "spread_pct": 92.28713989257812
+      },
+      {
+        "date": "2026-10-08",
+        "front_price": 68.5999984741211,
+        "third_price": 74.67500305175781,
+        "spread": -6.075004577636719,
+        "spread_pct": 91.86473846435547
+      },
+      {
+        "date": "2026-10-09",
+        "front_price": 67.82499694824219,
+        "third_price": 74.17500305175781,
+        "spread": -6.350006103515625,
+        "spread_pct": 91.43915557861328
       }
     ],
     "feeder-cattle": [
@@ -378244,6 +382423,356 @@
         "third_price": 334.0249938964844,
         "spread": 12.45001220703125,
         "spread_pct": 103.7272720336914
+      },
+      {
+        "date": "2026-07-31",
+        "front_price": 348.0249938964844,
+        "third_price": 335.3500061035156,
+        "spread": 12.67498779296875,
+        "spread_pct": 103.77962493896484
+      },
+      {
+        "date": "2026-08-03",
+        "front_price": 347.82501220703125,
+        "third_price": 333.70001220703125,
+        "spread": 14.125,
+        "spread_pct": 104.23284912109375
+      },
+      {
+        "date": "2026-08-04",
+        "front_price": 351.20001220703125,
+        "third_price": 337.1499938964844,
+        "spread": 14.050018310546875,
+        "spread_pct": 104.16729736328125
+      },
+      {
+        "date": "2026-08-05",
+        "front_price": 353.32501220703125,
+        "third_price": 339.42498779296875,
+        "spread": 13.9000244140625,
+        "spread_pct": 104.09516906738281
+      },
+      {
+        "date": "2026-08-06",
+        "front_price": 341.57501220703125,
+        "third_price": 324.3500061035156,
+        "spread": 17.225006103515625,
+        "spread_pct": 105.31061553955078
+      },
+      {
+        "date": "2026-08-07",
+        "front_price": 345.2250061035156,
+        "third_price": 326.625,
+        "spread": 18.600006103515625,
+        "spread_pct": 105.6946029663086
+      },
+      {
+        "date": "2026-08-10",
+        "front_price": 344.57501220703125,
+        "third_price": 328.1499938964844,
+        "spread": 16.425018310546875,
+        "spread_pct": 105.00533294677734
+      },
+      {
+        "date": "2026-08-11",
+        "front_price": 345.25,
+        "third_price": 329.2250061035156,
+        "spread": 16.024993896484375,
+        "spread_pct": 104.86749267578125
+      },
+      {
+        "date": "2026-08-12",
+        "front_price": 339.3500061035156,
+        "third_price": 322.875,
+        "spread": 16.475006103515625,
+        "spread_pct": 105.10260009765625
+      },
+      {
+        "date": "2026-08-13",
+        "front_price": 337.20001220703125,
+        "third_price": 321.4750061035156,
+        "spread": 15.725006103515625,
+        "spread_pct": 104.89151763916016
+      },
+      {
+        "date": "2026-08-14",
+        "front_price": 334.54998779296875,
+        "third_price": 317.42498779296875,
+        "spread": 17.125,
+        "spread_pct": 105.39497375488281
+      },
+      {
+        "date": "2026-08-17",
+        "front_price": 332.95001220703125,
+        "third_price": 317.82501220703125,
+        "spread": 15.125,
+        "spread_pct": 104.75890350341797
+      },
+      {
+        "date": "2026-08-18",
+        "front_price": 333.3500061035156,
+        "third_price": 318.625,
+        "spread": 14.725006103515625,
+        "spread_pct": 104.62142181396484
+      },
+      {
+        "date": "2026-08-19",
+        "front_price": 329.125,
+        "third_price": 314.07501220703125,
+        "spread": 15.04998779296875,
+        "spread_pct": 104.7918472290039
+      },
+      {
+        "date": "2026-08-20",
+        "front_price": 328.92498779296875,
+        "third_price": 314.875,
+        "spread": 14.04998779296875,
+        "spread_pct": 104.46208953857422
+      },
+      {
+        "date": "2026-08-21",
+        "front_price": 329.0249938964844,
+        "third_price": 316.25,
+        "spread": 12.774993896484375,
+        "spread_pct": 104.0395278930664
+      },
+      {
+        "date": "2026-08-24",
+        "front_price": 324.2250061035156,
+        "third_price": 310.9750061035156,
+        "spread": 13.25,
+        "spread_pct": 104.26078796386719
+      },
+      {
+        "date": "2026-08-25",
+        "front_price": 319.2749938964844,
+        "third_price": 305.70001220703125,
+        "spread": 13.574981689453125,
+        "spread_pct": 104.44062042236328
+      },
+      {
+        "date": "2026-08-26",
+        "front_price": 319.0,
+        "third_price": 307.5,
+        "spread": 11.5,
+        "spread_pct": 103.73983764648438
+      },
+      {
+        "date": "2026-08-27",
+        "front_price": 322.45001220703125,
+        "third_price": 311.4750061035156,
+        "spread": 10.975006103515625,
+        "spread_pct": 103.52356719970703
+      },
+      {
+        "date": "2026-08-28",
+        "front_price": 320.8999938964844,
+        "third_price": 309.92498779296875,
+        "spread": 10.975006103515625,
+        "spread_pct": 103.54118347167969
+      },
+      {
+        "date": "2026-08-31",
+        "front_price": 321.45001220703125,
+        "third_price": 310.42498779296875,
+        "spread": 11.0250244140625,
+        "spread_pct": 103.55158996582031
+      },
+      {
+        "date": "2026-09-01",
+        "front_price": 320.3500061035156,
+        "third_price": 308.5249938964844,
+        "spread": 11.82501220703125,
+        "spread_pct": 103.83275604248047
+      },
+      {
+        "date": "2026-09-02",
+        "front_price": 318.9750061035156,
+        "third_price": 308.3500061035156,
+        "spread": 10.625,
+        "spread_pct": 103.44575500488281
+      },
+      {
+        "date": "2026-09-03",
+        "front_price": 325.8500061035156,
+        "third_price": 315.29998779296875,
+        "spread": 10.550018310546875,
+        "spread_pct": 103.34602355957031
+      },
+      {
+        "date": "2026-09-04",
+        "front_price": 324.82501220703125,
+        "third_price": 314.7250061035156,
+        "spread": 10.100006103515625,
+        "spread_pct": 103.20915222167969
+      },
+      {
+        "date": "2026-09-08",
+        "front_price": 325.45001220703125,
+        "third_price": 313.04998779296875,
+        "spread": 12.4000244140625,
+        "spread_pct": 103.9610366821289
+      },
+      {
+        "date": "2026-09-09",
+        "front_price": 325.82501220703125,
+        "third_price": 314.1499938964844,
+        "spread": 11.675018310546875,
+        "spread_pct": 103.71638488769531
+      },
+      {
+        "date": "2026-09-10",
+        "front_price": 327.54998779296875,
+        "third_price": 315.92498779296875,
+        "spread": 11.625,
+        "spread_pct": 103.67967224121094
+      },
+      {
+        "date": "2026-09-11",
+        "front_price": 332.5,
+        "third_price": 320.70001220703125,
+        "spread": 11.79998779296875,
+        "spread_pct": 103.679443359375
+      },
+      {
+        "date": "2026-09-14",
+        "front_price": 337.8500061035156,
+        "third_price": 324.3500061035156,
+        "spread": 13.5,
+        "spread_pct": 104.16217041015625
+      },
+      {
+        "date": "2026-09-15",
+        "front_price": 333.8500061035156,
+        "third_price": 320.82501220703125,
+        "spread": 13.024993896484375,
+        "spread_pct": 104.0598373413086
+      },
+      {
+        "date": "2026-09-16",
+        "front_price": 329.6499938964844,
+        "third_price": 314.1000061035156,
+        "spread": 15.54998779296875,
+        "spread_pct": 104.95065307617188
+      },
+      {
+        "date": "2026-09-17",
+        "front_price": 324.375,
+        "third_price": 309.75,
+        "spread": 14.625,
+        "spread_pct": 104.72154235839844
+      },
+      {
+        "date": "2026-09-18",
+        "front_price": 323.5,
+        "third_price": 308.92498779296875,
+        "spread": 14.57501220703125,
+        "spread_pct": 104.71797943115234
+      },
+      {
+        "date": "2026-09-21",
+        "front_price": 330.25,
+        "third_price": 318.1499938964844,
+        "spread": 12.100006103515625,
+        "spread_pct": 103.80323791503906
+      },
+      {
+        "date": "2026-09-22",
+        "front_price": 328.0249938964844,
+        "third_price": 314.75,
+        "spread": 13.274993896484375,
+        "spread_pct": 104.21763610839844
+      },
+      {
+        "date": "2026-09-23",
+        "front_price": 333.32501220703125,
+        "third_price": 321.67498779296875,
+        "spread": 11.6500244140625,
+        "spread_pct": 103.62167358398438
+      },
+      {
+        "date": "2026-09-24",
+        "front_price": 331.75,
+        "third_price": 320.6499938964844,
+        "spread": 11.100006103515625,
+        "spread_pct": 103.46171569824219
+      },
+      {
+        "date": "2026-09-25",
+        "front_price": 334.92498779296875,
+        "third_price": 324.3500061035156,
+        "spread": 10.574981689453125,
+        "spread_pct": 103.26036071777344
+      },
+      {
+        "date": "2026-09-28",
+        "front_price": 331.8999938964844,
+        "third_price": 321.9750061035156,
+        "spread": 9.92498779296875,
+        "spread_pct": 103.08253479003906
+      },
+      {
+        "date": "2026-09-29",
+        "front_price": 333.6499938964844,
+        "third_price": 323.3999938964844,
+        "spread": 10.25,
+        "spread_pct": 103.1694564819336
+      },
+      {
+        "date": "2026-09-30",
+        "front_price": 336.42498779296875,
+        "third_price": 327.67498779296875,
+        "spread": 8.75,
+        "spread_pct": 102.67032623291016
+      },
+      {
+        "date": "2026-10-01",
+        "front_price": 338.875,
+        "third_price": 329.70001220703125,
+        "spread": 9.17498779296875,
+        "spread_pct": 102.7828369140625
+      },
+      {
+        "date": "2026-10-02",
+        "front_price": 334.625,
+        "third_price": 324.54998779296875,
+        "spread": 10.07501220703125,
+        "spread_pct": 103.10430908203125
+      },
+      {
+        "date": "2026-10-05",
+        "front_price": 333.8500061035156,
+        "third_price": 322.6000061035156,
+        "spread": 11.25,
+        "spread_pct": 103.48728942871094
+      },
+      {
+        "date": "2026-10-06",
+        "front_price": 338.2749938964844,
+        "third_price": 327.875,
+        "spread": 10.399993896484375,
+        "spread_pct": 103.17194366455078
+      },
+      {
+        "date": "2026-10-07",
+        "front_price": 335.79998779296875,
+        "third_price": 326.8999938964844,
+        "spread": 8.899993896484375,
+        "spread_pct": 102.7225341796875
+      },
+      {
+        "date": "2026-10-08",
+        "front_price": 334.875,
+        "third_price": 324.2250061035156,
+        "spread": 10.649993896484375,
+        "spread_pct": 103.28475189208984
+      },
+      {
+        "date": "2026-10-09",
+        "front_price": 341.95001220703125,
+        "third_price": 332.17498779296875,
+        "spread": 9.7750244140625,
+        "spread_pct": 102.9427261352539
       }
     ],
     "canola": [
@@ -407233,6 +411762,349 @@
         "third_price": 784.5,
         "spread": -15.9000244140625,
         "spread_pct": 97.97322845458984
+      },
+      {
+        "date": "2026-07-31",
+        "front_price": 758.2000122070312,
+        "third_price": 774.5,
+        "spread": -16.29998779296875,
+        "spread_pct": 97.89541625976562
+      },
+      {
+        "date": "2026-08-04",
+        "front_price": 760.7000122070312,
+        "third_price": 778.4000244140625,
+        "spread": -17.70001220703125,
+        "spread_pct": 97.7260971069336
+      },
+      {
+        "date": "2026-08-05",
+        "front_price": 766.0,
+        "third_price": 783.5999755859375,
+        "spread": -17.5999755859375,
+        "spread_pct": 97.75395965576172
+      },
+      {
+        "date": "2026-08-06",
+        "front_price": 768.9000244140625,
+        "third_price": 787.2000122070312,
+        "spread": -18.29998779296875,
+        "spread_pct": 97.67530822753906
+      },
+      {
+        "date": "2026-08-07",
+        "front_price": 779.7999877929688,
+        "third_price": 795.7999877929688,
+        "spread": -16.0,
+        "spread_pct": 97.98944854736328
+      },
+      {
+        "date": "2026-08-10",
+        "front_price": 794.9000244140625,
+        "third_price": 812.5,
+        "spread": -17.5999755859375,
+        "spread_pct": 97.83384704589844
+      },
+      {
+        "date": "2026-08-11",
+        "front_price": 781.0,
+        "third_price": 799.2999877929688,
+        "spread": -18.29998779296875,
+        "spread_pct": 97.71049499511719
+      },
+      {
+        "date": "2026-08-12",
+        "front_price": 794.4000244140625,
+        "third_price": 811.0,
+        "spread": -16.5999755859375,
+        "spread_pct": 97.9531478881836
+      },
+      {
+        "date": "2026-08-13",
+        "front_price": 803.5,
+        "third_price": 816.9000244140625,
+        "spread": -13.4000244140625,
+        "spread_pct": 98.35964965820312
+      },
+      {
+        "date": "2026-08-14",
+        "front_price": 818.9000244140625,
+        "third_price": 832.0,
+        "spread": -13.0999755859375,
+        "spread_pct": 98.42548370361328
+      },
+      {
+        "date": "2026-08-17",
+        "front_price": 827.4000244140625,
+        "third_price": 843.2000122070312,
+        "spread": -15.79998779296875,
+        "spread_pct": 98.12618255615234
+      },
+      {
+        "date": "2026-08-18",
+        "front_price": 805.9000244140625,
+        "third_price": 822.4000244140625,
+        "spread": -16.5,
+        "spread_pct": 97.9936752319336
+      },
+      {
+        "date": "2026-08-19",
+        "front_price": 819.9000244140625,
+        "third_price": 833.7000122070312,
+        "spread": -13.79998779296875,
+        "spread_pct": 98.34473419189453
+      },
+      {
+        "date": "2026-08-20",
+        "front_price": 820.4000244140625,
+        "third_price": 835.0,
+        "spread": -14.5999755859375,
+        "spread_pct": 98.25149536132812
+      },
+      {
+        "date": "2026-08-21",
+        "front_price": 799.0999755859375,
+        "third_price": 815.4000244140625,
+        "spread": -16.300048828125,
+        "spread_pct": 98.0009765625
+      },
+      {
+        "date": "2026-08-24",
+        "front_price": 770.5999755859375,
+        "third_price": 786.2999877929688,
+        "spread": -15.70001220703125,
+        "spread_pct": 98.00330352783203
+      },
+      {
+        "date": "2026-08-25",
+        "front_price": 789.7000122070312,
+        "third_price": 807.5,
+        "spread": -17.79998779296875,
+        "spread_pct": 97.79566192626953
+      },
+      {
+        "date": "2026-08-26",
+        "front_price": 798.2999877929688,
+        "third_price": 816.2999877929688,
+        "spread": -18.0,
+        "spread_pct": 97.79492950439453
+      },
+      {
+        "date": "2026-08-27",
+        "front_price": 804.0,
+        "third_price": 821.0999755859375,
+        "spread": -17.0999755859375,
+        "spread_pct": 97.91743469238281
+      },
+      {
+        "date": "2026-08-28",
+        "front_price": 823.7000122070312,
+        "third_price": 840.5,
+        "spread": -16.79998779296875,
+        "spread_pct": 98.00119018554688
+      },
+      {
+        "date": "2026-08-31",
+        "front_price": 813.2000122070312,
+        "third_price": 831.5999755859375,
+        "spread": -18.39996337890625,
+        "spread_pct": 97.78740692138672
+      },
+      {
+        "date": "2026-09-01",
+        "front_price": 841.9000244140625,
+        "third_price": 860.0999755859375,
+        "spread": -18.199951171875,
+        "spread_pct": 97.88397216796875
+      },
+      {
+        "date": "2026-09-02",
+        "front_price": 825.7999877929688,
+        "third_price": 843.9000244140625,
+        "spread": -18.10003662109375,
+        "spread_pct": 97.85519409179688
+      },
+      {
+        "date": "2026-09-03",
+        "front_price": 828.7000122070312,
+        "third_price": 848.4000244140625,
+        "spread": -19.70001220703125,
+        "spread_pct": 97.677978515625
+      },
+      {
+        "date": "2026-09-04",
+        "front_price": 822.5,
+        "third_price": 841.4000244140625,
+        "spread": -18.9000244140625,
+        "spread_pct": 97.75373840332031
+      },
+      {
+        "date": "2026-09-08",
+        "front_price": 839.0999755859375,
+        "third_price": 856.2999877929688,
+        "spread": -17.20001220703125,
+        "spread_pct": 97.9913558959961
+      },
+      {
+        "date": "2026-09-09",
+        "front_price": 832.0999755859375,
+        "third_price": 849.0999755859375,
+        "spread": -17.0,
+        "spread_pct": 97.99787902832031
+      },
+      {
+        "date": "2026-09-10",
+        "front_price": 839.2999877929688,
+        "third_price": 857.9000244140625,
+        "spread": -18.60003662109375,
+        "spread_pct": 97.8319091796875
+      },
+      {
+        "date": "2026-09-11",
+        "front_price": 817.2000122070312,
+        "third_price": 835.2000122070312,
+        "spread": -18.0,
+        "spread_pct": 97.8448257446289
+      },
+      {
+        "date": "2026-09-14",
+        "front_price": 823.0,
+        "third_price": 843.7999877929688,
+        "spread": -20.79998779296875,
+        "spread_pct": 97.53495788574219
+      },
+      {
+        "date": "2026-09-15",
+        "front_price": 829.2999877929688,
+        "third_price": 850.5,
+        "spread": -21.20001220703125,
+        "spread_pct": 97.5073471069336
+      },
+      {
+        "date": "2026-09-16",
+        "front_price": 826.9000244140625,
+        "third_price": 846.4000244140625,
+        "spread": -19.5,
+        "spread_pct": 97.69612884521484
+      },
+      {
+        "date": "2026-09-17",
+        "front_price": 833.9000244140625,
+        "third_price": 851.7999877929688,
+        "spread": -17.89996337890625,
+        "spread_pct": 97.89857482910156
+      },
+      {
+        "date": "2026-09-18",
+        "front_price": 822.2999877929688,
+        "third_price": 840.7999877929688,
+        "spread": -18.5,
+        "spread_pct": 97.79971313476562
+      },
+      {
+        "date": "2026-09-21",
+        "front_price": 835.2000122070312,
+        "third_price": 854.5,
+        "spread": -19.29998779296875,
+        "spread_pct": 97.74137115478516
+      },
+      {
+        "date": "2026-09-22",
+        "front_price": 824.2999877929688,
+        "third_price": 843.7000122070312,
+        "spread": -19.4000244140625,
+        "spread_pct": 97.70059967041016
+      },
+      {
+        "date": "2026-09-23",
+        "front_price": 825.0999755859375,
+        "third_price": 845.0,
+        "spread": -19.9000244140625,
+        "spread_pct": 97.64496612548828
+      },
+      {
+        "date": "2026-09-24",
+        "front_price": 828.5999755859375,
+        "third_price": 848.5,
+        "spread": -19.9000244140625,
+        "spread_pct": 97.6546859741211
+      },
+      {
+        "date": "2026-09-25",
+        "front_price": 828.5999755859375,
+        "third_price": 848.9000244140625,
+        "spread": -20.300048828125,
+        "spread_pct": 97.60865783691406
+      },
+      {
+        "date": "2026-09-28",
+        "front_price": 809.0,
+        "third_price": 830.5,
+        "spread": -21.5,
+        "spread_pct": 97.41119384765625
+      },
+      {
+        "date": "2026-09-29",
+        "front_price": 823.7000122070312,
+        "third_price": 846.2000122070312,
+        "spread": -22.5,
+        "spread_pct": 97.34105682373047
+      },
+      {
+        "date": "2026-09-30",
+        "front_price": 823.7000122070312,
+        "third_price": 846.2000122070312,
+        "spread": -22.5,
+        "spread_pct": 97.34105682373047
+      },
+      {
+        "date": "2026-10-01",
+        "front_price": 811.7000122070312,
+        "third_price": 833.5,
+        "spread": -21.79998779296875,
+        "spread_pct": 97.384521484375
+      },
+      {
+        "date": "2026-10-02",
+        "front_price": 815.5,
+        "third_price": 836.2000122070312,
+        "spread": -20.70001220703125,
+        "spread_pct": 97.5245132446289
+      },
+      {
+        "date": "2026-10-05",
+        "front_price": 819.4000244140625,
+        "third_price": 841.4000244140625,
+        "spread": -22.0,
+        "spread_pct": 97.38531494140625
+      },
+      {
+        "date": "2026-10-06",
+        "front_price": 825.7999877929688,
+        "third_price": 848.2999877929688,
+        "spread": -22.5,
+        "spread_pct": 97.3476333618164
+      },
+      {
+        "date": "2026-10-07",
+        "front_price": 810.2999877929688,
+        "third_price": 831.9000244140625,
+        "spread": -21.60003662109375,
+        "spread_pct": 97.40353393554688
+      },
+      {
+        "date": "2026-10-08",
+        "front_price": 815.9000244140625,
+        "third_price": 838.2000122070312,
+        "spread": -22.29998779296875,
+        "spread_pct": 97.33953857421875
+      },
+      {
+        "date": "2026-10-09",
+        "front_price": 816.7000122070312,
+        "third_price": 839.0999755859375,
+        "spread": -22.39996337890625,
+        "spread_pct": 97.33047485351562
       }
     ]
   }
