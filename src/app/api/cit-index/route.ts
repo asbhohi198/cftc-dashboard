@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import JSZip from "jszip";
-import { CIT_CONTRACTS, CITContractId, CITRecord, parseCITRow, getYearsToFetch, getCITUrl } from "@/lib/cftc";
+import { CIT_CONTRACTS, CITContractId, CITRecord, COTRecord, parseCITRow, getYearsToFetch, getCITUrl } from "@/lib/cftc";
 
 // In-memory cache
 const cache: Map<string, { data: CITRecord[]; timestamp: number }> = new Map();
+const disaggCache: Map<string, { data: COTRecord[]; timestamp: number }> = new Map();
 const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours
 
 async function fetchYearData(year: number, contractCode: string): Promise<CITRecord[]> {
@@ -83,6 +84,31 @@ async function fetchAllData(contractCode: string): Promise<CITRecord[]> {
   return allRecords;
 }
 
+// Fetch Disaggregated COT data to get accurate Managed Money positions
+async function fetchDisaggregatedData(contractId: CITContractId, baseUrl: string): Promise<COTRecord[]> {
+  const cacheKey = `disagg_${contractId}`;
+  const cached = disaggCache.get(cacheKey);
+  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    return cached.data;
+  }
+
+  try {
+    const res = await fetch(`${baseUrl}/api/cot?contract=${contractId}`, {
+      cache: "no-store",
+    });
+    const json = await res.json();
+
+    if (json.success && json.data && Array.isArray(json.data)) {
+      disaggCache.set(cacheKey, { data: json.data, timestamp: Date.now() });
+      return json.data;
+    }
+    return [];
+  } catch (error) {
+    console.error(`Failed to fetch disaggregated data for ${contractId}:`, error);
+    return [];
+  }
+}
+
 export interface CITContractData {
   id: CITContractId;
   name: string;
@@ -130,19 +156,35 @@ export async function GET(request: NextRequest) {
     const contractIds = Object.keys(CIT_CONTRACTS) as CITContractId[];
     const results: CITContractData[] = [];
 
+    // Get base URL for internal API calls
+    const baseUrl = new URL(request.url).origin;
+
     // Fetch all contracts in parallel
     const allDataPromises = contractIds.map(async (contractId) => {
       const contract = CIT_CONTRACTS[contractId];
       const records = await fetchAllData(contract.code);
 
+      // Also fetch Disaggregated COT data for accurate MM positions
+      const disaggRecords = await fetchDisaggregatedData(contractId, baseUrl);
+
       if (records.length === 0) {
         return null;
+      }
+
+      // Create a map of disaggregated data by date for easy lookup
+      const disaggByDate = new Map<string, COTRecord>();
+      for (const d of disaggRecords) {
+        disaggByDate.set(d.date, d);
       }
 
       // Get latest record and previous for change calculation
       const latest = records[records.length - 1];
       const previous = records.length > 1 ? records[records.length - 2] : null;
       const change = previous ? latest.indexNet - previous.indexNet : 0;
+
+      // Get MM data from disaggregated report for latest date
+      const latestDisagg = disaggByDate.get(latest.date);
+      const latestMMNet = latestDisagg ? latestDisagg.mmNetAll : latest.nonCommNet; // fallback to nonCommNet if not found
 
       // Calculate weekly changes for std dev calculation
       const weeklyChanges: number[] = [];
@@ -178,11 +220,17 @@ export async function GET(request: NextRequest) {
       // % of max (current position as % of record maximum)
       const pctMax = recordMax > 0 ? (latest.indexNet / recordMax) * 100 : 0;
 
-      // Calculate roll position metrics (MM - Index)
-      const rollValues = records.map(r => r.nonCommNet - r.indexNet);
+      // Calculate roll position metrics (MM - Index) using Disaggregated MM data
+      const rollValues: number[] = [];
+      for (const r of records) {
+        const disagg = disaggByDate.get(r.date);
+        const mmNet = disagg ? disagg.mmNetAll : r.nonCommNet; // fallback to nonCommNet
+        rollValues.push(mmNet - r.indexNet);
+      }
+
       let rollMin = Math.min(...rollValues);
       let rollMax = Math.max(...rollValues);
-      const currentRoll = latest.nonCommNet - latest.indexNet;
+      const currentRoll = latestMMNet - latest.indexNet;
 
       // Calculate Z-score for roll position
       const rollMean = rollValues.reduce((a, b) => a + b, 0) / rollValues.length;
@@ -193,14 +241,18 @@ export async function GET(request: NextRequest) {
       // % of min (current as % of historical minimum - for tracking extremes)
       const pctOfMin = rollMin < 0 ? (currentRoll / rollMin) * 100 : 0;
 
-      // Historical data for charts
-      const historicalData = records.map(r => ({
-        date: r.date,
-        indexNet: r.indexNet,
-        indexPctOI: r.indexPctOI,
-        mmNet: r.nonCommNet,
-        mmMinusIndex: r.nonCommNet - r.indexNet,
-      }));
+      // Historical data for charts - use Disaggregated MM data
+      const historicalData = records.map(r => {
+        const disagg = disaggByDate.get(r.date);
+        const mmNet = disagg ? disagg.mmNetAll : r.nonCommNet; // fallback to nonCommNet
+        return {
+          date: r.date,
+          indexNet: r.indexNet,
+          indexPctOI: r.indexPctOI,
+          mmNet: mmNet,
+          mmMinusIndex: mmNet - r.indexNet,
+        };
+      });
 
       return {
         id: contractId,
@@ -208,7 +260,7 @@ export async function GET(request: NextRequest) {
         latestDate: latest.date,
         indexNet: latest.indexNet,
         indexPctOI: latest.indexPctOI,
-        mmNet: latest.nonCommNet,
+        mmNet: latestMMNet,
         mmMinusIndex: currentRoll,
         change,
         isChangeSignificant,

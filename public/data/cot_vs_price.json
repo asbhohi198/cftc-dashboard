@@ -1,22 +1,22 @@
 {
-  "updated": "2026-08-01T01:58:34.498571",
+  "updated": "2026-10-24T14:44:39.733403",
   "data": [
     {
       "id": "corn",
       "name": "Corn",
       "sector": "ags-grains",
-      "currentMMNet": 168399.0,
-      "currentPrice": 458.5,
-      "latestDate": "2026-07-28",
-      "recordMaxPosition": 401993.0,
+      "currentMMNet": 146257.0,
+      "currentPrice": 462.0,
+      "latestDate": "2026-10-20",
+      "recordMaxPosition": 431062.0,
       "recordMinPosition": -353983.0,
-      "beta": 4.449388374493306e-05,
-      "rSquared": 0.2837078442297993,
-      "correlation": 0.5326423229802522,
-      "priceToMaxLong": 506.15421712157115,
-      "priceToMaxShort": 351.9317437588268,
-      "contractsToMaxLong": 233594.0,
-      "contractsToMaxShort": -522382.0,
+      "beta": 4.525561426139608e-05,
+      "rSquared": 0.29927031115281283,
+      "correlation": 0.5470560402306265,
+      "priceToMaxLong": 521.5472965150922,
+      "priceToMaxShort": 357.409351631082,
+      "contractsToMaxLong": 284805.0,
+      "contractsToMaxShort": -500240.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -4425,6 +4425,102 @@
           "mm_change": 75490.0,
           "price_change": 5.75,
           "price_change_pct": 1.2700165654334628
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": 181946.0,
+          "price": 442.25,
+          "mm_change": 13547.0,
+          "price_change": -16.25,
+          "price_change_pct": -3.5441657579062147
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": 166770.0,
+          "price": 436.75,
+          "mm_change": -15176.0,
+          "price_change": -5.5,
+          "price_change_pct": -1.2436404748445429
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": 250505.0,
+          "price": 463.25,
+          "mm_change": 83735.0,
+          "price_change": 26.5,
+          "price_change_pct": 6.067544361763022
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": 376513.0,
+          "price": 500.5,
+          "mm_change": 126008.0,
+          "price_change": 37.25,
+          "price_change_pct": 8.041014570965999
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": 431062.0,
+          "price": 521.5,
+          "mm_change": 54549.0,
+          "price_change": 21.0,
+          "price_change_pct": 4.195804195804187
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": 425171.0,
+          "price": 533.5,
+          "mm_change": -5891.0,
+          "price_change": 12.0,
+          "price_change_pct": 2.301054650047929
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": 426842.0,
+          "price": 535.75,
+          "mm_change": 1671.0,
+          "price_change": 2.25,
+          "price_change_pct": 0.4217432052483705
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": 414437.0,
+          "price": 536.75,
+          "mm_change": -12405.0,
+          "price_change": 1.0,
+          "price_change_pct": 0.18665422305179646
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": 377850.0,
+          "price": 522.0,
+          "mm_change": -36587.0,
+          "price_change": -14.75,
+          "price_change_pct": -2.7480204937121555
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": 317359.0,
+          "price": 508.0,
+          "mm_change": -60491.0,
+          "price_change": -14.0,
+          "price_change_pct": -2.6819923371647514
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": 230877.0,
+          "price": 482.75,
+          "mm_change": -86482.0,
+          "price_change": -25.25,
+          "price_change_pct": -4.970472440944884
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": 146257.0,
+          "price": 462.0,
+          "mm_change": -84620.0,
+          "price_change": -20.75,
+          "price_change_pct": -4.298291040911439
         }
       ]
     },
@@ -4432,18 +4528,18 @@
       "id": "chicago-wheat",
       "name": "Chicago Wheat",
       "sector": "ags-grains",
-      "currentMMNet": -6880.0,
-      "currentPrice": 662.5,
-      "latestDate": "2026-07-28",
+      "currentMMNet": -51134.0,
+      "currentPrice": 643.25,
+      "latestDate": "2026-10-20",
       "recordMaxPosition": 66948.0,
       "recordMinPosition": -162327.0,
-      "beta": 0.00019243782638315594,
-      "rSquared": 0.3452845713640403,
-      "correlation": 0.5876091995229825,
-      "priceToMaxLong": 756.6233614811786,
-      "priceToMaxShort": 464.32052646469134,
-      "contractsToMaxLong": 73828.0,
-      "contractsToMaxShort": -155447.0,
+      "beta": 0.0001947403460419156,
+      "rSquared": 0.3526466581225757,
+      "correlation": 0.5938405999277716,
+      "priceToMaxLong": 791.1674572745504,
+      "priceToMaxShort": 503.96216758922543,
+      "contractsToMaxLong": 118082.0,
+      "contractsToMaxShort": -111193.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -8852,6 +8948,102 @@
           "mm_change": 12469.0,
           "price_change": -15.5,
           "price_change_pct": -2.286135693215341
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": -23786.0,
+          "price": 638.5,
+          "mm_change": -16906.0,
+          "price_change": -24.0,
+          "price_change_pct": -3.622641509433966
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": -31401.0,
+          "price": 630.25,
+          "mm_change": -7615.0,
+          "price_change": -8.25,
+          "price_change_pct": -1.2920908379013274
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": -26485.0,
+          "price": 664.5,
+          "mm_change": 4916.0,
+          "price_change": 34.25,
+          "price_change_pct": 5.4343514478381705
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": -14171.0,
+          "price": 685.5,
+          "mm_change": 12314.0,
+          "price_change": 21.0,
+          "price_change_pct": 3.160270880361171
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": 14654.0,
+          "price": 764.0,
+          "mm_change": 28825.0,
+          "price_change": 78.5,
+          "price_change_pct": 11.451495258935074
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": 4262.0,
+          "price": 747.0,
+          "mm_change": -10392.0,
+          "price_change": -17.0,
+          "price_change_pct": -2.2251308900523514
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": -4706.0,
+          "price": 728.5,
+          "mm_change": -8968.0,
+          "price_change": -18.5,
+          "price_change_pct": -2.476572958500667
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": -13144.0,
+          "price": 717.25,
+          "mm_change": -8438.0,
+          "price_change": -11.25,
+          "price_change_pct": -1.5442690459849029
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": -21670.0,
+          "price": 692.75,
+          "mm_change": -8526.0,
+          "price_change": -24.5,
+          "price_change_pct": -3.4158243290345114
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": -29543.0,
+          "price": 704.25,
+          "mm_change": -7873.0,
+          "price_change": 11.5,
+          "price_change_pct": 1.6600505232768015
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": -33038.0,
+          "price": 669.25,
+          "mm_change": -3495.0,
+          "price_change": -35.0,
+          "price_change_pct": -4.969826056088033
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": -51134.0,
+          "price": 643.25,
+          "mm_change": -18096.0,
+          "price_change": -26.0,
+          "price_change_pct": -3.884945834889797
         }
       ]
     },
@@ -8859,18 +9051,18 @@
       "id": "kansas-wheat",
       "name": "Kansas Wheat",
       "sector": "ags-grains",
-      "currentMMNet": 33233.0,
-      "currentPrice": 726.25,
-      "latestDate": "2026-07-28",
+      "currentMMNet": 6395.0,
+      "currentPrice": 691.0,
+      "latestDate": "2026-10-20",
       "recordMaxPosition": 73111.0,
       "recordMinPosition": -80799.0,
-      "beta": 0.0003498095467414029,
-      "rSquared": 0.27262126617748916,
-      "correlation": 0.5221314644584151,
-      "priceToMaxLong": 827.5597333247259,
-      "priceToMaxShort": 436.55263527546134,
-      "contractsToMaxLong": 39878.0,
-      "contractsToMaxShort": -114032.0,
+      "beta": 0.0003522443636856576,
+      "rSquared": 0.27744244609436297,
+      "correlation": 0.5267280570601522,
+      "priceToMaxLong": 853.3873146264776,
+      "priceToMaxShort": 478.769058223798,
+      "contractsToMaxLong": 66716.0,
+      "contractsToMaxShort": -87194.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -13279,6 +13471,102 @@
           "mm_change": 3289.0,
           "price_change": -6.75,
           "price_change_pct": -0.9208731241473367
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": 33094.0,
+          "price": 707.0,
+          "mm_change": -139.0,
+          "price_change": -19.25,
+          "price_change_pct": -2.6506024096385583
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": 27662.0,
+          "price": 699.25,
+          "mm_change": -5432.0,
+          "price_change": -7.75,
+          "price_change_pct": -1.0961810466760924
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": 34835.0,
+          "price": 743.75,
+          "mm_change": 7173.0,
+          "price_change": 44.5,
+          "price_change_pct": 6.363961387200567
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": 44062.0,
+          "price": 754.5,
+          "mm_change": 9227.0,
+          "price_change": 10.75,
+          "price_change_pct": 1.4453781512605124
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": 50284.0,
+          "price": 825.75,
+          "mm_change": 6222.0,
+          "price_change": 71.25,
+          "price_change_pct": 9.44333996023856
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": 51248.0,
+          "price": 819.0,
+          "mm_change": 964.0,
+          "price_change": -6.75,
+          "price_change_pct": -0.8174386920980936
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": 45758.0,
+          "price": 796.25,
+          "mm_change": -5490.0,
+          "price_change": -22.75,
+          "price_change_pct": -2.777777777777779
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": 41743.0,
+          "price": 781.25,
+          "mm_change": -4015.0,
+          "price_change": -15.0,
+          "price_change_pct": -1.883830455259028
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": 30710.0,
+          "price": 743.0,
+          "mm_change": -11033.0,
+          "price_change": -38.25,
+          "price_change_pct": -4.896000000000001
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": 24040.0,
+          "price": 756.25,
+          "mm_change": -6670.0,
+          "price_change": 13.25,
+          "price_change_pct": 1.7833109017496573
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": 17391.0,
+          "price": 712.25,
+          "mm_change": -6649.0,
+          "price_change": -44.0,
+          "price_change_pct": -5.818181818181822
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": 6395.0,
+          "price": 691.0,
+          "mm_change": -10996.0,
+          "price_change": -21.25,
+          "price_change_pct": -2.9835029835029836
         }
       ]
     },
@@ -13286,18 +13574,18 @@
       "id": "soybeans",
       "name": "Soybeans",
       "sector": "ags-grains",
-      "currentMMNet": 155001.0,
-      "currentPrice": 1212.0,
-      "latestDate": "2026-07-28",
-      "recordMaxPosition": 238394.0,
+      "currentMMNet": 206936.0,
+      "currentPrice": 1248.25,
+      "latestDate": "2026-10-20",
+      "recordMaxPosition": 266031.0,
       "recordMinPosition": -185750.0,
-      "beta": 7.414984906997123e-05,
-      "rSquared": 0.4210848291218415,
-      "correlation": 0.6489104939218054,
-      "priceToMaxLong": 1286.9449697655243,
-      "priceToMaxShort": 905.7683811282458,
-      "contractsToMaxLong": 83393.0,
-      "contractsToMaxShort": -340751.0,
+      "beta": 7.442079708130146e-05,
+      "rSquared": 0.42887609138424854,
+      "correlation": 0.654886319435861,
+      "priceToMaxLong": 1303.1467493464322,
+      "priceToMaxShort": 883.4613560562974,
+      "contractsToMaxLong": 59095.0,
+      "contractsToMaxShort": -392686.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -17706,6 +17994,102 @@
           "mm_change": 30101.0,
           "price_change": -7.5,
           "price_change_pct": -0.6150061500615034
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": 125466.0,
+          "price": 1155.0,
+          "mm_change": -29535.0,
+          "price_change": -57.0,
+          "price_change_pct": -4.702970297029707
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": 101362.0,
+          "price": 1151.5,
+          "mm_change": -24104.0,
+          "price_change": -3.5,
+          "price_change_pct": -0.303030303030305
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": 151662.0,
+          "price": 1200.75,
+          "mm_change": 50300.0,
+          "price_change": 49.25,
+          "price_change_pct": 4.277029960920542
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": 198254.0,
+          "price": 1228.0,
+          "mm_change": 46592.0,
+          "price_change": 27.25,
+          "price_change_pct": 2.2694149489902227
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": 241183.0,
+          "price": 1306.75,
+          "mm_change": 42929.0,
+          "price_change": 78.75,
+          "price_change_pct": 6.412866449511401
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": 266031.0,
+          "price": 1316.25,
+          "mm_change": 24848.0,
+          "price_change": 9.5,
+          "price_change_pct": 0.726994451884444
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": 244710.0,
+          "price": 1318.75,
+          "mm_change": -21321.0,
+          "price_change": 2.5,
+          "price_change_pct": 0.18993352326686086
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": 265041.0,
+          "price": 1325.5,
+          "mm_change": 20331.0,
+          "price_change": 6.75,
+          "price_change_pct": 0.511848341232235
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": 241164.0,
+          "price": 1297.75,
+          "mm_change": -23877.0,
+          "price_change": -27.75,
+          "price_change_pct": -2.0935496039230506
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": 251660.0,
+          "price": 1303.0,
+          "mm_change": 10496.0,
+          "price_change": 5.25,
+          "price_change_pct": 0.40454633018687236
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": 237491.0,
+          "price": 1283.75,
+          "mm_change": -14169.0,
+          "price_change": -19.25,
+          "price_change_pct": -1.4773599386032288
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": 206936.0,
+          "price": 1248.25,
+          "mm_change": -30555.0,
+          "price_change": -35.5,
+          "price_change_pct": -2.765335929892887
         }
       ]
     },
@@ -17713,18 +18097,18 @@
       "id": "soymeal",
       "name": "Soybean Meal",
       "sector": "ags-grains",
-      "currentMMNet": 88655.0,
-      "currentPrice": 320.29998779296875,
-      "latestDate": "2026-07-28",
-      "recordMaxPosition": 155063.0,
+      "currentMMNet": 204693.0,
+      "currentPrice": 348.70001220703125,
+      "latestDate": "2026-10-20",
+      "recordMaxPosition": 207416.0,
       "recordMinPosition": -133592.0,
-      "beta": 0.00014953641141466064,
-      "rSquared": 0.4025380910376132,
-      "correlation": 0.6344588962553943,
-      "priceToMaxLong": 352.107102652307,
-      "priceToMaxShort": 213.85142954481572,
-      "contractsToMaxLong": 66408.0,
-      "contractsToMaxShort": -222247.0,
+      "beta": 0.0001482298491734526,
+      "rSquared": 0.40576274160730913,
+      "correlation": 0.6369950875849115,
+      "priceToMaxLong": 350.1074696454192,
+      "priceToMaxShort": 173.8481063880599,
+      "contractsToMaxLong": 2723.0,
+      "contractsToMaxShort": -338285.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -22133,6 +22517,102 @@
           "mm_change": 13503.0,
           "price_change": -6.4000244140625,
           "price_change_pct": -1.958991176898628
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": 77451.0,
+          "price": 310.6000061035156,
+          "mm_change": -11204.0,
+          "price_change": -9.699981689453125,
+          "price_change_pct": -3.0284052635440206
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": 71576.0,
+          "price": 305.0,
+          "mm_change": -5875.0,
+          "price_change": -5.600006103515625,
+          "price_change_pct": -1.8029639386578977
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": 83024.0,
+          "price": 313.0,
+          "mm_change": 11448.0,
+          "price_change": 8.0,
+          "price_change_pct": 2.6229508196721207
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": 97036.0,
+          "price": 320.29998779296875,
+          "mm_change": 14012.0,
+          "price_change": 7.29998779296875,
+          "price_change_pct": 2.3322644705970452
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": 158741.0,
+          "price": 342.0,
+          "mm_change": 61705.0,
+          "price_change": 21.70001220703125,
+          "price_change_pct": 6.7749026019499725
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": 159558.0,
+          "price": 343.29998779296875,
+          "mm_change": 817.0,
+          "price_change": 1.29998779296875,
+          "price_change_pct": 0.380113389756942
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": 185546.0,
+          "price": 360.1000061035156,
+          "mm_change": 25988.0,
+          "price_change": 16.800018310546875,
+          "price_change_pct": 4.893684505656992
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": 192368.0,
+          "price": 368.8999938964844,
+          "mm_change": 6822.0,
+          "price_change": 8.79998779296875,
+          "price_change_pct": 2.443762189339993
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": 207416.0,
+          "price": 360.1000061035156,
+          "mm_change": 15048.0,
+          "price_change": -8.79998779296875,
+          "price_change_pct": -2.3854670475917827
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": 206804.0,
+          "price": 354.79998779296875,
+          "mm_change": -612.0,
+          "price_change": -5.300018310546875,
+          "price_change_pct": -1.4718184450747573
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": 206131.0,
+          "price": 363.20001220703125,
+          "mm_change": -673.0,
+          "price_change": 8.4000244140625,
+          "price_change_pct": 2.3675379659156226
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": 204693.0,
+          "price": 348.70001220703125,
+          "mm_change": -1438.0,
+          "price_change": -14.5,
+          "price_change_pct": -3.9922906147191184
         }
       ]
     },
@@ -22140,18 +22620,18 @@
       "id": "soyoil",
       "name": "Soybean Oil",
       "sector": "ags-grains",
-      "currentMMNet": 109855.0,
-      "currentPrice": 70.76000213623047,
-      "latestDate": "2026-07-28",
+      "currentMMNet": 69858.0,
+      "currentPrice": 66.7300033569336,
+      "latestDate": "2026-10-20",
       "recordMaxPosition": 169142.0,
       "recordMinPosition": -109950.0,
-      "beta": 0.00017682311432285042,
-      "rSquared": 0.3851316310287482,
-      "correlation": 0.6205897445404236,
-      "priceToMaxLong": 78.17799391641869,
-      "priceToMaxShort": 43.257991860043944,
-      "contractsToMaxLong": 59287.0,
-      "contractsToMaxShort": -219805.0,
+      "beta": 0.00017687549540093675,
+      "rSquared": 0.38997614643395656,
+      "correlation": 0.6244807014103451,
+      "priceToMaxLong": 78.44839697760005,
+      "priceToMaxShort": 45.50744060619033,
+      "contractsToMaxLong": 99284.0,
+      "contractsToMaxShort": -179808.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -26560,6 +27040,102 @@
           "mm_change": -15493.0,
           "price_change": -3.5400009155273438,
           "price_change_pct": -4.76446940797749
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": 80681.0,
+          "price": 68.18000030517578,
+          "mm_change": -29174.0,
+          "price_change": -2.5800018310546875,
+          "price_change_pct": -3.6461302334156898
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": 80922.0,
+          "price": 68.56999969482422,
+          "mm_change": 241.0,
+          "price_change": 0.3899993896484375,
+          "price_change_pct": 0.5720143559735824
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": 98237.0,
+          "price": 69.69000244140625,
+          "mm_change": 17315.0,
+          "price_change": 1.1200027465820312,
+          "price_change_pct": 1.6333713746050638
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": 88442.0,
+          "price": 67.5199966430664,
+          "mm_change": -9795.0,
+          "price_change": -2.1700057983398438,
+          "price_change_pct": -3.113797850939004
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": 109912.0,
+          "price": 72.37000274658203,
+          "mm_change": 21470.0,
+          "price_change": 4.850006103515625,
+          "price_change_pct": 7.183066268729843
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": 101768.0,
+          "price": 70.22000122070312,
+          "mm_change": -8144.0,
+          "price_change": -2.1500015258789062,
+          "price_change_pct": -2.970846268180427
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": 110894.0,
+          "price": 69.87999725341797,
+          "mm_change": 9126.0,
+          "price_change": -0.34000396728515625,
+          "price_change_pct": -0.48419817911496965
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": 96622.0,
+          "price": 67.37000274658203,
+          "mm_change": -14272.0,
+          "price_change": -2.5099945068359375,
+          "price_change_pct": -3.5918640605172136
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": 87875.0,
+          "price": 67.8499984741211,
+          "mm_change": -8747.0,
+          "price_change": 0.4799957275390625,
+          "price_change_pct": 0.7124769303403555
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": 99447.0,
+          "price": 69.91000366210938,
+          "mm_change": 11572.0,
+          "price_change": 2.0600051879882812,
+          "price_change_pct": 3.0361167786525423
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": 89328.0,
+          "price": 68.0199966430664,
+          "mm_change": -10119.0,
+          "price_change": -1.8900070190429688,
+          "price_change_pct": -2.703485796078331
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": 69858.0,
+          "price": 66.7300033569336,
+          "mm_change": -19470.0,
+          "price_change": -1.2899932861328125,
+          "price_change_pct": -1.8964912522739796
         }
       ]
     },
@@ -26567,18 +27143,18 @@
       "id": "sugar",
       "name": "Sugar #11",
       "sector": "ags-softs",
-      "currentMMNet": -112413.0,
-      "currentPrice": 14.550000190734863,
-      "latestDate": "2026-07-28",
+      "currentMMNet": 269008.0,
+      "currentPrice": 20.520000457763672,
+      "latestDate": "2026-10-20",
       "recordMaxPosition": 286248.0,
       "recordMinPosition": -248296.0,
-      "beta": 9.48283382530087e-05,
-      "rSquared": 0.3494006570737028,
-      "correlation": 0.5911012240502491,
-      "priceToMaxLong": 20.05053466558009,
-      "priceToMaxShort": 12.675151319023325,
-      "contractsToMaxLong": 398661.0,
-      "contractsToMaxShort": -135883.0,
+      "beta": 9.343627535449129e-05,
+      "rSquared": 0.3530225210791119,
+      "correlation": 0.5941569835313828,
+      "priceToMaxLong": 20.850545117772782,
+      "priceToMaxShort": 10.601666652580743,
+      "contractsToMaxLong": 17240.0,
+      "contractsToMaxShort": -517304.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -30987,6 +31563,102 @@
           "mm_change": -15817.0,
           "price_change": -0.3299999237060547,
           "price_change_pct": -2.2177414056992695
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": -77814.0,
+          "price": 15.039999961853027,
+          "mm_change": 34599.0,
+          "price_change": 0.48999977111816406,
+          "price_change_pct": 3.3676959772838133
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": 58990.0,
+          "price": 16.729999542236328,
+          "mm_change": 136804.0,
+          "price_change": 1.6899995803833008,
+          "price_change_pct": 11.236699366155323
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": 151349.0,
+          "price": 17.469999313354492,
+          "mm_change": 92359.0,
+          "price_change": 0.7399997711181641,
+          "price_change_pct": 4.423190623825013
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": 207082.0,
+          "price": 17.270000457763672,
+          "mm_change": 55733.0,
+          "price_change": -0.1999988555908203,
+          "price_change_pct": -1.1448131851839127
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": 243467.0,
+          "price": 18.360000610351562,
+          "mm_change": 36385.0,
+          "price_change": 1.0900001525878906,
+          "price_change_pct": 6.311523588280421
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": 247051.0,
+          "price": 18.100000381469727,
+          "mm_change": 3584.0,
+          "price_change": -0.26000022888183594,
+          "price_change_pct": -1.416123203913433
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": 236288.0,
+          "price": 17.940000534057617,
+          "mm_change": -10763.0,
+          "price_change": -0.15999984741210938,
+          "price_change_pct": -0.8839770388950563
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": 224006.0,
+          "price": 17.59000015258789,
+          "mm_change": -12282.0,
+          "price_change": -0.35000038146972656,
+          "price_change_pct": -1.9509496714076424
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": 227821.0,
+          "price": 17.81999969482422,
+          "mm_change": 3815.0,
+          "price_change": 0.22999954223632812,
+          "price_change_pct": 1.3075585005182022
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": 257364.0,
+          "price": 20.81999969482422,
+          "mm_change": 29543.0,
+          "price_change": 3.0,
+          "price_change_pct": 16.835017123324334
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": 261841.0,
+          "price": 21.110000610351562,
+          "mm_change": 4477.0,
+          "price_change": 0.29000091552734375,
+          "price_change_pct": 1.3928958682907
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": 269008.0,
+          "price": 20.520000457763672,
+          "mm_change": 7167.0,
+          "price_change": -0.5900001525878906,
+          "price_change_pct": -2.794884583274604
         }
       ]
     },
@@ -30994,18 +31666,18 @@
       "id": "cotton",
       "name": "Cotton",
       "sector": "ags-softs",
-      "currentMMNet": 52410.0,
-      "currentPrice": 79.20999908447266,
-      "latestDate": "2026-07-28",
+      "currentMMNet": 66466.0,
+      "currentPrice": 80.87999725341797,
+      "latestDate": "2026-10-20",
       "recordMaxPosition": 108778.0,
       "recordMinPosition": -81343.0,
-      "beta": 0.00026694973721104616,
-      "rSquared": 0.2919177896308526,
-      "correlation": 0.5402941695325358,
-      "priceToMaxLong": 91.129062536381,
-      "priceToMaxShort": 50.92780894320285,
-      "contractsToMaxLong": 56368.0,
-      "contractsToMaxShort": -133753.0,
+      "beta": 0.00026353656501210707,
+      "rSquared": 0.28738354299245555,
+      "correlation": 0.5360816570192041,
+      "priceToMaxLong": 89.89873093860841,
+      "priceToMaxShort": 49.37475034298324,
+      "contractsToMaxLong": 42312.0,
+      "contractsToMaxShort": -147809.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -35414,6 +36086,102 @@
           "mm_change": -799.0,
           "price_change": 0.25,
           "price_change_pct": 0.3166160117764827
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": 62279.0,
+          "price": 81.12999725341797,
+          "mm_change": 9869.0,
+          "price_change": 1.9199981689453125,
+          "price_change_pct": 2.423934088040758
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": 72870.0,
+          "price": 83.08999633789062,
+          "mm_change": 10591.0,
+          "price_change": 1.9599990844726562,
+          "price_change_pct": 2.4158747082788645
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": 78668.0,
+          "price": 84.12000274658203,
+          "mm_change": 5798.0,
+          "price_change": 1.0300064086914062,
+          "price_change_pct": 1.2396274570801724
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": 95841.0,
+          "price": 87.08000183105469,
+          "mm_change": 17173.0,
+          "price_change": 2.9599990844726562,
+          "price_change_pct": 3.518781488143641
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": 107976.0,
+          "price": 90.01000213623047,
+          "mm_change": 12135.0,
+          "price_change": 2.9300003051757812,
+          "price_change_pct": 3.36472237432921
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": 100170.0,
+          "price": 82.63999938964844,
+          "mm_change": -7806.0,
+          "price_change": -7.370002746582031,
+          "price_change_pct": -8.18798197052313
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": 97903.0,
+          "price": 81.0999984741211,
+          "mm_change": -2267.0,
+          "price_change": -1.5400009155273438,
+          "price_change_pct": -1.863505477857308
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": 81610.0,
+          "price": 79.69000244140625,
+          "mm_change": -16293.0,
+          "price_change": -1.4099960327148438,
+          "price_change_pct": -1.7385894688577208
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": 74593.0,
+          "price": 75.12999725341797,
+          "mm_change": -7017.0,
+          "price_change": -4.560005187988281,
+          "price_change_pct": -5.722179756916335
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": 63837.0,
+          "price": 81.20999908447266,
+          "mm_change": -10756.0,
+          "price_change": 6.0800018310546875,
+          "price_change_pct": 8.092642158027076
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": 65699.0,
+          "price": 80.51000213623047,
+          "mm_change": 1862.0,
+          "price_change": -0.6999969482421875,
+          "price_change_pct": -0.8619590643192399
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": 66466.0,
+          "price": 80.87999725341797,
+          "mm_change": 767.0,
+          "price_change": 0.3699951171875,
+          "price_change_pct": 0.4595641626756297
         }
       ]
     },
@@ -35421,18 +36189,18 @@
       "id": "arabica-coffee",
       "name": "Coffee C",
       "sector": "ags-softs",
-      "currentMMNet": 25136.0,
-      "currentPrice": 339.3999938964844,
-      "latestDate": "2026-07-28",
+      "currentMMNet": 16347.0,
+      "currentPrice": 311.29998779296875,
+      "latestDate": "2026-10-20",
       "recordMaxPosition": 71811.0,
       "recordMinPosition": -109159.0,
-      "beta": 0.00041914212991819866,
-      "rSquared": 0.3487085466506235,
-      "correlation": 0.5905154923036512,
-      "priceToMaxLong": 405.79837225631053,
-      "priceToMaxShort": 148.35617553905843,
-      "contractsToMaxLong": 46675.0,
-      "contractsToMaxShort": -134295.0,
+      "beta": 0.00042558520275584697,
+      "rSquared": 0.34709498732478705,
+      "correlation": 0.5891476787061009,
+      "priceToMaxLong": 384.78128428697016,
+      "priceToMaxShort": 145.02377984229543,
+      "contractsToMaxLong": 55464.0,
+      "contractsToMaxShort": -125506.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -39841,6 +40609,102 @@
           "mm_change": 270.0,
           "price_change": 17.29998779296875,
           "price_change_pct": 5.370998902561008
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": 23550.0,
+          "price": 324.1000061035156,
+          "mm_change": -1586.0,
+          "price_change": -15.29998779296875,
+          "price_change_pct": -4.5079516995027324
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": 24170.0,
+          "price": 335.75,
+          "mm_change": 620.0,
+          "price_change": 11.649993896484375,
+          "price_change_pct": 3.594567626377465
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": 26739.0,
+          "price": 363.3999938964844,
+          "mm_change": 2569.0,
+          "price_change": 27.649993896484375,
+          "price_change_pct": 8.235292299771956
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": 26693.0,
+          "price": 371.3999938964844,
+          "mm_change": -46.0,
+          "price_change": 8.0,
+          "price_change_pct": 2.201430967078899
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": 22350.0,
+          "price": 342.25,
+          "mm_change": -4343.0,
+          "price_change": -29.149993896484375,
+          "price_change_pct": -7.848679153346727
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": 18080.0,
+          "price": 291.29998779296875,
+          "mm_change": -4270.0,
+          "price_change": -50.95001220703125,
+          "price_change_pct": -14.886782237262597
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": 15654.0,
+          "price": 283.6499938964844,
+          "mm_change": -2426.0,
+          "price_change": -7.649993896484375,
+          "price_change_pct": -2.6261566141641324
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": 11098.0,
+          "price": 272.29998779296875,
+          "mm_change": -4556.0,
+          "price_change": -11.350006103515625,
+          "price_change_pct": -4.001412426491258
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": 11512.0,
+          "price": 289.45001220703125,
+          "mm_change": 414.0,
+          "price_change": 17.1500244140625,
+          "price_change_pct": 6.298209762352891
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": 13929.0,
+          "price": 304.45001220703125,
+          "mm_change": 2417.0,
+          "price_change": 15.0,
+          "price_change_pct": 5.18224196489967
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": 10267.0,
+          "price": 292.70001220703125,
+          "mm_change": -3662.0,
+          "price_change": -11.75,
+          "price_change_pct": -3.8594184690029842
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": 16347.0,
+          "price": 311.29998779296875,
+          "mm_change": 6080.0,
+          "price_change": 18.5999755859375,
+          "price_change_pct": 6.354620707286296
         }
       ]
     },
@@ -39848,18 +40712,18 @@
       "id": "ny-cocoa",
       "name": "Cocoa",
       "sector": "ags-softs",
-      "currentMMNet": -14127.0,
-      "currentPrice": 5201.0,
-      "latestDate": "2026-07-28",
+      "currentMMNet": -10854.0,
+      "currentPrice": 5801.0,
+      "latestDate": "2026-10-20",
       "recordMaxPosition": 79541.0,
       "recordMinPosition": -52334.0,
-      "beta": 0.00025989407582859394,
-      "rSquared": 0.14748195085897992,
-      "correlation": 0.3840337886944063,
-      "priceToMaxLong": 6467.118868908009,
-      "priceToMaxShort": 4684.5525086009275,
-      "contractsToMaxLong": 93668.0,
-      "contractsToMaxShort": -38207.0,
+      "beta": 0.0002661486800822551,
+      "rSquared": 0.14877884859720067,
+      "correlation": 0.3857186132366452,
+      "priceToMaxLong": 7196.6341613894165,
+      "priceToMaxShort": 5160.578461038409,
+      "contractsToMaxLong": 90395.0,
+      "contractsToMaxShort": -41480.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -44268,6 +45132,102 @@
           "mm_change": -2523.0,
           "price_change": -406.0,
           "price_change_pct": -7.240948813982517
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": -11914.0,
+          "price": 5924.0,
+          "mm_change": 2213.0,
+          "price_change": 723.0,
+          "price_change_pct": 13.901172851374731
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": -14011.0,
+          "price": 5543.0,
+          "mm_change": -2097.0,
+          "price_change": -381.0,
+          "price_change_pct": -6.431465226198519
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": -13613.0,
+          "price": 5905.0,
+          "mm_change": 398.0,
+          "price_change": 362.0,
+          "price_change_pct": 6.530759516507301
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": -14627.0,
+          "price": 5759.0,
+          "mm_change": -1014.0,
+          "price_change": -146.0,
+          "price_change_pct": -2.472480948348854
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": -8925.0,
+          "price": 6552.0,
+          "mm_change": 5702.0,
+          "price_change": 793.0,
+          "price_change_pct": 13.769751693002252
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": -11536.0,
+          "price": 5913.0,
+          "mm_change": -2611.0,
+          "price_change": -639.0,
+          "price_change_pct": -9.752747252747252
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": -12445.0,
+          "price": 5923.0,
+          "mm_change": -909.0,
+          "price_change": 10.0,
+          "price_change_pct": 0.1691188905800889
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": -19422.0,
+          "price": 5402.0,
+          "mm_change": -6977.0,
+          "price_change": -521.0,
+          "price_change_pct": -8.796218132703027
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": -19318.0,
+          "price": 5408.0,
+          "mm_change": 104.0,
+          "price_change": 6.0,
+          "price_change_pct": 0.11106997408367736
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": -14494.0,
+          "price": 5700.0,
+          "mm_change": 4824.0,
+          "price_change": 292.0,
+          "price_change_pct": 5.399408284023677
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": -14377.0,
+          "price": 5733.0,
+          "mm_change": 117.0,
+          "price_change": 33.0,
+          "price_change_pct": 0.5789473684210567
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": -10854.0,
+          "price": 5801.0,
+          "mm_change": 3523.0,
+          "price_change": 68.0,
+          "price_change_pct": 1.1861154718297628
         }
       ]
     },
@@ -44275,18 +45235,18 @@
       "id": "live-cattle",
       "name": "Live Cattle",
       "sector": "ags-livestock",
-      "currentMMNet": 66523.0,
-      "currentPrice": 227.47500610351562,
-      "latestDate": "2026-07-28",
+      "currentMMNet": 51143.0,
+      "currentPrice": 230.1750030517578,
+      "latestDate": "2026-10-20",
       "recordMaxPosition": 156909.0,
       "recordMinPosition": -6885.0,
-      "beta": 0.00013740988979146453,
-      "rSquared": 0.19097131851712248,
-      "correlation": 0.43700265275753475,
-      "priceToMaxLong": 255.72724330851605,
-      "priceToMaxShort": 204.52963592733045,
-      "contractsToMaxLong": 90386.0,
-      "contractsToMaxShort": -73408.0,
+      "beta": 0.00013724178100263325,
+      "rSquared": 0.1883453958799612,
+      "correlation": 0.43398778309989466,
+      "priceToMaxLong": 263.5860883265092,
+      "priceToMaxShort": 211.84417408665303,
+      "contractsToMaxLong": 105766.0,
+      "contractsToMaxShort": -58028.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -48695,6 +49655,102 @@
           "mm_change": -8840.0,
           "price_change": 0.8000030517578125,
           "price_change_pct": 0.35292954273178356
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": 66067.0,
+          "price": 231.9499969482422,
+          "mm_change": -456.0,
+          "price_change": 4.4749908447265625,
+          "price_change_pct": 1.967245070735446
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": 64662.0,
+          "price": 226.3249969482422,
+          "mm_change": -1405.0,
+          "price_change": -5.625,
+          "price_change_pct": -2.4250916464789496
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": 61514.0,
+          "price": 218.9250030517578,
+          "mm_change": -3148.0,
+          "price_change": -7.399993896484375,
+          "price_change_pct": -3.269631722640276
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": 57441.0,
+          "price": 210.9499969482422,
+          "mm_change": -4073.0,
+          "price_change": -7.975006103515625,
+          "price_change_pct": -3.642802782846233
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": 47914.0,
+          "price": 212.0749969482422,
+          "mm_change": -9527.0,
+          "price_change": 1.125,
+          "price_change_pct": 0.5333017379829608
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": 47250.0,
+          "price": 217.02499389648438,
+          "mm_change": -664.0,
+          "price_change": 4.9499969482421875,
+          "price_change_pct": 2.3340785191430458
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": 45262.0,
+          "price": 220.6999969482422,
+          "mm_change": -1988.0,
+          "price_change": 3.6750030517578125,
+          "price_change_pct": 1.6933547541121863
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": 46983.0,
+          "price": 218.77499389648438,
+          "mm_change": 1721.0,
+          "price_change": -1.9250030517578125,
+          "price_change_pct": -0.8722261342891002
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": 51304.0,
+          "price": 217.22500610351562,
+          "mm_change": 4321.0,
+          "price_change": -1.54998779296875,
+          "price_change_pct": -0.7084848982796155
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": 50920.0,
+          "price": 224.10000610351562,
+          "mm_change": -384.0,
+          "price_change": 6.875,
+          "price_change_pct": 3.1649210757640933
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": 48748.0,
+          "price": 226.375,
+          "mm_change": -2172.0,
+          "price_change": 2.274993896484375,
+          "price_change_pct": 1.0151690470876273
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": 51143.0,
+          "price": 230.1750030517578,
+          "mm_change": 2395.0,
+          "price_change": 3.8000030517578125,
+          "price_change_pct": 1.678631938932229
         }
       ]
     },
@@ -48702,18 +49758,18 @@
       "id": "feeder-cattle",
       "name": "Feeder Cattle",
       "sector": "ags-livestock",
-      "currentMMNet": 7423.0,
-      "currentPrice": 343.07501220703125,
-      "latestDate": "2026-07-28",
+      "currentMMNet": 10444.0,
+      "currentPrice": 346.29998779296875,
+      "latestDate": "2026-10-20",
       "recordMaxPosition": 37806.0,
       "recordMinPosition": -9796.0,
-      "beta": 0.000625490935662285,
-      "rSquared": 0.1696732887286241,
-      "correlation": 0.41191417641132977,
-      "priceToMaxLong": 408.273986212134,
-      "priceToMaxShort": 306.12470666136875,
-      "contractsToMaxLong": 30383.0,
-      "contractsToMaxShort": -17219.0,
+      "beta": 0.0006302637628787063,
+      "rSquared": 0.1712890090808596,
+      "correlation": 0.4138707637425717,
+      "priceToMaxLong": 406.0203802154816,
+      "priceToMaxShort": 302.12409631458047,
+      "contractsToMaxLong": 27362.0,
+      "contractsToMaxShort": -20240.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -53122,6 +54178,102 @@
           "mm_change": -482.0,
           "price_change": -6.4749755859375,
           "price_change_pct": -1.8523747137912938
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": 8605.0,
+          "price": 351.20001220703125,
+          "mm_change": 1182.0,
+          "price_change": 8.125,
+          "price_change_pct": 2.368286733484659
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": 8738.0,
+          "price": 345.25,
+          "mm_change": 133.0,
+          "price_change": -5.95001220703125,
+          "price_change_pct": -1.6941947608827945
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": 7498.0,
+          "price": 333.3500061035156,
+          "mm_change": -1240.0,
+          "price_change": -11.899993896484375,
+          "price_change_pct": -3.446775929466872
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": 5714.0,
+          "price": 319.2749938964844,
+          "mm_change": -1784.0,
+          "price_change": -14.07501220703125,
+          "price_change_pct": -4.222292470173383
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": 7508.0,
+          "price": 320.3500061035156,
+          "mm_change": 1794.0,
+          "price_change": 1.07501220703125,
+          "price_change_pct": 0.3367041664966042
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": 6781.0,
+          "price": 325.45001220703125,
+          "mm_change": -727.0,
+          "price_change": 5.100006103515625,
+          "price_change_pct": 1.5920106153728852
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": 6701.0,
+          "price": 333.8500061035156,
+          "mm_change": -80.0,
+          "price_change": 8.399993896484375,
+          "price_change_pct": 2.5810396624415644
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": 6909.0,
+          "price": 328.0249938964844,
+          "mm_change": 208.0,
+          "price_change": -5.82501220703125,
+          "price_change_pct": -1.744799191414459
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": 7638.0,
+          "price": 333.6499938964844,
+          "mm_change": 729.0,
+          "price_change": 5.625,
+          "price_change_pct": 1.7148083544435977
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": 8787.0,
+          "price": 338.2749938964844,
+          "mm_change": 1149.0,
+          "price_change": 4.625,
+          "price_change_pct": 1.386183151387943
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": 8852.0,
+          "price": 341.0249938964844,
+          "mm_change": 65.0,
+          "price_change": 2.75,
+          "price_change_pct": 0.8129480598975336
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": 10444.0,
+          "price": 346.29998779296875,
+          "mm_change": 1592.0,
+          "price_change": 5.274993896484375,
+          "price_change_pct": 1.5468056567389254
         }
       ]
     },
@@ -53129,18 +54281,18 @@
       "id": "lean-hogs",
       "name": "Lean Hogs",
       "sector": "ags-livestock",
-      "currentMMNet": -10884.0,
-      "currentPrice": 103.0999984741211,
-      "latestDate": "2026-07-28",
+      "currentMMNet": -41133.0,
+      "currentPrice": 67.1500015258789,
+      "latestDate": "2026-10-20",
       "recordMaxPosition": 146288.0,
-      "recordMinPosition": -31110.0,
-      "beta": 0.0002538285688706654,
-      "rSquared": 0.1097600521430247,
-      "correlation": 0.331300546548032,
-      "priceToMaxLong": 144.23147875053857,
-      "priceToMaxShort": 97.80690988282736,
-      "contractsToMaxLong": 157172.0,
-      "contractsToMaxShort": -20226.0,
+      "recordMinPosition": -44186.0,
+      "beta": 0.0002529427201571844,
+      "rSquared": 0.10791665757246797,
+      "correlation": 0.3285067085653929,
+      "priceToMaxLong": 98.98365337714917,
+      "priceToMaxShort": 66.63144629939987,
+      "contractsToMaxLong": 187421.0,
+      "contractsToMaxShort": -3053.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -57549,6 +58701,102 @@
           "mm_change": 7273.0,
           "price_change": 1.5999984741210938,
           "price_change_pct": 1.5763531764739769
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": -9642.0,
+          "price": 97.8499984741211,
+          "mm_change": 1242.0,
+          "price_change": -5.25,
+          "price_change_pct": -5.09214362531517
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": -15121.0,
+          "price": 83.32499694824219,
+          "mm_change": -5479.0,
+          "price_change": -14.525001525878906,
+          "price_change_pct": -14.84415099885813
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": -23486.0,
+          "price": 80.7249984741211,
+          "mm_change": -8365.0,
+          "price_change": -2.5999984741210938,
+          "price_change_pct": -3.120310314245911
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": -31135.0,
+          "price": 80.44999694824219,
+          "mm_change": -7649.0,
+          "price_change": -0.27500152587890625,
+          "price_change_pct": -0.34066464054138823
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": -28323.0,
+          "price": 83.6500015258789,
+          "mm_change": 2812.0,
+          "price_change": 3.2000045776367188,
+          "price_change_pct": 3.9776316954933666
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": -23556.0,
+          "price": 84.25,
+          "mm_change": 4767.0,
+          "price_change": 0.5999984741210938,
+          "price_change_pct": 0.7172725202347685
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": -31401.0,
+          "price": 79.07499694824219,
+          "mm_change": -7845.0,
+          "price_change": -5.1750030517578125,
+          "price_change_pct": -6.142436856685829
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": -35548.0,
+          "price": 79.2750015258789,
+          "mm_change": -4147.0,
+          "price_change": 0.20000457763671875,
+          "price_change_pct": 0.2529302375662734
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": -44186.0,
+          "price": 79.375,
+          "mm_change": -8638.0,
+          "price_change": 0.09999847412109375,
+          "price_change_pct": 0.1261412452807642
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": -35272.0,
+          "price": 70.375,
+          "mm_change": 8914.0,
+          "price_change": -9.0,
+          "price_change_pct": -11.338582677165354
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": -42088.0,
+          "price": 68.0250015258789,
+          "mm_change": -6816.0,
+          "price_change": -2.3499984741210938,
+          "price_change_pct": -3.3392518282360117
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": -41133.0,
+          "price": 67.1500015258789,
+          "mm_change": 955.0,
+          "price_change": -0.875,
+          "price_change_pct": -1.2862917756306436
         }
       ]
     },
@@ -57556,18 +58804,18 @@
       "id": "wti-crude",
       "name": "WTI Crude Oil",
       "sector": "energy",
-      "currentMMNet": 86905.0,
-      "currentPrice": 84.91000366210938,
-      "latestDate": "2026-07-21",
+      "currentMMNet": 17666.0,
+      "currentPrice": 56.65999984741211,
+      "latestDate": "2025-12-23",
       "recordMaxPosition": 496111.0,
       "recordMinPosition": -29995.0,
-      "beta": 0.00012221276499682697,
-      "rSquared": 0.16006751848308182,
-      "correlation": 0.4000843892019305,
-      "priceToMaxLong": 127.37366352279336,
-      "priceToMaxShort": 72.77918975001141,
-      "contractsToMaxLong": 409206.0,
-      "contractsToMaxShort": -116900.0,
+      "beta": 0.00012095141841487275,
+      "rSquared": 0.16824350841646926,
+      "correlation": 0.41017497292798016,
+      "priceToMaxLong": 89.44834930300487,
+      "priceToMaxShort": 53.393740353838126,
+      "contractsToMaxLong": 478445.0,
+      "contractsToMaxShort": -47661.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -60466,12 +61714,20 @@
           "price_change_pct": 0.9811343786851445
         },
         {
+          "date": "2025-03-25",
+          "mm_net": 91844.0,
+          "price": 68.26000213623047,
+          "mm_change": -4669.0,
+          "price_change": 1.3600006103515625,
+          "price_change_pct": 2.0328857688074464
+        },
+        {
           "date": "2025-04-08",
           "mm_net": 69463.0,
           "price": 59.58000183105469,
-          "mm_change": -27050.0,
-          "price_change": -7.319999694824219,
-          "price_change_pct": -10.941703330145103
+          "mm_change": -22381.0,
+          "price_change": -8.680000305175781,
+          "price_change_pct": -12.716085604352312
         },
         {
           "date": "2025-04-15",
@@ -60696,190 +61952,6 @@
           "mm_change": 6575.0,
           "price_change": 1.3899993896484375,
           "price_change_pct": 2.514925598219686
-        },
-        {
-          "date": "2026-01-06",
-          "mm_net": 22580.0,
-          "price": 57.130001068115234,
-          "mm_change": 4914.0,
-          "price_change": 0.470001220703125,
-          "price_change_pct": 0.8295115107110007
-        },
-        {
-          "date": "2026-01-13",
-          "mm_net": 42507.0,
-          "price": 61.150001525878906,
-          "mm_change": 19927.0,
-          "price_change": 4.020000457763672,
-          "price_change_pct": 7.0365839009362
-        },
-        {
-          "date": "2026-01-20",
-          "mm_net": 53434.0,
-          "price": 60.34000015258789,
-          "mm_change": 10927.0,
-          "price_change": -0.8100013732910156,
-          "price_change_pct": -1.3246138235143312
-        },
-        {
-          "date": "2026-02-03",
-          "mm_net": 80377.0,
-          "price": 63.54999923706055,
-          "mm_change": 26943.0,
-          "price_change": 3.2099990844726562,
-          "price_change_pct": 5.319852629027522
-        },
-        {
-          "date": "2026-02-10",
-          "mm_net": 86314.0,
-          "price": 63.959999084472656,
-          "mm_change": 5937.0,
-          "price_change": 0.4099998474121094,
-          "price_change_pct": 0.64516105796113
-        },
-        {
-          "date": "2026-02-17",
-          "mm_net": 81219.0,
-          "price": 62.33000183105469,
-          "mm_change": -5095.0,
-          "price_change": -1.6299972534179688,
-          "price_change_pct": -2.548463534630785
-        },
-        {
-          "date": "2026-02-24",
-          "mm_net": 98187.0,
-          "price": 66.38999938964844,
-          "mm_change": 16968.0,
-          "price_change": 4.05999755859375,
-          "price_change_pct": 6.513713202830251
-        },
-        {
-          "date": "2026-03-03",
-          "mm_net": 108421.0,
-          "price": 90.9000015258789,
-          "mm_change": 10234.0,
-          "price_change": 24.51000213623047,
-          "price_change_pct": 36.91821413098564
-        },
-        {
-          "date": "2026-03-10",
-          "mm_net": 136419.0,
-          "price": 83.44999694824219,
-          "mm_change": 27998.0,
-          "price_change": -7.450004577636719,
-          "price_change_pct": -8.19582448028423
-        },
-        {
-          "date": "2026-03-17",
-          "mm_net": 147861.0,
-          "price": 96.20999908447266,
-          "mm_change": 11442.0,
-          "price_change": 12.760002136230469,
-          "price_change_pct": 15.29059628863083
-        },
-        {
-          "date": "2026-03-24",
-          "mm_net": 148985.0,
-          "price": 98.31999969482422,
-          "mm_change": 1124.0,
-          "price_change": 2.1100006103515625,
-          "price_change_pct": 2.1931198736411694
-        },
-        {
-          "date": "2026-04-07",
-          "mm_net": 137838.0,
-          "price": 112.94999694824219,
-          "mm_change": -11147.0,
-          "price_change": 14.629997253417969,
-          "price_change_pct": 14.87998097927996
-        },
-        {
-          "date": "2026-04-14",
-          "mm_net": 144243.0,
-          "price": 91.27999877929688,
-          "mm_change": 6405.0,
-          "price_change": -21.669998168945312,
-          "price_change_pct": -19.18547919826443
-        },
-        {
-          "date": "2026-04-21",
-          "mm_net": 143401.0,
-          "price": 92.12999725341797,
-          "mm_change": -842.0,
-          "price_change": 0.8499984741210938,
-          "price_change_pct": 0.9311990419459626
-        },
-        {
-          "date": "2026-05-05",
-          "mm_net": 131956.0,
-          "price": 95.08000183105469,
-          "mm_change": -11445.0,
-          "price_change": 2.9500045776367188,
-          "price_change_pct": 3.202002242030111
-        },
-        {
-          "date": "2026-05-12",
-          "mm_net": 129583.0,
-          "price": 102.18000030517578,
-          "mm_change": -2373.0,
-          "price_change": 7.099998474121094,
-          "price_change_pct": 7.467394128511806
-        },
-        {
-          "date": "2026-05-19",
-          "mm_net": 138774.0,
-          "price": 107.7699966430664,
-          "mm_change": 9191.0,
-          "price_change": 5.589996337890625,
-          "price_change_pct": 5.470734313168202
-        },
-        {
-          "date": "2026-06-09",
-          "mm_net": 123207.0,
-          "price": 88.19999694824219,
-          "mm_change": -15567.0,
-          "price_change": -19.56999969482422,
-          "price_change_pct": -18.159042687585803
-        },
-        {
-          "date": "2026-06-16",
-          "mm_net": 117885.0,
-          "price": 76.05000305175781,
-          "mm_change": -5322.0,
-          "price_change": -12.149993896484375,
-          "price_change_pct": -13.775503760634223
-        },
-        {
-          "date": "2026-06-23",
-          "mm_net": 100295.0,
-          "price": 74.81999969482422,
-          "mm_change": -17590.0,
-          "price_change": -1.2300033569335938,
-          "price_change_pct": -1.6173613511842766
-        },
-        {
-          "date": "2026-07-07",
-          "mm_net": 74679.0,
-          "price": 70.44000244140625,
-          "mm_change": -25616.0,
-          "price_change": -4.379997253417969,
-          "price_change_pct": -5.85404607228428
-        },
-        {
-          "date": "2026-07-14",
-          "mm_net": 86383.0,
-          "price": 79.33999633789062,
-          "mm_change": 11704.0,
-          "price_change": 8.899993896484375,
-          "price_change_pct": 12.634857450335279
-        },
-        {
-          "date": "2026-07-21",
-          "mm_net": 86905.0,
-          "price": 84.91000366210938,
-          "mm_change": 522.0,
-          "price_change": 5.57000732421875,
-          "price_change_pct": 7.020428007706703
         }
       ]
     },
@@ -60887,18 +61959,18 @@
       "id": "natural-gas",
       "name": "Natural Gas",
       "sector": "energy",
-      "currentMMNet": -105605.0,
-      "currentPrice": 2.6619999408721924,
-      "latestDate": "2026-07-28",
+      "currentMMNet": -156848.0,
+      "currentPrice": 2.9630000591278076,
+      "latestDate": "2026-10-20",
       "recordMaxPosition": 271683.0,
       "recordMinPosition": -330163.0,
-      "beta": 0.0001585853719130258,
-      "rSquared": 0.17934931928868308,
-      "correlation": 0.4234965398780527,
-      "priceToMaxLong": 4.254737270085954,
-      "priceToMaxShort": 1.7140187986848348,
-      "contractsToMaxLong": 377288.0,
-      "contractsToMaxShort": -224558.0,
+      "beta": 0.0001557547880973276,
+      "rSquared": 0.17659169336196423,
+      "correlation": 0.4202281444191527,
+      "priceToMaxLong": 4.940676822150876,
+      "priceToMaxShort": 2.1631488274004806,
+      "contractsToMaxLong": 428531.0,
+      "contractsToMaxShort": -173315.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -65139,6 +66211,102 @@
           "mm_change": -2911.0,
           "price_change": -0.20300006866455078,
           "price_change_pct": -7.085517207288772
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": -126545.0,
+          "price": 2.640000104904175,
+          "mm_change": -20940.0,
+          "price_change": -0.021999835968017578,
+          "price_change_pct": -0.8264401373656471
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": -110382.0,
+          "price": 2.7669999599456787,
+          "mm_change": 16163.0,
+          "price_change": 0.1269998550415039,
+          "price_change_pct": 4.810600378597862
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": -99900.0,
+          "price": 2.7760000228881836,
+          "mm_change": 10482.0,
+          "price_change": 0.009000062942504883,
+          "price_change_pct": 0.3252642960891672
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": -71496.0,
+          "price": 2.7699999809265137,
+          "mm_change": 28404.0,
+          "price_change": -0.006000041961669922,
+          "price_change_pct": -0.21613983833571604
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": -89523.0,
+          "price": 2.9070000648498535,
+          "mm_change": -18027.0,
+          "price_change": 0.13700008392333984,
+          "price_change_pct": 4.945851439230542
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": -96677.0,
+          "price": 2.9159998893737793,
+          "mm_change": -7154.0,
+          "price_change": 0.008999824523925781,
+          "price_change_pct": 0.3095914799847277
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": -100024.0,
+          "price": 2.9189999103546143,
+          "mm_change": -3347.0,
+          "price_change": 0.003000020980834961,
+          "price_change_pct": 0.10288138184666451
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": -65632.0,
+          "price": 2.9649999141693115,
+          "mm_change": 34392.0,
+          "price_change": 0.046000003814697266,
+          "price_change_pct": 1.5758823305036973
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": -132849.0,
+          "price": 3.0,
+          "mm_change": -67217.0,
+          "price_change": 0.03500008583068848,
+          "price_change_pct": 1.1804413775335476
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": -144681.0,
+          "price": 3.114000082015991,
+          "mm_change": -11832.0,
+          "price_change": 0.11400008201599121,
+          "price_change_pct": 3.800002733866381
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": -126156.0,
+          "price": 3.2829999923706055,
+          "mm_change": 18525.0,
+          "price_change": 0.16899991035461426,
+          "price_change_pct": 5.42710038225831
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": -156848.0,
+          "price": 2.9630000591278076,
+          "mm_change": -30692.0,
+          "price_change": -0.31999993324279785,
+          "price_change_pct": -9.747180444302428
         }
       ]
     },
@@ -65146,18 +66314,18 @@
       "id": "gold",
       "name": "Gold",
       "sector": "metals",
-      "currentMMNet": 120328.0,
-      "currentPrice": 4038.699951171875,
-      "latestDate": "2026-07-28",
+      "currentMMNet": 108685.0,
+      "currentPrice": 4142.60009765625,
+      "latestDate": "2026-10-20",
       "recordMaxPosition": 292066.0,
       "recordMinPosition": -103009.0,
-      "beta": 6.449573188309272e-05,
-      "rSquared": 0.4167044918707246,
-      "correlation": 0.645526522980059,
-      "priceToMaxLong": 4486.041220265863,
-      "priceToMaxShort": 3456.9541697161458,
-      "contractsToMaxLong": 171738.0,
-      "contractsToMaxShort": -223337.0,
+      "beta": 6.51440155742788e-05,
+      "rSquared": 0.40116326931517204,
+      "correlation": 0.6333745095243193,
+      "priceToMaxLong": 4637.482343274267,
+      "priceToMaxShort": 3571.3108032153837,
+      "contractsToMaxLong": 183381.0,
+      "contractsToMaxShort": -211694.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -69566,6 +70734,102 @@
           "mm_change": -3258.0,
           "price_change": -37.699951171875,
           "price_change_pct": -0.9248344636206829
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": 132398.0,
+          "price": 4095.39990234375,
+          "mm_change": 12070.0,
+          "price_change": 56.699951171875,
+          "price_change_pct": 1.4039159100052157
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": 141868.0,
+          "price": 4408.2001953125,
+          "mm_change": 9470.0,
+          "price_change": 312.80029296875,
+          "price_change_pct": 7.637844909595715
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": 145922.0,
+          "price": 4387.7998046875,
+          "mm_change": 4054.0,
+          "price_change": -20.400390625,
+          "price_change_pct": -0.46278276215070413
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": 151315.0,
+          "price": 4658.2001953125,
+          "mm_change": 5393.0,
+          "price_change": 270.400390625,
+          "price_change_pct": 6.16255076943415
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": 140811.0,
+          "price": 4362.7998046875,
+          "mm_change": -10504.0,
+          "price_change": -295.400390625,
+          "price_change_pct": -6.341513422335487
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": 139548.0,
+          "price": 4405.2001953125,
+          "mm_change": -1263.0,
+          "price_change": 42.400390625,
+          "price_change_pct": 0.9718619355268965
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": 137060.0,
+          "price": 4299.0,
+          "mm_change": -2488.0,
+          "price_change": -106.2001953125,
+          "price_change_pct": -2.410791578223981
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": 131334.0,
+          "price": 4342.7001953125,
+          "mm_change": -5726.0,
+          "price_change": 43.7001953125,
+          "price_change_pct": 1.0165200119213846
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": 124418.0,
+          "price": 4147.7001953125,
+          "mm_change": -6916.0,
+          "price_change": -195.0,
+          "price_change_pct": -4.490293854742323
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": 114820.0,
+          "price": 4187.10009765625,
+          "mm_change": -9598.0,
+          "price_change": 39.39990234375,
+          "price_change_pct": 0.9499216550964196
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": 111079.0,
+          "price": 4177.2998046875,
+          "mm_change": -3741.0,
+          "price_change": -9.80029296875,
+          "price_change_pct": -0.23405919945013176
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": 108685.0,
+          "price": 4142.60009765625,
+          "mm_change": -2394.0,
+          "price_change": -34.69970703125,
+          "price_change_pct": -0.8306731298604042
         }
       ]
     },
@@ -69573,18 +70837,18 @@
       "id": "silver",
       "name": "Silver",
       "sector": "metals",
-      "currentMMNet": 8387.0,
-      "currentPrice": 5752.89990234375,
-      "latestDate": "2026-07-28",
+      "currentMMNet": 3746.0,
+      "currentPrice": 5800.0,
+      "latestDate": "2026-10-20",
       "recordMaxPosition": 98845.0,
       "recordMinPosition": -47480.0,
-      "beta": 0.0002598930861931772,
-      "rSquared": 0.2302970649393473,
-      "correlation": 0.4798927639997787,
-      "priceToMaxLong": 7105.372657714867,
-      "priceToMaxShort": 4917.610647393185,
-      "contractsToMaxLong": 90458.0,
-      "contractsToMaxShort": -55867.0,
+      "beta": 0.00026217019787719845,
+      "rSquared": 0.22841609412583394,
+      "correlation": 0.47792896347243274,
+      "priceToMaxLong": 7246.063171579574,
+      "priceToMaxShort": 5021.064027725472,
+      "contractsToMaxLong": 95099.0,
+      "contractsToMaxShort": -51226.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -73993,6 +75257,102 @@
           "mm_change": -1616.0,
           "price_change": -157.89990234375,
           "price_change_pct": -2.671379636619209
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": 11067.0,
+          "price": 6024.5,
+          "mm_change": 2680.0,
+          "price_change": 271.60009765625,
+          "price_change_pct": 4.721098963421899
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": 10312.0,
+          "price": 6493.5,
+          "mm_change": -755.0,
+          "price_change": 469.0,
+          "price_change_pct": 7.784878413146323
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": 10768.0,
+          "price": 6403.7001953125,
+          "mm_change": 456.0,
+          "price_change": -89.7998046875,
+          "price_change_pct": -1.3829183751058793
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": 13235.0,
+          "price": 6868.2001953125,
+          "mm_change": 2467.0,
+          "price_change": 464.5,
+          "price_change_pct": 7.253618780279769
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": 12170.0,
+          "price": 6461.7998046875,
+          "mm_change": -1065.0,
+          "price_change": -406.400390625,
+          "price_change_pct": -5.917130821293847
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": 14176.0,
+          "price": 6700.0,
+          "mm_change": 2006.0,
+          "price_change": 238.2001953125,
+          "price_change_pct": 3.6862824988744602
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": 12632.0,
+          "price": 6385.60009765625,
+          "mm_change": -1544.0,
+          "price_change": -314.39990234375,
+          "price_change_pct": -4.6925358558768675
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": 13016.0,
+          "price": 6653.0,
+          "mm_change": 384.0,
+          "price_change": 267.39990234375,
+          "price_change_pct": 4.187545387345759
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": 7738.0,
+          "price": 6115.2998046875,
+          "mm_change": -5278.0,
+          "price_change": -537.7001953125,
+          "price_change_pct": -8.082071175597472
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": 7608.0,
+          "price": 6158.89990234375,
+          "mm_change": -130.0,
+          "price_change": 43.60009765625,
+          "price_change_pct": 0.7129674594666513
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": 5735.0,
+          "price": 5952.5,
+          "mm_change": -1873.0,
+          "price_change": -206.39990234375,
+          "price_change_pct": -3.3512462552801825
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": 3746.0,
+          "price": 5800.0,
+          "mm_change": -1989.0,
+          "price_change": -152.5,
+          "price_change_pct": -2.5619487610247793
         }
       ]
     },
@@ -74000,18 +75360,18 @@
       "id": "copper",
       "name": "Copper",
       "sector": "metals",
-      "currentMMNet": 66490.0,
-      "currentPrice": 635.9500122070312,
-      "latestDate": "2026-07-28",
+      "currentMMNet": 48009.0,
+      "currentPrice": 660.3499755859375,
+      "latestDate": "2026-10-20",
       "recordMaxPosition": 125376.0,
       "recordMinPosition": -74597.0,
-      "beta": 0.000178954711093246,
-      "rSquared": 0.3442421994111278,
-      "correlation": 0.5867215688988499,
-      "priceToMaxLong": 702.9659609967392,
-      "priceToMaxShort": 475.38418727591824,
-      "contractsToMaxLong": 58886.0,
-      "contractsToMaxShort": -141087.0,
+      "beta": 0.00018042591548410018,
+      "rSquared": 0.34800941383543116,
+      "correlation": 0.5899232270689392,
+      "priceToMaxLong": 752.5283066207924,
+      "priceToMaxShort": 514.2719777979994,
+      "contractsToMaxLong": 77367.0,
+      "contractsToMaxShort": -122606.0,
       "weeklyData": [
         {
           "date": "2016-01-12",
@@ -78420,6 +79780,102 @@
           "mm_change": -7195.0,
           "price_change": -19.29998779296875,
           "price_change_pct": -2.9454388085415895
+        },
+        {
+          "date": "2026-08-04",
+          "mm_net": 77796.0,
+          "price": 664.3499755859375,
+          "mm_change": 11306.0,
+          "price_change": 28.39996337890625,
+          "price_change_pct": 4.465754042577297
+        },
+        {
+          "date": "2026-08-11",
+          "mm_net": 80880.0,
+          "price": 663.4000244140625,
+          "mm_change": 3084.0,
+          "price_change": -0.949951171875,
+          "price_change_pct": -0.14298956977264465
+        },
+        {
+          "date": "2026-08-18",
+          "mm_net": 79225.0,
+          "price": 649.25,
+          "mm_change": -1655.0,
+          "price_change": -14.1500244140625,
+          "price_change_pct": -2.132955063810904
+        },
+        {
+          "date": "2026-08-25",
+          "mm_net": 76446.0,
+          "price": 671.4000244140625,
+          "mm_change": -2779.0,
+          "price_change": 22.1500244140625,
+          "price_change_pct": 3.411632562812872
+        },
+        {
+          "date": "2026-09-01",
+          "mm_net": 73000.0,
+          "price": 650.6500244140625,
+          "mm_change": -3446.0,
+          "price_change": -20.75,
+          "price_change_pct": -3.0905569325989757
+        },
+        {
+          "date": "2026-09-08",
+          "mm_net": 82017.0,
+          "price": 682.3499755859375,
+          "mm_change": 9017.0,
+          "price_change": 31.699951171875,
+          "price_change_pct": 4.872043338570853
+        },
+        {
+          "date": "2026-09-15",
+          "mm_net": 65541.0,
+          "price": 644.3499755859375,
+          "mm_change": -16476.0,
+          "price_change": -38.0,
+          "price_change_pct": -5.568989720761575
+        },
+        {
+          "date": "2026-09-22",
+          "mm_net": 82649.0,
+          "price": 683.5999755859375,
+          "mm_change": 17108.0,
+          "price_change": 39.25,
+          "price_change_pct": 6.091410178809764
+        },
+        {
+          "date": "2026-09-29",
+          "mm_net": 78709.0,
+          "price": 660.3499755859375,
+          "mm_change": -3940.0,
+          "price_change": -23.25,
+          "price_change_pct": -3.401111882731067
+        },
+        {
+          "date": "2026-10-06",
+          "mm_net": 61465.0,
+          "price": 664.9500122070312,
+          "mm_change": -17244.0,
+          "price_change": 4.60003662109375,
+          "price_change_pct": 0.6966058591903579
+        },
+        {
+          "date": "2026-10-13",
+          "mm_net": 61170.0,
+          "price": 672.5999755859375,
+          "mm_change": -295.0,
+          "price_change": 7.64996337890625,
+          "price_change_pct": 1.150456912319675
+        },
+        {
+          "date": "2026-10-20",
+          "mm_net": 48009.0,
+          "price": 660.3499755859375,
+          "mm_change": -13161.0,
+          "price_change": -12.25,
+          "price_change_pct": -1.821290580530932
         }
       ]
     }
